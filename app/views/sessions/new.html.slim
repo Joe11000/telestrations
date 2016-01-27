@@ -1,0 +1,39 @@
+.container
+  .navbar
+    .container
+      /! .navbar-toggle is used as the toggle for collapsed navbar content
+      button.navbar-toggle data-target=".navbar-collapse" data-toggle="collapse" type="button"
+        span.icon-bar
+        span.icon-bar
+        span.icon-bar
+      /! Everything in here gets hidden at 940px or less
+      .navbar-collapse.collapse
+        /! menu items gets rendered here instead
+
+  .jumbotron.masthead
+    h1 Telestrations
+    h3 Sign in with social media.
+    h5 * You must have an account in order to back view your photos from games. *
+
+    br
+    .row
+      .col-xs-6.col-sm-6
+        = link_to '/auth/facebook', id: 'facebook_logo'
+          = image_tag 'users/facebook.png'
+      .col-xs-6.col-sm-6
+        = link_to '/auth/twitter', id: 'twitter_logo'
+          = image_tag 'users/twitter.png'
+
+    .clearfix
+    .col-xs-6.col-xs-offset-3.col-sm-6.col-sm-offset-3
+      h4 = "Don't tell me what to do!"
+      a href="#{login_anonymously_path}" Let Me Play Anonymously
+
+
+
+
+/ <fb:login-button scope="public_profile,email" onlogin="checkLoginState();">
+/ </fb:login-button>
+
+/ #status
+
