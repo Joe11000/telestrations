@@ -15,7 +15,6 @@ Rails.application.routes.draw do
 
   get  'login'             => 'sessions#new'
   post 'login'             => 'sessions#create'
-  get  'login_anonymously' => 'sessions#login_anonymously'
   get  'logout'            =>'sessions#destroy'
 
   get 'auth/:provider/callback', to: 'sessions#create'

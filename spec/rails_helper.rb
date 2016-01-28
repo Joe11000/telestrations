@@ -60,8 +60,6 @@ RSpec.configure do |config|
   config.before(:suite) do
     DatabaseCleaner.strategy = :transaction
     DatabaseCleaner.clean_with(:truncation)
-
-    User.create(name: "Anonymous", provider: 'Anonymous', uid: 'Anonymous', provider_avatar: ENV['DOMAIN'] + '/images/anonymous.png')
   end
 
   config.around(:each) do |example|

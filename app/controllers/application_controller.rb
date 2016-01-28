@@ -14,10 +14,6 @@ class ApplicationController < ActionController::Base
     !current_user.blank?
   end
 
-  def is_user_anonymous?
-    logged_in? && session[:user_id] == User.find_by!(provider: 'Anonymous').try(:id)
-  end
-
   def redirect_if_not_logged_in
     redirect_to root_path unless logged_in?
   end

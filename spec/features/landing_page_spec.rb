@@ -7,8 +7,6 @@ RSpec.feature "User lands on correct root page when", :type => :feature do
     visit root_path
 
     case provider.downcase
-      when 'anonymous'
-        click_link('Let Me Play Anonymously')
       when 'twitter'
       when 'facebook'
         find(provider + '_logo').click
@@ -33,12 +31,6 @@ RSpec.feature "User lands on correct root page when", :type => :feature do
       login twitter
 
       expect(current_path).to eq '/'
-    end
-
-    scenario "Anonymous" do
-      login anonymous
-
-
     end
   end
 end
