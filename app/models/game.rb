@@ -56,4 +56,9 @@ class Game < ActiveRecord::Base
     end
     result
   end
+
+  def add_current_user_to_game
+  end
+
+
 end

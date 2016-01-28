@@ -3,30 +3,35 @@ html
   head
     title Telestrations
     = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true
-    = javascript_include_tag 'application', 'data-turbolinks-track' => true
     = csrf_meta_tags
     = action_cable_meta_tag
     = favicon_link_tag 'images/happy-icon.ico'
 
-    link href="./inc/wColorPicker.css" rel="Stylesheet" type="text/css" /
-    link href="./wPaint.css" rel="Stylesheet" type="text/css" /
+    = stylesheet_link_tag 'inc/wColorPicker.css'
+    = stylesheet_link_tag 'wPaint.css'
 
-
+    = javascript_include_tag 'application', 'data-turbolinks-track' => true
     = javascript_include_tag "https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
-    = javascript_include_tag "./inc/jquery.ui.core.min.js"
-    = javascript_include_tag "./inc/jquery.ui.widget.min.js"
-    = javascript_include_tag "./inc/jquery.ui.mouse.min.js"
-    = javascript_include_tag "./inc/jquery.ui.draggable.min.js"
-    = javascript_include_tag "./inc/wColorPicker.js"
+    = javascript_include_tag "inc/jquery.ui.core.min.js"
+    = javascript_include_tag "inc/jquery.ui.widget.min.js"
+    = javascript_include_tag "inc/jquery.ui.mouse.min.js"
+    = javascript_include_tag "inc/jquery.ui.draggable.min.js"
+    = javascript_include_tag "inc/wColorPicker.js"
     = javascript_include_tag "wPaint.js"
     br type="_moz"
 
-
   body
+    = if flash[:notice]
+    .alert.alert-success.alert-dismissible.fade.in role="alert"
+      button.close type="button" data-dismiss="alert" aria-label="Close"
+        span aria-hidden="true" &times;
+      = flash[:notice]
+
+    = if flash[:alert]
+      .alert.alert-danger.alert-dismissible.fade.in role="alert"
+        button.close type="button" data-dismiss="alert" aria-label="Close"
+          span aria-hidden="true" &times;
+        = flash[:alert]
+
     javascript:
       | $("#wPaint").wPaint();
-
-    = yield
-
-
-

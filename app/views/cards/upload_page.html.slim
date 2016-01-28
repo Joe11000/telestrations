@@ -1,4 +1,1 @@
-= form_for @card, url: cards_upload_path, :html => { multiple: true } do |f|
-  = f.file_field_tag "drawings[]", type: :file,multiple: true
-  = f.submit 'Submit'
-
+= render partial: 'shard/file_upload', local: { to_path: cards_upload_path }

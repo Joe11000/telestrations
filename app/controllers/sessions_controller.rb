@@ -10,8 +10,8 @@ class SessionsController < ApplicationController
   end
 
   def login_anonymously
-    session[:user_id] = User.find_by!(provider: 'Anonymous').try(:id)
-
+    session[:user_id] = User.find_by!(provider: 'Anonymous').id
+    byebug
     if session[:user_id].nil?
       redirect_to root_path, alert: 'Sorry. Not currently allowing anonymous users.' && return
     else

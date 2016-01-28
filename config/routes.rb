@@ -2,8 +2,8 @@ Rails.application.routes.draw do
   root 'sessions#new'
 
   resource :game, only: [:new]
+  get  'game/start/quick_start'          => 'games#quick_start',   as: :quick_start_game
   get  'game/start/:privacy'             => 'games#start',         as: :start_game
-  get  'game/start/quick_start'          => 'games#start',         as: :quick_start_game
   get  'game/leave_pregame'              => 'games#leave_pregame', as: :leave_pregame
   get  'game/post_game'                  => 'games#post_game',     as: :post_game
   post 'game/join'                       => 'games#join',          as: :join_game

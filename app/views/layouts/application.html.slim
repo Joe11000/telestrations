@@ -8,4 +8,17 @@ html
     = action_cable_meta_tag
     = favicon_link_tag 'images/happy-icon.png'
   body
+    = if flash[:notice]
+      .alert.alert-success.alert-dismissible.fade.in role="alert"
+        button.close type="button" data-dismiss="alert" aria-label="Close"
+          span aria-hidden="true" &times;
+        = flash[:notice]
+
+    = if flash[:alert]
+      .alert.alert-danger.alert-dismissible.fade.in role="alert"
+        button.close type="button" data-dismiss="alert" aria-label="Close"
+          span aria-hidden="true" &times;
+        = flash[:alert]
+
+
     = yield

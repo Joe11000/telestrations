@@ -43,3 +43,10 @@ $('#wPaint').wPaint({
     },
     disableMobileDefaults: false             // disable default touchmove events for mobile (will prevent flipping between tabs and scrolling)
 });
+
+
+
+// $('#wPaint').wPaint('undo');
+// $('#wPaint').wPaint('redo');
+// clear the canvas
+// $('#wPaint').wPaint('clear');

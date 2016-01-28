@@ -1,2 +1,4 @@
-= form_for @user, :url => card_path, :html => { multipart: true } do |form|
-  = form.file_field :sketch
+= form_for :card, url: to_path, :html => { multiple: true } do |f|
+  = f.label :drawings, 'Upload drawings'
+  = f.file_field "drawings[]", type: :file, name: 'drawings[]', multiple: true
+  = f.submit 'Submit'

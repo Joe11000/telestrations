@@ -1,8 +1,12 @@
 class GamesController < ApplicationController
   layout 'layouts/game_layout'
 
+  before_action :redirect_if_not_logged_in, except: [:new, :quick_start, :join]
+
   def new
     current_user.games.create(is_private: params[:privacy] == 'private')
+
+    # open websocket here
 
     render :new, layout: 'application'
   end
@@ -14,6 +18,7 @@ class GamesController < ApplicationController
   end
 
   def quick_start
+    game = Game.random_open_game
     # @handshake = WebSocket::Handshake::Server.new
 
     render :start

@@ -16,7 +16,7 @@ ActiveRecord::Schema.define(version: 20160116063308) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "cards", force: true do |t|
+  create_table "cards", force: :cascade do |t|
     t.integer  "uploader_id"
     t.integer  "parent_card_id"
     t.integer  "idea_catalyst_id"
@@ -28,27 +28,31 @@ ActiveRecord::Schema.define(version: 20160116063308) do
     t.string   "drawing_content_type"
     t.integer  "drawing_file_size"
     t.datetime "drawing_updated_at"
+    t.index ["deleted_at"], name: "index_cards_on_deleted_at", using: :btree
   end
 
-  create_table "games", force: true do |t|
-    t.boolean  "is_private", default: true
-    t.boolean  "is_active",  default: true
+  create_table "games", force: :cascade do |t|
+    t.boolean  "is_private",               default: true
+    t.boolean  "is_active",                default: true
+    t.boolean  "allow_additional_players", default: true
     t.string   "join_code"
     t.datetime "deleted_at"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.index ["deleted_at"], name: "index_games_on_deleted_at", using: :btree
   end
 
-  create_table "games_users", force: true do |t|
+  create_table "games_users", force: :cascade do |t|
     t.integer  "user_id"
     t.integer  "game_id"
     t.string   "users_game_name", default: "Ned Flanders"
     t.datetime "deleted_at"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.index ["deleted_at"], name: "index_games_users_on_deleted_at", using: :btree
   end
 
-  create_table "users", force: true do |t|
+  create_table "users", force: :cascade do |t|
     t.string   "name"
     t.string   "provider"
     t.string   "uid"
@@ -60,6 +64,7 @@ ActiveRecord::Schema.define(version: 20160116063308) do
     t.string   "provider_avatar_override_content_type"
     t.integer  "provider_avatar_override_file_size"
     t.datetime "provider_avatar_override_updated_at"
+    t.index ["deleted_at"], name: "index_users_on_deleted_at", using: :btree
   end
 
 end

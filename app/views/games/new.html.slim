@@ -1,9 +1,15 @@
 p = current_user.name
 p = current_user.uid
 p = current_user.provider
+- byebug
+.user-avatar
+  = link_to root_path
+    - if !current_user.provider_avatar_override.blank?
+      = image_tag current_user.provider_avatar_override.url
+    - else
+      = image_tag current_user.provider_avatar
 
 a href="#{logout_path}" logout
-
 
 .row
   .col-xs-offset-2.col-xs-6.col-sm-offset-2.col-sm-3 Start a New Game
