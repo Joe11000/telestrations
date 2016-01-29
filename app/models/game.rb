@@ -5,11 +5,10 @@ class Game < ActiveRecord::Base
   has_many :users, through: :games_users
   has_many :starting_cards, through: :games_users
 
-
   validates :join_code, uniqueness: true, length: { is: 4 }
 
   scope :active, -> { where(is_active: true) }
-  scope :random_open_game, -> { where(is_private: false).sample }
+  scope :random_open_game, -> { active.where(is_private: false, allow_additional_players: true).sample }
 
   # this may get problematic if the number of groups playing gets a certain percentage close enough to 456976....not likely
   before_validation(on: :create) do
@@ -33,6 +32,14 @@ class Game < ActiveRecord::Base
 #   [ [users_game_name, Card.create], [users_game_name, Card.create], [users_game_name, Card.create] ],
 #   [ [users_game_name, Card.create], [users_game_name, Card.create], [users_game_name, Card.create] ],
 # ]
+  def start_request
+
+  end
+
+  def self.all_users_game_names join_code
+    GamesUser.includes(:game).where(games: { join_code: join_code }).map(&:users_game_name)
+  end
+
   def cards_from_finished_game
     return [] if is_active
 
@@ -57,8 +64,16 @@ class Game < ActiveRecord::Base
     result
   end
 
-  def add_current_user_to_game
-  end
+  # def join_request user
+  #   if self.allow_additional_players
 
+  #   else
+  #     false
+  #   end
+  # end
+
+  def prevent_additional_players
+    # if user is NOT attached to a game, then return false
+  end
 
 end

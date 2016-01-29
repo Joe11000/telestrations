@@ -26,8 +26,8 @@
         p Enter a name to join the game
         p Or use the link to leave
 
-        = form_tag(join_game_path, method: "post", remote: true)
-          = text_field_tag(:join_code, '', { placeholder: 'Enter Game Name', class: 'span2' })
+        = form_tag(upload_game_name_path(@game.join_code), method: "post", remote: true)
+          = text_field_tag(:name, '', { placeholder: 'Enter your game name', class: 'span2' })
           = submit_tag("Go!", class: 'btn')
 
       .clearfix

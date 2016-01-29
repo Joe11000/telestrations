@@ -6,46 +6,55 @@ class GamesController < ApplicationController
   def new
     current_user.games.create(is_private: params[:privacy] == 'private')
 
-    # open websocket here
-
     render :new, layout: 'application'
   end
 
   def start
-    @users_waiting = ['person1', 'person2', 'person1', 'person2']
+    @users_waiting = []
 
-    # @handshake = WebSocket::Handshake::Server.new
+    if params[:privacy] == 'public'
+      @game = Game.create(is_private: false)
+    else
+      @game = Game.create
+    end
   end
 
   def quick_start
-    game = Game.random_open_game
-    # @handshake = WebSocket::Handshake::Server.new
+
+    @game = Game.random_open_game
+
+    if @game.blank?
+      redirect_to new_game_path, alert: 'There are no games allowing additional players'
+    end
+
+    @users_waiting = @game.users.map(&:users_game_name)
 
     render :start
   end
 
   def join
-    game = Game.where(join_code: join_params)
+    @game = Game.where(join_code: join_params, allow_additional_players: true)
 
-    if game.blank?
+    if @game.blank?
       redirect_to new_game_path, alert: "No players in group #{join_params}" && return
     else
-      current_user.games << Game.where(join_code: join_params)
+      @users_waiting = @game.users.map(&:users_game_name)
+      render :start && return
     end
-
-    # let existing members know a new person joined their group
-    # @handshake = WebSocket::Handshake::Server.new
-
-    redirect_to start_game_path
   end
 
-  def prevent_additional_players
-    # if user is NOT attached to a game, then return false
+  def upload_game_name
+    respond_to do |format|
+      format.js do
+        @game = Game.where(join_code: join_params).active.where( allow_additional_players: true)
+        current_user.games << Game.all_users_game_names(params[:join_code]).to_json
+        render nothing: true
+      end
+    end
+  end
 
-
-    @game = Game.find_by(prevent_additional_players_params)
-
-    render alert: "Permission Denied: You are not a member of that group." && return if @game.blank?
+  def all_game_names
+    render js: Game.all_users_game_names(params[:join_code]).to_json
   end
 
   def leave_group
@@ -60,13 +69,16 @@ class GamesController < ApplicationController
     redirect_to new_game_path
   end
 
-
   def post_game
-    Card.all_cards_from_game
+    @cards = Card.all_cards_from_game
   end
 
 
+
 protected
+  def create_game_name_params
+    params.require(:name, :join_code)
+  end
 
   def join_params
     params.require(:join_game)
