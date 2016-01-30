@@ -1,7 +1,7 @@
 class Game < ActiveRecord::Base
   # acts_as_paranoid
 
-  has_many :games_users, inverse_of: :game
+  has_many :games_users, inverse_of: :game, dependent: :destroy
   has_many :users, through: :games_users
   has_many :starting_cards, through: :games_users
 
@@ -74,6 +74,7 @@ class Game < ActiveRecord::Base
 
   def prevent_additional_players
     # if user is NOT attached to a game, then return false
+    byebug; self.users.find_by(user_id: current_user.id)
   end
 
 end

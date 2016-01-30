@@ -8,9 +8,8 @@ RSpec.describe User, type: :model do
   it { is_expected.to have_many(:games_users) }
 
   context 'methods' do
-    context '#all_unassociated_cards' do
+    context 'User.all_unassociated_cards' do
       it 'valid if' do
-        byebug
         # associated card
         gu1 = FactoryGirl.create(:games_user)
         g1 = gu1.game
@@ -34,7 +33,7 @@ RSpec.describe User, type: :model do
 
         # no games_user association
         c4 = FactoryGirl.create(:card, uploader_id: u1.id)
-        results = u1.all_unassociated_cards
+        results = User.all_unassociated_cards
 
         session[:user_id] = u1.id
 

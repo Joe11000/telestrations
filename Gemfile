@@ -52,14 +52,14 @@ gem 'paranoia', '1.2.0'
 gem 'redis', '3.2.2'
 
 # testing
+  gem 'factory_girl_rails', '4.5.0'
+  gem 'faker', '1.6.1'
 group :test do
   gem 'database_cleaner', '1.5.1'
-  gem 'factory_girl_rails', '4.5.0'
   gem 'rspec-rails', '3.1.0'
   gem 'selenium-webdriver', '2.49.0'
   gem 'webmock', '1.22.6'
   gem 'shoulda-matchers', '3.1.0'
   gem 'capybara', '2.6.0'
   gem 'poltergeist', '1.8.1'
-  gem 'faker', '1.6.1'
 end

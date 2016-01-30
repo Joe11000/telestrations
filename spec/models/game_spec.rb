@@ -70,7 +70,6 @@ RSpec.describe Game, type: :model do
       expect(result.first).to eq g
     end
 
-
     context '#cards_from_finished_game' do
       context 'returns correct ordering of cards if' do
         before(:all) do
@@ -113,6 +112,12 @@ RSpec.describe Game, type: :model do
         it 'description card is first' do
 
         end
+      end
+    end
+
+    context '#prevent_additional_players' do
+      it 'allows a user associated with a game to prevent further users' do
+
       end
     end
   end
