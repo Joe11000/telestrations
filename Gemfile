@@ -43,23 +43,32 @@ end
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 gem 'sass', '3.2.19'
 gem 'slim', '3.0.6'
-gem "twitter-bootstrap-rails", '3.2.2'
+gem "twitter-bootstrap-rails"
 gem 'paperclip', '4.3.2'
 gem 'omniauth-twitter', '1.2.1'
 gem 'omniauth-facebook', '1.4.0'
 gem 'dotenv-rails', '2.1.0'
 gem 'paranoia', '1.2.0'
 gem 'redis', '3.2.2'
+gem 'sidekiq'
+gem 'sidetiq'
+
+# react-rails isn't compatible yet with latest Sprockets.
+# https://github.com/reactjs/react-rails/pull/322
+gem 'react-rails'
+
+# Add support to use es6 based on top of babel, instead of using coffeescript
+gem 'sprockets-es6'
 
 # testing
-  gem 'factory_girl_rails', '4.5.0'
-  gem 'faker', '1.6.1'
 group :test do
   gem 'database_cleaner', '1.5.1'
+  gem 'factory_girl_rails', '4.5.0'
   gem 'rspec-rails', '3.1.0'
   gem 'selenium-webdriver', '2.49.0'
   gem 'webmock', '1.22.6'
-  gem 'shoulda-matchers', '3.1.0'
+  gem 'shoulda-matchers', '3.1.1'
   gem 'capybara', '2.6.0'
+  gem 'faker', '1.6.1'
   gem 'poltergeist', '1.8.1'
 end

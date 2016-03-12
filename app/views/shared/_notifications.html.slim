@@ -1,0 +1,11 @@
+= unless (flash[:notice].blank? && flash.now[:notice].blank?)
+  .alert.alert-success.alert-dismissible.fade.in role="alert"
+    button.close type="button" data-dismiss="alert" aria-label="Close"
+      span aria-hidden="true" &times;
+    = flash[:notice]
+
+= unless (flash[:alert].blank? && flash.now[:alert].blank?)
+  .alert.alert-danger.alert-dismissible.fade.in role="alert"
+    button.close type="button" data-dismiss="alert" aria-label="Close"
+      span aria-hidden="true" &times;
+    = flash[:alert]

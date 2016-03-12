@@ -13,5 +13,10 @@
 //= require jquery
 //= require jquery_ujs
 //= require turbolinks
+//= require react
+//= require react_ujs
+//  components
 //= require twitter/bootstrap
+//= require cable
+//= require_tree ./channels
 //= require_tree .

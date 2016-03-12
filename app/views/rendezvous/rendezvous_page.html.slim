@@ -1,0 +1,47 @@
+#rendezvous-page.form-horizontal data-id='rendezvous-page'
+
+  .col-xs-10.col-xs-offset-1.col-sm-10.col-sm-offset-1
+    a href="#{leave_pregame_path(@game.join_code)}"
+
+      h3.h3
+        i.fa.fa-arrow-circle-left &nbsp;
+        | Leave Group
+
+
+  = render partial: 'currently_joined'
+  .clearfix
+
+  .col-xs-12.col-sm-12
+    .loading-gif.text-center
+      = image_tag 'loading_icon.gif', class: 'text-center', width:'80px'
+  .clearfix
+
+  .col-xs-12.col-sm-12.text-center.hidden data-id='rendezvous-start-game-button-container'
+    h3.h3-text-center You're In
+    = button_to 'Start The Game', start_game_page_path, class: 'btn btn-secondary'
+  .clearfix
+
+  .col-xs-10.col-xs-offset-1.col-sm-10.col-sm-offset-1 data-id="update-rendezvous-group-col"
+    h2.h2.text-center Join This #{@game.is_private ? 'Private' : 'Public'} Game
+
+    = form_tag update_rendezvous_path(@game.join_code), method: :post
+      = hidden_field_tag 'get_updates_rendezvous', get_updates_rendezvous_path(@game.join_code), data: {id:"rendezvous-get-updates-url" }
+      .form-group data-id='update-rendezvous-form-group'
+        = label_tag 'name', 'Enter a name to join the game', class: 'sr-only'
+        .input-group.col-xs-offset-2.col-xs-8.col-sm-4.col-sm-offset-4.col-md-offset-4.col-md-4
+          = text_field_tag(:name, '', { placeholder: 'Game name', class: 'form-control', autocorrect: 'off', autocapitalize: 'words' })
+          .input-group-btn
+            button.btn.btn-primary Join!
+
+        small.help-block.hidden You weren't added to the game yet. (Duplicating names is legal, but it's confusing. I'm not your mom. Do what you want.)
+  .clearfix
+
+  .col-xs-12.col-sm-12
+    h2.text-center
+      | Join Code :
+      span data-id="randezvous-join-code" =< @game.join_code
+    h4.text-center = "( While Waiting, Don't Refresh )"
+  .clearfix
+
+
+

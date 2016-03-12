@@ -4,8 +4,7 @@ html
     title Telestrations
     = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true
     = csrf_meta_tags
-    = action_cable_meta_tag
-    = favicon_link_tag 'images/happy-icon.ico'
+    = favicon_link_tag 'happy-icon.ico'
 
     = stylesheet_link_tag 'inc/wColorPicker.css'
     = stylesheet_link_tag 'wPaint.css'
@@ -21,17 +20,6 @@ html
     br type="_moz"
 
   body
-    = if flash[:notice]
-    .alert.alert-success.alert-dismissible.fade.in role="alert"
-      button.close type="button" data-dismiss="alert" aria-label="Close"
-        span aria-hidden="true" &times;
-      = flash[:notice]
-
-    = if flash[:alert]
-      .alert.alert-danger.alert-dismissible.fade.in role="alert"
-        button.close type="button" data-dismiss="alert" aria-label="Close"
-          span aria-hidden="true" &times;
-        = flash[:alert]
-
+    = render partial: 'shared/notifications'
     javascript:
       | $("#wPaint").wPaint();

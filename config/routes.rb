@@ -2,21 +2,32 @@ Rails.application.routes.draw do
   root 'sessions#new'
 
   resource :game, only: [:new]
-  get  'game/leave_pregame'               => 'games#leave_pregame',    as: :leave_pregame
-  get  'game/post_game'                   => 'games#post_game',        as: :post_game
-  post 'game/join'                        => 'games#join',             as: :join_game
-  post 'game/:join_code/upload_game_name' => 'games#upload_game_name', as: :upload_game_name
-  get  'game/start/quick_start'           => 'games#quick_start',      as: :quick_start_game
-  get  'game/start/:privacy'              => 'games#start',            as: :start_game
-  get  'game/all_game_names'              => 'games#all_game_names',   as: :all_game_names
 
+  scope 'game' do
+    scope 'rendezvous' do
+      get '/'                         => 'rendezvous#choose_game_type_page', as: :rendezvous_choose_game_type_page
+      get  ':game_type'               => 'rendezvous#rendezvous_page',       as: :rendezvous_page
+      post 'join'                     => 'rendezvous#join_game',             as: :join_game
+      get  'get_updates/:join_code'   => 'rendezvous#get_updates',           as: :get_updates_rendezvous
+      post 'update/:join_code'        => 'rendezvous#update',                as: :update_rendezvous
+      get  'leave_pregame/:join_code' => 'rendezvous#leave_pregame',         as: :leave_pregame
+    end
 
-  get 'cards/upload'       => 'cards#upload_page',   as: :cards_upload_page
-  post 'cards/upload'      => 'cards#upload',        as: :cards_upload
+    get  'start'        => 'games#start_page',  as: :start_game_page
+    post 'start'        => 'games#start',       as: :start_game
 
-  get  'login'             => 'sessions#new'
-  post 'login'             => 'sessions#create'
-  get  'logout'            => 'sessions#destroy'
+    post 'card_upload'  => 'games#card_upload', as: :card_upload
+    get  'post_game'    => 'games#post_game',   as: :post_game
+  end
+
+  scope 'cards' do
+    get  'bulk_upload'  => 'cards#bulk_upload_page', as: :bulk_upload_cards_page
+    post 'bulk_upload'  => 'cards#bulk_upload',      as: :bulk_upload_cards
+  end
+
+  get  'login'          => 'sessions#new'
+  post 'login'          => 'sessions#create'
+  get  'logout'         => 'sessions#destroy', as: :logout
 
   get 'auth/:provider/callback', to: 'sessions#create'
   get 'auth/failure', to: redirect('/')

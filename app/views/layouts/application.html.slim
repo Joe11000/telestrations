@@ -5,20 +5,8 @@ html
     = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true
     = javascript_include_tag 'application', 'data-turbolinks-track' => true
     = csrf_meta_tags
-    = action_cable_meta_tag
-    = favicon_link_tag 'images/happy-icon.png'
+    = favicon_link_tag 'happy-icon.png'
   body
-    = if flash[:notice]
-      .alert.alert-success.alert-dismissible.fade.in role="alert"
-        button.close type="button" data-dismiss="alert" aria-label="Close"
-          span aria-hidden="true" &times;
-        = flash[:notice]
-
-    = if flash[:alert]
-      .alert.alert-danger.alert-dismissible.fade.in role="alert"
-        button.close type="button" data-dismiss="alert" aria-label="Close"
-          span aria-hidden="true" &times;
-        = flash[:alert]
-
-
-    = yield
+    = render partial: 'shared/notifications'
+    .container-fluid
+      = yield

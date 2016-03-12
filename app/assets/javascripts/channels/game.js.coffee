@@ -1,0 +1,19 @@
+App.game = App.cable.subscriptions.create "GameChannel",
+  connected: ->
+
+    # Called when the subscription is ready for use on the server
+
+  disconnected: ->
+    # Called when the subscription has been terminated by the server
+
+  received: (data) ->
+    # Called when there's incoming data on the websocket for this channel
+
+  start_game: ->
+    @perform 'start_game'
+
+  join_game: ->
+    @perform 'join_game'
+
+  unjoin_game: ->
+    @perform 'unjoin_game'

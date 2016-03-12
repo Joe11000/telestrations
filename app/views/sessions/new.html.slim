@@ -1,30 +1,30 @@
-.container
-  .navbar
-    .container
-      /! .navbar-toggle is used as the toggle for collapsed navbar content
-      button.navbar-toggle data-target=".navbar-collapse" data-toggle="collapse" type="button"
-        span.icon-bar
-        span.icon-bar
-        span.icon-bar
-      /! Everything in here gets hidden at 940px or less
-      .navbar-collapse.collapse
-        /! menu items gets rendered here instead
+.navbar
+  .container
+    /! .navbar-toggle is used as the toggle for collapsed navbar content
+    button.navbar-toggle data-target=".navbar-collapse" data-toggle="collapse" type="button"
+      span.icon-bar
+      span.icon-bar
+      span.icon-bar
+    /! Everything in here gets hidden at 940px or less
+    .navbar-collapse.collapse
+      /! menu items gets rendered here instead
 
-  .jumbotron.masthead
-    h1 Telestrations
-    h3 Sign in with social media.
-    h5 * You must have an account in order to back view your photos from games. *
+.jumbotron.masthead
+  h1 Telestrations
+  .sub-text
+    h3 Log in and play.
+    h5 You must have an account in order to back view your photos from games, That is it! No notifications. No emails. No friend requests.
 
-    br
-    .row
-      .col-xs-6.col-sm-6
-        = link_to '/auth/facebook', id: 'facebook_logo'
-          = image_tag 'users/facebook.png'
-      .col-xs-6.col-sm-6
-        = link_to '/auth/twitter', id: 'twitter_logo'
-          = image_tag 'users/twitter.png'
+  br
+  .row
+    .social-media-col.col-xs-6.col-sm-6
+      = link_to '/auth/facebook', id: 'facebook_logo'
+        = image_tag 'users/facebook.png'
+    .social-media-col.col-xs-6.col-sm-6
+      = link_to '/auth/twitter', id: 'twitter_logo'
+        = image_tag 'users/twitter.png'
 
-    .clearfix
+  .clearfix
 
 
 

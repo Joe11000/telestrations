@@ -1,4 +1,5 @@
-= form_for :card, url: to_path, :html => { multiple: true } do |f|
-  = f.label :drawings, 'Upload drawings'
-  = f.file_field "drawings[]", type: :file, name: 'drawings[]', multiple: true
-  = f.submit 'Submit'
+= form_for :card, class: 'form-horizontal', url: to_path, :html => { multiple: true } do |f|
+  .form-group
+    = f.label :drawings, 'Upload drawings'
+    = f.file_field "drawings[]", type: :file, name: 'drawings[]', multiple: true
+    = f.submit 'Submit'
