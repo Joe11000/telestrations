@@ -43,27 +43,27 @@ class RendezvousController < ApplicationController
     render :rendezvous_page
   end
 
-  def get_updates
-    respond_to do |format|
-      format.js do
-        @users_waiting = Game.all_users_game_names(params[:join_code])
-        game = Game.find_by(join_code: params[:join_code])
-        game.touch
+  # def get_updates
+  #   respond_to do |format|
+  #     format.js do
+  #       @users_waiting = Game.all_users_game_names(params[:join_code])
+  #       game = Game.find_by(join_code: params[:join_code])
+  #       game.touch
 
-        if(!game.is_active && game.join_code != nil)
-          render json: {
-            content: render_to_string(partial: 'currently_joined', :layout => false)
-          } and return
-        else
-          render json: {
-            content: 'Start Game'
-          } and return
-        end
-      end
-    end
+  #       if(!game.is_active && game.join_code != nil)
+  #         render json: {
+  #           content: render_to_string(partial: 'currently_joined', :layout => false)
+  #         } and return
+  #       else
+  #         render json: {
+  #           content: 'Start Game'
+  #         } and return
+  #       end
+  #     end
+  #   end
 
-    render status: 400 and return
-  end
+  #   render status: 400 and return
+  # end
 
   def update
     respond_to do |format|
@@ -84,11 +84,12 @@ class RendezvousController < ApplicationController
             render(json: { response: 'user already joined' }) and return
           end
 
-          # delete an association to another pregame game
-          association = current_user.gamesuser_in_current_game
-          association.destroy unless association.blank?
 
-          GamesUser.create(user_id: current_user.id, game_id: @game.id, users_game_name: update_params)
+          # # delete an association to another pregame game
+          # association = current_user.gamesuser_in_current_game
+          # association.destroy unless association.blank?
+
+          # GamesUser.create(user_id: current_user.id, game_id: @game.id, users_game_name: update_params)
 
           render(json: { response: 'user sucessfully joined' }) and return
         end

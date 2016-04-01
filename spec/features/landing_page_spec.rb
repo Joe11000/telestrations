@@ -7,9 +7,8 @@ RSpec.feature "User lands on correct root page when", :type => :feature do
     visit root_path
 
     case provider.downcase
-      when 'twitter'
-      when 'facebook'
-        find(provider + '_logo').click
+      when 'facebook', 'twitter'
+        find('#' + provider + '_logo').click
       end
   end
 
@@ -22,15 +21,15 @@ RSpec.feature "User lands on correct root page when", :type => :feature do
   describe "when they logged in as" do
 
     scenario "a User in facebook" do
-      login twitter
+      login 'facebook'
 
-      expect(current_path).to eq '/'
+      expect(current_path).to eq new_game_path
     end
 
     scenario "a User in twitter" do
-      login twitter
+      login 'twitter'
 
-      expect(current_path).to eq '/'
+      expect(current_path).to eq new_game_path
     end
   end
 end

@@ -1,13 +1,22 @@
 FactoryGirl.define do
 
-  factory :card do
+  factory :card, aliases: [:description] do
+    drawing_or_description "description"
+    description_text { Faker::Lorem.sentence(3)}
+    association :uploader, :factory => :user
+
+    factory :users_starting_description_card do
+      association :idea_catalyst, :factory => :games_user
+    end
 
     factory :drawing do
       drawing_file_name { Faker::Avatar.image }
-    end
+      drawing_or_description 'drawing'
+      description_text nil
 
-    factory :description do
-      description_text { Faker::Lorem.sentence(3)}
+      factory :users_starting_drawing_card do
+        association :idea_catalyst, :factory => :games_user
+      end
     end
 
   end

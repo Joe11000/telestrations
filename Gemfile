@@ -67,8 +67,10 @@ group :test do
   gem 'rspec-rails', '3.1.0'
   gem 'selenium-webdriver', '2.49.0'
   gem 'webmock', '1.22.6'
-  gem 'shoulda-matchers', '3.1.1'
+  gem 'shoulda-matchers'
+
   gem 'capybara', '2.6.0'
   gem 'faker', '1.6.1'
   gem 'poltergeist', '1.8.1'
+  gem 'rails-controller-testing'
 end

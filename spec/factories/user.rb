@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :user do
-    name { Faker::Name.name }
+    name { "#{Faker::Name.first_name} #{Faker::Name.first_name}" }
     provider { rand(2) == 0 ? 'twitter' : 'facebook' }
     uid { rand(1000..100000)}
 

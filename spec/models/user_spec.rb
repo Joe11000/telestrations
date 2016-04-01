@@ -2,50 +2,73 @@ require 'rails_helper'
 
 RSpec.describe User, type: :model do
 
-  it { is_expected.to act_as_paranoid }
-  it { is_expected.to have_many(:games).through(:games_users)}
-  it { is_expected.to have_many(:starting_cards).through(:games_users)}
-  it { is_expected.to have_many(:games_users) }
+  context 'model validations' do
+    it { is_expected.to act_as_paranoid }
+    it { is_expected.to have_many(:games_users).inverse_of(:user) }
+    it { is_expected.to have_many(:games).through(:games_users)}
+    it { is_expected.to have_many(:starting_cards).through(:games_users)}
 
-  context 'methods' do
-    context 'User.all_unassociated_cards' do
-      it 'valid if' do
-        # associated card
-        gu1 = FactoryGirl.create(:games_user)
-        g1 = gu1.game
-        u1 = gu1.user
-        gu1.starting_card = FactoryGirl.create(:card, uploader_id: u1.id)
-        c1 = gu1.starting_card
+    # paperclip
+    it { is_expected.to have_attached_file(:provider_avatar_override) }
+    it { is_expected.to validate_attachment_size(:provider_avatar_override).
+                  less_than(5.megabytes) }
+    it { is_expected.to validate_attachment_content_type(:provider_avatar_override).
+                  allowing("image/jpeg", "image/jpg", "image/gif", "image/png").
+                  rejecting('text/plain', 'text/xml') }
+  end
 
-        # incorrect uploader
-        gu2 = FactoryGirl.create(:games_user)
-        g2 = gu2.game
-        u2 = gu2.user
-        gu2.starting_card = FactoryGirl.create(:card, uploader_id: u2.id)
-        c2 = gu2.starting_card
+  context 'factory'
 
-        # no uploader
-        gu3 = FactoryGirl.create(:games_user)
-        g3 = gu3.game
-        u3 = gu3.user
-        gu3.starting_card = FactoryGirl.create(:card, uploader_id: nil)
-        c3 = gu3.starting_card
-
-        # no games_user association
-        c4 = FactoryGirl.create(:card, uploader_id: u1.id)
-        results = User.all_unassociated_cards
-
-        session[:user_id] = u1.id
-
-        expect(results.length).to eq 1
-        expect(results.first).to eq c4
-
-        byebug
-      end
+  context 'LOOK UP methods' do
+    before(:all) do
+      @game = FactoryGirl.create(:full_game)
+      @user = @game.users.first
     end
 
-    context '#current_game_name' do
+    it '#current_game' do
+      expect(@user.current_game).to eq @game
+    end
 
+    it '#gamesuser_in_current_game' do
+      expect(@user.gamesuser_in_current_game).to eq GamesUser.find_by(game_id: @game.id, user_id: @user.id)
+    end
+
+    it '#starting_card_in_current_game' do
+      expect(@user.starting_card_in_current_game).to eq @user.gamesuser_in_current_game.starting_card
+    end
+
+    it '#users_game_name' do
+      expect(@user.users_game_name).to eq @user.gamesuser_in_current_game.users_game_name
+    end
+  end
+
+  context 'DB changing methods' do
+    context '#leave_current_game' do
+      before(:each) do
+        @game = FactoryGirl.create(:full_game)
+        @user = @game.users.first
+      end
+
+      it 'single player leaves a game with other people in it' do
+        @user.leave_current_game
+        @user.reload
+
+        expect(@user.current_game).to eq nil
+        expect(@user.gamesuser_in_current_game).to eq nil
+        expect(@game.persisted?).to eq true
+        expect(@game.deleted?).to eq false
+      end
+
+      it 'only player leaves a game' do
+        @game.users.each{|user| user.destroy if user != @user }
+        @user.leave_current_game
+        @game.reload
+
+        expect(@user.current_game).to eq nil
+        expect(@user.gamesuser_in_current_game).to eq nil
+        expect(@game.persisted?).to eq true
+        expect(@game.deleted?).to eq true
+      end
     end
   end
 end

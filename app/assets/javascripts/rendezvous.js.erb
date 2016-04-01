@@ -13,28 +13,29 @@ $(function(){
       url: $form.attr('action')
     }
 
-    window.setInterval(function(){
-      $.ajax({
-          type: 'get',
-          url: $("[data-id='rendezvous-get-updates-url']").val(),
-          success: function(data, status){
-            if(data == 'Start Game')
-              $("['data-id='rendezvous-start-game-button-container']").click();
-            else if (data !== undefined)
-              $("[data-id=currently-joined]").replaceWith(data.content);
-            }
-          },
-          failure: function() {
-            $(this).removeAttr('disabled'); //enable go button
-            display_error_name_submission_error($this)
-          },
-          ifModified: true,
-          dataType: 'json'
-        });
-    }, 4000);
+    // window.setInterval(function(){
+    //   $.ajax({
+    //       type: 'get',
+    //       url: $("[data-id='rendezvous-get-updates-url']").val(),
+    //       success: function(data, status){
+    //         if(data == 'Start Game')
+    //           $("['data-id='rendezvous-start-game-button-container']").click();
+    //         else if (data !== undefined)
+    //           $("[data-id=currently-joined]").replaceWith(data.content);
+    //         }
+    //       },
+    //       failure: function() {
+    //         $(this).removeAttr('disabled'); //enable go button
+    //         display_error_name_submission_error($this)
+    //       },
+    //       ifModified: true,
+    //       dataType: 'json'
+    //     });
+    // }, 4000);
 
     $("[data-id='update-rendezvous-form-group'] button").on('click', function(e){
       e.preventDefault()
+
       display_error_name_submission_error = function(element){
         var input_group = $(this).closest('.form-group');
         input_group.addClass('has-error');
@@ -44,7 +45,6 @@ $(function(){
       // validate for a 4 digit number before submitting
       if( $("[data-id='update-rendezvous-form-group'] input").val().length > 0)
       {
-
         $(this).attr('disabled', 'disabled'); //disable go button
 
         join_code = $('[data-id=randezvous-join-code]').html();
@@ -53,29 +53,34 @@ $(function(){
         url = $form.attr('action')
 
 
-        $.ajax({
-          type: 'post',
-          url: url,
-          data: {users_game_name: game_name},
-          success: function(data, status){
-            $(this).removeAttr('disabled'); //enable go button
 
-            if(data['response'] === 'user sucessfully joined')
-            {
-              $('[data-id=update-rendezvous-group-col]').addClass('hidden')
-              $('[data-id=rendezvous-start-game-button-container]').removeClass('hidden')
-            }
-            else if (data['response'] === 'user unsucessfully joined')
-            {
-              display_error_name_submission_error($this)
-            }
-          },
-          failure: function(){
-            $(this).removeAttr('disabled'); //enable go button
-            display_error_name_submission_error($this)
-          },
-          dataType: 'json'
-        });
+        $('[data-id=update-rendezvous-group-col]').addClass('hidden')
+        $('[data-id=rendezvous-start-game-button-container]').removeClass('hidden')
+
+
+        // $.ajax({
+        //   type: 'post',
+        //   url: url,
+        //   data: {users_game_name: game_name},
+        //   success: function(data, status){
+        //     $(this).removeAttr('disabled'); //enable go button
+
+        //     if(data['response'] === 'user sucessfully joined')
+        //     {
+        //       $('[data-id=update-rendezvous-group-col]').addClass('hidden')
+        //       $('[data-id=rendezvous-start-game-button-container]').removeClass('hidden')
+        //     }
+        //     else if (data['response'] === 'user unsucessfully joined')
+        //     {
+        //       display_error_name_submission_error($this)
+        //     }
+        //   },
+        //   failure: function(){
+        //     $(this).removeAttr('disabled'); //enable go button
+        //     display_error_name_submission_error($this)
+        //   },
+        //   dataType: 'json'
+        // });
       }
       else
       {

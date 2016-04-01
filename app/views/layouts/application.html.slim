@@ -3,10 +3,12 @@ html
   head
     title Telestrations
     = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true
-    = javascript_include_tag 'application', 'data-turbolinks-track' => true
     = csrf_meta_tags
+    = action_cable_meta_tag
     = favicon_link_tag 'happy-icon.png'
   body
     = render partial: 'shared/notifications'
     .container-fluid
       = yield
+
+  = javascript_include_tag 'application', 'data-turbolinks-track' => true

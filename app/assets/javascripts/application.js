@@ -10,13 +10,13 @@
 // Read Sprockets README (https://github.com/rails/sprockets#sprockets-directives) for details
 // about supported directives.
 //
+//  components
 //= require jquery
 //= require jquery_ujs
 //= require turbolinks
 //= require react
 //= require react_ujs
-//  components
 //= require twitter/bootstrap
-//= require cable
-//= require_tree ./channels
+//= requre channels
 //= require_tree .
+

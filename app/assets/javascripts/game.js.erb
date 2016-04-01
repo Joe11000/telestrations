@@ -1,14 +1,14 @@
-$(function(){
-  if(document.getElementById('start_game') != undefined)
-    window.setInterval(function(){
-      jQuery.ajax({
-        type: 'GET',
-        url: 'game/all_game_names',
-        data: JSON.parse(data),
-        success: console.log(data),
-        dataType: 'text',
-        ifModified: true
-      }
+// $(function(){
+//   if(document.getElementById('start_game') != undefined)
+//     window.setInterval(function(){
+//       jQuery.ajax({
+//         type: 'GET',
+//         url: 'game/all_game_names',
+//         data: JSON.parse(data),
+//         success: console.log(data),
+//         dataType: 'text',
+//         ifModified: true
+//       }
 
-    }, 500);
-});
+//     }, 500);
+// });

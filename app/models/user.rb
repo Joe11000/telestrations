@@ -27,6 +27,16 @@ class User < ActiveRecord::Base
     gamesuser_in_current_game.try(:users_game_name)
   end
 
+  def assign_player_to_game game_id
+    # delete an association to another pregame game
+      association = current_user.gamesuser_in_current_game
+      association.destroy unless association.blank?
+
+    # create user association to game
+      GamesUser.create(user_id: current_user.id, game_id: @game.id, users_game_name: update_params)
+
+
+  end
 
   def leave_current_game
     gamesuser = self.gamesuser_in_current_game

@@ -47,6 +47,10 @@ Rails.application.configure do
   # Raises helpful error messages.
   config.assets.raise_runtime_errors = true
 
+
+  config.action_cable.allowed_request_origins = ['*', /http:\/\/ruby.*/]
+
+  config.action_cable.disable_request_forgery_protection = true
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
 

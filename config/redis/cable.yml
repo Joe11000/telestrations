@@ -1,9 +1,17 @@
-# Action Cable uses Redis to administer connections, channels, and sending/receiving messages over the WebSocket.
-production:
-  url: redis://localhost:6379/1
+production: &production
+  adapter: redis
+  url: redis://dev.telestrations.herokuapp.com:6381
+development: &development
+  adapter: redis
+  url: redis://dev.telestrations.herokuapp.com:28080
+test: *development
 
-development:
-  url: redis://localhost:6379/2
 
-test:
-  url: redis://localhost:6379/3
+local: &local
+  :url: redis://dev.telestrations.herokuapp.com:6379
+  :host: dev.telestrations.herokuapp.com
+  :port: 6379
+  :timeout: 1
+  :inline: true
+development: *local
+test: *local
