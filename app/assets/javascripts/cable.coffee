@@ -2,4 +2,4 @@
 #= require action_cable
 
 @App = {}
-App.cable = ActionCable.createConsumer()
+App.cable = ActionCable.createConsumer(ENV['ACTIONCABLE_URL'])

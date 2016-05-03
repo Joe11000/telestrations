@@ -1,6 +1,7 @@
 # Be sure to restart your server when you modify this file. Action Cable runs in an EventMachine loop that does not support auto reloading.
 class GameChannel < ApplicationCable::Channel
   def subscribed
+    byebug
     game = Game.find_by(join_code: params[:join_code])
     stream_for game
   end
@@ -11,6 +12,7 @@ class GameChannel < ApplicationCable::Channel
   # end
 
   def unsubscribed
+    byebug
     stop_all_streams
   end
 
