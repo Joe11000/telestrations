@@ -9,14 +9,12 @@ class RendezvousController < ApplicationController
 
   # joining a game
   def join_game
-    byebug
-    @game = Game.active.find_by(join_code: join_game_params)
+    @game = Game.find_by(join_code: join_game_params)
     if @game.blank?
-      byebug
       redirect_to(rendezvous_choose_game_type_page_path, alert: "No players in group #{join_game_params}") and return
     else
       @game.touch # remember activity for deleting if inactive later
-      @users_waiting = @game.users.map(&:users_game_name)
+      @users_waiting = Game.all_users_game_names(@game.join_code)
       render :rendezvous_page and return
     end
   end
@@ -104,8 +102,9 @@ class RendezvousController < ApplicationController
   end
 
   def leave_pregame
-    gu = GamesUser.includes(:game).find_by(games: {join_code: params[:join_code]}, user_id: current_user.id )
-    gu.destroy unless gu.blank?
+    current_user.leave_current_game
+    # gu = GamesUser.includes(:game).find_by(games: {join_code: params[:join_code]}, user_id: current_user.id )
+    # gu.destroy unless gu.blank?
 
     redirect_to rendezvous_choose_game_type_page_path
   end

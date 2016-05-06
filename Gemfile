@@ -2,8 +2,8 @@ source 'https://rubygems.org'
 
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-# gem 'rails', '>= 5.0.0.beta1.1', '< 5.1'
-gem "rails", github: "rails/rails", ref: "dbf67b3a6f549769c5f581b70bc0c0d880d5d5d1"
+gem 'rails', '>= 5.0.0.beta4', '< 5.1'
+# gem "rails", github: "rails/rails", ref: "dbf67b3a6f549769c5f581b70bc0c0d880d5d5d1"
 # Use postgresql as the database for Active Record
 gem 'pg', '~> 0.18'
 # Use Uglifier as compressor for JavaScript assets
@@ -16,21 +16,27 @@ gem 'coffee-rails', '~> 4.1.0'
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
-gem 'turbolinks'
+gem 'turbolinks', '~> 5.x'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.0'
 # Use Puma as the app server
-gem 'puma'
+gem 'puma', '~> 3.0'
+
+
+# Use Puma as the app server
+# Use SCSS for stylesheets
+gem 'sass-rails', '~> 5.0'
+
 
 # Use ActiveModel has_secure_password
-# gem 'bcrypt', '~> 3.1.7'
+gem 'bcrypt', '~> 3.1.7'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
-  gem 'byebug'
+ gem 'byebug', platform: :mri
 end
 
 group :development do
@@ -51,12 +57,13 @@ gem 'omniauth-facebook', '1.4.0'
 gem 'dotenv-rails', '2.1.0'
 gem 'paranoia', '1.2.0'
 gem 'redis', '3.2.2'
+gem 'em-hiredis'
 gem 'sidekiq'
 gem 'sidetiq'
 
 # react-rails isn't compatible yet with latest Sprockets.
 # https://github.com/reactjs/react-rails/pull/322
-gem 'react-rails'
+# gem 'react-rails'
 
 # Add support to use es6 based on top of babel, instead of using coffeescript
 gem 'sprockets-es6'
@@ -75,3 +82,14 @@ group :test do
   gem 'poltergeist', '1.8.1'
   gem 'rails-controller-testing'
 end
+
+
+group :development do
+  # Access an IRB console on exception pages or by using <%= console %> anywhere in the code.
+  gem 'listen', '~> 3.0.5'
+  # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
+  gem 'spring-watcher-listen', '~> 2.0.0'
+end
+
+# Windows does not include zoneinfo files, so bundle the tzinfo-data gem
+gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]

@@ -4,9 +4,8 @@ module ApplicationCable
     identified_by :current_user
 
     def connect
-      byebug
       self.current_user = find_verified_user
-      # logger.add_tags 'ActionCable', current_user.name
+      # logger.info 'ActionCable', current_user.name
     end
 
     protected
@@ -26,7 +25,7 @@ end
 
 #     def connect
 #       self.current_user = User.last || find_verified_user
-#       logger.add_tags 'ActionCable', current_user.name
+#       logger.info 'ActionCable', current_user.name
 #     end
 
 #     protected

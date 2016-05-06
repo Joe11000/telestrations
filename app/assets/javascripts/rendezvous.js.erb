@@ -34,7 +34,7 @@ $(function(){
     // }, 4000);
 
     $("[data-id='update-rendezvous-form-group'] button").on('click', function(e){
-      e.preventDefault()
+      e.preventDefault();
 
       display_error_name_submission_error = function(element){
         var input_group = $(this).closest('.form-group');
@@ -42,17 +42,18 @@ $(function(){
         input_group.find('.help-block:hidden').removeClass('hidden');
       }
 
-      // validate for a 4 digit number before submitting
-      if( $("[data-id='update-rendezvous-form-group'] input").val().length > 0)
+      users_game_name = $(this).closest('.form-group').find('input').val();
+
+      // validate for a 4 character alphabetic string before submitting
+      if( users_game_name.length > 0)
       {
         $(this).attr('disabled', 'disabled'); //disable go button
 
         join_code = $('[data-id=randezvous-join-code]').html();
-        game_name = $(this).closest('.form-group').find('#name').val();
         $form = $(this).closest('form')
         url = $form.attr('action')
 
-
+        App.game.join_game(users_game_name, join_code);
 
         $('[data-id=update-rendezvous-group-col]').addClass('hidden')
         $('[data-id=rendezvous-start-game-button-container]').removeClass('hidden')
@@ -88,4 +89,10 @@ $(function(){
       }
     });
   }
+
+  $(document).unload(function(){
+    join_code = $('[data-id=randezvous-join-code]').html();
+    alert(join_code)
+    // App.game.unjoin_game();
+  });
 });

@@ -1,58 +1,39 @@
 # Be sure to restart your server when you modify this file. Action Cable runs in an EventMachine loop that does not support auto reloading.
 class GameChannel < ApplicationCable::Channel
   def subscribed
-    byebug
-    game = Game.find_by(join_code: params[:join_code])
-    stream_for game
+    if params['join_code']
+      game = Game.find_by(join_code: params['join_code'])
+      stream_from "game_#{params[:join_code]}"
+    end
   end
-
-  # def follow
-  #   byebug
-  #   stop_all_streams
-  # end
 
   def unsubscribed
-    byebug
-    stop_all_streams
+    # stop_all_streams
+    # close
   end
 
+  def join_game data_hash
+    current_user.assign_player_to_game( params[:join_code], data_hash['users_game_name'] )
+    html = render_user_partial_for_game( params[:join_code] )
+    ActionCable.server.broadcast("game_#{params[:join_code]}", partial: html)
+  end
 
-  # def unfollow
-  #   byebug
-  #   stop_all_streams
-  # end
+  def unjoin_game
+    debugger
+    current_user.leave_current_game
+    html = render_user_partial_for_game( params[:join_code] )
+    ActionCable.server.broadcast("game_#{params[:join_code]}", partial: html)
+  end
 
+  def start_game
+    debugger
 
-
-  # def join_game join_code
-  #   byebug
-  #   # assign_player_to_game
-  #   # ActionCable.server.broadcast('games', message: render_user_partial())
-  # end
-
-  # def unjoin_game
-  #   byebug
-
-  #   # ActionCable.server.broadcast('games', message: render_user_partial())
-  # end
-
-  # def start_game
-  #   byebug
-
-  # end
+  end
 
   protected
-    # def assign_player_to_game update_params
-    #   # delete an association to another pregame game
-    #     association = current_user.gamesuser_in_current_game
-    #     association.destroy unless association.blank?
 
-    #   # create user association to game
-    #     GamesUser.create(user_id: current_user.id, game_id: @game.id, users_game_name: update_params)
-    # end
-
-    def render_user_partial
-      ApplicationController.render(partial: 'rendezvous/currently_joined',
-                                   locals: { message: users_arr })
+    def render_user_partial_for_game join_code
+      users_waiting = Game.all_users_game_names(join_code)
+      ApplicationController.render(partial: 'rendezvous/currently_joined', locals: { users_waiting: users_waiting })
     end
 end

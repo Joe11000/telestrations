@@ -1,0 +1,6 @@
+local: &local
+  adapter: redis
+  url: redis://dev.telestrations.herokuapp.com:6379/1
+  host: dev.telestrations.herokuapp.com:3000
+development: *local
+test: *local

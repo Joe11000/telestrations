@@ -27,15 +27,20 @@ class User < ActiveRecord::Base
     gamesuser_in_current_game.try(:users_game_name)
   end
 
-  def assign_player_to_game game_id
-    # delete an association to another pregame game
-      association = current_user.gamesuser_in_current_game
+  def assign_player_to_game games_join_code, users_game_name
+    association = gamesuser_in_current_game
+
+    if current_game.try(:join_code) == games_join_code || # already attached to this game
+      current_game.try(:active)                     # currently playing a game, but somehow got here
+      return
+    else
+      # delete an association to another pregame game if it exists
       association.destroy unless association.blank?
 
-    # create user association to game
-      GamesUser.create(user_id: current_user.id, game_id: @game.id, users_game_name: update_params)
-
-
+      # create user association to game
+      game = Game.find_by(join_code: games_join_code)
+      GamesUser.create(user_id: id, game_id: game.id, users_game_name: users_game_name)
+    end
   end
 
   def leave_current_game
