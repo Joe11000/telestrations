@@ -90,9 +90,9 @@ $(function(){
     });
   }
 
-  $(document).unload(function(){
-    join_code = $('[data-id=randezvous-join-code]').html();
-    alert(join_code)
-    // App.game.unjoin_game();
+  $("[data-id='leave_game_link']").click(function(e){
+    e.preventDefault();
+    App.game.unjoin_game();
+    window.location = this.getAttribute('href');
   });
 });

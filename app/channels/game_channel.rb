@@ -19,10 +19,18 @@ class GameChannel < ApplicationCable::Channel
   end
 
   def unjoin_game
+    cur_game = current_user.current_game
     debugger
     current_user.leave_current_game
+    now_game = current_user.current_game
+    debugger
+
+
     html = render_user_partial_for_game( params[:join_code] )
     ActionCable.server.broadcast("game_#{params[:join_code]}", partial: html)
+    debugger
+
+    stop_all_streams
   end
 
   def start_game

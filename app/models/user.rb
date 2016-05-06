@@ -44,6 +44,7 @@ class User < ActiveRecord::Base
   end
 
   def leave_current_game
+    byebug
     gamesuser = self.gamesuser_in_current_game
     return if gamesuser.blank?
     game = gamesuser.game
