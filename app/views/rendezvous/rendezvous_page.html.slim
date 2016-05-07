@@ -7,13 +7,18 @@
         i.fa.fa-arrow-circle-left &nbsp;
         | Leave Group
 
-
-  = render partial: 'currently_joined', locals: {users_waiting: @users_waiting}
   .clearfix
 
   .col-xs-12.col-sm-12
     .loading-gif.text-center.invisible
       = image_tag 'loading_icon.gif', class: 'text-center', width:'80px'
+  .clearfix
+
+  .col-xs-12.col-sm-12
+    h2.text-center
+      | Join Code :
+      span data-id="randezvous-join-code" data-game-id="#{@game.id}" =< @game.join_code
+    h4.text-center = "( While Waiting, Don't Refresh )"
   .clearfix
 
   .col-xs-12.col-sm-12.text-center.hidden data-id='rendezvous-start-game-button-container'
@@ -36,12 +41,12 @@
         small.help-block.hidden You weren't added to the game yet. (Duplicating names is legal, but it's confusing. I'm not your mom. Do what you want.)
   .clearfix
 
-  .col-xs-12.col-sm-12
-    h2.text-center
-      | Join Code :
-      span data-id="randezvous-join-code" data-game-id="#{@game.id}" =< @game.join_code
-    h4.text-center = "( While Waiting, Don't Refresh )"
+
+
+
+
+
+
+
+  = render partial: 'currently_joined', locals: {users_waiting: @users_waiting}
   .clearfix
-
-
-
