@@ -36,7 +36,9 @@ gem 'bcrypt', '~> 3.1.7'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
- gem 'byebug', platform: :mri
+  gem 'byebug', platform: :mri
+  gem 'factory_girl_rails', '4.5.0'
+
 end
 
 group :development do
@@ -60,6 +62,7 @@ gem 'redis', '3.2.2'
 gem 'em-hiredis'
 gem 'sidekiq'
 gem 'sidetiq'
+gem 'tcr'
 
 # react-rails isn't compatible yet with latest Sprockets.
 # https://github.com/reactjs/react-rails/pull/322
@@ -71,7 +74,6 @@ gem 'sprockets-es6'
 # testing
 group :test do
   gem 'database_cleaner', '1.5.1'
-  gem 'factory_girl_rails', '4.5.0'
   gem 'rspec-rails', '3.1.0'
   gem 'selenium-webdriver', '2.49.0'
   gem 'webmock', '1.22.6'

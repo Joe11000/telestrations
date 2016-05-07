@@ -11,7 +11,7 @@ FactoryGirl.define do
 
     # midway through game
     factory :full_game do
-
+      status 'midgame'
       after(:create) do |game|
         mid_game_associations game
         game.update(join_code: nil)
@@ -19,7 +19,7 @@ FactoryGirl.define do
     end
 
     factory :post_game do
-      is_active false
+      status 'post_game'
 
       after(:create) do |game|
         mid_game_associations game

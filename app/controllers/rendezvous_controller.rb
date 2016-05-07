@@ -14,7 +14,7 @@ class RendezvousController < ApplicationController
       redirect_to(rendezvous_choose_game_type_page_path, alert: "No players in group #{join_game_params}") and return
     else
       @game.touch # remember activity for deleting if inactive later
-      @users_waiting = Game.all_users_game_names(@game.join_code)
+      @users_waiting = Game.all_users_game_names(@game.id)
       render :rendezvous_page and return
     end
   end
@@ -40,28 +40,6 @@ class RendezvousController < ApplicationController
     @game.touch # remember activity for deleting if inactive later
     render :rendezvous_page
   end
-
-  # def get_updates
-  #   respond_to do |format|
-  #     format.js do
-  #       @users_waiting = Game.all_users_game_names(params[:join_code])
-  #       game = Game.find_by(join_code: params[:join_code])
-  #       game.touch
-
-  #       if(!game.is_active && game.join_code != nil)
-  #         render json: {
-  #           content: render_to_string(partial: 'currently_joined', :layout => false)
-  #         } and return
-  #       else
-  #         render json: {
-  #           content: 'Start Game'
-  #         } and return
-  #       end
-  #     end
-  #   end
-
-  #   render status: 400 and return
-  # end
 
   def update
     respond_to do |format|

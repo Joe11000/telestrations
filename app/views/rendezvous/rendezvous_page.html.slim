@@ -39,7 +39,7 @@
   .col-xs-12.col-sm-12
     h2.text-center
       | Join Code :
-      span data-id="randezvous-join-code" =< @game.join_code
+      span data-id="randezvous-join-code" data-game-id="#{@game.id}" =< @game.join_code
     h4.text-center = "( While Waiting, Don't Refresh )"
   .clearfix
 

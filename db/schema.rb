@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160116063308) do
+ActiveRecord::Schema.define(version: 20160113013041) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -32,9 +32,8 @@ ActiveRecord::Schema.define(version: 20160116063308) do
   end
 
   create_table "games", force: :cascade do |t|
-    t.boolean  "is_private",               default: true
-    t.boolean  "is_active",                default: true
-    t.boolean  "allow_additional_players", default: true
+    t.boolean  "is_private", default: true
+    t.string   "status",     default: "pregame"
     t.string   "join_code"
     t.datetime "deleted_at"
     t.datetime "created_at"

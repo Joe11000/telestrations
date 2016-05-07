@@ -3,9 +3,8 @@ require 'rails_helper'
 
 RSpec.describe Game, type: :model do
 
-  context 'model validations' do
+  xcontext 'model validations' do
     it { is_expected.to have_many(:games_users).inverse_of(:game).dependent(:destroy) }
-    it { is_expected.to act_as_paranoid }
   end
 
   context 'factory' do
@@ -32,8 +31,8 @@ RSpec.describe Game, type: :model do
         end
       end
 
-      it 'is active' do
-        expect(@full_game.is_active).to eq true
+      it 'status' do
+        expect(@full_game.status).to eq 'midgame'
       end
 
       it 'removes join code' do
@@ -60,8 +59,8 @@ RSpec.describe Game, type: :model do
         end
       end
 
-      it 'is active' do
-        expect(@post_game.is_active).to eq false
+      it 'status' do
+        expect(@post_game.status).to eq 'postgame'
       end
 
       it 'does not allow additional players' do
@@ -87,7 +86,7 @@ RSpec.describe Game, type: :model do
       end
 
       it 'game has not been completed' do
-        expect(@public_pre_game.is_active).to eq true
+        expect(@public_pre_game.status).to eq 'pregame'
       end
 
       it 'game has not been deleted for some strange reason' do
@@ -107,8 +106,8 @@ RSpec.describe Game, type: :model do
       expect(game.is_private).to eq true
     end
 
-    it 'is_active is set to true' do
-      expect(game.is_active).to eq true
+    it 'status is defaulted to pregame' do
+      expect(game.status).to eq 'pregame'
     end
 
     it 'a 4 digit join_code' do
@@ -128,14 +127,7 @@ RSpec.describe Game, type: :model do
       expect(Game.random_public_game).to eq g1 # intentionally duplicated test
     end
 
-    it 'active' do
-      findable_id = FactoryGirl.create(:game).id
-      unfindable_id = FactoryGirl.create(:game, is_active: false).id
-      ids = Game.active.ids
 
-      expect(ids.include?(findable_id)).to eq true
-      expect(ids.include?(unfindable_id)).to eq false
-    end
   end
 
   context 'methods' do

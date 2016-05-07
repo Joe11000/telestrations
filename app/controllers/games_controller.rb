@@ -21,7 +21,7 @@ class GamesController < ApplicationController
     #     unless current_game.blank?
     #       @game = Game.pre_game.where(join_code: params[:join_code])
 
-    #       current_user.games << Game.all_users_game_names(params[:join_code]).to_json
+    #       current_user.games << Game.all_users_game_names(@game.id).to_json
     #       render status: 200 && return
     #     end
 

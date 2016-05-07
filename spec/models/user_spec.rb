@@ -70,5 +70,9 @@ RSpec.describe User, type: :model do
         expect(@game.deleted?).to eq true
       end
     end
+
+    context '#assign_player_to_game' do
+
+    end
   end
 end

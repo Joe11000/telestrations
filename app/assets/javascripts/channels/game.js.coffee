@@ -1,5 +1,4 @@
-App.game = App.cable.subscriptions.create { channel: "GameChannel", not_join_code: 7, join_code: $('[data-id=randezvous-join-code]').html() },
-# App.game = App.cable.subscriptions.create { channel: "GameChannel", game_join_code: 'AAAA'},
+App.game = App.cable.subscriptions.create { channel: "GameChannel", game_id: $('[data-game-id]').attr('data-game-id') },
   connected: ->
     # console.log('connected')
     $('.loading-gif').removeClass('invisible');

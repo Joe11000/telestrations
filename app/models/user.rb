@@ -12,11 +12,11 @@ class User < ActiveRecord::Base
   validates_with AttachmentSizeValidator, :attributes => :provider_avatar_override, less_than: 5.megabytes
 
   def current_game
-    Game.includes(:users).find_by(users: { id: id }, games: { is_active: true } )
+    Game.includes(:users).not_postgames.find_by(users: { id: id })
   end
 
   def gamesuser_in_current_game
-    GamesUser.includes(:game).find_by(user_id: id, games: {is_active: true})
+    GamesUser.includes(:game).find_by(user_id: id, games: { status: ['pregame', 'midgame' ] })
   end
 
   def starting_card_in_current_game
@@ -27,34 +27,33 @@ class User < ActiveRecord::Base
     gamesuser_in_current_game.try(:users_game_name)
   end
 
-  def assign_player_to_game games_join_code, users_game_name
-    association = gamesuser_in_current_game
-
-    if current_game.try(:join_code) == games_join_code || # already attached to this game
-      current_game.try(:active)                     # currently playing a game, but somehow got here
+  def assign_player_to_game game_id, users_game_name
+    cg = current_game
+    if cg.try(:id) == game_id || # already attached to this game
+      cg.try(:status) == 'midgame'  # currently playing a game, but somehow got here
       return
     else
+
       # delete an association to another pregame game if it exists
+      association = gamesuser_in_current_game
       association.destroy unless association.blank?
 
       # create user association to game
-      game = Game.find_by(join_code: games_join_code)
+      game = Game.find(game_id)
       GamesUser.create(user_id: id, game_id: game.id, users_game_name: users_game_name)
     end
   end
 
   def leave_current_game
-    byebug
-    gamesuser = self.gamesuser_in_current_game
-    return if gamesuser.blank?
-    game = gamesuser.game
+    cg = current_game
+    return false if (cg.blank? || cg.status != 'pregame')
 
-    unless game.join_code.blank?
-      if game.users.size == 1
-        game.destroy
-      else
-        gamesuser.destroy
-      end
+    if cg.users.count == 1
+      cg.destroy
+    else
+      gamesuser_in_current_game.destroy
     end
+
+    true
   end
 end

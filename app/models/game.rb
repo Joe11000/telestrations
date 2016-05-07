@@ -1,18 +1,21 @@
 class Game < ActiveRecord::Base
-  # acts_as_paranoid
-
   has_many :games_users, inverse_of: :game, dependent: :destroy
   has_many :users, through: :games_users
   has_many :starting_cards, through: :games_users
 
   validates :join_code, uniqueness: true, length: { is: 4 }
+  validates :status, inclusion: { in: %w( pregame midgame postgame ) }
 
-  scope :active, -> { where(is_active: true) }
-  scope :random_open_game, -> { active.where(is_private: false, allow_additional_players: true).sample }
+  scope :pregames, -> { where(status: 'pregame') }
+  scope :midgames, -> { where(status: 'midgame') }
+  scope :postgames, -> { where(status: 'postgame') }
+  scope :not_postgames, -> { where.not(status: 'postgame') }
+
+  scope :random_public_game, -> { pregames.where(is_private: false).sample }
 
   # this may get problematic if the number of groups playing gets a certain percentage close enough to 456976....not likely
   before_validation(on: :create) do
-    active_codes = Game.active.pluck(:join_code)
+    active_codes = Game.not_postgames.pluck(:join_code)
     letters = ('A'..'Z').to_a
     new_code = ''
 
@@ -32,16 +35,16 @@ class Game < ActiveRecord::Base
 #   [ [users_game_name, Card.create], [users_game_name, Card.create], [users_game_name, Card.create] ],
 #   [ [users_game_name, Card.create], [users_game_name, Card.create], [users_game_name, Card.create] ],
 # ]
-  def start_request
-
+  def is_post_game?
+    status == 'postgame'
   end
 
-  def self.all_users_game_names join_code
-    GamesUser.includes(:game).where(games: { join_code: join_code }).map(&:users_game_name)
+  def self.all_users_game_names id
+    GamesUser.includes(:game).where(games: { id: id }).map(&:users_game_name)
   end
 
   def cards_from_finished_game
-    return [] if is_active
+    return [] if is_post_game?
 
     # all cards associated with this games get
     starting_cards = Card.all_starting_cards.includes(idea_catalyst: :game).where(games: { join_code: join_code } )

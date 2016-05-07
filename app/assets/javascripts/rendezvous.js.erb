@@ -1,38 +1,8 @@
 // Place all the behaviors and hooks related to the matching controller here.
 // All this logic will automatically be available in application.js.
 
-
 $(function(){
   if($("[data-id='rendezvous-page']").length > 0) {
-
-    $form = $("[data-id='update-rendezvous-form-group'] form")
-    window.RENDEZVOUS = {
-      join_code: $('[data-id=randezvous-join-code]').html(),
-      game_name: '',
-      update_rendezvous_form: $form,
-      url: $form.attr('action')
-    }
-
-    // window.setInterval(function(){
-    //   $.ajax({
-    //       type: 'get',
-    //       url: $("[data-id='rendezvous-get-updates-url']").val(),
-    //       success: function(data, status){
-    //         if(data == 'Start Game')
-    //           $("['data-id='rendezvous-start-game-button-container']").click();
-    //         else if (data !== undefined)
-    //           $("[data-id=currently-joined]").replaceWith(data.content);
-    //         }
-    //       },
-    //       failure: function() {
-    //         $(this).removeAttr('disabled'); //enable go button
-    //         display_error_name_submission_error($this)
-    //       },
-    //       ifModified: true,
-    //       dataType: 'json'
-    //     });
-    // }, 4000);
-
     $("[data-id='update-rendezvous-form-group'] button").on('click', function(e){
       e.preventDefault();
 
@@ -44,44 +14,18 @@ $(function(){
 
       users_game_name = $(this).closest('.form-group').find('input').val();
 
-      // validate for a 4 character alphabetic string before submitting
+      // user submitted a games_user_name
       if( users_game_name.length > 0)
       {
         $(this).attr('disabled', 'disabled'); //disable go button
 
-        join_code = $('[data-id=randezvous-join-code]').html();
         $form = $(this).closest('form')
         url = $form.attr('action')
 
-        App.game.join_game(users_game_name, join_code);
+        App.game.join_game(users_game_name);
 
         $('[data-id=update-rendezvous-group-col]').addClass('hidden')
         $('[data-id=rendezvous-start-game-button-container]').removeClass('hidden')
-
-
-        // $.ajax({
-        //   type: 'post',
-        //   url: url,
-        //   data: {users_game_name: game_name},
-        //   success: function(data, status){
-        //     $(this).removeAttr('disabled'); //enable go button
-
-        //     if(data['response'] === 'user sucessfully joined')
-        //     {
-        //       $('[data-id=update-rendezvous-group-col]').addClass('hidden')
-        //       $('[data-id=rendezvous-start-game-button-container]').removeClass('hidden')
-        //     }
-        //     else if (data['response'] === 'user unsucessfully joined')
-        //     {
-        //       display_error_name_submission_error($this)
-        //     }
-        //   },
-        //   failure: function(){
-        //     $(this).removeAttr('disabled'); //enable go button
-        //     display_error_name_submission_error($this)
-        //   },
-        //   dataType: 'json'
-        // });
       }
       else
       {
