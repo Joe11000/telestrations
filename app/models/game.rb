@@ -10,9 +10,11 @@ class Game < ActiveRecord::Base
   scope :midgames, -> { where(status: 'midgame') }
   scope :postgames, -> { where(status: 'postgame') }
   scope :not_postgames, -> { where.not(status: 'postgame') }
+  scope :public_games, -> { where(is_private: false) }
 
-  scope :random_public_game, -> { pregames.where(is_private: false).sample }
-
+  def self.random_public_game
+    Game.pregames.public_games.sample
+  end
 
   # this may get problematic if the number of groups playing gets a certain percentage close enough to 456976....not likely
   before_validation(on: :create) do
