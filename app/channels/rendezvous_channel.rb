@@ -1,5 +1,5 @@
 # Be sure to restart your server when you modify this file. Action Cable runs in an EventMachine loop that does not support auto reloading.
-class GameChannel < ApplicationCable::Channel
+class RendezvousChannel < ApplicationCable::Channel
   def subscribed
     unless params['game_id'].blank?
       game = Game.find(params['game_id'])

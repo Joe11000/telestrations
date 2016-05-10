@@ -28,6 +28,7 @@ class User < ActiveRecord::Base
   end
 
   def assign_player_to_game game_id, users_game_name
+    byebug
     cg = current_game
     if cg.try(:id) == game_id || # already attached to this game
       cg.try(:status) == 'midgame'  # currently playing a game, but somehow got here

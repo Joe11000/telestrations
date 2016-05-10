@@ -13,6 +13,7 @@ class Game < ActiveRecord::Base
 
   scope :random_public_game, -> { pregames.where(is_private: false).sample }
 
+
   # this may get problematic if the number of groups playing gets a certain percentage close enough to 456976....not likely
   before_validation(on: :create) do
     active_codes = Game.not_postgames.pluck(:join_code)
@@ -30,11 +31,23 @@ class Game < ActiveRecord::Base
   end
 
 
+  def unassociated_rendezousing_users
+    User.includes(games_users: :game).where(games: {id: id }).where(games_users: {users_game_name: nil})
+  end
+
+  def associated_rendezousing_users
+    User.includes(games_users: :game).where(games: {id: id }).where.not(games_users: {users_game_name: nil})
+  end
+
+
+
 # ie
 # [
 #   [ [users_game_name, Card.create], [users_game_name, Card.create], [users_game_name, Card.create] ],
 #   [ [users_game_name, Card.create], [users_game_name, Card.create], [users_game_name, Card.create] ],
 # ]
+
+
   def is_post_game?
     status == 'postgame'
   end

@@ -22,7 +22,7 @@ $(function(){
         $form = $(this).closest('form')
         url = $form.attr('action')
 
-        App.game.join_game(users_game_name);
+        App.rendezvous.join_game(users_game_name);
 
         $('[data-id=update-rendezvous-group-col]').addClass('hidden')
         $('[data-id=rendezvous-start-game-button-container]').removeClass('hidden')
@@ -36,7 +36,7 @@ $(function(){
 
   $("[data-id='leave_game_link']").click(function(e){
     e.preventDefault();
-    App.game.unjoin_game();
+    App.rendezvous.unjoin_game();
     window.location = this.getAttribute('href');
   });
 });
