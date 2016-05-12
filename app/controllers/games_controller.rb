@@ -5,7 +5,6 @@ class GamesController < ApplicationController
   before_action :redirect_if_no_current_game
 
   def start_page
-    byebug
     # @variable = 'Playing Game'
     # @current_game = current_user.current_game
   end
@@ -42,8 +41,6 @@ class GamesController < ApplicationController
     end
 
     def redirect_if_no_current_game
-      unless current_user.current_game.try(:status) == 'midgame'
-        redirect_to rendezvous_choose_game_type_page_path && return
-      end
+      redirect_to rendezvous_choose_game_type_page_path if current_user.current_game.try(:status) != 'midgame'
     end
 end

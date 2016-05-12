@@ -1,6 +1,8 @@
 class RendezvousController < ApplicationController
 
   before_action :redirect_if_not_logged_in
+  before_action :redirect_if_currently_playing_game
+
   layout proc { false if request.xhr? }
 
   def choose_game_type_page
@@ -94,5 +96,9 @@ protected
 
   def update_params
     params.require(:users_game_name)
+  end
+
+  def redirect_if_currently_playing_game
+    redirect_to start_game_page_path if current_user.current_game.try(:status) == 'midgame'
   end
 end
