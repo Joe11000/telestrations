@@ -26,35 +26,4 @@ class User < ActiveRecord::Base
   def users_game_name
     gamesuser_in_current_game.try(:users_game_name)
   end
-
-  def rendezvous_with_game join_code
-    cg = current_game
-
-    if !cg.blank? && cg.try(:join_code) == join_code # player is already rendezvousing with Game
-      return
-    elsif ( cg.try(:status) == 'pregame' ) # player rendezvousing with another game
-      gamesuser_in_current_game.destroy
-    end
-
-    self.games << Game.find_by(join_code: join_code)
-  end
-
-  def commit_to_game join_code, users_game_name
-    gu = gamesuser_in_current_game
-    return if gu.blank?
-    gu.update(users_game_name: users_game_name);
-  end
-
-  def leave_current_game
-    cg = current_game
-    return false if (cg.blank? || cg.status != 'pregame')
-
-    if cg.users.count == 1
-      cg.destroy
-    else
-      gamesuser_in_current_game.try(:destroy)
-    end
-
-    true
-  end
 end

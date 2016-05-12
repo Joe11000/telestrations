@@ -3,10 +3,11 @@ class RendezvousChannel < ApplicationCable::Channel
   include Rails.application.routes.url_helpers
 
   def subscribed
-    unless params['join_code'].blank? || Game.find_by(join_code: params['join_code']).blank?
+    unless params['join_code'].blank?
+      game = Game.find_by(join_code: params['join_code']).blank?
       stop_all_streams
       stream_from "rendezvous_#{params[:join_code]}"
-      current_user.rendezvous_with_game(params[:join_code])
+      game.rendezvous_new_user(current_user)
     end
   end
 

@@ -49,6 +49,60 @@ class Game < ActiveRecord::Base
 #   [ [users_game_name, Card.create], [users_game_name, Card.create], [users_game_name, Card.create] ],
 # ]
 
+
+  def rendezvous_with_game user_id
+    byebug
+    users.where(id: user_id)
+    # user = User.find(user_id)
+
+
+
+
+    # cg = current_game
+
+    # if !cg.blank? && cg.try(:join_code) == join_code # player is already rendezvousing with Game
+    #   return
+    # elsif ( cg.try(:status) == 'pregame' ) # player rendezvousing with another game
+    #   gamesuser_in_current_game.destroy
+    # end
+
+    # self.games << Game.find_by(join_code: join_code)
+  end
+
+  # def commit_to_game join_code, users_game_name
+  #   gu = gamesuser_in_current_game
+  #   return if gu.blank?
+  #   gu.update(users_game_name: users_game_name);
+  # end
+
+  def remove_player user_id
+    user = users.find(user_id)
+    return false if (user.blank? || status != 'pregame')
+
+    if users.count == 1
+      self.destroy
+    else
+      games_users.find_by(user_id: user_id, game_id: id).destroy
+    end
+
+    true
+
+    # cg = current_game
+    # return false if (cg.blank? || cg.status != 'pregame')
+
+    # if cg.users.count == 1
+    #   cg.destroy
+    # else
+    #   gamesuser_in_current_game.try(:destroy)
+    # end
+
+    # true
+  end
+
+
+
+
+
   def self.all_users_game_names join_code
     GamesUser.includes(:game).where(games: { join_code: join_code }).map(&:users_game_name)
   end
@@ -76,5 +130,7 @@ class Game < ActiveRecord::Base
     end
     result
   end
-
+  # FactoryGirl.create(:full_game)
+# Game.last.update(status: 'pregame')
+# Game.last.remove_player(Game.last.users.first)
 end
