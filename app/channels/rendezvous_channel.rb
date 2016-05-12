@@ -23,7 +23,9 @@ class RendezvousChannel < ApplicationCable::Channel
   end
 
   def unjoin_game
-    current_user.leave_current_game
+    game = Game.find_by(params[:join_code])
+
+    return false unless game.remove_player(current_user.id)
 
     html = render_user_partial_for_game( params[:join_code] )
     ActionCable.server.broadcast("rendezvous_#{params[:join_code]}", partial: html)

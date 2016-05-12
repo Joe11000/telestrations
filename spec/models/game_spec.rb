@@ -214,5 +214,17 @@ RSpec.describe Game, type: :model do
         end
       end
     end
+
+    context '#rendezvouing_user' do
+      context 'does nothing and returns false if' do
+        it 'user doesnt exist'
+        it 'user is already associated with game'
+        it 'the game is not in pregame mode'
+      end
+
+      context 'does nothing and returns false if' do
+
+      end
+    end
   end
 end

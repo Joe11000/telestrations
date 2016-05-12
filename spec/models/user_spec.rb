@@ -41,38 +41,4 @@ RSpec.describe User, type: :model do
       expect(@user.users_game_name).to eq @user.gamesuser_in_current_game.users_game_name
     end
   end
-
-  context 'DB changing methods' do
-    context '#leave_current_game' do
-      before(:each) do
-        @game = FactoryGirl.create(:full_game)
-        @user = @game.users.first
-      end
-
-      it 'single player leaves a game with other people in it' do
-        @user.leave_current_game
-        @user.reload
-
-        expect(@user.current_game).to eq nil
-        expect(@user.gamesuser_in_current_game).to eq nil
-        expect(@game.persisted?).to eq true
-        expect(@game.deleted?).to eq false
-      end
-
-      it 'only player leaves a game' do
-        @game.users.each{|user| user.destroy if user != @user }
-        @user.leave_current_game
-        @game.reload
-
-        expect(@user.current_game).to eq nil
-        expect(@user.gamesuser_in_current_game).to eq nil
-        expect(@game.persisted?).to eq true
-        expect(@game.deleted?).to eq true
-      end
-    end
-
-    context '#assign_player_to_game' do
-
-    end
-  end
 end

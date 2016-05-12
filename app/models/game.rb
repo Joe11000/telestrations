@@ -50,7 +50,7 @@ class Game < ActiveRecord::Base
 # ]
 
 
-  def rendezvous_with_game user_id
+  def rendezvouing_user user_id
     byebug
     user = users.find(user_id)
     return false unless user.blank?
@@ -64,13 +64,15 @@ class Game < ActiveRecord::Base
     # cg = current_game
 
     # if !cg.blank? && cg.try(:join_code) == join_code # player is already rendezvousing with Game
-    #   return
+    #   return false
     # elsif ( cg.try(:status) == 'pregame' ) # player rendezvousing with another game
     #   gamesuser_in_current_game.destroy
     # end
 
     # self.games << Game.find_by(join_code: join_code)
   end
+
+  # def commiting_user join_code, users_game_name
 
   # def commit_to_game join_code, users_game_name
   #   gu = gamesuser_in_current_game

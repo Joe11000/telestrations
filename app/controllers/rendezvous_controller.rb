@@ -44,7 +44,7 @@ class RendezvousController < ApplicationController
   end
 
   def leave_pregame
-    current_user.leave_current_game
+    current_user.current_game.remove_player current_user.id
     redirect_to rendezvous_choose_game_type_page_path
   end
 
