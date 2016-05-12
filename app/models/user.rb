@@ -12,11 +12,11 @@ class User < ActiveRecord::Base
   validates_with AttachmentSizeValidator, :attributes => :provider_avatar_override, less_than: 5.megabytes
 
   def current_game
-    Game.includes(:users).not_postgames.find_by(users: { id: id })
+    games.not_postgames.last || Game.none
   end
 
   def gamesuser_in_current_game
-    GamesUser.includes(:game).where.not(games: {status: 'postgames'}).find_by(user_id: id)
+    GamesUser.includes(:game).where.not(games: {status: 'postgame'}).find_by(user_id: id) || GamesUser.none
   end
 
   def starting_card_in_current_game
@@ -27,33 +27,23 @@ class User < ActiveRecord::Base
     gamesuser_in_current_game.try(:users_game_name)
   end
 
-
-
   def rendezvous_with_game join_code
     cg = current_game
 
-    if( cg && (cg.try(:join_code) == join_code || cg.try(:status) != 'pregame') ) # game is not joinable
-      #byebug
+    if !cg.blank? && cg.try(:join_code) == join_code # player is already rendezvousing with Game
       return
-    else
-      #byebug
-
-      # delete an association to another pregame game if it exists
-      association = gamesuser_in_current_game
-      association.destroy unless association.blank?
-      # create user association to game
-      self.games << Game.find_by(join_code: join_code)
+    elsif ( cg.try(:status) == 'pregame' ) # player rendezvousing with another game
+      gamesuser_in_current_game.destroy
     end
+
+    self.games << Game.find_by(join_code: join_code)
   end
 
   def commit_to_game join_code, users_game_name
-    #byebug
     gu = gamesuser_in_current_game
     return if gu.blank?
     gu.update(users_game_name: users_game_name);
   end
-
-
 
   def leave_current_game
     cg = current_game

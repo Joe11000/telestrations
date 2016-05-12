@@ -42,9 +42,8 @@ class GamesController < ApplicationController
     end
 
     def redirect_if_no_current_game
-      # byebug
-      # unless current_user.current_game.status == 'midgame'
-        # redirect_to root_path && return
-      # end
+      unless current_user.current_game.try(:status) == 'midgame'
+        redirect_to rendezvous_choose_game_type_page_path && return
+      end
     end
 end

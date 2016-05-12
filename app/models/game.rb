@@ -33,7 +33,7 @@ class Game < ActiveRecord::Base
   end
 
   def unassociated_rendezousing_games_users
-    GamesUser.includes(:user, :game).where(game_id: id).where(users_game_name: nil)
+    GamesUser.where(game_id: id, users_game_name: nil)
   end
 
   # could use but haven't
@@ -75,11 +75,6 @@ class Game < ActiveRecord::Base
       result << card_set
     end
     result
-  end
-
-  def prevent_additional_players
-    # if user is NOT attached to a game, then return false
-    self.users.find_by(user_id: current_user.id)
   end
 
 end
