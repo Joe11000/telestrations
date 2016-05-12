@@ -2,7 +2,7 @@ class GamesController < ApplicationController
   # layout 'layouts/game_layout'
 
   before_action :redirect_if_not_logged_in
-  before_action :redirect_if_no_current_game
+  before_action :redirect_if_no_current_game, except: [:post_game]
 
   def game_page
     # @variable = 'Playing Game'
