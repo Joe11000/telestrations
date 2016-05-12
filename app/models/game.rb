@@ -52,7 +52,10 @@ class Game < ActiveRecord::Base
 
   def rendezvous_with_game user_id
     byebug
-    users.where(id: user_id)
+    user = users.find(user_id)
+    return false unless user.blank?
+
+
     # user = User.find(user_id)
 
 
@@ -76,7 +79,7 @@ class Game < ActiveRecord::Base
   # end
 
   def remove_player user_id
-    user = users.find(user_id)
+    user = users.find_by(id: user_id)
     return false if (user.blank? || status != 'pregame')
 
     if users.count == 1
@@ -86,17 +89,6 @@ class Game < ActiveRecord::Base
     end
 
     true
-
-    # cg = current_game
-    # return false if (cg.blank? || cg.status != 'pregame')
-
-    # if cg.users.count == 1
-    #   cg.destroy
-    # else
-    #   gamesuser_in_current_game.try(:destroy)
-    # end
-
-    # true
   end
 
 

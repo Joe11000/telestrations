@@ -164,16 +164,54 @@ RSpec.describe Game, type: :model do
       end
     end
 
-    xcontext '#prevent_additional_players' do
-      before(:all) do
-        @game = FactoryGirl.create(:post_game)
-        @cards = @game.cards_formatted
+    context '#remove_player' do
+      context 'does nothing and returns false if' do
+        it 'user does not exist' do
+          game = FactoryGirl.create(:public_pre_game)
+          user_ids = game.users.ids
+          invalid_id = (User.ids.last + 1)
+
+          expect(game.remove_player invalid_id).to eq false
+          game.reload
+          expect(game.users.ids).to eq user_ids
+        end
+
+        it 'user not associated with game' do
+          game = FactoryGirl.create(:public_pre_game)
+          random_user = FactoryGirl.create(:user)
+
+          user_ids = game.users.ids
+          random_user_id = random_user.id
+
+          expect(game.remove_player random_user_id).to eq false
+          game.reload
+          expect(game.users.ids).to eq user_ids
+        end
       end
 
-      it 'allows a user associated with a game to prevent further users' do
-        new_user = FactoryGirl.create(:user)
+      context 'if other users are rendezvouing' do
+        it 'removes only the user' do
+          game = FactoryGirl.create(:public_pre_game)
+          user_ids = game.users.ids
+          valid_id = user_ids.first
 
-        @game
+          expect(game.remove_player valid_id).to eq true
+          game.reload
+          expect(game.users.ids).to eq user_ids.last(2)
+        end
+      end
+
+      context 'if NO other users are rendezvouing' do
+        it 'removes the user and the game' do
+          game = FactoryGirl.create(:public_pre_game)
+          user = game.users.first
+          game.users.where.not(id: user.id).destroy_all
+
+
+          expect(game.remove_player user.id).to eq true
+          expect(user.current_game).to eq Game.none
+          expect(game.destroyed?).to eq true
+        end
       end
     end
   end

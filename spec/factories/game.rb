@@ -19,7 +19,7 @@ FactoryGirl.define do
     end
 
     factory :post_game do
-      status 'post_game'
+      status 'postgame'
 
       after(:create) do |game|
         mid_game_associations game
