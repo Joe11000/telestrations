@@ -3,7 +3,7 @@ class CreateGamesUsers < ActiveRecord::Migration
     create_table :games_users do |t|
       t.references :user
       t.references :game
-      t.string     :users_game_name, default: 'Ned Flanders'
+      t.string     :users_game_name, default: nil
 
       t.datetime   :deleted_at, index: true
       t.timestamps

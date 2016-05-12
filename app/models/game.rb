@@ -3,7 +3,7 @@ class Game < ActiveRecord::Base
   has_many :users, through: :games_users
   has_many :starting_cards, through: :games_users
 
-  validates :join_code, uniqueness: true, length: { is: 4 }
+  validates :join_code, uniqueness: true, length: { is: 4 }, if: Proc.new { !join_code.blank? }
   validates :status, inclusion: { in: %w( pregame midgame postgame ) }
 
   scope :pregames, -> { where(status: 'pregame') }
@@ -32,14 +32,14 @@ class Game < ActiveRecord::Base
     end
   end
 
-
-  def unassociated_rendezousing_users
-    User.includes(games_users: :game).where(games: {id: id }).where(games_users: {users_game_name: nil})
+  def unassociated_rendezousing_games_users
+    GamesUser.includes(:user, :game).where(game_id: id).where(users_game_name: nil)
   end
 
-  def associated_rendezousing_users
-    User.includes(games_users: :game).where(games: {id: id }).where.not(games_users: {users_game_name: nil})
-  end
+  # could use but haven't
+  # def associated_rendezousing_games_users
+  #   GamesUser.includes(:user, :game).where(games: {id: id }).where.not(games_users: {users_game_name: nil})
+  # end
 
 
 
@@ -49,13 +49,8 @@ class Game < ActiveRecord::Base
 #   [ [users_game_name, Card.create], [users_game_name, Card.create], [users_game_name, Card.create] ],
 # ]
 
-
-  def is_post_game?
-    status == 'postgame'
-  end
-
-  def self.all_users_game_names id
-    GamesUser.includes(:game).where(games: { id: id }).map(&:users_game_name)
+  def self.all_users_game_names join_code
+    GamesUser.includes(:game).where(games: { join_code: join_code }).map(&:users_game_name)
   end
 
   def cards_from_finished_game
@@ -82,17 +77,9 @@ class Game < ActiveRecord::Base
     result
   end
 
-  # def join_request user
-  #   if self.allow_additional_players
-
-  #   else
-  #     false
-  #   end
-  # end
-
   def prevent_additional_players
     # if user is NOT attached to a game, then return false
-    byebug; self.users.find_by(user_id: current_user.id)
+    self.users.find_by(user_id: current_user.id)
   end
 
 end

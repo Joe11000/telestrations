@@ -1,19 +1,17 @@
 class GamesController < ApplicationController
-  layout 'layouts/game_layout'
+  # layout 'layouts/game_layout'
 
   before_action :redirect_if_not_logged_in
-  before_action :redirect_to_choose_game_type_page #, if Proc.new { current_user.current_game.mid_game? }
+  before_action :redirect_if_no_current_game
 
   def start_page
-    @current_game = current_user.current_game
-
-    if @current_game.pre_game?
-      current_user
-    end
-
+    byebug
+    # @variable = 'Playing Game'
+    # @current_game = current_user.current_game
   end
 
   def start
+
     # revise similar code here in start action
     # respond_to do |format|
     #   format.js do
@@ -41,5 +39,12 @@ class GamesController < ApplicationController
 
     def prevent_additional_players_params
       params.require(:id)
+    end
+
+    def redirect_if_no_current_game
+      # byebug
+      # unless current_user.current_game.status == 'midgame'
+        # redirect_to root_path && return
+      # end
     end
 end

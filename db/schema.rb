@@ -20,7 +20,8 @@ ActiveRecord::Schema.define(version: 20160113013041) do
     t.integer  "uploader_id"
     t.integer  "parent_card_id"
     t.integer  "idea_catalyst_id"
-    t.text     "description_text",     default: ""
+    t.text     "description_text",       default: ""
+    t.text     "drawing_or_description"
     t.datetime "deleted_at"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -44,7 +45,7 @@ ActiveRecord::Schema.define(version: 20160113013041) do
   create_table "games_users", force: :cascade do |t|
     t.integer  "user_id"
     t.integer  "game_id"
-    t.string   "users_game_name", default: "Ned Flanders"
+    t.string   "users_game_name"
     t.datetime "deleted_at"
     t.datetime "created_at"
     t.datetime "updated_at"

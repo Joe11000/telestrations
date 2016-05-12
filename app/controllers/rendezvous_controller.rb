@@ -41,43 +41,43 @@ class RendezvousController < ApplicationController
     render :rendezvous_page
   end
 
-  def update
-    respond_to do |format|
-      format.js do
+  # def update
+  #   respond_to do |format|
+  #     format.js do
 
-        # bail if user is already playing another game
-        if Game.in_progress.ids.include? current_user.current_game.try(:id)
-          render(json: {response: 'user currently involved in another game'}) and return
-        end
+  #       # bail if user is already playing another game
+  #       if Game.in_progress.ids.include? current_user.current_game.try(:id)
+  #         render(json: {response: 'user currently involved in another game'}) and return
+  #       end
 
-        @game = Game.pre_game.find_by(join_code: params[:join_code])
+  #       @game = Game.pre_game.find_by(join_code: params[:join_code])
 
-        unless @game.blank?
-          @game.touch
+  #       unless @game.blank?
+  #         @game.touch
 
-          # bail if user already is attached to this game
-          if current_user.current_game.try(:id) == @game.id
-            render(json: { response: 'user already joined' }) and return
-          end
+  #         # bail if user already is attached to this game
+  #         if current_user.current_game.try(:id) == @game.id
+  #           render(json: { response: 'user already joined' }) and return
+  #         end
 
 
-          # # delete an association to another pregame game
-          # association = current_user.gamesuser_in_current_game
-          # association.destroy unless association.blank?
+  #         # # delete an association to another pregame game
+  #         # association = current_user.gamesuser_in_current_game
+  #         # association.destroy unless association.blank?
 
-          # GamesUser.create(user_id: current_user.id, game_id: @game.id, users_game_name: update_params)
+  #         # GamesUser.create(user_id: current_user.id, game_id: @game.id, users_game_name: update_params)
 
-          render(json: { response: 'user sucessfully joined' }) and return
-        end
+  #         render(json: { response: 'user sucessfully joined' }) and return
+  #       end
 
-        # bail. game trying to join is underway or doesn't exist.
-        render(json: {response: 'user unsucessfully joined'}) and return
-      end
-    end
+  #       # bail. game trying to join is underway or doesn't exist.
+  #       render(json: {response: 'user unsucessfully joined'}) and return
+  #     end
+  #   end
 
-    # bail. illegal usage of method.
-    render status: 400 and return
-  end
+  #   # bail. illegal usage of method.
+  #   render status: 400 and return
+  # end
 
   def leave_pregame
     current_user.leave_current_game

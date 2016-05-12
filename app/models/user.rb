@@ -16,7 +16,7 @@ class User < ActiveRecord::Base
   end
 
   def gamesuser_in_current_game
-    GamesUser.includes(:game).find_by(user_id: id, games: { status: ['pregame', 'midgame' ] })
+    GamesUser.includes(:game).where.not(games: {status: 'postgames'}).find_by(user_id: id)
   end
 
   def starting_card_in_current_game
@@ -27,23 +27,33 @@ class User < ActiveRecord::Base
     gamesuser_in_current_game.try(:users_game_name)
   end
 
-  def assign_player_to_game game_id, users_game_name
-    byebug
+
+
+  def rendezvous_with_game join_code
     cg = current_game
-    if cg.try(:id) == game_id || # already attached to this game
-      cg.try(:status) == 'midgame'  # currently playing a game, but somehow got here
+
+    if( cg && (cg.try(:join_code) == join_code || cg.try(:status) != 'pregame') ) # game is not joinable
+      #byebug
       return
     else
+      #byebug
 
       # delete an association to another pregame game if it exists
       association = gamesuser_in_current_game
       association.destroy unless association.blank?
-
       # create user association to game
-      game = Game.find(game_id)
-      GamesUser.create(user_id: id, game_id: game.id, users_game_name: users_game_name)
+      self.games << Game.find_by(join_code: join_code)
     end
   end
+
+  def commit_to_game join_code, users_game_name
+    #byebug
+    gu = gamesuser_in_current_game
+    return if gu.blank?
+    gu.update(users_game_name: users_game_name);
+  end
+
+
 
   def leave_current_game
     cg = current_game
@@ -52,7 +62,7 @@ class User < ActiveRecord::Base
     if cg.users.count == 1
       cg.destroy
     else
-      gamesuser_in_current_game.destroy
+      gamesuser_in_current_game.try(:destroy)
     end
 
     true

@@ -1,9 +1,12 @@
 # Be sure to restart your server when you modify this file. Action Cable runs in an EventMachine loop that does not support auto reloading.
 class RendezvousChannel < ApplicationCable::Channel
+  include Rails.application.routes.url_helpers
+
   def subscribed
-    unless params['game_id'].blank?
-      game = Game.find(params['game_id'])
-      stream_from "game_#{params[:game_id]}"
+    unless params['join_code'].blank? || Game.find_by(join_code: params['join_code']).blank?
+      stop_all_streams
+      stream_from "rendezvous_#{params[:join_code]}"
+      current_user.rendezvous_with_game(params[:join_code])
     end
   end
 
@@ -13,32 +16,36 @@ class RendezvousChannel < ApplicationCable::Channel
   end
 
   def join_game data_hash
-    # debugger
-    current_user.assign_player_to_game( params[:game_id], data_hash['users_game_name'] )
-    html = render_user_partial_for_game( params[:game_id] )
-    ActionCable.server.broadcast("game_#{params[:game_id]}", partial: html)
+    current_user.commit_to_game( params[:join_code], data_hash['users_game_name'] )
+    html = render_user_partial_for_game( params[:join_code] )
+    ActionCable.server.broadcast("rendezvous_#{params[:join_code]}", partial: html)
   end
 
   def unjoin_game
-    cur_game = current_user.current_game
     current_user.leave_current_game
-    now_game = current_user.current_game
 
-    html = render_user_partial_for_game( params[:game_id] )
-    ActionCable.server.broadcast("game_#{params[:game_id]}", partial: html)
-
+    html = render_user_partial_for_game( params[:join_code] )
+    ActionCable.server.broadcast("rendezvous_#{params[:join_code]}", partial: html)
+    debugger
     stop_all_streams
   end
 
   def start_game
-    debugger
+    game = Game.find_by(join_code: params[:join_code])
 
+    game.update(status: 'midgame', join_code: nil)
+
+    # remove user games_users association to people that didn't submit a name
+    game.unassociated_rendezousing_games_users.destroy_all
+
+    # broadcast a message to try and go to the game start page. The before action will allow the commited people through to their game and send the uncommited people back to the game choice page.
+    ActionCable.server.broadcast("rendezvous_#{params[:join_code]}", start_game_signal: start_game_page_path)
   end
 
   protected
 
-    def render_user_partial_for_game game_id
-      users_waiting = Game.all_users_game_names(game_id)
+    def render_user_partial_for_game join_code
+      users_waiting = Game.all_users_game_names(join_code)
       ApplicationController.render(partial: 'rendezvous/currently_joined', locals: { users_waiting: users_waiting })
     end
 end

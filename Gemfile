@@ -38,6 +38,8 @@ group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platform: :mri
   gem 'factory_girl_rails', '4.5.0'
+  gem 'faker', '1.6.1'
+
 
 end
 
@@ -80,7 +82,6 @@ group :test do
   gem 'shoulda-matchers'
 
   gem 'capybara', '2.6.0'
-  gem 'faker', '1.6.1'
   gem 'poltergeist', '1.8.1'
   gem 'rails-controller-testing'
 end

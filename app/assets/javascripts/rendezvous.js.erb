@@ -3,34 +3,33 @@
 
 $(function(){
   if($("[data-id='rendezvous-page']").length > 0) {
-    $("[data-id='update-rendezvous-form-group'] button").on('click', function(e){
+    $("[data-id='update-rendezvous-form']").on('submit', function(e){
       e.preventDefault();
 
-      display_error_name_submission_error = function(element){
-        var input_group = $(this).closest('.form-group');
-        input_group.addClass('has-error');
-        input_group.find('.help-block:hidden').removeClass('hidden');
-      }
+      var $form = $(this);
 
-      users_game_name = $(this).closest('.form-group').find('input').val();
+      // display_error_name_submission_error = function(element){
+      //   var input_group = $(this).closest('.form-group');
+      //   input_group.addClass('has-error');
+      //   input_group.find('.help-block:hidden').removeClass('hidden');
+      // }
+
+      users_game_name = $form.find('[data-id=users_game_name]').val();
 
       // user submitted a games_user_name
       if( users_game_name.length > 0)
       {
-        $(this).attr('disabled', 'disabled'); //disable go button
-
-        $form = $(this).closest('form')
-        url = $form.attr('action')
+        $form.find('button').attr('disabled', 'disabled'); //disable go button
 
         App.rendezvous.join_game(users_game_name);
 
         $('[data-id=update-rendezvous-group-col]').addClass('hidden')
         $('[data-id=rendezvous-start-game-button-container]').removeClass('hidden')
       }
-      else
-      {
-        display_error_name_submission_error($this)
-      }
+      // else
+      // {
+      //   display_error_name_submission_error($this)
+      // }
     });
   }
 
@@ -38,5 +37,10 @@ $(function(){
     e.preventDefault();
     App.rendezvous.unjoin_game();
     window.location = this.getAttribute('href');
+  });
+
+  $("[data-id='start_game_button']").closest('form').on('submit', function(e){
+    e.preventDefault();
+    App.rendezvous.start_game();
   });
 });

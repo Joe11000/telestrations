@@ -8,8 +8,6 @@ Rails.application.routes.draw do
       get '/'                         => 'rendezvous#choose_game_type_page', as: :rendezvous_choose_game_type_page
       get  ':game_type'               => 'rendezvous#rendezvous_page',       as: :rendezvous_page
       post 'join'                     => 'rendezvous#join_game',             as: :join_game
-      get  'get_updates/:join_code'   => 'rendezvous#get_updates',           as: :get_updates_rendezvous
-      post 'update/:join_code'        => 'rendezvous#update',                as: :update_rendezvous
       get  'leave_pregame/:join_code' => 'rendezvous#leave_pregame',         as: :leave_pregame
     end
 

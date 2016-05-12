@@ -23,14 +23,13 @@
 
   .col-xs-12.col-sm-12.text-center.hidden data-id='rendezvous-start-game-button-container'
     h3.h3-text-center You're In
-    = button_to 'Start The Game', start_game_page_path, class: 'btn btn-secondary'
+    = button_to 'Start The Game', start_game_page_path, class: 'btn btn-secondary', data: {id: :start_game_button}
   .clearfix
 
   .col-xs-10.col-xs-offset-1.col-sm-10.col-sm-offset-1 data-id="update-rendezvous-group-col"
     h2.h2.text-center Join This #{@game.is_private ? 'Private' : 'Public'} Game
 
-    = form_tag update_rendezvous_path(@game.join_code), method: :post
-      = hidden_field_tag 'get_updates_rendezvous', get_updates_rendezvous_path(@game.join_code), data: {id:"rendezvous-get-updates-url" }
+    = form_tag '#', data: {id: 'update-rendezvous-form'}
       .form-group data-id='update-rendezvous-form-group'
         = label_tag 'name', 'Enter a name to join the game', class: 'sr-only'
         .input-group.col-xs-offset-2.col-xs-8.col-sm-4.col-sm-offset-4.col-md-offset-4.col-md-4
