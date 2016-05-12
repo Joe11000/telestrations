@@ -11,10 +11,8 @@ Rails.application.routes.draw do
       get  'leave_pregame/:join_code' => 'rendezvous#leave_pregame',         as: :leave_pregame
     end
 
-    scope 'start' do
-      get  '/'          => 'games#start_page',  as: :start_game_page
-      post '/'          => 'games#start',       as: :start_game
-    end
+    get  '/'          => 'games#game_page',  as: :game_page
+    post '/'          => 'games#game',       as: :game
 
     post 'card_upload'  => 'games#card_upload', as: :card_upload
     get  'post_game'    => 'games#post_game',   as: :post_game

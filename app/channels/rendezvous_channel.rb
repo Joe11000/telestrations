@@ -43,7 +43,7 @@ class RendezvousChannel < ApplicationCable::Channel
     game.unassociated_rendezousing_games_users.destroy_all
 
     # broadcast a message to try and go to the game start page. The before action will allow the commited people through to their game and send the uncommited people back to the game choice page.
-    ActionCable.server.broadcast("rendezvous_#{params[:join_code]}", start_game_signal: start_game_page_path)
+    ActionCable.server.broadcast("rendezvous_#{params[:join_code]}", start_game_signal: game_page_path)
     # debugger
   end
 
