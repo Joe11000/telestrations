@@ -12,11 +12,11 @@ class User < ActiveRecord::Base
   validates_with AttachmentSizeValidator, :attributes => :provider_avatar_override, less_than: 5.megabytes
 
   def current_game
-    games.not_postgames.last || Game.none
+    games.last || Game.none
   end
 
   def gamesuser_in_current_game
-    GamesUser.includes(:game).where.not(games: {status: 'postgame'}).find_by(user_id: id) || GamesUser.none
+    GamesUser.includes(:game).find_by(user_id: id) || GamesUser.none
   end
 
   def starting_card_in_current_game
@@ -26,4 +26,5 @@ class User < ActiveRecord::Base
   def users_game_name
     gamesuser_in_current_game.try(:users_game_name)
   end
+
 end

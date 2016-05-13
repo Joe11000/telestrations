@@ -50,10 +50,22 @@ class Game < ActiveRecord::Base
 # ]
 
 
-  def rendezvouing_user user_id
-    byebug
-    user = users.find(user_id)
-    return false unless user.blank?
+  def rendezvous_a_new_user user_id
+    user = User.find_by(id: user_id)
+    user_current_game = user.try(:current_game)
+
+    if user.blank? ||                        # player doesn't exist or
+       users.find_by(id: user.id) ||         # player already rendezvousing with game
+       user_current_game.status == 'midgame' # c) player is currently in the middle of a game
+      return false
+
+    elsif user_current_game.try(:status) == 'midgame'
+      # current game is not underway or over
+      user.gamesuser_in_current_game.destroy
+
+    end
+
+    self.users << user
 
 
     # user = User.find(user_id)

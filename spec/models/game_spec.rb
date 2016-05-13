@@ -215,14 +215,46 @@ RSpec.describe Game, type: :model do
       end
     end
 
-    context '#rendezvouing_user' do
+    context '#rendezvous_a_new_user' do
       context 'does nothing and returns false if' do
-        it 'user doesnt exist'
-        it 'user is already associated with game'
+        it 'user doesnt exist' do
+          game = FactoryGirl.create(:public_pre_game)
+          user_ids = game.users.ids
+          invalid_id = (User.ids.last + 1)
+
+          expect(game.rendezvous_a_new_user invalid_id).to eq false
+          game.reload
+          expect(game.users.ids).to eq user_ids
+        end
+
+        it 'user is already associated with game' do
+          game = FactoryGirl.create(:public_pre_game)
+          user_ids = game.users.ids
+          invalid_id = User.ids.first
+
+          expect(game.rendezvous_a_new_user invalid_id).to eq false
+          game.reload
+          expect(game.users.ids).to eq user_ids
+        end
+
+        it 'player playing another game' do
+          user_associated_game = FactoryGirl.create(:full_game)
+          new_game = FactoryGirl.create(:public_pre_game)
+          user = user_associated_game.users.last
+
+          user_associated_game_user_ids = user_associated_game.users.ids
+          new_game_user_ids = new_game.users.ids
+
+          expect(new_game.rendezvous_a_new_user user.id).to eq false
+          new_game.reload
+          expect(new_game.users.ids).to eq new_game_user_ids
+          expect(user_associated_game.users.ids).to eq user_associated_game_user_ids
+        end
+
         it 'the game is not in pregame mode'
       end
 
-      context 'does nothing and returns false if' do
+      context 'creates a GamesUser association from game to the new player' do
 
       end
     end
