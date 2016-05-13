@@ -75,6 +75,7 @@ class Game < ActiveRecord::Base
   end
 
   def remove_player user_id
+    byebug
     user = users.find_by(id: user_id)
     return false if (user.blank? || status != 'pregame')
 

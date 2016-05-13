@@ -3,11 +3,12 @@ class RendezvousChannel < ApplicationCable::Channel
   include Rails.application.routes.url_helpers
 
   def subscribed
-    unless params['join_code'].blank?
-      game = Game.find_by(join_code: params['join_code']).blank?
+    unless params[:join_code].blank?
+      game = Game.find_by(join_code: params[:join_code])
+      return false if game.blank?
       stop_all_streams
       stream_from "rendezvous_#{params[:join_code]}"
-      game.rendezvous_a_new_user(current_user)
+      game.rendezvous_a_new_user(current_user.id)
     end
   end
 
@@ -17,14 +18,14 @@ class RendezvousChannel < ApplicationCable::Channel
   end
 
   def join_game data_hash
-    game = Game.find_by(params[:join_code])
+    game = Game.find_by(join_code: params[:join_code])
     game.commit_a_rendezvoused_user( current_user.id, data_hash['users_game_name'] )
     html = render_user_partial_for_game( params[:join_code] )
     ActionCable.server.broadcast("rendezvous_#{params[:join_code]}", partial: html)
   end
 
   def unjoin_game
-    game = Game.find_by(params[:join_code])
+    game = Game.find_by(join_code: params[:join_code])
 
     return false unless game.remove_player(current_user.id)
 
