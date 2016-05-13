@@ -11,12 +11,12 @@
         #private-game-option.col-xs-offset-3.col-xs-6.col-sm-offset-3.col-sm-3
           a href="#{rendezvous_page_path(:private)}"
             button.btn.btn-primary.btn-large Private
-          i.fa.fa-question-circle data-toggle="tooltip" data-placement="right" title="Game can only be joined if code is known."
+          i.fa.fa-question-circle.has-popover data-toggle="tooltip" data-placement="right" title="Game can only be joined if code is known."
 
         #public-game-option.col-xs-offset-1.col-sm-offset-1
           a href="#{rendezvous_page_path(:public)}"
             button.btn.btn-info.btn-large Public
-          i.fa.fa-question-circle data-toggle="tooltip" data-placement="right" title="Game can be joined by the join code or random."
+          i.fa.fa-question-circle.has-popover data-toggle="tooltip" data-placement="right" title="Game can be joined by the join code or random."
         .clearfix
 
       .row.game-type-option data-id="join-code-form"

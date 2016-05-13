@@ -29,8 +29,6 @@ FactoryGirl.define do
   end
 end
 
-
-
 def mid_game_associations game
   add_users_to game
 

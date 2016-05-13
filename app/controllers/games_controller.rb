@@ -1,5 +1,5 @@
 class GamesController < ApplicationController
-  # layout 'layouts/game_layout'
+  layout 'layouts/game_layout'
 
   before_action :redirect_if_not_logged_in
   before_action :redirect_if_no_current_game, except: [:post_game]

@@ -5,23 +5,23 @@ html
     = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true
     = csrf_meta_tags
     = action_cable_meta_tag
-    = favicon_link_tag 'happy-icon.ico'
+    = favicon_link_tag 'fav-icon.ico'
 
-    = stylesheet_link_tag 'inc/wColorPicker.css'
-    = stylesheet_link_tag 'wPaint.css'
+    / = stylesheet_link_tag 'inc/wColorPicker.css'
+    / = stylesheet_link_tag 'wPaint.css'
 
-    = javascript_include_tag "https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
-    = javascript_include_tag "inc/jquery.ui.core.min.js"
-    = javascript_include_tag "inc/jquery.ui.widget.min.js"
-    = javascript_include_tag "inc/jquery.ui.mouse.min.js"
-    = javascript_include_tag "inc/jquery.ui.draggable.min.js"
-    = javascript_include_tag "inc/wColorPicker.js"
-    = javascript_include_tag "wPaint.js"
+    / = javascript_include_tag "https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
+    / = javascript_include_tag "inc/jquery.ui.core.min.js"
+    / = javascript_include_tag "inc/jquery.ui.widget.min.js"
+    / = javascript_include_tag "inc/jquery.ui.mouse.min.js"
+    / = javascript_include_tag "inc/jquery.ui.draggable.min.js"
+    / = javascript_include_tag "inc/wColorPicker.js"
+    / = javascript_include_tag "wPaint.js"
     br type="_moz"
 
   body
     = render partial: 'shared/notifications'
-    javascript:
-      | $("#wPaint").wPaint();
+    / javascript:
+      / | $("#wPaint").wPaint();
 
   = javascript_include_tag 'application', 'data-turbolinks-track' => true
