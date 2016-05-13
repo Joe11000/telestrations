@@ -36,13 +36,6 @@ class Game < ActiveRecord::Base
     GamesUser.where(game_id: id, users_game_name: nil)
   end
 
-  # could use but haven't
-  # def associated_rendezousing_games_users
-  #   GamesUser.includes(:user, :game).where(games: {id: id }).where.not(games_users: {users_game_name: nil})
-  # end
-
-
-
 # ie
 # [
 #   [ [users_game_name, Card.create], [users_game_name, Card.create], [users_game_name, Card.create] ],
@@ -75,7 +68,6 @@ class Game < ActiveRecord::Base
   end
 
   def remove_player user_id
-    byebug
     user = users.find_by(id: user_id)
     return false if (user.blank? || status != 'pregame')
 
@@ -115,7 +107,4 @@ class Game < ActiveRecord::Base
     end
     result
   end
-  # FactoryGirl.create(:full_game)
-# Game.last.update(status: 'pregame')
-# Game.last.remove_player(Game.last.users.first)
 end

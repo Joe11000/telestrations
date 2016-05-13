@@ -19,7 +19,6 @@ RSpec.describe Game, type: :model do
       end
 
       it 'is valid' do
-        #byebug
         expect(FactoryGirl.create(:full_game).valid?).to eq true
       end
 
