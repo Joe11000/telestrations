@@ -53,7 +53,6 @@ class Game < ActiveRecord::Base
   def rendezvous_a_new_user user_id
     user = User.find_by(id: user_id)
     user_current_game = user.try(:current_game)
-
     if  user.blank? ||                        # player doesn't exist or
         users.find_by(id: user.id) ||         # player already rendezvousing with game
         user_current_game.try(:status) == 'midgame' || # c) player is currently in the middle of a game
@@ -69,13 +68,11 @@ class Game < ActiveRecord::Base
     true
   end
 
-  # def commiting_user join_code, users_game_name
-
-  # def commit_to_game join_code, users_game_name
-  #   gu = gamesuser_in_current_game
-  #   return if gu.blank?
-  #   gu.update(users_game_name: users_game_name);
-  # end
+  def commit_a_rendezvoused_user user_id, users_game_name=''
+    gu = GamesUser.find_by(user_id: user_id, game_id: id)
+    return false if gu.blank? || status != 'pregame'
+    gu.update(users_game_name: users_game_name);
+  end
 
   def remove_player user_id
     user = users.find_by(id: user_id)
@@ -89,10 +86,6 @@ class Game < ActiveRecord::Base
 
     true
   end
-
-
-
-
 
   def self.all_users_game_names join_code
     GamesUser.includes(:game).where(games: { join_code: join_code }).map(&:users_game_name)

@@ -17,7 +17,8 @@ class RendezvousChannel < ApplicationCable::Channel
   end
 
   def join_game data_hash
-    current_user.commit_to_game( params[:join_code], data_hash['users_game_name'] )
+    game = Game.find_by(params[:join_code])
+    game.commit_a_rendezvoused_user( current_user.id, data_hash['users_game_name'] )
     html = render_user_partial_for_game( params[:join_code] )
     ActionCable.server.broadcast("rendezvous_#{params[:join_code]}", partial: html)
   end

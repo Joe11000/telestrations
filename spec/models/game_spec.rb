@@ -274,5 +274,49 @@ RSpec.describe Game, type: :model do
         end
       end
     end
+
+    context '#commit_a_rendezvoused_user' do
+      context 'does nothing and returns false if' do
+        it 'user is not associated with the game already' do
+          game = FactoryGirl.create(:public_pre_game)
+          user =  FactoryGirl.create(:user)
+          users_game_name = 'NameName'
+
+          expect(game.commit_a_rendezvoused_user user.id, users_game_name).to eq false
+
+          game.reload
+          expect(user.users_game_name).to eq nil
+        end
+
+        it "the game's status != pregame" do
+          game = FactoryGirl.create(:public_pre_game)
+          user =  FactoryGirl.create(:user)
+          users_game_name = 'NameName'
+
+          game.rendezvous_a_new_user user.id
+
+          game.update(status: 'midgame', join_code: nil)
+          expect(game.commit_a_rendezvoused_user user.id, users_game_name).to eq false
+
+          game.reload
+          expect(user.users_game_name).to eq nil
+        end
+      end
+
+      context "assigns the user's game name to games_users.users_game_name if" do
+        it 'associated user id and name string is received' do
+          game = FactoryGirl.create(:public_pre_game)
+          user =  FactoryGirl.create(:user)
+          users_game_name = 'NameName'
+
+          game.rendezvous_a_new_user user.id
+
+          expect(game.commit_a_rendezvoused_user user.id, users_game_name).to eq true
+
+          game.reload
+          expect(user.users_game_name).to eq users_game_name
+        end
+      end
+    end
   end
 end
