@@ -54,34 +54,19 @@ class Game < ActiveRecord::Base
     user = User.find_by(id: user_id)
     user_current_game = user.try(:current_game)
 
-    if user.blank? ||                        # player doesn't exist or
-       users.find_by(id: user.id) ||         # player already rendezvousing with game
-       user_current_game.status == 'midgame' # c) player is currently in the middle of a game
+    if  user.blank? ||                        # player doesn't exist or
+        users.find_by(id: user.id) ||         # player already rendezvousing with game
+        user_current_game.try(:status) == 'midgame' || # c) player is currently in the middle of a game
+        status != 'pregame'
       return false
 
-    elsif user_current_game.try(:status) == 'midgame'
+    elsif user_current_game.try(:status) == 'pregame'
       # current game is not underway or over
       user.gamesuser_in_current_game.destroy
-
     end
 
     self.users << user
-
-
-    # user = User.find(user_id)
-
-
-
-
-    # cg = current_game
-
-    # if !cg.blank? && cg.try(:join_code) == join_code # player is already rendezvousing with Game
-    #   return false
-    # elsif ( cg.try(:status) == 'pregame' ) # player rendezvousing with another game
-    #   gamesuser_in_current_game.destroy
-    # end
-
-    # self.games << Game.find_by(join_code: join_code)
+    true
   end
 
   # def commiting_user join_code, users_game_name

@@ -121,14 +121,13 @@ RSpec.describe Game, type: :model do
     it 'random_public_game' do
       Game.destroy_all
       g1 = FactoryGirl.create(:public_pre_game)
-      g3 = FactoryGirl.create(:public_pre_game, is_private: true)
-      g3 = FactoryGirl.create(:public_pre_game, join_code: nil)
+      FactoryGirl.create(:public_pre_game, is_private: true)
+      FactoryGirl.create(:full_game)
+      FactoryGirl.create(:full_game, is_private: true)
 
       expect(Game.random_public_game).to eq g1
       expect(Game.random_public_game).to eq g1 # intentionally duplicated test
     end
-
-
   end
 
   context 'methods' do
@@ -230,9 +229,9 @@ RSpec.describe Game, type: :model do
         it 'user is already associated with game' do
           game = FactoryGirl.create(:public_pre_game)
           user_ids = game.users.ids
-          invalid_id = User.ids.first
+          repeated_id = user_ids.first
 
-          expect(game.rendezvous_a_new_user invalid_id).to eq false
+          expect(game.rendezvous_a_new_user repeated_id).to eq false
           game.reload
           expect(game.users.ids).to eq user_ids
         end
@@ -251,11 +250,28 @@ RSpec.describe Game, type: :model do
           expect(user_associated_game.users.ids).to eq user_associated_game_user_ids
         end
 
-        it 'the game is not in pregame mode'
+        it 'the game is not in pregame mode' do
+          new_game = FactoryGirl.create(:full_game)
+          user = FactoryGirl.create(:user)
+
+          new_game_user_ids = new_game.users.ids
+
+          expect(new_game.rendezvous_a_new_user user.id).to eq false
+          new_game.reload
+          expect(new_game.users.ids).to eq new_game_user_ids
+        end
       end
 
       context 'creates a GamesUser association from game to the new player' do
+        it 'when a user is rendezvouing with a new game and isnt currently playing one' do
+          game = FactoryGirl.create(:public_pre_game)
+          user = FactoryGirl.create(:user)
+          game_user_ids = game.users.ids
 
+          expect(game.rendezvous_a_new_user user.id).to eq true
+          game.reload
+          expect(game.users.ids).to eq game_user_ids + [user.id]
+        end
       end
     end
   end

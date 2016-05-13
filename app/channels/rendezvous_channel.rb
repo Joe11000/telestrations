@@ -7,7 +7,7 @@ class RendezvousChannel < ApplicationCable::Channel
       game = Game.find_by(join_code: params['join_code']).blank?
       stop_all_streams
       stream_from "rendezvous_#{params[:join_code]}"
-      game.rendezvous_new_user(current_user)
+      game.rendezvous_a_new_user(current_user)
     end
   end
 
