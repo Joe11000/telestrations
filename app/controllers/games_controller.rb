@@ -6,7 +6,7 @@ class GamesController < ApplicationController
 
   def game_page
     # @variable = 'Playing Game'
-    # @current_game = current_user.current_game
+    @current_game = current_user.current_game
   end
 
   def post_game
