@@ -12,6 +12,16 @@ class Game < ActiveRecord::Base
   scope :not_postgames, -> { where.not(status: 'postgame') }
   scope :public_games, -> { where(is_private: false) }
 
+
+
+  def next_player_after user_id
+    user_index = parse_passing_order.index(user_id)
+    return User.none if user_index.nil?
+
+    user_id_of_next_user = parse_passing_order[ (user_index + 1) % parse_passing_order.length ]
+    return User.find_by( id: user_id_of_next_user )
+  end
+
   def self.random_public_game
     Game.pregames.public_games.sample
   end
@@ -107,4 +117,12 @@ class Game < ActiveRecord::Base
     end
     result
   end
+
+  protected
+    def parse_passing_order
+      return [] if passing_order.blank?
+      JSON.parse(passing_order) #.split(',').map(&:to_i)
+    end
 end
+
+

@@ -2,7 +2,8 @@ class User < ActiveRecord::Base
   # acts_as_paranoid
 
   has_many :games_users, inverse_of: :user
-  has_many :games, through: :games_users
+  has_many :games, through: :games_users #, after_add: Proc.new { || self.current_game =  }
+  has_one  :current_game, through: :games_users
 
   has_many :starting_cards, through: :games_users
 
@@ -16,7 +17,7 @@ class User < ActiveRecord::Base
   end
 
   def gamesuser_in_current_game
-    GamesUser.includes(:game).find_by(user_id: id) || GamesUser.none
+    GamesUser.includes(:game).where(user_id: id).try(:last) || GamesUser.none
   end
 
   def starting_card_in_current_game

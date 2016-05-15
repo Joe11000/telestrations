@@ -317,5 +317,23 @@ RSpec.describe Game, type: :model do
         end
       end
     end
+
+    context '#next_player_after' do
+      it 'returns Empty relation if user not in game' do
+        game = FactoryGirl.create(:full_game)
+        invalid_id = game.users.last.id + 1
+
+        expect(game.next_player_after invalid_id).to eq User.none
+      end
+
+      it 'returns the next user' do
+        game = FactoryGirl.create(:full_game)
+        users = game.users
+
+        expect(game.next_player_after users.first.id).to eq users.second
+        expect(game.next_player_after users.second.id).to eq users.third
+        expect(game.next_player_after users.third.id).to eq users.first
+      end
+    end
   end
 end

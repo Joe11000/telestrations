@@ -46,6 +46,8 @@ def mid_game_associations game
   gu3.starting_card = FactoryGirl.create(:description, uploader_id: user3.id, idea_catalyst_id: user3.id)
   gu3.starting_card.child_card = FactoryGirl.create(:drawing, uploader_id: user1.id)
   gu3.starting_card.child_card.child_card = FactoryGirl.create(:description, uploader_id: user2.id)
+
+  game.update(passing_order: game.users.ids.to_s)
 end
 
 def add_users_to game
