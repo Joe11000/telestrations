@@ -4,3 +4,18 @@
 
 $primary: '';
 $secondary: '';
+
+
+
+#game{
+
+  .tab-content{
+    height: 400px;
+    background-color: lightgray;
+    .tab-pane{
+      margin: 5px 10px;
+
+    }
+  }
+}
+

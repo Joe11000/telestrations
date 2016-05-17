@@ -1,4 +1,4 @@
-App.game = App.cable.subscriptions.create { channel: "GameChannel", game_id: $('[data-game-id]').attr('data-game-id') }
+App.game = App.cable.subscriptions.create { channel: "GameChannel", game_id: $('[data-game-id]').attr('data-game-id') },
   connected: ->
     # Called when the subscription is ready for use on the server
 
