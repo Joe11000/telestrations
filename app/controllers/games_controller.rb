@@ -1,16 +1,23 @@
 class GamesController < ApplicationController
-  # layout 'layouts/game'
+  layout 'layouts/game'
 
   before_action :redirect_if_not_logged_in
-  before_action :redirect_if_no_current_game, except: [:post_game]
+  before_action :redirect_if_no_current_game, except: [:postgame]
 
   def game_page
     # @variable = 'Playing Game'
     @game = current_user.current_game
   end
 
-  def post_game
+  def postgame
+    # redirect_to game_page_path unless current_user.current_game.is_postgame?
     # @cards = Card.all_cards_from_game
+  end
+
+  # params[:]
+  def upload_card
+    byebug
+    render 200
   end
 
   protected

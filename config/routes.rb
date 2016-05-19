@@ -14,8 +14,8 @@ Rails.application.routes.draw do
     get  '/'          => 'games#game_page',  as: :game_page
     post '/'          => 'games#game',       as: :game
 
-    post 'card_upload'  => 'games#card_upload', as: :card_upload
-    get  'post_game'    => 'games#post_game',   as: :post_game
+    post 'upload_card'  => 'games#upload_card', as: :upload_card_in_game
+    get  'postgame'    => 'games#postgame',   as: :postgame
   end
 
   scope 'cards' do

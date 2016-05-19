@@ -2,8 +2,17 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
+body{
+  background: url('images/large.jpg')  no-repeat fixed center;
+
+  -moz-background-clip: padding;     /* Firefox 3.6 */
+  -webkit-background-clip: padding;  /* Safari 4? Chrome 6? */
+  background-clip: padding-box;      /* Firefox 4, Safari 5, Opera 10, IE 9 */
+}
 .jumbotron{
-  border: 20px double lightblue;
+  outline: 20px solid rebeccapurple;
+  border: 40px solid rgba(0,0,0,.15);
+  border-radius: 2px;
 
   .social-media-col {
     text-align: center;
@@ -20,6 +29,6 @@
   h5{
     &::before { content: "* "; }
     &::after { content: " *"; }
-    &::before, &::after { color: red; font-weight: bold }
+    &::before, &::after { color: rebeccapurple; font-weight: bold }
   }
 }

@@ -18,7 +18,7 @@ FactoryGirl.define do
       end
     end
 
-    factory :post_game do
+    factory :postgame do
       status 'postgame'
 
       after(:create) do |game|

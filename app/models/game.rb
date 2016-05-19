@@ -12,7 +12,9 @@ class Game < ActiveRecord::Base
   scope :not_postgames, -> { where.not(status: 'postgame') }
   scope :public_games, -> { where(is_private: false) }
 
-
+  def is_postgame?
+    status == 'postgame'
+  end
 
   def next_player_after user_id
     user_index = parse_passing_order.index(user_id)
@@ -95,7 +97,7 @@ class Game < ActiveRecord::Base
   end
 
   def cards_from_finished_game
-    return [] if is_post_game?
+    return [] if is_postgame?
 
     # all cards associated with this games get
     starting_cards = Card.all_starting_cards.includes(idea_catalyst: :game).where(games: { join_code: join_code } )

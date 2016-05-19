@@ -13,6 +13,7 @@
 //  components
 //= require jquery
 //= require jquery_ujs
+//= require jquery-ui
 //= require turbolinks
 //= require twitter/bootstrap
 //= requre channels

@@ -41,30 +41,30 @@ RSpec.describe Game, type: :model do
     end
 
 
-    context ':post_game' do
+    context ':postgame' do
       before :all do
-        @post_game = FactoryGirl.create(:post_game)
+        @postgame = FactoryGirl.create(:postgame)
       end
 
       it 'is valid' do
-        expect(@post_game.valid?).to eq true
+        expect(@postgame.valid?).to eq true
       end
 
       it 'has correct associations' do
-        expect(@post_game.users.count).to eq 3
+        expect(@postgame.users.count).to eq 3
 
-        @post_game.users.each do |user|
+        @postgame.users.each do |user|
           expect(user.starting_cards.length).to eq 1
           expect(user.starting_cards.first.child_card.parent_card).to eq user.starting_cards.first
         end
       end
 
       it 'status' do
-        expect(@post_game.status).to eq 'postgame'
+        expect(@postgame.status).to eq 'postgame'
       end
 
       it 'does not allow additional players' do
-        expect(@post_game.join_code).to eq nil
+        expect(@postgame.join_code).to eq nil
       end
     end
 
@@ -132,7 +132,7 @@ RSpec.describe Game, type: :model do
   context 'methods' do
     context '#cards_formatted' do
       before(:all) do
-        @game = FactoryGirl.create(:post_game)
+        @game = FactoryGirl.create(:postgame)
         @cards = @game.cards_formatted
       end
 

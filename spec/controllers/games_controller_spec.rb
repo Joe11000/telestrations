@@ -7,7 +7,7 @@ RSpec.describe GamesController, :type => :controller do
     it ''
   end
 
-  context 'post_game' do
+  context 'postgame' do
     it ''
   end
 end

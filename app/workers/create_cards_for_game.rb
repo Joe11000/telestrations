@@ -17,7 +17,7 @@
 #         for passed_to_index in 1...size
 #           uploader_id =  passing_order[ (starting_user_index + passed_to_index) % size ]
 #           parent_card.child_card = Card.create(drawing_or_description: card_type, uploader_id: uploader_id)
-#           card_type = (card_type == 'description' ? 'drawing' : 'description')
+#           card_type = (card_type.is_description? ? 'drawing' : 'description')
 #         end
 #       end
 
