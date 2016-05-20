@@ -21,6 +21,19 @@ class Card < ActiveRecord::Base
   def is_drawing?
     drawing_or_description == 'drawing'
   end
+
+  #                                       ( {filename: '', data: ''}) # data is the uri
+  def self.make_unsaved_card_from_data_uri(paperclip_card_params)
+
+    # Instantiates Paperclip::DataUriAdapter attachment
+    file = Paperclip.io_adapters.for(paperclip_card_params[:data])
+    file.original_filename = paperclip_card_params[:filename]
+
+    # Save the model
+    new_card = Card.new
+    new_card.drawing = file
+    new_card
+  end
 end
 
 # class Card < ActiveRecord::Base

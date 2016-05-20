@@ -1,3 +1,4 @@
+= image_tag @card.drawing.url
 #game data-game-id=@game.id
   h1 = @game.id
 
@@ -18,7 +19,7 @@
             p drawing here
           #upload-drawing.tab-pane.fade           role="tabpanel"
             #file_upload
-              = render partial: 'shared/file_upload', locals: { to_path: bulk_upload_cards_path, allow_multiple_file_upload: false }
+              = render partial: 'shared/file_upload', locals: { to_path: upload_card_in_game_path, allow_multiple_file_upload: false }
 
 
 

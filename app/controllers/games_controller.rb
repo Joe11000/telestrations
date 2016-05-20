@@ -1,10 +1,11 @@
 class GamesController < ApplicationController
-  layout 'layouts/game'
+  # layout 'layouts/game'
 
   before_action :redirect_if_not_logged_in
   before_action :redirect_if_no_current_game, except: [:postgame]
 
   def game_page
+    @card = Card.last
     # @variable = 'Playing Game'
     @game = current_user.current_game
   end
@@ -16,8 +17,19 @@ class GamesController < ApplicationController
 
   # params[:]
   def upload_card
-    byebug
-    render 200
+    respond_to do |format|
+      format.js do
+        byebug;
+        a = Card.make_unsaved_card_from_data_uri(params.slice(:filename, :data))
+        a.drawing_or_description = 'drawing'
+        a.save
+        byebug
+       end
+
+      format.html {byebug}
+    end
+    #
+    render status: 200
   end
 
   protected
