@@ -4,6 +4,7 @@ FactoryGirl.define do
     drawing_or_description "description"
     description_text { Faker::Lorem.sentence(3)}
     association :uploader, :factory => :user
+    games_user
 
     factory :users_starting_description_card do
       association :idea_catalyst, :factory => :games_user

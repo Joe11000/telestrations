@@ -303,7 +303,7 @@ RSpec.describe RendezvousController, type: :controller do
     end
 
     it "user can't be removed from an in progress game" do
-      game = FactoryGirl.create(:full_game)
+      game = FactoryGirl.create(:midgame)
       current_user = game.users.first
       controller.session[:user_id] = current_user.id
 

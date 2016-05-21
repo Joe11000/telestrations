@@ -5,7 +5,7 @@ class RendezvousChannel < ApplicationCable::Channel
   def subscribed
     unless params[:join_code].blank?
       game = Game.find_by(join_code: params[:join_code])
-      return false if game.blank?
+      return false if game.blank? || game.status != 'pregame'
       stop_all_streams
       stream_from "rendezvous_#{params[:join_code]}"
       game.rendezvous_a_new_user(current_user.id)

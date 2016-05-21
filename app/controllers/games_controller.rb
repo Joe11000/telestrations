@@ -5,31 +5,16 @@ class GamesController < ApplicationController
   before_action :redirect_if_no_current_game, except: [:postgame]
 
   def game_page
-    @card = Card.last
-    # @variable = 'Playing Game'
     @game = current_user.current_game
+    @placeholder_card = @game.find_or_create_placeholder_card current_user.id
+    @prev_card = @placeholder_card.try(:parent_card)
+
+    # @variable = 'Playing Game'
   end
 
   def postgame
-    # redirect_to game_page_path unless current_user.current_game.is_postgame?
+    # redirect_to game_page_path unless current_user.current_game.status == 'postgame'
     # @cards = Card.all_cards_from_game
-  end
-
-  # params[:]
-  def upload_card
-    respond_to do |format|
-      format.js do
-        byebug;
-        a = Card.make_unsaved_card_from_data_uri(params.slice(:filename, :data))
-        a.drawing_or_description = 'drawing'
-        a.save
-        byebug
-       end
-
-      format.html {byebug}
-    end
-    #
-    render status: 200
   end
 
   protected

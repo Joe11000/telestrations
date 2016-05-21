@@ -17,4 +17,4 @@
 # # {"oauth_token"=>"JWHBuAAAAAAAjpvXAAABUikBg1o", "oauth_verifier"=>"LFKa1Bp5WxnrpamskuHrPOyHgZqf7brF", "controller"=>"sessions", "action"=>"create", "provider"=>"twitter"}
 
 
-# FactoryGirl.create(:full_game)
+# FactoryGirl.create(:midgame)

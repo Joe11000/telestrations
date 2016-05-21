@@ -1,5 +1,5 @@
-= image_tag @card.drawing.url
-#game data-game-id=@game.id
+/ = image_tag @card.drawing.url
+#game data-game-id=@game.id data-prev-card-id=@prev_card.id
   h1 = @game.id
 
   .form-horizontal
@@ -7,21 +7,38 @@
 
 
     .drawing.col-xs-12.col-sm-offset-1.col-sm-10.col-md-offset-2.col-md-8
-      #drawing-tab
-        ul.nav.nav-tabs.nav-justified
-          li.active role="presentation"
-            a href="#create-drawing" Create
-          li role="presentation"
-            a href="#upload-drawing" Upload
+      #make-drawing-container data-id='make-drawing-container' class=(@prev_card.blank? ? 'hidden' : '')
+        #description-to-draw
+          p.h3#text-to-draw data-id='description-text-to-draw' = @prev_card.blank? ? @prev_card.try(:description_text) : "Draw a picture."
+        #drawing-tab
+          ul.nav.nav-tabs.nav-justified
+            li.active role="presentation"
+              a href="#create-drawing" Create
+            li role="presentation"
+              a href="#upload-drawing" Upload
 
-        .tab-content
-          #create-drawing.tab-pane.fade.in.active role="tabpanel"
-            p drawing here
-          #upload-drawing.tab-pane.fade           role="tabpanel"
-            #file_upload
-              = render partial: 'shared/file_upload', locals: { to_path: upload_card_in_game_path, allow_multiple_file_upload: false }
+          .tab-content
+            #create-drawing.tab-pane.fade.in.active role="tabpanel"
+              p drawing here
+            #upload-drawing.tab-pane.fade           role="tabpanel"
+              #file_upload
+                = render partial: 'shared/file_upload', locals: { to_path: upload_card_in_game_path, allow_multiple_file_upload: false }
+
+      #make-description-container data-id='make-description-container'
+        #drawing-to-describe-container class=(@prev_card.blank? ? 'hidden' : '') data-id='drawing-to-describe-container'
+          img#drawing-to-describe data-id='drawing-to-describe' src=(@prev_card ? @prev_card.try(:drawing_url) : "")
+
+        form data-id='make-description-form'
+          .form-group data-id='make-description-group'
+            .input-group
+              = text_field_tag(:description_text_input_field, nil,  {data: {id: 'description_text_input_field'}, placeholder: 'Enter A Description', class: 'span2 form-control text-uppercase'})
+              .input-group-btn
+                button.btn.btn-primary type='button' onclick='submit()' Submit
+
+        p.h3#text-to-draw data-id='drawing-to-describe' = @text_to_draw
 
 
-
-
-
+      .loading-gif.text-center.hidden
+        p.waiting_for_card Waiting for a card to be passed to you.
+        p.waiting_for_card.hidden You are finished. Waiting for others.
+        = image_tag 'loading_icon.gif', class: 'text-center', width:'80px'

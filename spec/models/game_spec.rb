@@ -13,30 +13,32 @@ RSpec.describe Game, type: :model do
       expect(FactoryGirl.create(:game).valid?).to eq true
     end
 
-    context ':full_game' do
+    context ':midgame' do
       before :all do
-        @full_game = FactoryGirl.create(:full_game)
+        @midgame = FactoryGirl.create(:midgame)
       end
 
       it 'is valid' do
-        expect(FactoryGirl.create(:full_game).valid?).to eq true
+        expect(FactoryGirl.create(:midgame).valid?).to eq true
       end
 
       it 'has correct associations' do
-        expect(@full_game.users.count).to eq 3
+        expect(@midgame.users.count).to eq 3
 
-        @full_game.users.each do |user|
+
+        @midgame.users.each do |user|
+          byebug
           expect(user.starting_cards.length).to eq 1
           expect(user.starting_cards.first.child_card.parent_card).to eq user.starting_cards.first
         end
       end
 
       it 'status' do
-        expect(@full_game.status).to eq 'midgame'
+        expect(@midgame.status).to eq 'midgame'
       end
 
       it 'removes join code' do
-        expect(@full_game.join_code).to eq nil
+        expect(@midgame.join_code).to eq nil
       end
     end
 
@@ -121,8 +123,8 @@ RSpec.describe Game, type: :model do
       Game.destroy_all
       g1 = FactoryGirl.create(:public_pre_game)
       FactoryGirl.create(:public_pre_game, is_private: true)
-      FactoryGirl.create(:full_game)
-      FactoryGirl.create(:full_game, is_private: true)
+      FactoryGirl.create(:midgame)
+      FactoryGirl.create(:midgame, is_private: true)
 
       expect(Game.random_public_game).to eq g1
       expect(Game.random_public_game).to eq g1 # intentionally duplicated test
@@ -130,10 +132,10 @@ RSpec.describe Game, type: :model do
   end
 
   context 'methods' do
-    context '#cards_formatted' do
+    context '#cards_from_finished_game' do
       before(:all) do
         @game = FactoryGirl.create(:postgame)
-        @cards = @game.cards_formatted
+        @cards = @game.cards_from_finished_game
       end
 
       it 'returns correct ordering of cards' do
@@ -236,7 +238,7 @@ RSpec.describe Game, type: :model do
         end
 
         it 'player playing another game' do
-          user_associated_game = FactoryGirl.create(:full_game)
+          user_associated_game = FactoryGirl.create(:midgame)
           new_game = FactoryGirl.create(:public_pre_game)
           user = user_associated_game.users.last
 
@@ -250,7 +252,7 @@ RSpec.describe Game, type: :model do
         end
 
         it 'the game is not in pregame mode' do
-          new_game = FactoryGirl.create(:full_game)
+          new_game = FactoryGirl.create(:midgame)
           user = FactoryGirl.create(:user)
 
           new_game_user_ids = new_game.users.ids
@@ -320,20 +322,261 @@ RSpec.describe Game, type: :model do
 
     context '#next_player_after' do
       it 'returns Empty relation if user not in game' do
-        game = FactoryGirl.create(:full_game)
+        game = FactoryGirl.create(:midgame)
         invalid_id = game.users.last.id + 1
 
-        expect(game.next_player_after invalid_id).to eq User.none
+        expect(game.send(:next_player_after, invalid_id)).to eq User.none
       end
 
       it 'returns the next user' do
-        game = FactoryGirl.create(:full_game)
+        game = FactoryGirl.create(:midgame)
         users = game.users
 
-        expect(game.next_player_after users.first.id).to eq users.second
-        expect(game.next_player_after users.second.id).to eq users.third
-        expect(game.next_player_after users.third.id).to eq users.first
+        expect(game.send(:next_player_after, users.first.id)).to eq users.second
+        expect(game.send(:next_player_after, users.second.id)).to eq users.third
+        expect(game.send(:next_player_after, users.third.id)).to eq users.first
       end
     end
+
+    context '#upload_card' do
+      context 'when uploading a drawing' do
+        context 'fails to upload and does nothing if' do
+          it 'incorrect parameters'
+          it 'person does not exist'
+        end
+
+        context 'uploads card' do
+          it 'sets the set_complete in games_users when all a set is complete are filled'
+
+          it 'triggers a waiting screen until all users are done'
+        end
+      end
+    end
+
+
+    context '#find_or_create_placeholder_card' do
+      context 'fails, does nothing, and returns if' do
+        before :all do
+          @game = FactoryGirl.create(:midgame)
+          @prev_card = @game.starting_cards.order(:id).first
+          @prev_card.destroy
+        end
+
+        it 'user does not exist' do
+          invalid_user_id = 1234123412341
+
+          create_card_params = { prev_card: @prev_card.id, drawing_or_description: 'description'}
+          expect(@game.find_or_create_placeholder_card invalid_user_id, create_card_params).to eq false
+        end
+
+        it 'params does not include drawing_or_description' do
+          valid_user_id = @game.users.order(:id).last.id
+
+          create_card_params = { prev_card: @prev_card.id }
+          expect(@game.find_or_create_placeholder_card valid_user_id, create_card_params).to eq false
+        end
+      end
+
+      context 'succeeds if' do
+        context 'a drawing is requested'
+          context 'placeholder_card returns an existing' do
+            before :all do
+              @game = FactoryGirl.create(:midgame)
+            end
+            it 'with an existing drawing_card for the user' do
+              gu = @game.games_users.order(:id).first
+              current_user = gu.user
+              find_card = gu.starting_card
+
+              expect {
+                @returned_card = @game.find_or_create_placeholder_card current_user.id, { drawing_or_description: 'description'}
+              }.to change{Card.count}.by(0)
+
+              expect(@returned_card.id).to eq find_card.id
+            end
+
+            it 'with an existing drawing_card for the user' do
+              gu = @game.games_users.order(:id).second
+              find_card = gu.starting_card.child_card
+              current_user = find_card.uploader
+
+              expect {
+                @returned_card = @game.find_or_create_placeholder_card current_user.id, { drawing_or_description: 'drawing'}
+              }.to change{Card.count}.by(0)
+
+              expect(@returned_card.try(:id)).to eq find_card.id
+            end
+
+            it 'with a prev_card' do
+              gu = @game.games_users.order(:id).second
+              find_card = gu.starting_card.child_card
+              current_user = find_card.uploader
+
+              expect {
+                @returned_card = @game.find_or_create_placeholder_card current_user.id, { prev_card: find_card.parent_card.id , drawing_or_description: 'drawing'}
+              }.to change{Card.count}.by(0)
+
+              expect(@returned_card.try(:id)).to eq find_card.id
+            end
+          end
+
+          context 'no placeholder_card, so it creates a new' do
+
+            context 'drawing card with' do
+              it 'no prev_card' do
+                game = FactoryGirl.create(:midgame)
+                gu = game.games_users.order(:id).first
+                current_user = gu.user
+                gu.starting_card.destroy
+
+                expect(Card).to receive(:create_placeholder_card).once.and_call_original
+
+                expect {
+                  @returned_card = game.find_or_create_placeholder_card current_user.id, { drawing_or_description: 'drawing'}
+                }.to change{Card.count}.by(1)
+
+                gu.reload
+                expect(@returned_card.drawing_or_description).to eq 'drawing'
+                expect(gu.starting_card.id).to eq @returned_card.id
+                expect(@returned_card.description_text).to eq nil
+                expect(@returned_card.drawing_file_name).to eq nil
+              end
+
+              it 'a prev_card' do
+                game = FactoryGirl.create(:midgame)
+                gu = game.games_users.order(:id).second
+                prev_card = gu.starting_card
+                current_user = prev_card.child_card.uploader
+                prev_card.child_card.destroy
+
+                expect(Card).to receive(:create_placeholder_card).once.and_call_original
+
+                expect {
+                  @returned_card = game.find_or_create_placeholder_card current_user.id, { drawing_or_description: 'drawing', prev_card: prev_card.id }
+                }.to change{Card.count}.by(1)
+
+                prev_card.reload
+                expect(@returned_card.drawing_or_description).to eq 'drawing'
+                expect(prev_card.child_card.id).to eq @returned_card.id
+                expect(@returned_card.description_text).to eq nil
+                expect(@returned_card.drawing_file_name).to eq nil
+              end
+            end
+
+            context 'description card' do
+              it 'no prev_card' do
+                game = FactoryGirl.create(:midgame)
+                gu = game.games_users.order(:id).first
+                current_user = gu.user
+                gu.starting_card.destroy
+
+                expect(Card).to receive(:create_placeholder_card).once.and_call_original
+
+                expect {
+                  @returned_card = game.find_or_create_placeholder_card current_user.id, { drawing_or_description: 'description'}
+                }.to change{Card.count}.by(1)
+
+                gu.reload
+                expect(@returned_card.drawing_or_description).to eq 'description'
+                expect(gu.starting_card.id).to eq @returned_card.id
+                expect(@returned_card.description_text).to eq nil
+                expect(@returned_card.drawing_file_name).to eq nil
+              end
+
+              it 'a prev_card' do
+                game = FactoryGirl.create(:midgame)
+                users = game.users.order(:id)
+                Card.destroy_all
+                gu = game.games_users.order(:id).first
+                gu.starting_card = Game.create_placeholder_card users.first, 'drawing'
+                prev_card = gu.starting_card
+                current_user = users.second
+
+                expect(Card).to receive(:create_placeholder_card).once.and_call_original
+
+                expect {
+                  @returned_card = game.find_or_create_placeholder_card current_user.id, { drawing_or_description: 'description', prev_card: prev_card.id }
+                }.to change{Card.count}.by(1)
+
+                prev_card.reload
+                expect(@returned_card.drawing_or_description).to eq 'description'
+                expect(prev_card.child_card.id).to eq @returned_card.id
+                expect(@returned_card.description_text).to eq nil
+                expect(@returned_card.drawing_file_name).to eq nil
+              end
+            end
+          end
+      end
+    end
+
+    it 'self.get_placeholder_card' do
+      game = FactoryGirl.create(:midgame)
+
+      find_card = game.starting_cards.order(:id).first
+      user = find_card.uploader
+
+      # edit an existing completed description card for this test
+        dont_find_card = game.starting_cards.order(:id).last.child_card.child_card
+        dont_find_card.update(description_text: nil, drawing: nil)
+
+
+      expect(game.get_placeholder_card user.id).to eq find_card.id
+      expect(user.id).not_to eq dont_find_card.uploader_id
+    end
+
+   context 'self.create_placeholder_card' do
+    it "creates a drawing card if params passed a user_id and drawing_or_description = 'drawing'" do
+      user_id = 1
+
+      card = Game.create_placeholder_card user_id, 'drawing'
+
+      expect(card.drawing.blank?).to eq true
+      expect(card.description_text.blank?).to eq true
+      expect(card.drawing_or_description).to eq 'drawing'
+      expect(card.uploader_id).to eq user_id
+    end
+
+    it "creates a drawing card if params passed a user_id and drawing_or_description = 'description'" do
+      user_id = 1
+
+      card = Game.create_placeholder_card user_id, 'description'
+
+      expect(card.drawing.blank?).to eq true
+      expect(card.description_text.blank?).to eq true
+      expect(card.drawing_or_description).to eq 'description'
+      expect(card.uploader_id).to eq user_id
+    end
+  end
+
+  context '#fill_in_info_for_placeholder_card'
+
+
+    context '#upload_info_into_existing_card' do
+      context 'does nothing and returns false if' do
+        it 'user does not exist'
+        it 'placeholder_card '
+      end
+
+      context 'succeeds if' do
+        it 'updating drawing' do
+          game = FactoryGirl.create(:midgame)
+          gu = game.games_users.order(:id).first
+          card_to_update = gu.starting_card
+          current_user = card_to_update.uploader
+
+          allow_any_instance_of(Card).to receive(:parse_and_save_uri_for_drawing).once.and_call_original
+
+          expect(Paperclip).to receive(:io_adapters).and_return() .for(paperclip_card_params[:data])
+          card_to_update.reload
+          expect(card_to_update)
+
+
+        end
+        it 'updating description'
+      end
+
+    end
+#
+    # context '#send_out_broadcasts_to_players_after_card_upload'
   end
 end

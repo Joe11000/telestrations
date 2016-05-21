@@ -13,11 +13,11 @@ class User < ActiveRecord::Base
   validates_with AttachmentSizeValidator, :attributes => :provider_avatar_override, less_than: 5.megabytes
 
   def current_game
-    games.last || Game.none
+    games.order(:id).last || Game.none
   end
 
   def gamesuser_in_current_game
-    GamesUser.includes(:game).where(user_id: id).try(:last) || GamesUser.none
+    GamesUser.includes(:game).where(user_id: id).order(:id).try(:last) || GamesUser.none
   end
 
   def starting_card_in_current_game

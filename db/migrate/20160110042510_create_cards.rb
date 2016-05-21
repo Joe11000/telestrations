@@ -3,8 +3,9 @@ class CreateCards < ActiveRecord::Migration
     create_table :cards do |t|
       t.references :uploader, class_name: 'User'
       t.references :parent_card, class_name: 'Card'
+      t.references :starting_games_user
       t.references :idea_catalyst, class_name: 'GamesUser'
-      t.text       :description_text, default: ''
+      t.text       :description_text, default: nil
       t.text       :drawing_or_description
 
       t.datetime   :deleted_at, index: true

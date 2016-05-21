@@ -139,6 +139,7 @@ GEM
       less (~> 2.6.0)
       sprockets (> 2, < 4)
       tilt
+    libv8 (3.16.14.13)
     listen (3.0.7)
       rb-fsevent (>= 0.9.3)
       rb-inotify (>= 0.9.7)
@@ -231,6 +232,7 @@ GEM
     rb-inotify (0.9.7)
       ffi (>= 0.5.0)
     redis (3.2.2)
+    ref (2.0.0)
     rspec-core (3.1.7)
       rspec-support (~> 3.1.0)
     rspec-expectations (3.1.2)
@@ -291,6 +293,9 @@ GEM
       sprockets (>= 3.0.0)
     tcr (0.1.0)
     temple (0.7.6)
+    therubyracer (0.12.2)
+      libv8 (~> 3.16.14.0)
+      ref
     thor (0.19.1)
     thread_safe (0.3.5)
     tilt (2.0.2)
@@ -362,6 +367,7 @@ DEPENDENCIES
   spring-watcher-listen (~> 2.0.0)
   sprockets-es6
   tcr
+  therubyracer
   turbolinks (~> 5.x)
   twitter-bootstrap-rails
   tzinfo-data
