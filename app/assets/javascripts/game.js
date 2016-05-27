@@ -1,5 +1,20 @@
 (function(){
 
+  // broadcast_params: { game_over: false, set_complete: false, attention_users: next_user_id, prev_card: {id: card_id, description_text: description_text} } }
+  // broadcast_params: { game_over: false, set_complete: false, attention_users: next_user_id, prev_card: {id: card_id, drawing_url: url} } }
+  window.updatePageForNextCard = function(broadcast_params){
+    // previous card info
+    $('[data-prev-card-id]').attr('data-prev-card-id', broadcast_params['prev_card']['id'])
+
+    if(broadcast_params['prev_card']['description_text'] != undefined)
+    {
+      $("[data-id='make-description-container']").hide()
+      $("[data-id='make-description-form']")
+
+    }
+  };
+
+
   $('#drawing-tab a').click(function (e) {
     e.preventDefault();
     $(this).tab('show');

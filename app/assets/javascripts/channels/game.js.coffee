@@ -15,16 +15,21 @@ App.game = App.cable.subscriptions.create { channel: "GameChannel", prev_card: N
   received: (data) ->
     if(data['game_over'] == true)
       window.location = '/postgame'
-    else if(data['set_complete'] == true)
-      # hide drawing and description container and show waiting for users screen
-    else if data['prev_card']['description_text'] != undefined
-      # hide and clear the describing form
-      # set the description_text in the drawing area so the user can draw it
-    else if data['prev_card']['drawing_url'] != undefined
-      # hide and clear picture drawing area and drawing upload form
-      # set the picture so the user can describe it
+    else if(data['attention_users'] == Number.parseInt( $('[data-user-id]').attr('data-user-id') )
+      if(data['set_complete'] == true)
+        # hide drawing and description container and show waiting for users screen
+      else if data['prev_card']['description_text'] != undefined
+        # hide and clear the describing form
+        # set the description_text in the drawing area so the user can draw it
+      else if data['prev_card']['drawing_url'] != undefined
+        # hide and clear picture drawing area and drawing upload form
+        # set the picture so the user can describe it
+      else
+        console.warning('received ' + data + ' and front end knew the user, but dropped data on the floor')
     else
-      console.warning('received ' + data + ' and dropped it on the floor')
+      console.warning('received ' + data + ', and did not know if it was the intended user and dropped it on the floor')
+
+
 
   upload_card: (card_uri_info) ->
     @perform 'upload_card',  card_uri_info

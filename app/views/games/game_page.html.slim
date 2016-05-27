@@ -1,5 +1,5 @@
-/ = image_tag @card.drawing.url
-#game data-game-id=@game.id data-prev-card-id=@prev_card.id
+/ #games information is for
+#game data-game-id=@game.id data-prev-card-id=@prev_card.id data-user-id=@current_user.id
   h1 = @game.id
 
   .form-horizontal
@@ -39,6 +39,6 @@
 
 
       .loading-gif.text-center.hidden
-        p.waiting_for_card Waiting for a card to be passed to you.
-        p.waiting_for_card.hidden You are finished. Waiting for others.
+        p.h3.waiting_for_card Waiting for a card to be passed to you.
+        p.h3.waiting_for_card.hidden You are finished. Waiting for others.
         = image_tag 'loading_icon.gif', class: 'text-center', width:'80px'
