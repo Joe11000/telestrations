@@ -121,16 +121,27 @@ class Game < ActiveRecord::Base
   # params
   #   create_card_params: { prev_card: id }
   # !!! drawing_or_description only used if prev_card type not found !!!
-  def find_or_create_placeholder_card current_user_id, create_card_params={}
+  def find_or_create_placeholder_card current_user_id
+    raise 'game status is not midgame' if status != 'midgame'
+
     placeholder_card = Game.get_placeholder_card current_user_id
 
-    return placeholder_card unless placeholder_card.blank? # check if user exists
-
     current_user = users.find_by(id: current_user_id)
-    prev_card = create_card_params.keys.include?(:prev_card) ? game.cards.find_by(id: create_card_params[:prev_card]) : nil
 
-    return false if current_user.blank?
+    # if a placeholder card isn't found, then it could either be the start of the game for this user or they are done with cards.
+    if placeholder_card.blank? && games_users.find_by(user_id: current_user.id).child_card.blank?
+      # User is done drawing all cards, but refeshed the page.
+      return Card.none
+    end
 
+    # return a successfully returned placeholder
+    return placeholder_card unless placeholder_card.blank?
+
+    prev_card = Card.find_by(id: prev_card_id)
+
+    raise 'current user is blank' if current_user.blank?
+
+    #user exists and doesn't have an existing placeholder
     if prev_card.blank?
       new_card_type = (description_first ? 'description' : 'drawing')
     else
@@ -177,6 +188,7 @@ class Game < ActiveRecord::Base
 
       if gu.game.games_users.pluck(:set_complete).all? # are any sets not completed?
         # game is done
+        self.status = 'postgame'
         return { game_over: true }
       else
         # game is not done. games_user set is done

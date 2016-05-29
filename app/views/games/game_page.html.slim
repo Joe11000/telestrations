@@ -1,5 +1,5 @@
 / #games information is for
-#game data-game-id=@game.id data-prev-card-id=@prev_card.id data-user-id=@current_user.id
+#game data-game-id=@game.id data-prev-card-id=(@prev_card.try(:id) || '') data-user-id=(@current_user.try(:id) || "")
   h1 = @game.id
 
   .form-horizontal
@@ -7,9 +7,9 @@
 
 
     .drawing.col-xs-12.col-sm-offset-1.col-sm-10.col-md-offset-2.col-md-8
-      #make-drawing-container data-id='make-drawing-container' class=(@prev_card.blank? ? 'hidden' : '')
+      #make-drawing-container data-id='make-drawing-container' class=(@placeholder_card.is_drawing? ? '' : 'hidden')
         #description-to-draw
-          p.h3#text-to-draw data-id='description-text-to-draw' = @prev_card.blank? ? @prev_card.try(:description_text) : "Draw a picture."
+          p.h3#text-to-draw data-id='description-text-to-draw' = @prev_card.blank? ? @prev_card.try(:description_text) : ''
         #drawing-tab
           ul.nav.nav-tabs.nav-justified
             li.active role="presentation"
@@ -24,9 +24,9 @@
               #file_upload
                 = render partial: 'shared/file_upload', locals: { to_path: upload_card_in_game_path, allow_multiple_file_upload: false }
 
-      #make-description-container data-id='make-description-container'
-        #drawing-to-describe-container class=(@prev_card.blank? ? 'hidden' : '') data-id='drawing-to-describe-container'
-          img#drawing-to-describe data-id='drawing-to-describe' src=(@prev_card ? @prev_card.try(:drawing_url) : "")
+      #make-description-container data-id='make-description-container' class=(@placeholder_card.is_description? ? '' : 'hidden')
+        #drawing-to-describe-container data-id='drawing-to-describe-container'
+          img#drawing-to-describe data-id='drawing-to-describe' src=(@prev_card ? @prev_card.try(:drawing_url) : '')
 
         form data-id='make-description-form'
           .form-group data-id='make-description-group'
@@ -38,7 +38,7 @@
         p.h3#text-to-draw data-id='drawing-to-describe' = @text_to_draw
 
 
-      .loading-gif.text-center.hidden
-        p.h3.waiting_for_card Waiting for a card to be passed to you.
-        p.h3.waiting_for_card.hidden You are finished. Waiting for others.
+      .loading-container.text-center class=(@placeholder_card.blank? ? '' : 'hidden')
+        p.h3.waiting_for_card class=(@placeholder_card.blank? ? 'hidden' : '') Waiting for a card to be passed to you.
+        p.h3.waiting_for_others class=(@placeholder_card.blank? ? '' : 'hidden') You are finished. Waiting for others to finish.
         = image_tag 'loading_icon.gif', class: 'text-center', width:'80px'

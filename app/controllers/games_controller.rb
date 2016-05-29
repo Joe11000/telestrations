@@ -6,10 +6,12 @@ class GamesController < ApplicationController
 
   def game_page
     @game = current_user.current_game
-    @placeholder_card = @game.find_or_create_placeholder_card current_user.id
-    @prev_card = @placeholder_card.try(:parent_card)
+    redirect_to postgame_path unless @game.status == 'midgame'
 
-    # @variable = 'Playing Game'
+    @placeholder_card = @game.find_or_create_placeholder_card current_user.id
+    @prev_card = @placeholder_card.try(:parent_card) || ''
+    @current_user = current_user
+    byebug
   end
 
   def postgame
@@ -18,15 +20,8 @@ class GamesController < ApplicationController
   end
 
   protected
-    def create_game_name_params
-      params.require(:name, :join_code)
-    end
-
-    def prevent_additional_players_params
-      params.require(:id)
-    end
 
     def redirect_if_no_current_game
-      redirect_to rendezvous_choose_game_type_page_path if current_user.current_game.try(:status) != 'midgame'
+      redirect_to rendezvous_choose_game_type_page_path if current_user.current_game.try(:status) == 'pregame'
     end
 end
