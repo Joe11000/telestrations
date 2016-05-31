@@ -426,7 +426,7 @@ RSpec.describe Game, type: :model do
                 expect(@returned_card.id).to eq find_card.id
               end
 
-              it 'a parent card', focus: true  do
+              it 'a parent card' do
                 game = FactoryGirl.create(:midgame)
 
                 # replace placeholder card for this test
@@ -447,17 +447,16 @@ RSpec.describe Game, type: :model do
         end
 
         context 'no placeholder_card exists for user' do
-          context 'and the users last card belongs to this games completed set of cards' do
-            it 'is returned an empty relation, meaning the user has no additional cards to draw/describe' do
+          context "users last card DOES belong to to this game's completed set of cards" do
+            it 'is returned an empty relation, meaning the user has no additional cards to draw/describe', focus: true do
               game = FactoryGirl.create(:postgame, status: 'midgame')
-              user = game.users.first
-              byebug
-              expect(game.find_or_create_placeholder_card user.id).to eq Card.none
+              current_user = game.users.order(:id).first
+
+              expect(game.find_or_create_placeholder_card current_user.id).to eq Card.none
             end
           end
-        end
 
-          context 'no placeholder_card exists for user, but users last card does not belong to a completed set of cards' do
+          context "users last card DOES NOT belong to to this game's completed set of cards" do
             context 'the method creates a new drawing card with' do
               it 'no prev_card' do
                 game = FactoryGirl.create(:midgame)
@@ -543,8 +542,11 @@ RSpec.describe Game, type: :model do
             end
           end
         end
+
+        end
       end
     end
+
 
     it 'self.get_placeholder_card' do
       game = FactoryGirl.create(:midgame)

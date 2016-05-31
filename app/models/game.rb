@@ -130,22 +130,20 @@ class Game < ActiveRecord::Base
     current_user = users.find(current_user_id)
 
     users_last_game_agnostic_card = Card.where(uploader_id: current_user.try(:id)).order(:id).last
-    # byebug
+    byebug
     # if a placeholder card isn't found, then it could either be the start of the game for this user or they are done with cards.
     if placeholder_card.blank? && users_last_game_agnostic_card.try(:starting_games_user).try(:set_complete)
-      # User is done drawing all cards, but refeshed the page.
+      # User is done drawing all cards
       return Card.none
     end
 
+  byebug
     # return a successfully found placeholder
     return placeholder_card unless placeholder_card.blank?
-
-
-    if users_last_game_agnostic_card.starting_games_user.game_id == id
-
-    end
+  byebug
 
     raise 'current user is does not exist' if current_user.blank?
+    byebug
 
     # #user exists and doesn't have an existing placeholder
     # if prev_card.blank?
