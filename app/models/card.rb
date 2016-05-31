@@ -4,7 +4,7 @@ class Card < ActiveRecord::Base
 
   belongs_to :idea_catalyst, class_name: 'GamesUser', inverse_of: :starting_card # signifies this card is a starting card. Because trying to find all starting cards was harder before doing this
   belongs_to :parent_card, class_name: 'Card', inverse_of: :child_card
-  belongs_to :games_user
+  belongs_to :starting_games_user, class_name: 'GamesUser'
   has_one :child_card, class_name: 'Card', foreign_key: :parent_card_id, inverse_of: :parent_card
   belongs_to :uploader, foreign_key: :uploader_id, class_name: 'User'
 

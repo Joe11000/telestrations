@@ -124,41 +124,48 @@ class Game < ActiveRecord::Base
   def find_or_create_placeholder_card current_user_id
     raise 'game status is not midgame' if status != 'midgame'
 
+    # find a user's placeholder card if one exists
     placeholder_card = Game.get_placeholder_card current_user_id
 
-    current_user = users.find_by(id: current_user_id)
+    current_user = users.find(current_user_id)
 
+    users_last_game_agnostic_card = Card.where(uploader_id: current_user.try(:id)).order(:id).last
+    # byebug
     # if a placeholder card isn't found, then it could either be the start of the game for this user or they are done with cards.
-    if placeholder_card.blank? && games_users.find_by(user_id: current_user.id).child_card.blank?
+    if placeholder_card.blank? && users_last_game_agnostic_card.try(:starting_games_user).try(:set_complete)
       # User is done drawing all cards, but refeshed the page.
       return Card.none
     end
 
-    # return a successfully returned placeholder
+    # return a successfully found placeholder
     return placeholder_card unless placeholder_card.blank?
 
-    prev_card = Card.find_by(id: prev_card_id)
 
-    raise 'current user is blank' if current_user.blank?
+    if users_last_game_agnostic_card.starting_games_user.game_id == id
 
-    #user exists and doesn't have an existing placeholder
-    if prev_card.blank?
-      new_card_type = (description_first ? 'description' : 'drawing')
-    else
-      new_card_type = prev_card.drawing_or_description
     end
 
-    card = Game.create_placeholder_card current_user.id, new_card_type
+    raise 'current user is does not exist' if current_user.blank?
+
+    # #user exists and doesn't have an existing placeholder
+    # if prev_card.blank?
+    #   new_card_type = (description_first ? 'description' : 'drawing')
+    # else
+    #   new_card_type = prev_card.drawing_or_description
+    # end
+
+    # card = Game.create_placeholder_card current_user.id, new_card_type
 
 
-    if prev_card.blank?  # if this is initial card
-      gu = current_user.gamesuser_in_current_game
-      return gu.starting_card = card
-    else
-      return prev_card.child_card = card
-    end
+    # if prev_card.blank?  # if this is initial card
+    #   gu = current_user.gamesuser_in_current_game
+    #   return gu.starting_card = card
+    # else
+    #   return prev_card.child_card = card
+    # end
+end
+# user has no placeholder card and is starting game
 
-  end
 
   # params :  a XOR b
     # a) upload_card_params: { description_text: "Suicidal Penguin"}
