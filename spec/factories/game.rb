@@ -48,14 +48,11 @@ def midgame_associations game
   gu1, gu2, gu3 = GamesUser.where(game_id: game.id, user_id: [ user1.id, user2.id, user3.id ])
 
   # player 1 is making a move
-  gu1.starting_card = FactoryGirl.create(:description, uploader_id: user1.id, idea_catalyst_id: user1.id, description_text: nil) # description placeholder card
-  gu1.starting_card.starting_games_user = gu1
+  gu1.starting_card = FactoryGirl.create(:description, uploader_id: user1.id, idea_catalyst_id: user1.id, description_text: nil, starting_games_user: gu1) # description placeholder card
 
   # player 3 is making a move
-  gu2.starting_card = FactoryGirl.create(:description, uploader_id: user2.id, idea_catalyst_id: user2.id)
-  gu2.starting_card.starting_games_user = gu2
-  gu2.starting_card.child_card = FactoryGirl.create(:drawing, uploader_id: user3.id, drawing: nil) # drawing placeholder card
-  gu2.starting_card.child_card.starting_games_user = gu2
+  gu2.starting_card = FactoryGirl.create(:description, uploader_id: user2.id, idea_catalyst_id: user2.id, starting_games_user: gu2)
+  gu2.starting_card.child_card = FactoryGirl.create(:drawing, uploader_id: user3.id, drawing: nil, starting_games_user: gu2) # drawing placeholder card
 
 
   # gu3.starting_card = FactoryGirl.create(:description, uploader_id: user3.id, idea_catalyst_id: user3.id)
@@ -80,25 +77,16 @@ def postgame_associations game
   gu3 = FactoryGirl.create(:games_user, game_id: game.id, user_id: user3.id, set_complete: true)
 
   gu1.starting_card = FactoryGirl.create(:description, uploader_id: user1.id, starting_games_user: gu1)
-  # gu1.starting_card.starting_games_user = gu1
   gu1.starting_card.child_card = FactoryGirl.create(:drawing, uploader_id: user2.id, starting_games_user: gu1)
-  # gu1.starting_card.child_card.starting_games_user = gu1
   gu1.starting_card.child_card.child_card = FactoryGirl.create(:description, uploader_id: user3.id, starting_games_user: gu1)
-  # gu1.starting_card.child_card.child_card.starting_games_user = gu1
 
   gu2.starting_card = FactoryGirl.create(:description, uploader_id: user2.id, idea_catalyst_id: user2.id, starting_games_user: gu2)
-  # gu2.starting_card.starting_games_user = gu2
   gu2.starting_card.child_card = FactoryGirl.create(:drawing, uploader_id: user3.id, starting_games_user: gu2)
-  # gu2.starting_card.child_card.starting_games_user = gu2
   gu2.starting_card.child_card.child_card = FactoryGirl.create(:description, uploader_id: user1.id, starting_games_user: gu2)
-  # gu2.starting_card.child_card.child_card.starting_games_user = gu2
 
   gu3.starting_card = FactoryGirl.create(:description, uploader_id: user3.id, idea_catalyst_id: user3.id, starting_games_user: gu3)
-  # gu3.starting_card.starting_games_user = gu3
   gu3.starting_card.child_card = FactoryGirl.create(:drawing, uploader_id: user1.id, starting_games_user: gu3)
-  # gu3.starting_card.child_card.starting_games_user = gu3
   gu3.starting_card.child_card.child_card = FactoryGirl.create(:description, uploader_id: user2.id, starting_games_user: gu3)
-  # gu3.starting_card.child_card.child_card.starting_games_user = gu3
 
   game.update(passing_order: game.users.ids.to_s)
 end
