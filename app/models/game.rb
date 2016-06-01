@@ -145,7 +145,7 @@ class Game < ActiveRecord::Base
     raise 'current user is does not exist' if current_user.blank?
     byebug
 
-    # #user exists and doesn't have an existing placeholder
+    #user exists and doesn't have an existing placeholder
     # if prev_card.blank?
     #   new_card_type = (description_first ? 'description' : 'drawing')
     # else
