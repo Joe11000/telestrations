@@ -94,8 +94,100 @@ class Game < ActiveRecord::Base
     true
   end
 
+
+
+# midgame public methods
+
+  #untested
+  # called by games_controller when person first lands on game_page
+  # this assigns a placeholder card to the user's games_user
+  def create_initial_placeholder_for_user current_user_id
+    card = create_placeholder_card( user_id, (description_first ? 'description' : 'drawing') )
+    games_users.find_by(user_id: current_user_id).starting_card = card
+  end
+
+  # params :  a XOR b
+    # a) upload_card_params: { description_text: "Suicidal Penguin"}
+    # b) upload_card_params: { filename: file.filename,  data: file.data };
+  def upload_info_into_existing_card current_user_id, upload_card_params
+    current_user = users.find_by(id: current_user_id)
+    card = current_user.try(:placeholder_card)
+    return false if current_user.blank? || card.blank?
+
+    if upload_card_params.keys.include? 'description_text'
+      return card.update(description_text: upload_card_params[:description_text])
+    else
+      return card.parse_and_save_uri_for_drawing upload_card_params
+    end
+  end
+
+
+  def set_up_next_players_turn current_card_id
+    # current_user = game.users.find_by(id: current_user_id)
+    card = Card.find(current_card_id)
+
+    # figure out who is next in line
+    next_player = next_player_after(card.uploader_id)
+
+    gu = card.games_user
+    if next_player.id == gu.user_id
+      gu.update(set_complete: true)
+
+      if gu.game.games_users.pluck(:set_complete).all? # are any sets not completed?
+        # game is done
+        self.status = 'postgame'
+        return { game_over: true }
+      else
+        # game is not done. games_user set is done
+        return { game_over: false, attention_users: card.uploader_id, set_complete: true }
+      end
+    else
+      create_subsequent_placeholder_for_next_player card.id, next_player.id
+
+      return_info = { game_over: false, set_complete: false, attention_users: card.uploader_id }
+
+      if card.is_description?
+        return_info.merge!({ prev_card: {id: card.id, drawing_url: card.drawing.url} })
+      else
+        return_info.merge({ prev_card: {id: card.id, description_text: description_text} })
+      end
+
+      return return_info
+    end
+  end
+
+    # called indirectly by games_channel through 'set_up_next_players_turn' for to prepare for the next players turn
+  #untested
+  def create_subsequent_placeholder_for_next_player prev_card_id, next_player_id
+    prev_card = Card.find(prev_card_id)
+    card = create_placeholder_card( next_player_id, (description_first ? 'description' : 'drawing') )
+
+    return prev_card.child_card = card
+  end
+
+
+
+  # params a XOR b XOR c XOR d
+  #  a) broadcast_params: { game_over: true }
+  #  b) broadcast_params: { game_over: false, set_complete: true,  attention_users: current_user_id }
+  #  c) broadcast_params: { game_over: false, set_complete: false, attention_users: next_user_id, prev_card: {id: card_id, description_text: description_text} } }
+  #  d) broadcast_params: { game_over: false, set_complete: false, attention_users: next_user_id, prev_card: {id: card_id, drawing_url: url} } }
+  def send_out_broadcasts_to_players_after_card_upload broadcast_params
+    ActionCable.server.broadcast("game_#{id}", broadcast_params )
+  end
+
+  # retest this
+  def get_placeholder_card current_user_id
+    Card.find_by(uploader_id: current_user_id, starting_games_user_id: games_users.ids, drawing_file_name: nil, description_text: nil) || Card.none
+  end
+
+
+
+
+
+# postgame public methods
   def cards_from_finished_game
-    return [] if status == 'postgame'
+    return [] unless status == 'postgame'
 
     # all cards associated with this games get
     starting_cards = Card.all_starting_cards.includes(idea_catalyst: :game).where(games: { join_code: join_code } )
@@ -118,119 +210,10 @@ class Game < ActiveRecord::Base
     result
   end
 
-  # params
-  #   create_card_params: { prev_card: id }
-  # !!! drawing_or_description only used if prev_card type not found !!!
-  def find_or_create_placeholder_card current_user_id
-    raise 'game status is not midgame' if status != 'midgame'
-
-    # find a user's placeholder card if one exists
-    placeholder_card = Game.get_placeholder_card current_user_id
-
-    current_user = users.find(current_user_id)
-
-    users_last_game_agnostic_card = Card.where(uploader_id: current_user.try(:id)).order(:id).last
-    byebug
-    # if a placeholder card isn't found, then it could either be the start of the game for this user or they are done with cards.
-    if placeholder_card.blank? && users_last_game_agnostic_card.try(:starting_games_user).try(:set_complete)
-      # User is done drawing all cards
-      return Card.none
-    end
-
-  byebug
-    # return a successfully found placeholder
-    return placeholder_card unless placeholder_card.blank?
-  byebug
-
-    raise 'current user is does not exist' if current_user.blank?
-    byebug
-
-    #user exists and doesn't have an existing placeholder
-    # if prev_card.blank?
-    #   new_card_type = (description_first ? 'description' : 'drawing')
-    # else
-    #   new_card_type = prev_card.drawing_or_description
-    # end
-
-    # card = Game.create_placeholder_card current_user.id, new_card_type
-
-
-    # if prev_card.blank?  # if this is initial card
-    #   gu = current_user.gamesuser_in_current_game
-    #   return gu.starting_card = card
-    # else
-    #   return prev_card.child_card = card
-    # end
-end
-# user has no placeholder card and is starting game
-
-
-  # params :  a XOR b
-    # a) upload_card_params: { description_text: "Suicidal Penguin"}
-    # b) upload_card_params: { filename: file.filename,  data: file.data };
-  def upload_info_into_existing_card current_user_id, upload_card_params
-    current_user = users.find_by(id: current_user_id)
-    card = current_user.try(:placeholder_card)
-    return false if current_user.blank? || card.blank?
-
-    if upload_card_params.keys.include? 'description_text'
-      return card.update(description_text: upload_card_params[:description_text])
-    else
-      return card.parse_and_save_uri_for_drawing upload_card_params
-    end
-  end
-
-  def set_up_next_players_turn current_card_id
-    # current_user = game.users.find_by(id: current_user_id)
-    card = Card.find(current_card_id)
-
-    # figure out who is next in line
-    next_player = next_player_after(card.uploader_id)
-
-    gu = card.games_user
-    if next_player.id == gu.user_id
-      gu.update(set_complete: true)
-
-      if gu.game.games_users.pluck(:set_complete).all? # are any sets not completed?
-        # game is done
-        self.status = 'postgame'
-        return { game_over: true }
-      else
-        # game is not done. games_user set is done
-        return { game_over: false, attention_users: card.uploader_id, set_complete: true }
-      end
-    else
-      return_info = { game_over: false, set_complete: false, attention_users: card.uploader_id }
-
-      if card.is_description?
-        return_info.merge!({ prev_card: {id: card.id, drawing_url: card.drawing.url} })
-      else
-        return_info.merge({ prev_card: {id: card.id, description_text: description_text} })
-      end
-
-      return return_info
-    end
-  end
-
-  # params a XOR b XOR c XOR d
-  #  a) broadcast_params: { game_over: true }
-  #  b) broadcast_params: { game_over: false, set_complete: true,  attention_users: current_user_id }
-  #  c) broadcast_params: { game_over: false, set_complete: false, attention_users: next_user_id, prev_card: {id: card_id, description_text: description_text} } }
-  #  d) broadcast_params: { game_over: false, set_complete: false, attention_users: next_user_id, prev_card: {id: card_id, drawing_url: url} } }
-  def send_out_broadcasts_to_players_after_card_upload broadcast_params
-    ActionCable.server.broadcast("game_#{id}", broadcast_params )
-  end
-
-
   protected
 
-    # tested
-    def self.get_placeholder_card user_id
-      Card.find_by(uploader_id: user_id, drawing_file_name: nil, description_text: nil) || Card.none
-    end
-
     #tested
-    def self.create_placeholder_card uploader_id, drawing_or_description
+    def create_placeholder_card uploader_id, drawing_or_description
       if drawing_or_description == 'description'
         return Card.create( drawing_or_description: "description",
                             uploader_id: uploader_id)

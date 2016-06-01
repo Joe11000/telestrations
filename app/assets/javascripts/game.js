@@ -1,18 +1,22 @@
 (function(){
 
-  // broadcast_params: { game_over: false, set_complete: false, attention_users: next_user_id, prev_card: {id: card_id, description_text: description_text} } }
-  // broadcast_params: { game_over: false, set_complete: false, attention_users: next_user_id, prev_card: {id: card_id, drawing_url: url} } }
-  window.updatePageForNextCard = function(broadcast_params){
+  // broadcasted_params: { game_over: false, set_complete: false, attention_users: next_user_id, prev_card: {id: card_id, description_text: description_text} } }
+  // broadcasted_params: { game_over: false, set_complete: false, attention_users: next_user_id, prev_card: {id: card_id, drawing_url: url} } }
+  window.updatePageForNextDescriptionCard = function(broadcasted_params){
     // previous card info
-    $('[data-prev-card-id]').attr('data-prev-card-id', broadcast_params['prev_card']['id'])
+    $('[data-prev-card-id]').attr('data-prev-card-id', broadcasted_params['prev_card']['id'])
 
-    if(broadcast_params['prev_card']['description_text'] != undefined)
+    if(broadcasted_params['prev_card']['description_text'] != undefined)
     {
       $("[data-id='make-description-container']").hide()
       $("[data-id='make-description-form']")
 
     }
   };
+
+  window.updatePageForNextDrawingCard = function(broadcasted_params){
+
+  }
 
 
   $('#drawing-tab a').click(function (e) {

@@ -354,7 +354,7 @@ RSpec.describe Game, type: :model do
     end
 
 
-    context '#find_or_create_placeholder_card', all: true do
+    context '#get_placeholder_card', all: true do
       context 'fails, does nothing, and returns if' do
         before :all do
           @game = FactoryGirl.create(:midgame)
@@ -365,7 +365,7 @@ RSpec.describe Game, type: :model do
         xit 'user does not exist' do
           invalid_user_id = 1234123412341
 
-          expect(@game.find_or_create_placeholder_card invalid_user_id).to raise_error
+          expect(@game.get_placeholder_card invalid_user_id).to raise_error
         end
       end
 
@@ -384,7 +384,7 @@ RSpec.describe Game, type: :model do
                 gu.starting_card = find_card
 
                 expect do
-                  @returned_card = game.find_or_create_placeholder_card current_user.id
+                  @returned_card = game.get_placeholder_card current_user.id
                 end.to change{Card.count}.by(0)
 
                 expect(@returned_card.id).to eq find_card.id
@@ -401,7 +401,7 @@ RSpec.describe Game, type: :model do
                 gu.starting_card.child_card = find_card
 
                 expect do
-                  @returned_card = game.find_or_create_placeholder_card current_user.id
+                  @returned_card = game.get_placeholder_card current_user.id
                 end.to change{Card.count}.by(0)
 
                 expect(@returned_card.id).to eq find_card.id
@@ -420,7 +420,7 @@ RSpec.describe Game, type: :model do
                 gu.starting_card = find_card
 
                 expect do
-                  @returned_card = game.find_or_create_placeholder_card current_user.id
+                  @returned_card = game.get_placeholder_card current_user.id
                 end.to change{Card.count}.by(0)
 
                 expect(@returned_card.id).to eq find_card.id
@@ -437,7 +437,7 @@ RSpec.describe Game, type: :model do
                 gu.starting_card.child_card = find_card
 
                 expect do
-                  @returned_card = game.find_or_create_placeholder_card current_user.id
+                  @returned_card = game.get_placeholder_card current_user.id
                 end.to change{Card.count}.by(0)
 
                 expect(@returned_card.id).to eq find_card.id
@@ -452,7 +452,7 @@ RSpec.describe Game, type: :model do
               game = FactoryGirl.create(:postgame, status: 'midgame')
               current_user = game.users.order(:id).first
 
-              expect(game.find_or_create_placeholder_card current_user.id).to eq Card.none
+              expect(game.get_placeholder_card current_user.id).to eq Card.none
             end
           end
 
@@ -467,7 +467,7 @@ RSpec.describe Game, type: :model do
                 # expect(Card).to receive(:create_placeholder_card).once.and_call_original
 
                 expect {
-                  @returned_card = game.find_or_create_placeholder_card current_user.id
+                  @returned_card = game.get_placeholder_card current_user.id
                 }.to change{Card.count}.by(1)
 
                 gu.reload
@@ -487,7 +487,7 @@ RSpec.describe Game, type: :model do
                 expect(Card).to receive(:create_placeholder_card).once.and_call_original
 
                 expect {
-                  @returned_card = game.find_or_create_placeholder_card current_user.id, { drawing_or_description: 'drawing', prev_card: prev_card.id }
+                  @returned_card = game.get_placeholder_card current_user.id, { drawing_or_description: 'drawing', prev_card: prev_card.id }
                 }.to change{Card.count}.by(1)
 
                 prev_card.reload
@@ -508,7 +508,7 @@ RSpec.describe Game, type: :model do
                 expect(Card).to receive(:create_placeholder_card).once.and_call_original
 
                 expect {
-                  @returned_card = game.find_or_create_placeholder_card current_user.id, { drawing_or_description: 'description'}
+                  @returned_card = game.get_placeholder_card current_user.id, { drawing_or_description: 'description'}
                 }.to change{Card.count}.by(1)
 
                 gu.reload
@@ -530,7 +530,7 @@ RSpec.describe Game, type: :model do
                 expect(Card).to receive(:create_placeholder_card).once.and_call_original
 
                 expect {
-                  @returned_card = game.find_or_create_placeholder_card current_user.id, { drawing_or_description: 'description', prev_card: prev_card.id }
+                  @returned_card = game.get_placeholder_card current_user.id, { drawing_or_description: 'description', prev_card: prev_card.id }
                 }.to change{Card.count}.by(1)
 
                 prev_card.reload
