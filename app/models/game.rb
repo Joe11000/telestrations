@@ -108,20 +108,18 @@ class Game < ActiveRecord::Base
     games_users.find_by(user_id: current_user_id).starting_card = card
   end
 
+  # working!!!
   # params :  a XOR b
     # a) upload_card_params: { description_text: "Suicidal Penguin"}
     # b) upload_card_params: { filename: file.filename,  data: file.data };
   def upload_info_into_existing_card current_user_id, upload_card_params
     current_user = users.find_by(id: current_user_id)
     card = get_placeholder_card current_user_id
-    byebug
 
     return false if current_user.blank? || card.blank?
-    if upload_card_params.keys.include? 'description_text'
-    byebug
+    if upload_card_params.keys.include? :description_text
       return card.update(description_text: upload_card_params[:description_text])
     else
-    byebug
       return card.parse_and_save_uri_for_drawing upload_card_params
     end
   end
@@ -218,14 +216,13 @@ class Game < ActiveRecord::Base
 
   protected
 
-    #tested
+    # working!!!
     def create_placeholder_card uploader_id, drawing_or_description
       if drawing_or_description == 'description'
         return Card.create( drawing_or_description: "description",
                             uploader_id: uploader_id)
       else
-        return Card.create( drawing_or_description: "drawing",
-                            uploader_id: uploader_id)
+        return Card.create( drawing_or_description: "drawing", uploader_id: uploader_id)
       end
     end
 
