@@ -31,6 +31,7 @@ class Card < ActiveRecord::Base
   # ( {filename: '', data: ''}) # data is the uri
   def parse_and_save_uri_for_drawing paperclip_card_params
     # Instantiates Paperclip::DataUriAdapter attachment
+    byebug
     file = Paperclip.io_adapters.for(paperclip_card_params[:data])
     file.original_filename = paperclip_card_params[:filename]
 

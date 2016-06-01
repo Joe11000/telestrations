@@ -6,13 +6,13 @@ class GamesController < ApplicationController
 
   def game_page
     @game = current_user.current_game
-    redirect_to postgame_path unless @game.status == 'midgame'
+    redirect_to postgame_path unless @game.try(:status) == 'midgame'
 
     @placeholder_card = @game.get_placeholder_card current_user.id
 
     # create a starting placeholder card for this user if game is just beginning
-    if( @placeholder_card.blank? && current_user.current_games_user.child_card.blank? )
-      create_initial_placeholder_for_user current_user.id
+    if( @placeholder_card.blank? && current_user.starting_card_in_current_game.blank? )
+      @game.create_initial_placeholder_for_user current_user.id
     end
 
     @prev_card = @placeholder_card.try(:parent_card) || ''

@@ -98,11 +98,13 @@ class Game < ActiveRecord::Base
 
 # midgame public methods
 
-  #untested
+  # working!!!
   # called by games_controller when person first lands on game_page
   # this assigns a placeholder card to the user's games_user
   def create_initial_placeholder_for_user current_user_id
-    card = create_placeholder_card( user_id, (description_first ? 'description' : 'drawing') )
+    card = create_placeholder_card( current_user_id, (description_first ? 'description' : 'drawing') )
+    gu = games_users.find_by(user_id: current_user_id)
+    card.update(starting_games_user: gu)
     games_users.find_by(user_id: current_user_id).starting_card = card
   end
 
@@ -111,12 +113,15 @@ class Game < ActiveRecord::Base
     # b) upload_card_params: { filename: file.filename,  data: file.data };
   def upload_info_into_existing_card current_user_id, upload_card_params
     current_user = users.find_by(id: current_user_id)
-    card = current_user.try(:placeholder_card)
-    return false if current_user.blank? || card.blank?
+    card = get_placeholder_card current_user_id
+    byebug
 
+    return false if current_user.blank? || card.blank?
     if upload_card_params.keys.include? 'description_text'
+    byebug
       return card.update(description_text: upload_card_params[:description_text])
     else
+    byebug
       return card.parse_and_save_uri_for_drawing upload_card_params
     end
   end
@@ -142,7 +147,7 @@ class Game < ActiveRecord::Base
         return { game_over: false, attention_users: card.uploader_id, set_complete: true }
       end
     else
-      create_subsequent_placeholder_for_next_player card.id, next_player.id
+      create_subsequent_placeholder_for_next_player next_player.id, card.id
 
       return_info = { game_over: false, set_complete: false, attention_users: card.uploader_id }
 
@@ -156,11 +161,12 @@ class Game < ActiveRecord::Base
     end
   end
 
-    # called indirectly by games_channel through 'set_up_next_players_turn' for to prepare for the next players turn
-  #untested
-  def create_subsequent_placeholder_for_next_player prev_card_id, next_player_id
+  # called indirectly by games_channel through 'set_up_next_players_turn' for to prepare for the next players turn
+  # working!!!
+  def create_subsequent_placeholder_for_next_player next_player_id, prev_card_id
     prev_card = Card.find(prev_card_id)
     card = create_placeholder_card( next_player_id, (description_first ? 'description' : 'drawing') )
+    card.update(starting_games_user: prev_card.starting_games_user)
 
     return prev_card.child_card = card
   end

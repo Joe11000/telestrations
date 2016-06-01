@@ -21,6 +21,16 @@ FactoryGirl.define do
       end
     end
 
+    # midway through game
+    factory :midgame_without_cards do
+      status 'midgame'
+
+      after(:create) do |game|
+        midgame_associations_without_cards game
+        game.update(join_code: nil)
+      end
+    end
+
     factory :postgame do
       status 'postgame'
 
@@ -34,6 +44,10 @@ end
 
 
 def add_users_to game
+end
+
+def midgame_associations_without_cards game
+  3.times { game.users << create(:user) }
 end
 
 def midgame_associations game

@@ -3,18 +3,20 @@
   // broadcasted_params: { game_over: false, set_complete: false, attention_users: next_user_id, prev_card: {id: card_id, description_text: description_text} } }
   // broadcasted_params: { game_over: false, set_complete: false, attention_users: next_user_id, prev_card: {id: card_id, drawing_url: url} } }
   window.updatePageForNextDescriptionCard = function(broadcasted_params){
+    debugger
     // previous card info
     $('[data-prev-card-id]').attr('data-prev-card-id', broadcasted_params['prev_card']['id'])
 
-    if(broadcasted_params['prev_card']['description_text'] != undefined)
-    {
       $("[data-id='make-description-container']").hide()
-      $("[data-id='make-description-form']")
-
-    }
+      $("[data-id='make-description-form']").clear()
   };
 
   window.updatePageForNextDrawingCard = function(broadcasted_params){
+    debugger
+
+    $('[data-prev-card-id]').attr('data-prev-card-id', broadcasted_params['prev_card']['id'])
+
+    $("[data-id='make-description-container']").show()
 
   }
 
@@ -27,8 +29,8 @@
 
   $("[data-id='make-description-form']").on('submit', function(e){
     e.preventDefault();
-    App.game.upload_card();
-
+    debugger
+    App.game.upload_card({description_text: this.val()});
   });
 
   function replaceContainerWithWaitingGif() {

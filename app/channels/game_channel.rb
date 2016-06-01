@@ -14,6 +14,7 @@ class GameChannel < ApplicationCable::Channel
   # a) { prev_card: nil, description_text: "Suicidal Penguin"}
   # b) { prev_card: nil, filename: file.filename,  data: file.data  };
   def upload_card upload_card_params
+    byebug
     current_user_game = current_user.current_game
     updated_card = current_user_game.try(:upload_info_into_existing_card)
     return false if updated_card == false

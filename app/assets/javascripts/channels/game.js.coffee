@@ -37,4 +37,5 @@ App.game = App.cable.subscriptions.create { channel: "GameChannel", prev_card: N
 
 
   upload_card: (card_uri_info) ->
+    debugger
     @perform 'upload_card',  card_uri_info

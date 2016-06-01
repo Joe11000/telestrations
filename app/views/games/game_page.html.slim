@@ -7,7 +7,7 @@
 
 
     .drawing.col-xs-12.col-sm-offset-1.col-sm-10.col-md-offset-2.col-md-8
-      #make-drawing-container data-id='make-drawing-container' class=(@placeholder_card.is_drawing? ? '' : 'hidden')
+      #make-drawing-container data-id='make-drawing-container' class=(@placeholder_card.try(:is_drawing?) ? '' : 'hidden')
         #description-to-draw
           p.h3#text-to-draw data-id='description-text-to-draw' = @prev_card.blank? ? @prev_card.try(:description_text) : ''
         #drawing-tab
@@ -24,7 +24,7 @@
               #file_upload
                 = render partial: 'shared/file_upload', locals: { to_path: upload_card_in_game_path, allow_multiple_file_upload: false }
 
-      #make-description-container data-id='make-description-container' class=(@placeholder_card.is_description? ? '' : 'hidden')
+      #make-description-container data-id='make-description-container' class=(@placeholder_card.try(:is_description?) ? '' : 'hidden')
         #drawing-to-describe-container data-id='drawing-to-describe-container'
           img#drawing-to-describe data-id='drawing-to-describe' src=(@prev_card ? @prev_card.try(:drawing_url) : '')
 
