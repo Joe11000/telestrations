@@ -43,6 +43,7 @@ class Game < ActiveRecord::Base
   end
   # end scoping methods
 
+  # working!!!
   def parse_passing_order
     return [] if passing_order.blank?
     JSON.parse(passing_order)
@@ -124,35 +125,33 @@ class Game < ActiveRecord::Base
     end
   end
 
-
+  # wip
   def set_up_next_players_turn current_card_id
-    # current_user = game.users.find_by(id: current_user_id)
     card = Card.find(current_card_id)
-
-    # figure out who is next in line
     next_player = next_player_after(card.uploader_id)
+    gu = card.starting_games_user
 
-    gu = card.games_user
     if next_player.id == gu.user_id
       gu.update(set_complete: true)
 
       if gu.game.games_users.pluck(:set_complete).all? # are any sets not completed?
         # game is done
-        self.status = 'postgame'
-        return { game_over: true }
+          update(status: 'postgame')
+          return { game_over: true }
       else
         # game is not done. games_user set is done
-        return { game_over: false, attention_users: card.uploader_id, set_complete: true }
+          return { game_over: false, attention_users: card.uploader_id, set_complete: true }
       end
+
     else
       create_subsequent_placeholder_for_next_player next_player.id, card.id
 
-      return_info = { game_over: false, set_complete: false, attention_users: card.uploader_id }
+      return_info = { game_over: false, set_complete: false, attention_users: next_player.id }
 
       if card.is_description?
-        return_info.merge!({ prev_card: {id: card.id, drawing_url: card.drawing.url} })
+        return_info.merge!({ prev_card: {id: card.id, description_text: card.description_text} })
       else
-        return_info.merge({ prev_card: {id: card.id, description_text: description_text} })
+        return_info.merge!({ prev_card: {id: card.id, drawing_url: card.drawing.url} })
       end
 
       return return_info
@@ -180,13 +179,10 @@ class Game < ActiveRecord::Base
     ActionCable.server.broadcast("game_#{id}", broadcast_params )
   end
 
-  # retest this
+  # working!!!
   def get_placeholder_card current_user_id
     Card.find_by(uploader_id: current_user_id, starting_games_user_id: games_users.ids, drawing_file_name: nil, description_text: nil) || Card.none
   end
-
-
-
 
 
 # postgame public methods
@@ -226,10 +222,10 @@ class Game < ActiveRecord::Base
       end
     end
 
+    # working!!!
     def next_player_after user_id
       user_index = parse_passing_order.index(user_id)
       return User.none if user_index.nil?
-
       user_id_of_next_user = parse_passing_order[ (user_index + 1) % parse_passing_order.length ]
       return User.find_by( id: user_id_of_next_user )
     end

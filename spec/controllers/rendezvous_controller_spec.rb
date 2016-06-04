@@ -40,7 +40,7 @@ RSpec.describe RendezvousController, type: :controller do
     context 'game/rendezvous/join' do
       context 'One game exists with matching :join_code' do
         it 'user can join a public game' do
-          game = FactoryGirl.create(:public_pre_game)
+          game = FactoryGirl.create(:public_pregame)
           current_user = game.users.first
           controller.session[:user_id] = current_user.id
 
@@ -55,7 +55,7 @@ RSpec.describe RendezvousController, type: :controller do
         end
 
         it 'user can join a private game' do
-          game = FactoryGirl.create(:public_pre_game, is_private: true)
+          game = FactoryGirl.create(:public_pregame, is_private: true)
           current_user = game.users.first
           controller.session[:user_id] = current_user.id
 
@@ -70,7 +70,7 @@ RSpec.describe RendezvousController, type: :controller do
         end
 
         it 'renders the correct page' do
-          game = FactoryGirl.create(:public_pre_game)
+          game = FactoryGirl.create(:public_pregame)
           current_user = game.users.first
           controller.session[:user_id] = current_user.id
 
@@ -248,7 +248,7 @@ RSpec.describe RendezvousController, type: :controller do
     it 'user can join a game', current: true do
       current_user = FactoryGirl.create(:user)
       controller.session[:user_id] = current_user.id
-      game = FactoryGirl.create(:public_pre_game)
+      game = FactoryGirl.create(:public_pregame)
 
       xhr :post, :update, join_code: game.join_code, users_game_name: Faker::Name.first_name
 
@@ -275,7 +275,7 @@ RSpec.describe RendezvousController, type: :controller do
 
 
     it 'user is blocked from joining game twice' do
-      game = FactoryGirl.create(:public_pre_game)
+      game = FactoryGirl.create(:public_pregame)
       current_user = game.users.first
       controller.session[:user_id] = current_user.id
 
@@ -288,11 +288,11 @@ RSpec.describe RendezvousController, type: :controller do
     end
 
     it "user can be removed from another pre-game game" do
-      game = FactoryGirl.create(:public_pre_game)
+      game = FactoryGirl.create(:public_pregame)
       current_user = game.users.first
       controller.session[:user_id] = current_user.id
 
-      game2 = FactoryGirl.create(:public_pre_game)
+      game2 = FactoryGirl.create(:public_pregame)
 
       xhr :post, :update, join_code: game2.join_code, users_game_name: Faker::Name.first_name
 
@@ -307,7 +307,7 @@ RSpec.describe RendezvousController, type: :controller do
       current_user = game.users.first
       controller.session[:user_id] = current_user.id
 
-      join_code_of_game_i_cant_join = FactoryGirl.create(:public_pre_game).join_code
+      join_code_of_game_i_cant_join = FactoryGirl.create(:public_pregame).join_code
 
       xhr :post, :update, join_code: join_code_of_game_i_cant_join, users_game_name: Faker::Name.first_name
 
@@ -339,7 +339,7 @@ RSpec.describe RendezvousController, type: :controller do
     context 'user IS currently associated with game' do
       context 'and is the only one attached to the game' do
         it 'removes user from game before redirecting user to choose_game_type_page' do
-          game = FactoryGirl.create(:public_pre_game)
+          game = FactoryGirl.create(:public_pregame)
           current_user = game.users.first
           game.users.where.not(id: current_user.id).destroy_all
           controller.session[:user_id] = current_user.id
@@ -354,7 +354,7 @@ RSpec.describe RendezvousController, type: :controller do
       end
       context 'and is one of many users attached to the game' do
         it 'removes user from game before redirecting user to choose_game_type_page' do
-          game = FactoryGirl.create(:public_pre_game)
+          game = FactoryGirl.create(:public_pregame)
           current_user = game.users.first
           other_players_ids = game.users.where.not(id: current_user.id).ids
           controller.session[:user_id] = current_user.id

@@ -84,6 +84,7 @@ group :test do
 
   gem 'capybara', '2.6.0'
   gem 'poltergeist', '1.8.1'
+  gem 'rack-test'
   gem 'rails-controller-testing'
 end
 

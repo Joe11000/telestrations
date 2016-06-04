@@ -352,6 +352,7 @@ DEPENDENCIES
   pg (~> 0.18)
   poltergeist (= 1.8.1)
   puma (~> 3.0)
+  rack-test
   rails (>= 5.0.0.beta4, < 5.1)
   rails-controller-testing
   redis (= 3.2.2)

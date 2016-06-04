@@ -47,7 +47,7 @@ class RendezvousChannel < ApplicationCable::Channel
     # broadcast a message to try and go to the game start page. The before action will allow the commited people through to their game and send the uncommited people back to the game choice page.
     ActionCable.server.broadcast("rendezvous_#{params[:join_code]}", start_game_signal: game_page_path)
 
-    game.update( passing_order: game.users.ids.to_s )
+    game.update( passing_order: game.users.order(:id).ids.to_s )
   end
 
   protected
