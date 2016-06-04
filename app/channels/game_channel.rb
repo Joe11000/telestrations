@@ -15,9 +15,10 @@ class GameChannel < ApplicationCable::Channel
   # b) { prev_card: nil, filename: file.filename,  data: file.data  };
   def upload_card upload_card_params
     current_user_game = current_user.current_game
-    updated_card = current_user_game.try(:upload_info_into_existing_card)
+    updated_card = current_user_game.try(:upload_info_into_existing_card, current_user.id, upload_card_params)
     return false if updated_card == false
 
+    byebug
     # set up the placeholder for the next players turn and get params that should be broadcasted to notify users of a card being finished
     broadcast_params = current_user_game.set_up_next_players_turn updated_card.id
 

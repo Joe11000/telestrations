@@ -27,10 +27,9 @@
   });
 
 
-  $("[data-id='make-description-form']").on('submit', function(e){
-    e.preventDefault();
-    debugger
-    App.game.upload_card({description_text: this.val()});
+  $("[data-id='make-description-form']").submit( function(e){
+    App.game.upload_card({description_text: $(this).find('input').val()});
+    return false;
   });
 
   function replaceContainerWithWaitingGif() {

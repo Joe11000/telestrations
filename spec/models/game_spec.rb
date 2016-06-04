@@ -455,16 +455,14 @@ RSpec.describe Game, type: :model do
           fake_file_data = "data:image/png;base64,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"
           fake_file_name = 'file_name'
 
-          game.upload_info_into_existing_card( current_user.id, { filename: fake_file_name,  data: fake_file_data })
+          card_returned = game.upload_info_into_existing_card( current_user.id, { 'filename' => fake_file_name,  'data' => fake_file_data })
 
-          card_to_update.reload
-
-          expect(card_to_update.uploader_id).to eq current_user.id
-          expect(card_to_update.starting_games_user_id).to eq gu.id
-          expect(card_to_update.description_text).to eq nil
-          expect(card_to_update.drawing_or_description).to eq 'drawing'
-          expect(card_to_update.drawing_file_name).to eq fake_file_name
-          expect(card_to_update.drawing_file_size).not_to eq nil
+          expect(card_returned.uploader_id).to eq current_user.id
+          expect(card_returned.starting_games_user_id).to eq gu.id
+          expect(card_returned.description_text).to eq nil
+          expect(card_returned.drawing_or_description).to eq 'drawing'
+          expect(card_returned.drawing_file_name).to eq fake_file_name
+          expect(card_returned.drawing_file_size).not_to eq nil
         end
 
         it 'updating description' do
@@ -475,16 +473,14 @@ RSpec.describe Game, type: :model do
           card_to_update = game.create_initial_placeholder_for_user current_user.id
           sample_description_text = "Suicidal Penguin"
 
-          game.upload_info_into_existing_card( current_user.id, { description_text: sample_description_text } )
+          card_returned = game.upload_info_into_existing_card( current_user.id, { 'description_text' => sample_description_text } )
 
-          card_to_update.reload
-
-          expect(card_to_update.uploader_id).to eq current_user.id
-          expect(card_to_update.starting_games_user_id).to eq gu.id
-          expect(card_to_update.description_text).to eq sample_description_text
-          expect(card_to_update.drawing_or_description).to eq 'description'
-          expect(card_to_update.drawing_file_name).to eq nil
-          expect(card_to_update.drawing_file_size).to eq nil
+          expect(card_returned.uploader_id).to eq current_user.id
+          expect(card_returned.starting_games_user_id).to eq gu.id
+          expect(card_returned.description_text).to eq sample_description_text
+          expect(card_returned.drawing_or_description).to eq 'description'
+          expect(card_returned.drawing_file_name).to eq nil
+          expect(card_returned.drawing_file_size).to eq nil
         end
       end
     end

@@ -111,17 +111,21 @@ class Game < ActiveRecord::Base
 
   # working!!!
   # params :  a XOR b
-    # a) upload_card_params: { description_text: "Suicidal Penguin"}
-    # b) upload_card_params: { filename: file.filename,  data: file.data };
+    # a) upload_card_params: { 'description_text' => "Suicidal Penguin"}
+    # b) upload_card_params: { 'filename' => file.filename,  data: file.data };
   def upload_info_into_existing_card current_user_id, upload_card_params
+      byebug
     current_user = users.find_by(id: current_user_id)
     card = get_placeholder_card current_user_id
+      byebug
 
     return false if current_user.blank? || card.blank?
-    if upload_card_params.keys.include? :description_text
-      return card.update(description_text: upload_card_params[:description_text])
+    if upload_card_params.keys.include? 'description_text'
+      card.update(description_text: upload_card_params[:description_text])
+      return card
     else
-      return card.parse_and_save_uri_for_drawing upload_card_params
+      card.parse_and_save_uri_for_drawing upload_card_params
+      return card
     end
   end
 

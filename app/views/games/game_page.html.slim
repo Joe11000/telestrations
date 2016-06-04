@@ -1,16 +1,11 @@
-- byebug
-/ #games information is for
 #game data-game-id=@game.id data-prev-card-id=(@prev_card.try(:id) || '') data-user-id=(@current_user.try(:id) || "")
   h1 = @game.id
 
   .form-horizontal
-    / .description.col-xs-offset-1.col-xs-10.col-sm-offset-1.col-sm-10.col-md-offset-2.col-md-8
-
-
     .drawing.col-xs-12.col-sm-offset-1.col-sm-10.col-md-offset-2.col-md-8
       #make-drawing-container data-id='make-drawing-container' class=(@placeholder_card.try(:is_drawing?) ? '' : 'hidden')
         #description-to-draw
-          p.h3#text-to-draw data-id='description-text-to-draw' = @prev_card.blank? ? @prev_card.try(:description_text) : ''
+          p.h3#text-to-draw data-id='description-text-to-draw' = @prev_card.blank? ? '' : @prev_card.try(:description_text)
         #drawing-tab
           ul.nav.nav-tabs.nav-justified
             li.active role="presentation"
@@ -27,14 +22,14 @@
 
       #make-description-container data-id='make-description-container' class=(@placeholder_card.try(:is_description?) ? '' : 'hidden')
         #drawing-to-describe-container data-id='drawing-to-describe-container'
-          img#drawing-to-describe data-id='drawing-to-describe' src=(@prev_card ? @prev_card.try(:drawing_url) : '')
+          img#drawing-to-describe data-id='drawing-to-describe' src=(@prev_card.blank? ? '' : @prev_card.try(:drawing_url))
 
         form data-id='make-description-form'
           .form-group data-id='make-description-group'
             .input-group
               = text_field_tag(:description_text_input_field, nil,  {data: {id: 'description_text_input_field'}, placeholder: 'Enter A Description', class: 'span2 form-control text-uppercase'})
               .input-group-btn
-                button.btn.btn-primary type='button' onclick='submit()' Submit
+                button.btn.btn-primary type='submit'  Submit
 
         p.h3#text-to-draw data-id='drawing-to-describe' = @text_to_draw
 
