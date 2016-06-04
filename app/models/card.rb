@@ -24,10 +24,6 @@ class Card < ActiveRecord::Base
     drawing_or_description == 'drawing'
   end
 
-  # def fill_in_info_for_placeholder_card id,
-#
-  # end
-
   # ( {filename: '', data: ''}) # data is the uri
   def parse_and_save_uri_for_drawing paperclip_card_params
     # Instantiates Paperclip::DataUriAdapter attachment

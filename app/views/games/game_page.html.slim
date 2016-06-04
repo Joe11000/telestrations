@@ -1,7 +1,4 @@
-- byebug
 #game data-game-id=@game.id data-prev-card-id=(@prev_card.try(:id) || '') data-user-id=(@current_user.try(:id) || "")
-  h1 = @game.id
-
   .form-horizontal
     .drawing.col-xs-12.col-sm-offset-1.col-sm-10.col-md-offset-2.col-md-8
       #make-drawing-container data-id='make-drawing-container' class=(@placeholder_card.try(:is_drawing?) ? '' : 'hidden')
@@ -35,7 +32,7 @@
         p.h3#text-to-draw data-id='drawing-to-describe' = @text_to_draw
 
 
-      .loading-container.text-center class=(@placeholder_card.blank? ? '' : 'hidden')
+      .loading-container.text-center class=(@placeholder_card.blank? ? '' : 'hidden') data-id='loading-container'
         p.h3.waiting_for_card class=(@placeholder_card.blank? ? 'hidden' : '') Waiting for a card to be passed to you.
         p.h3.waiting_for_others class=(@placeholder_card.blank? ? '' : 'hidden') You are finished. Waiting for others to finish.
         = image_tag 'loading_icon.gif', class: 'text-center', width:'80px'

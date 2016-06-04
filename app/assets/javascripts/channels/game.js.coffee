@@ -21,18 +21,25 @@ App.game = App.cable.subscriptions.create { channel: "GameChannel", prev_card: N
     else if( data['attention_users'] == Number.parseInt($('[data-user-id]').attr('data-user-id')) )
       if(data['set_complete'] == true)
         # hide drawing and description container and show waiting for users screen
+
+      else if( $("data-id='loading-container']:visible").length > 0 ) # current user is busy and can't take a new card yet.
+        console.error('received ' + data + ' and front end knew the user, but he is busy, so he dropped data on the floor')
+
+      # current user is waiting for a card and received a description card
       else if(data['prev_card']['description_text'] != undefined)
         window.updatePageForNextDescriptionCard(data['prev_card'])
         # hide and clear the describing form
         # set the description_text in the drawing area so the user can draw it
+
+      # current user is waiting for a card and received a drawing card
       else if(data['prev_card']['drawing_url'] != undefined)
         window.updatePageForNextDrawingCard(data['prev_card'])
         # hide and clear picture drawing area and drawing upload form
         # set the picture so the user can describe it
       else
-        console.warning('received ' + data + ' and front end knew the user, but dropped data on the floor')
+        console.error('received ' + data + ' and current user knew message was for him, did nothing and dropped data on the floor')
     else
-      console.warning('received ' + data + ', and did not know if it was the intended user and dropped it on the floor')
+      console.error('received ' + data + ', and did not know if it was the intended user and dropped it on the floor')
 
 
 
