@@ -166,7 +166,7 @@ class Game < ActiveRecord::Base
   # working!!!
   def create_subsequent_placeholder_for_next_player next_player_id, prev_card_id
     prev_card = Card.find(prev_card_id)
-    card = create_placeholder_card( next_player_id, (description_first ? 'description' : 'drawing') )
+    card = create_placeholder_card( next_player_id, (prev_card.is_drawing? ? 'description' : 'drawing') )
     card.update(starting_games_user: prev_card.starting_games_user)
 
     return prev_card.child_card = card

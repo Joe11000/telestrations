@@ -406,7 +406,7 @@ RSpec.describe Game, type: :model do
         game = FactoryGirl.create(:midgame_without_cards, description_first: false)
         gu = game.games_users.order(:id).first
         users = game.users.order(:id)
-        card = FactoryGirl.create(:drawing, uploader: users.first, idea_catalyst: gu, starting_games_user: gu) # description placeholder card
+        card = FactoryGirl.create(:drawing, uploader: users.first, idea_catalyst: gu, starting_games_user: gu) # drawing placeholder card
         gu.starting_card = card
 
         broadcast_params = game.set_up_next_players_turn gu.starting_card
@@ -549,18 +549,19 @@ RSpec.describe Game, type: :model do
     end
 
     context '#create_subsequent_placeholder_for_next_player', working: true do
-      context 'starts game for a user by creating their initial' do
+      context 'creates a placeholder card for the next player to be able to go' do
         it 'description placeholder card' do
           game = FactoryGirl.create(:midgame_without_cards, description_first: false)
 
           user = game.users.order(:id).first
           gu = user.gamesuser_in_current_game
-          gu.starting_card = FactoryGirl.create(:description, uploader_id: user.id, starting_games_user: gu)
+
+          gu.starting_card = FactoryGirl.create(:drawing, uploader_id: user.id, starting_games_user: gu)
           prev_card = gu.starting_card
 
           card = game.create_subsequent_placeholder_for_next_player user.id, prev_card.id
 
-          expect(card.drawing_or_description).to eq 'drawing'
+          expect(card.drawing_or_description).to eq 'description'
           expect(card.description_text).to eq nil
           expect(card.drawing_file_name).to eq nil
           expect(card.uploader_id).to eq user.id
@@ -576,7 +577,7 @@ RSpec.describe Game, type: :model do
         end
 
         it 'drawing placeholder card' do
-          game = FactoryGirl.create(:midgame_without_cards, description_first: false)
+          game = FactoryGirl.create(:midgame_without_cards)
 
           user = game.users.order(:id).first
           gu = user.gamesuser_in_current_game

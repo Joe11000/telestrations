@@ -21,7 +21,7 @@ class GameChannel < ApplicationCable::Channel
     # set up the placeholder for the next players turn and get params that should be broadcasted to notify users of a card being finished
     broadcast_params = current_user_game.set_up_next_players_turn updated_card.id
 
-    byebug
+    # byebug
     current_user_game.send_out_broadcasts_to_players_after_card_upload broadcast_params
   end
 
