@@ -131,6 +131,24 @@ RSpec.describe Game, type: :model do
   end
 
   context 'methods' do
+
+    it '#cards', working: true do
+      game = FactoryGirl.create(:midgame)
+      games_users = game.games_users
+
+      ids_array = []
+      games_users.each do |gu|
+        card = gu.starting_card
+        loop do
+          break if card.blank?
+          ids_array << card.id
+          card = card.child_card
+        end
+      end
+
+      expect(ids_array).to eq  game.cards.ids.sort
+    end
+
     xcontext '#cards_from_finished_game', todo: true do
       before(:all) do
         # @game = FactoryGirl.create(:postgame)
@@ -438,13 +456,13 @@ RSpec.describe Game, type: :model do
       end
     end
 
-    context '#upload_info_into_existing_card', working: true do
+    context '#upload_info_into_existing_card' do
       context 'does nothing and returns false if', todo: true do
         it 'user does not exist'
         it 'placeholder_card '
       end
 
-      context 'succeeds if' do
+      context 'succeeds if', working: true do
         it 'updating drawing' do
           expect_any_instance_of(Card).to receive(:parse_and_save_uri_for_drawing).once.and_call_original
 

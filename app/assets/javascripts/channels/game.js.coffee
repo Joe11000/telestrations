@@ -22,7 +22,7 @@ App.game = App.cable.subscriptions.create { channel: "GameChannel", prev_card: N
       if(data['set_complete'] == true)
         # hide drawing and description container and show waiting for users screen
       else if(data['prev_card']['description_text'] != undefined)
-        window.updatePageForNextCard(data['prev_card'])
+        window.updatePageForNextDescriptionCard(data['prev_card'])
         # hide and clear the describing form
         # set the description_text in the drawing area so the user can draw it
       else if(data['prev_card']['drawing_url'] != undefined)

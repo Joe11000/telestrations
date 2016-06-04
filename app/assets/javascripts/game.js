@@ -1,20 +1,20 @@
 (function(){
 
-  // broadcasted_params: { game_over: false, set_complete: false, attention_users: next_user_id, prev_card: {id: card_id, description_text: description_text} } }
-  // broadcasted_params: { game_over: false, set_complete: false, attention_users: next_user_id, prev_card: {id: card_id, drawing_url: url} } }
-  window.updatePageForNextDescriptionCard = function(broadcasted_params){
+  // prev_card_info: { id: card_id, description_text: description_text }
+  // prev_card_info: { id: card_id, drawing_url: url }
+  window.updatePageForNextDescriptionCard = function(prev_card_info){
     debugger
     // previous card info
-    $('[data-prev-card-id]').attr('data-prev-card-id', broadcasted_params['prev_card']['id'])
+    $('[data-prev-card-id]').attr('data-prev-card-id', prev_card_info['prev_card']['id'])
 
       $("[data-id='make-description-container']").hide()
       $("[data-id='make-description-form']").clear()
   };
 
-  window.updatePageForNextDrawingCard = function(broadcasted_params){
+  window.updatePageForNextDrawingCard = function(prev_card_info){
     debugger
 
-    $('[data-prev-card-id]').attr('data-prev-card-id', broadcasted_params['prev_card']['id'])
+    $('[data-prev-card-id]').attr('data-prev-card-id', prev_card_info['prev_card']['id'])
 
     $("[data-id='make-description-container']").show()
 

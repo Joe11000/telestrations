@@ -2,7 +2,6 @@ class Game < ActiveRecord::Base
   has_many :games_users, inverse_of: :game, dependent: :destroy
   has_many :users, through: :games_users
   has_many :starting_cards, through: :games_users
-  has_many :cards
 
   validates :join_code, uniqueness: true, length: { is: 4 }, if: Proc.new { !join_code.blank? }
   validates :status, inclusion: { in: %w( pregame midgame postgame ) }
@@ -29,6 +28,9 @@ class Game < ActiveRecord::Base
     end
   end
 
+  def cards
+    Card.includes(:starting_games_user).where(games_users: { game_id: id }).order(:id)
+  end
   # being scoping methods
   def self.all_users_game_names join_code
     GamesUser.includes(:game).where(games: { join_code: join_code }).map(&:users_game_name)
@@ -114,14 +116,12 @@ class Game < ActiveRecord::Base
     # a) upload_card_params: { 'description_text' => "Suicidal Penguin"}
     # b) upload_card_params: { 'filename' => file.filename,  data: file.data };
   def upload_info_into_existing_card current_user_id, upload_card_params
-      byebug
     current_user = users.find_by(id: current_user_id)
     card = get_placeholder_card current_user_id
-      byebug
 
     return false if current_user.blank? || card.blank?
     if upload_card_params.keys.include? 'description_text'
-      card.update(description_text: upload_card_params[:description_text])
+      card.update(description_text: upload_card_params['description_text'])
       return card
     else
       card.parse_and_save_uri_for_drawing upload_card_params
