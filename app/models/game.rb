@@ -119,6 +119,7 @@ class Game < ActiveRecord::Base
     current_user = users.find_by(id: current_user_id)
     card = get_placeholder_card current_user_id
 
+
     return false if current_user.blank? || card.blank?
     if upload_card_params.keys.include? 'description_text'
       card.update(description_text: upload_card_params['description_text'])
@@ -134,6 +135,8 @@ class Game < ActiveRecord::Base
     card = Card.find(current_card_id)
     next_player = next_player_after(card.uploader_id)
     gu = card.starting_games_user
+    current_user_id = card.uploader_id
+    next_player_message_params = []
 
     if next_player.id == gu.user_id
       gu.update(set_complete: true)
@@ -141,25 +144,39 @@ class Game < ActiveRecord::Base
       if gu.game.games_users.pluck(:set_complete).all? # are any sets not completed?
         # game is done
           update(status: 'postgame')
-          return { game_over: true }
+          return [ { game_over: true } ]
       else
         # game is not done. games_user set is done
-          return { game_over: false, attention_users: card.uploader_id, set_complete: true }
+          return [ { game_over: false, attention_users: card.uploader_id, set_complete: true } ]
       end
 
     else
       create_subsequent_placeholder_for_next_player next_player.id, card.id
-
-      return_info = { game_over: false, set_complete: false, attention_users: next_player.id }
+      next_player_message_params = { game_over: false, set_complete: false, attention_users: next_player.id }
 
       if card.is_description?
-        return_info.merge!({ prev_card: {id: card.id, description_text: card.description_text} })
+        next_player_message_params.merge!({ prev_card: {id: card.id, description_text: card.description_text} })
       else
-        return_info.merge!({ prev_card: {id: card.id, drawing_url: card.drawing.url} })
+        next_player_message_params.merge!({ prev_card: {id: card.id, drawing_url: card.drawing.url} })
+      end
+    end
+
+
+      current_player_message_params = {}
+      # check if user that just submitted a card has one waiting for him
+      existing_placeholder_for_uploading_user = get_placeholder_card current_user_id
+
+      unless existing_placeholder_for_uploading_user.blank?
+        current_player_message_params = { game_over: false, set_complete: false, attention_users: current_user_id }
+
+        if card.is_description?
+          current_player_message_params.merge!({ prev_card: {id: existing_placeholder_for_uploading_user.parent_card.id, description_text: existing_placeholder_for_uploading_user.parent_card.description_text} })
+        else
+          current_player_message_params.merge!({ prev_card: {id: existing_placeholder_for_uploading_user.parent_card.id, drawing_url: existing_placeholder_for_uploading_user.parent_card.drawing.url} })
+        end
       end
 
-      return return_info
-    end
+     return current_player_message_params.blank? ? [ next_player_message_params ] : [ next_player_message_params, current_player_message_params ]
   end
 
   # called indirectly by games_channel through 'set_up_next_players_turn' for to prepare for the next players turn
@@ -184,8 +201,9 @@ class Game < ActiveRecord::Base
   end
 
   # working!!!
+  # find the earliest placeholder created for user
   def get_placeholder_card current_user_id
-    Card.find_by(uploader_id: current_user_id, starting_games_user_id: games_users.ids, drawing_file_name: nil, description_text: nil) || Card.none
+    Card.where(uploader_id: current_user_id, starting_games_user_id: games_users.ids, drawing_file_name: nil, description_text: nil).order(:id).try(:first) || Card.none
   end
 
 

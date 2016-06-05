@@ -382,24 +382,59 @@ RSpec.describe Game, type: :model do
     end
 
 
-    context '#set_up_next_players_turn', working: true do
+    context '#set_up_next_players_turn', wip: true do
 
-      it 'can set up a normal next drawing' do
-        game = FactoryGirl.create(:midgame_without_cards)
-        gu = game.games_users.order(:id).first
-        users = game.users.order(:id)
-        card = FactoryGirl.create(:description, uploader: users.first, idea_catalyst: gu, starting_games_user: gu) # description placeholder card
-        gu.starting_card = card
+      context 'can set up a normal next drawing' do
 
-        broadcast_params = game.set_up_next_players_turn gu.starting_card
+        it 'with NO placeholder waiting for current user' do
+          game = FactoryGirl.create(:midgame_without_cards)
+          gu = game.games_users.order(:id).first
+          users = game.users.order(:id)
+          card = FactoryGirl.create(:description, uploader: users.first, idea_catalyst: gu, starting_games_user: gu) # description placeholder card
+          gu.starting_card = card
+          byebug
+          broadcast_params = game.set_up_next_players_turn gu.starting_card
 
-        gu.reload
-        game.reload
-        expect(broadcast_params).to eq({ game_over: false, set_complete: false, attention_users: users.second.id, prev_card: {id: card.id, description_text: card.description_text }})
-        expect(gu.set_complete).to eq false
+          gu.reload
+          game.reload
+          expect(broadcast_params).to eq([ { game_over: false, set_complete: false, attention_users: users.second.id, prev_card: {id: card.id, description_text: card.description_text }} ])
+          expect(gu.set_complete).to eq false
 
-        expect( game.get_placeholder_card card.child_card.uploader_id ).to eq card.child_card # see if there is a valid placeholder for the next person
-        expect(game.status).to eq 'midgame'
+          expect( game.get_placeholder_card card.child_card.uploader_id ).to eq card.child_card # see if there is a valid placeholder for the next person
+          expect(game.status).to eq 'midgame'
+        end
+
+        it 'with >= 1 placeholders waiting for current user', working: true do
+          game = FactoryGirl.create(:midgame_without_cards)
+          users = game.users.order(:id)
+          games_users = game.games_users.order(:id)
+
+          # create a placeholder waiting for the current user
+            prev_gu = games_users.first
+            prev_card_of_waiting_placeholder = FactoryGirl.create(:description, uploader: users.first, idea_catalyst: prev_gu, starting_games_user: prev_gu) # description placeholder card
+            prev_gu.starting_card = prev_card_of_waiting_placeholder
+            placeholder_waiting_for_current_user = FactoryGirl.create(:drawing, uploader: users.second, drawing: nil, starting_games_user: prev_gu) # drawing placeholder card
+            prev_gu.starting_card.child_card = placeholder_waiting_for_current_user
+
+          current_gu = games_users.second
+          current_gu.starting_card = FactoryGirl.create(:description, uploader: users.second, idea_catalyst: current_gu, starting_games_user: current_gu) # description placeholder card
+
+          expect do
+            @broadcast_params = game.set_up_next_players_turn current_gu.starting_card
+          end.to change{Card.count}.by(1)
+
+          game.reload
+          current_gu.reload
+          prev_gu.reload
+          expect(@broadcast_params).to eq([
+                                           { game_over: false, set_complete: false, attention_users: users.third.id, prev_card: {id: current_gu.starting_card.id, description_text: current_gu.starting_card.description_text }}, #  message for next player with broadcast params containing placeholder
+                                           { game_over: false, set_complete: false, attention_users: users.second.id, prev_card: {id: prev_card_of_waiting_placeholder.id, description_text: prev_card_of_waiting_placeholder.description_text }} # message to self for new card
+                                         ])
+          expect(games_users.map(&:set_complete).any?).to eq false
+
+          expect( game.get_placeholder_card users.third.id ).to eq current_gu.starting_card.child_card # make sure there is a valid placeholder for the next person
+          expect(game.status).to eq 'midgame'
+        end
       end
 
       it 'can set up a normal next description' do
@@ -413,7 +448,7 @@ RSpec.describe Game, type: :model do
 
         gu.reload
         game.reload
-        expect(broadcast_params).to eq({ game_over: false, set_complete: false, attention_users: users.second.id, prev_card: {id: card.id, drawing_url: card.drawing.url }})
+        expect(broadcast_params).to eq([ { game_over: false, set_complete: false, attention_users: users.second.id, prev_card: {id: card.id, drawing_url: card.drawing.url }}])
         expect(gu.set_complete).to eq false
 
         expect( game.get_placeholder_card card.child_card.uploader_id ).to eq card.child_card # see if there is a valid placeholder for the next person
@@ -431,10 +466,11 @@ RSpec.describe Game, type: :model do
 
         broadcast_params = game.set_up_next_players_turn last_card.id
 
+        byebug
         #tests
         gu.reload
         game.reload
-        expect(broadcast_params).to eq({ game_over: false, attention_users: users.third.id, set_complete: true })
+        expect(broadcast_params).to eq([{ game_over: false, attention_users: users.third.id, set_complete: true }])
         expect(gu.set_complete).to eq true
         expect(game.status).to eq 'midgame'
       end
@@ -448,9 +484,10 @@ RSpec.describe Game, type: :model do
 
         broadcast_params = game.set_up_next_players_turn last_card.id
 
+        byebug
         gu.reload
         game.reload
-        expect(broadcast_params).to eq({ game_over: true })
+        expect(broadcast_params).to eq([{ game_over: true }])
         expect(gu.set_complete).to eq true
         expect(game.status).to eq 'postgame'
       end

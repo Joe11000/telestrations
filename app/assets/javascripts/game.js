@@ -1,20 +1,17 @@
 (function(){
 
-  function replaceContainerWithWaitingGif() {
-    $("[data-id='make-drawing-container'] > *:visible").hide()
-  }
-
-
-  // prev_card_info: { id: card_id, description_text: description_text }
-  // prev_card_info: { id: card_id, drawing_url: url }
   $("[data-id='make-description-form']").submit( function(e){
     $(this).find('button').prop('disabled', true); // prevent user from submitting multiple times
     App.game.upload_card({description_text: $(this).find('input').val()});
     return false;
   });
 
+  // prev_card_info: { id: card_id, description_text: description_text }
   window.updatePageForNextDrawingCard = function(prev_card_info){
     debugger
+    // hide loading gif
+      $("[data-id='make-drawing-container'] > *:visible").addClass('hidden')
+
     // replace prev card info at the top of the screen
       $('[data-prev-card-id]').attr('data-prev-card-id', prev_card_info['id'])
 
@@ -24,12 +21,20 @@
     // clear description input field
       $("[data-id='make-description-container'] form")[0].reset();
 
-    // show the
+    // change description text to draw
+      $("[data-id='description-text-to-draw']").html(prev_card_info['description_text'])
+
+    // show the drawing area
       $("[data-id='make-drawing-container']").removeClass('hidden')
+
   };
 
+  // prev_card_info: { id: card_id, drawing_url: url }
   window.updatePageForNextDescriptionCard = function(prev_card_info){
     debugger
+    // hide loading gif
+      $("[data-id='make-drawing-container'] > *:visible").addClass('hidden')
+
     // replace prev card info at the top of the screen
       $('[data-prev-card-id]').attr('data-prev-card-id', prev_card_info['id'])
 
