@@ -137,15 +137,19 @@ class Game < ActiveRecord::Base
     gu = card.starting_games_user
     current_user_id = card.uploader_id
     next_player_message_params = []
+    # byebug
 
     if next_player.id == gu.user_id
       gu.update(set_complete: true)
+    # byebug
 
       if gu.game.games_users.pluck(:set_complete).all? # are any sets not completed?
+    # byebug
         # game is done
           update(status: 'postgame')
           return [ { game_over: true } ]
       else
+    # byebug
         # game is not done. games_user set is done
           return [ { game_over: false, attention_users: card.uploader_id, set_complete: true } ]
       end
@@ -155,8 +159,10 @@ class Game < ActiveRecord::Base
       next_player_message_params = { game_over: false, set_complete: false, attention_users: next_player.id }
 
       if card.is_description?
+    # byebug
         next_player_message_params.merge!({ prev_card: {id: card.id, description_text: card.description_text} })
       else
+    # byebug
         next_player_message_params.merge!({ prev_card: {id: card.id, drawing_url: card.drawing.url} })
       end
     end
@@ -166,12 +172,15 @@ class Game < ActiveRecord::Base
       # check if user that just submitted a card has one waiting for him
       existing_placeholder_for_uploading_user = get_placeholder_card current_user_id
 
+    # byebug
       unless existing_placeholder_for_uploading_user.blank?
         current_player_message_params = { game_over: false, set_complete: false, attention_users: current_user_id }
 
         if card.is_description?
+    # byebug
           current_player_message_params.merge!({ prev_card: {id: existing_placeholder_for_uploading_user.parent_card.id, description_text: existing_placeholder_for_uploading_user.parent_card.description_text} })
         else
+    # byebug
           current_player_message_params.merge!({ prev_card: {id: existing_placeholder_for_uploading_user.parent_card.id, drawing_url: existing_placeholder_for_uploading_user.parent_card.drawing.url} })
         end
       end
@@ -192,12 +201,14 @@ class Game < ActiveRecord::Base
 
 
   # params a XOR b XOR c XOR d
-  #  a) broadcast_params: { game_over: true }
-  #  b) broadcast_params: { game_over: false, set_complete: true,  attention_users: current_user_id }
-  #  c) broadcast_params: { game_over: false, set_complete: false, attention_users: next_user_id, prev_card: {id: card_id, description_text: description_text} } }
-  #  d) broadcast_params: { game_over: false, set_complete: false, attention_users: next_user_id, prev_card: {id: card_id, drawing_url: url} } }
-  def send_out_broadcasts_to_players_after_card_upload broadcast_params
-    ActionCable.server.broadcast("game_#{id}", broadcast_params )
+  #  a) broadcast_params: [ { game_over: true } ]
+  #  b) broadcast_params: [ { game_over: false, set_complete: true,  attention_users: current_user_id } ]
+  #  c) broadcast_params: [ { game_over: false, set_complete: false, attention_users: next_user_id, prev_card: {id: card_id, description_text: description_text} } }, { optional_message_to_self_about_waiting_placeholder_card } ]
+  #  d) broadcast_params: [ { game_over: false, set_complete: false, attention_users: next_user_id, prev_card: {id: card_id, drawing_url: url} } }, { optional_message_to_self_about_waiting_placeholder_card } ]
+  def send_out_broadcasts_to_players_after_card_upload broadcast_params_array
+    broadcast_params_array.each do |broadcast_params|
+      ActionCable.server.broadcast("game_#{id}", broadcast_params )
+    end
   end
 
   # working!!!
@@ -207,28 +218,20 @@ class Game < ActiveRecord::Base
   end
 
 
+# working!!!
 # postgame public methods
   def cards_from_finished_game
     return [] unless status == 'postgame'
 
-    # all cards associated with this games get
-    starting_cards = Card.all_starting_cards.includes(idea_catalyst: :game).where(games: { join_code: join_code } )
-
     result = []
-
-    starting_cards.each do |starting_card|
-      card_set = []
-      placeholder_card = starting_card
-
-      loop do
-        uploaders_gamesuser = GamesUser.find_by(user_id: placeholder_card.uploader_id, game_id: self.id)
-        card_set << [ uploaders_gamesuser.users_game_name, placeholder_card ]
-        placeholder_card = placeholder_card.child_card
-        break if placeholder_card.nil?
+    games_users.order(:id).each do |gu|
+      gu_set = []
+      gu.cards.each do |card|
+        gu_set << [ card.uploader.users_game_name, card ]
       end
-
-      result << card_set
+       result << gu_set
     end
+
     result
   end
 

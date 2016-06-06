@@ -1,25 +1,56 @@
 (function(){
 
   $("[data-id='make-description-form']").submit( function(e){
+    debugger;
     $(this).find('button').prop('disabled', true); // prevent user from submitting multiple times
-    App.game.upload_card({description_text: $(this).find('input').val()});
+    var description_text = $(this).find('input').val();
+    hideAndClearCardContainers();
+    App.game.upload_card({description_text: description_text});
     return false;
   });
 
+  showLoadingContainer = function(status) {
+    if(status === 'set_complete')
+    {
+      $("[data-id='set_complete']").removeClass('hidden')
+      $("[data-id='set_not_complete']").addClass('hidden')
+    }
+
+    $("[data-id='loading-container']").removeClass('hidden')
+  }
+
+  hideLoadingContainer = function(status) {
+    $("[data-id='loading-container']").addClass('hidden')
+  }
+
+  hideAndClearCardContainers = function(){
+    // hide drawing container if it is visible
+    var $element = $("[data-id='make-drawing-container']:visible")
+    if ($element.length > 0 )
+    {
+      // hide the description input container
+        $("[data-id='make-drawing-container']").addClass('hidden')
+
+      // todo : clear the paint portion!!!
+    }
+
+    // hide description container if it is visible
+    var $element = $("[data-id='make-description-container']:visible")
+    if ($element.length > 0 )
+    {
+      // hide the description input container
+        $("[data-id='make-description-container']").addClass('hidden')
+
+      // clear description input field
+        $("[data-id='make-description-container'] form")[0].reset();
+    }
+    showLoadingContainer();
+  }
+
   // prev_card_info: { id: card_id, description_text: description_text }
-  window.updatePageForNextDrawingCard = function(prev_card_info){
+  window.updatePageForNextDrawingCard = function(prev_card_info) {
     debugger
-    // hide loading gif
-      $("[data-id='make-drawing-container'] > *:visible").addClass('hidden')
-
-    // replace prev card info at the top of the screen
-      $('[data-prev-card-id]').attr('data-prev-card-id', prev_card_info['id'])
-
-    // hide the description input container
-      $("[data-id='make-description-container']").addClass('hidden')
-
-    // clear description input field
-      $("[data-id='make-description-container'] form")[0].reset();
+    hideLoadingContainer();
 
     // change description text to draw
       $("[data-id='description-text-to-draw']").html(prev_card_info['description_text'])
@@ -27,28 +58,23 @@
     // show the drawing area
       $("[data-id='make-drawing-container']").removeClass('hidden')
 
+    // replace prev card info at the top of the screen
+      $('[data-prev-card-id]').attr('data-prev-card-id', prev_card_info['id'])
   };
 
   // prev_card_info: { id: card_id, drawing_url: url }
-  window.updatePageForNextDescriptionCard = function(prev_card_info){
+  window.updatePageForNextDescriptionCard = function(prev_card_info) {
     debugger
-    // hide loading gif
-      $("[data-id='make-drawing-container'] > *:visible").addClass('hidden')
-
-    // replace prev card info at the top of the screen
-      $('[data-prev-card-id]').attr('data-prev-card-id', prev_card_info['id'])
-
-    // hide the drawing input container
-      $("[data-id='make-drawing-container']").addClass('hidden')
-
-    // clear drawing input field
-      $("[data-id='make-description-container'] form")[0].reset();
+    hideLoadingContainer();
 
     // enable user to submit description
       $(this).find('button').prop('disabled', false);
 
-    // show the
+    // show the description area
       $("[data-id='make-description-container']").removeClass('hidden')
+
+    // replace prev card info at the top of the screen
+      $('[data-prev-card-id]').attr('data-prev-card-id', prev_card_info['id'])
   }
 
 
@@ -74,16 +100,18 @@
   });
   $('#file_upload').submit(function(event) {
     event.preventDefault();
+    showLoadingContainer();
+    hideAndClearCardContainers();
+    debugger;
     $.each(files, function(index, file) {
-      let image_info = {prev_card: nil, filename: file.filename, data: file.data};
-      debugger
+      let image_info = {filename: file.filename, data: file.data};
       App.game.upload_card(image_info);
     });
 
-    //  reset form and ready for
-    replaceContainerWithWaitingGif();
+    //  reset form and ready for next time
     files = [];
     $("#file_upload input[type=file]").val('')
+
   });
 })();
 

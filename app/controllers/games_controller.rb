@@ -2,12 +2,10 @@ class GamesController < ApplicationController
   # layout 'layouts/game'
 
   before_action :redirect_if_not_logged_in
-  before_action :redirect_if_no_current_game
+  before_action :redirect_if_can_not_view_game_page, only: :game_page
 
   def game_page
-    @game = current_user.current_game
-    redirect_to postgame_path unless @game.try(:status) == 'midgame'
-
+    # @game from redirect method
     @placeholder_card = @game.get_placeholder_card current_user.id
 
     # create a starting placeholder card for this user if game is just beginning
@@ -20,13 +18,25 @@ class GamesController < ApplicationController
   end
 
   def postgame
-    # redirect_to game_page_path unless current_user.current_game.status == 'postgame'
-    # @cards = Card.all_cards_from_game
+    @game = current_user.current_game
+
+    case @game.status
+      when 'pregame' then redirect_to rendezvous_choose_game_type_page_path
+      when 'midgame' then redirect_to game_page_path
+    end
+
+    @cards = Card.all_cards_from_game
   end
 
   protected
+    def redirect_if_can_not_view_game_page
+      @game = current_user.try(:current_game)
 
-    def redirect_if_no_current_game
-      redirect_to rendezvous_choose_game_type_page_path unless current_user.current_game.try(:status) == 'midgame'
+      case @game.try(:status)
+      when 'pregame', nil
+        redirect_to rendezvous_choose_game_type_page_path
+      when 'postgame'
+       redirect_to postgame_path
+      end
     end
 end
