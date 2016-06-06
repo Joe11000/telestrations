@@ -137,19 +137,15 @@ class Game < ActiveRecord::Base
     gu = card.starting_games_user
     current_user_id = card.uploader_id
     next_player_message_params = []
-    # byebug
 
     if next_player.id == gu.user_id
       gu.update(set_complete: true)
-    # byebug
 
       if gu.game.games_users.pluck(:set_complete).all? # are any sets not completed?
-    # byebug
         # game is done
           update(status: 'postgame')
           return [ { game_over: true } ]
       else
-    # byebug
         # game is not done. games_user set is done
           return [ { game_over: false, attention_users: card.uploader_id, set_complete: true } ]
       end
@@ -159,10 +155,8 @@ class Game < ActiveRecord::Base
       next_player_message_params = { game_over: false, set_complete: false, attention_users: next_player.id }
 
       if card.is_description?
-    # byebug
         next_player_message_params.merge!({ prev_card: {id: card.id, description_text: card.description_text} })
       else
-    # byebug
         next_player_message_params.merge!({ prev_card: {id: card.id, drawing_url: card.drawing.url} })
       end
     end
@@ -172,15 +166,12 @@ class Game < ActiveRecord::Base
       # check if user that just submitted a card has one waiting for him
       existing_placeholder_for_uploading_user = get_placeholder_card current_user_id
 
-    # byebug
       unless existing_placeholder_for_uploading_user.blank?
         current_player_message_params = { game_over: false, set_complete: false, attention_users: current_user_id }
 
         if card.is_description?
-    # byebug
           current_player_message_params.merge!({ prev_card: {id: existing_placeholder_for_uploading_user.parent_card.id, description_text: existing_placeholder_for_uploading_user.parent_card.description_text} })
         else
-    # byebug
           current_player_message_params.merge!({ prev_card: {id: existing_placeholder_for_uploading_user.parent_card.id, drawing_url: existing_placeholder_for_uploading_user.parent_card.drawing.url} })
         end
       end
@@ -254,25 +245,4 @@ class Game < ActiveRecord::Base
       user_id_of_next_user = parse_passing_order[ (user_index + 1) % parse_passing_order.length ]
       return User.find_by( id: user_id_of_next_user )
     end
-
-
-
-
-
-    # upload_card_params :  a XOR b
-      # a) { description_text: "Suicidal Penguin"}
-      # b) { filename: file.filename,  data: file.data };
-    # def create_new_card current_user, upload_card_params
-    #   if !upload_card_params[:description_text].blank? # description
-    #     # This is initial card
-    #     return Card.create( drawing_or_description: "description",
-    #                  description_text: upload_card_params[:description_text],
-    #                  uploader_id: current_user.id)
-    #   elsif !upload_card_params[:filename].blank? && !upload_card_params[:data].blank? # drawing
-    #      card = Card.parse_uri_to_drawing_card(upload_card_params.slice(:filename, :data))
-    #      card.update(uploader_id: current_user.id)
-    #   else
-    #     return Card.none
-    #   end
-    # end
 end
