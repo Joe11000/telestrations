@@ -76,4 +76,58 @@ RSpec.describe GamesController, :type => :controller do
       end
     end
   end
+
+  describe "GET postgame_page", working: true do
+
+    context 'redirected if' do
+      it 'user not logged in' do
+        get :postgame_page
+
+        expect(response).to redirect_to login_path
+      end
+
+      it 'no current user game' do
+        game = FactoryGirl.create(:postgame)
+        user = FactoryGirl.create(:user)
+        cookies.signed[:user_id] = user.id
+
+        get :postgame_page
+
+        expect(response).to redirect_to rendezvous_choose_game_type_page_path
+      end
+
+      it 'current game.status == pregame' do
+        game = FactoryGirl.create(:public_pregame)
+        current_user = game.users.order(:id).first
+        cookies.signed[:user_id] = current_user.id
+
+        get :postgame_page
+        expect(response).to redirect_to rendezvous_choose_game_type_page_path
+      end
+
+      it 'current game.status == midgame' do
+        game = FactoryGirl.create(:midgame)
+        current_user = game.users.order(:id).first
+        cookies.signed[:user_id] = current_user.id
+
+        get :postgame_page
+        expect(response).to redirect_to game_page_path
+      end
+    end
+
+    it 'has correct variables being displayed on the page', wip: true do
+      game = FactoryGirl.create(:postgame)
+      current_user = game.users.order(:id).first
+      cookies.signed[:user_id] = current_user.id
+
+      expect_any_instance_of(Game).to receive(:cards_from_finished_game).once.and_call_original
+
+      get :postgame_page
+
+      expect(assigns[:game]).to eq game
+      expect(assigns[:arr_of_postgame_card_sets]).to be_an Array
+      expect(assigns[:current_user]).to eq current_user
+      expect(response).to have_http_status(:success)
+    end
+  end
 end
