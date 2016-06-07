@@ -7,22 +7,22 @@
   / The card.uploader_id compared to @current_user.id will reveal if current_user drew that card
   / have text glow if
 - arr_of_postgame_card_sets.each_with_index do |game_card_set, game_card_set_index|
-  - carousel_id = "carousel-example-generic-#{game_card_set_index}"
-  .carousel.slide data-ride="carousel" data-interval=false data-transition-duration=500000 id=carousel_id
-    /! Indicators
-    ol.carousel-indicators
-      li.active data-slide-to="0" data-target="##{carousel_id}"
-      li data-slide-to="1" data-target="##{carousel_id}"
-      li data-slide-to="2" data-target="##{carousel_id}"
-    /! Wrapper for slides
-    .carousel-inner role="listbox" style="min-height: 285px;"
-      - game_card_set.each_with_index do |games_user, games_user_index|
-        - games_user.each do |card_container|
-          / - byebug
+  - game_card_set.each_with_index do |games_user, games_user_index|
+    - carousel_id = "carousel-example-generic-#{games_user_index}"
+    .carousel.slide data-ride='carousel' data-interval='false' id=carousel_id
+      /! Indicators
+      ol.carousel-indicators
+        - games_user.each_with_index do |card_container, card_container_index|
+          / -byebug
+          li data-slide-to="#{card_container_index}" data-target="##{carousel_id}" class=(card_container_index == 0 ? 'active' : '')
+      /! Wrapper for slides
+      .carousel-inner role="listbox" style='min-height: 285px;'
+        - games_user.each_with_index do |card_container, card_container_index|
           - did_i_make_card = card_container[1].uploader_id == @current_user.id
-          .item style="min-height: 285px;" class=(games_user_index == 0 ? '.active' : '')
+          / - byebug
+          .item style='min-height: 285px;' class=(card_container_index == 0 ? 'active' : '')
             - unless(card_container[1].drawing_file_name.blank?)
-              = image_tag card_container[1].drawing.url, alt: "User Drawing"
+              = image_tag card_container[1].drawing.url, alt: 'User Drawing'
             .carousel-caption
               - unless(card_container[1].description_text.blank?)
                 h3.h3 = card_container[1].description_text
@@ -30,20 +30,20 @@
               br
               br
               br
-              p.h4 class=(did_i_make_card == 0 ? '.glow' : '') class=(did_i_make_card ? 'glow': '') Created By:
-              p class=(did_i_make_card == 0 ? '.glow' : '') class=(did_i_make_card ? 'glow': '') = card_container[0]
+              p.h4 class=(did_i_make_card == 0 ? 'glow' : '') class=(did_i_make_card ? 'glow': '') Created By:
+              p class=(did_i_make_card == 0 ? 'glow' : '') class=(did_i_make_card ? 'glow': '') = card_container[0]
 
 
-      | What is this
-    /! Controls
-    a.left.carousel-control data-slide="prev" href="##{carousel_id}" role="button"
-      span.glyphicon.glyphicon-chevron-left aria-hidden="true"
-      span.sr-only Previous
-    a.right.carousel-control data-slide="next" href="##{carousel_id}" role="button"
-      span.glyphicon.glyphicon-chevron-right aria-hidden="true"
-      span.sr-only Next
-  hr
-  hr
+        | What is this
+      /! Controls
+      a.left.carousel-control data-slide='prev' href="##{carousel_id}" role='button'
+        span.glyphicon.glyphicon-chevron-left aria-hidden='true'
+        span.sr-only Previous
+      a.right.carousel-control data-slide='next' href="##{carousel_id}" role='button'
+        span.glyphicon.glyphicon-chevron-right aria-hidden='true'
+        span.sr-only Next
+    hr
+    hr
 
 
 
