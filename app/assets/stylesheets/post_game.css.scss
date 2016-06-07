@@ -1,14 +1,22 @@
-#post-game {
+#post-game, #all-postgames-page {
+  margin-top: 25px;
+
    .carousel {
     max-width: 500px;
     margin: auto;
   }
 
+  .carousel.slide {
+    .carousel-caption {
+      top: 25%;
+    }
+    .carousel-indicators li {
+      &.active { background-color: purple; }
+
+      background-color: black;
+    }
+  }
   .glow {
     color: yellow;
-  }
-
-  .carousel-caption{
-    top: 25%;
   }
 }
