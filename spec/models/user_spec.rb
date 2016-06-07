@@ -41,5 +41,13 @@ RSpec.describe User, type: :model do
       expect(@user.users_game_name).to eq @user.gamesuser_in_current_game.users_game_name
     end
 
+    it '#unassociated_cards', working: true do
+      current_user = @game.users.order(:id).first
+      card_to_find_1 = FactoryGirl.create(:drawing, uploader: current_user, starting_games_user: nil, idea_catalyst_id: nil)
+      card_to_find_2 = FactoryGirl.create(:description, uploader: current_user, starting_games_user: nil, idea_catalyst_id: nil)
+
+      expect(current_user.unassociated_cards).to eq [ card_to_find_1, card_to_find_2 ]
+    end
+
   end
 end

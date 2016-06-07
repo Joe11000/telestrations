@@ -26,8 +26,8 @@ class GamesController < ApplicationController
 
   def all_postgames_page
     # want to pass down who the player was in each game so that i can highlight their games_user_name in the (postgame_page + all_postgames_page)
-
     @current_user = current_user
+    @unassociated_cards = current_user.unassociated_cards
     @arr_of_postgame_card_sets = current_user.games.map(&:cards_from_finished_game)
   end
 
@@ -53,6 +53,10 @@ class GamesController < ApplicationController
       when 'midgame'
        redirect_to game_page_path
       end
+    end
+
+    def redirect_if_user_is_midgame
+
     end
 
 end

@@ -28,4 +28,8 @@ class User < ActiveRecord::Base
     gamesuser_in_current_game.try(:users_game_name)
   end
 
+  def unassociated_cards
+    Card.where(uploader_id: id, starting_games_user_id: nil, idea_catalyst_id: nil).order(:id)
+  end
+
 end

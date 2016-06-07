@@ -1,4 +1,13 @@
 #all-postgames-page
+  a data-id='leave_game_link' href=rendezvous_choose_game_type_page_path
+    i.fa.fa-arrow-circle-left &nbsp;
+      | Choose A New Game
+
+  - unless @unassociated_cards.blank?
+    .unassociated-cards-i-uploaded
+
+
+  h3.h3 All Games I've played
+
+
   = render partial: 'shared/card_slideshow', locals: { arr_of_postgame_card_sets: @arr_of_postgame_card_sets}
-
-

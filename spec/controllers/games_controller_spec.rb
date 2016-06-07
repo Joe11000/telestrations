@@ -130,4 +130,40 @@ RSpec.describe GamesController, :type => :controller do
       expect(response).to have_http_status(:success)
     end
   end
+
+  describe "GET all_postgames_page", working: true do
+
+    context 'redirected if' do
+      it 'user not logged in' do
+        get :postgame_page
+
+        expect(response).to redirect_to login_path
+      end
+
+      it 'current game.status == midgame' do
+        game = FactoryGirl.create(:midgame)
+        current_user = game.users.order(:id).first
+        cookies.signed[:user_id] = current_user.id
+
+        get :postgame_page
+        expect(response).to redirect_to game_page_path
+      end
+    end
+
+    it 'has correct variables being displayed on the page', wip: true do
+      game = FactoryGirl.create(:postgame)
+      current_user = game.users.order(:id).first
+      cookies.signed[:user_id] = current_user.id
+      card_to_find_1 = FactoryGirl.create(:drawing, uploader: current_user, starting_games_user: nil, idea_catalyst_id: nil)
+      card_to_find_2 = FactoryGirl.create(:description, uploader: current_user, starting_games_user: nil, idea_catalyst_id: nil)
+      expect_any_instance_of(Game).to receive(:cards_from_finished_game).once.and_call_original
+
+      get :all_postgames_page
+
+      expect(assigns[:unassociated_cards]).to eq [ card_to_find_1, card_to_find_2 ]
+      expect(assigns[:current_user]).to eq current_user
+      expect(assigns[:arr_of_postgame_card_sets]).to be_an Array
+      expect(response).to have_http_status(:success)
+    end
+  end
 end

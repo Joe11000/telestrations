@@ -6,7 +6,7 @@
     span.user-name = current_user.name
 
     .user-avatar
-      = link_to root_path
+      = link_to all_postgames_page_path
         - if !current_user.provider_avatar_override.blank?
           = image_tag current_user.provider_avatar_override.url, class: 'img-thumbnail'
         - else
