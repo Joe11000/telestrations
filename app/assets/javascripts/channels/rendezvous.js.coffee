@@ -18,10 +18,7 @@ App.rendezvous = App.cable.subscriptions.create { channel: "RendezvousChannel", 
       window.location = data.start_game_signal
 
   disconnected: ->
-    # close
-    # debugger
-    1 + 1
-    # Called when the subscription has been terminated by the server
+  # Called when the subscription has been terminated by the server
 
 
 

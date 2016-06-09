@@ -1,7 +1,7 @@
 (function(){
 
   $("[data-id='make-description-form']").submit( function(e){
-    debugger;
+
     $(this).find('button').prop('disabled', true); // prevent user from submitting multiple times
     var description_text = $(this).find('input').val();
     hideAndClearCardContainers();
@@ -49,7 +49,7 @@
 
   // prev_card_info: { id: card_id, description_text: description_text }
   window.updatePageForNextDrawingCard = function(prev_card_info) {
-    debugger
+
     hideLoadingContainer();
 
     // change description text to draw
@@ -64,7 +64,7 @@
 
   // prev_card_info: { id: card_id, drawing_url: url }
   window.updatePageForNextDescriptionCard = function(prev_card_info) {
-    debugger
+
     hideLoadingContainer();
 
     // enable user to submit description
@@ -102,7 +102,7 @@
     event.preventDefault();
     showLoadingContainer();
     hideAndClearCardContainers();
-    debugger;
+
     $.each(files, function(index, file) {
       let image_info = {filename: file.filename, data: file.data};
       App.game.upload_card(image_info);

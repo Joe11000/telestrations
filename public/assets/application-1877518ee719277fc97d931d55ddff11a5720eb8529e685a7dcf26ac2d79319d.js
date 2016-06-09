@@ -31734,11 +31734,11 @@ jQuery(function() {
   });
 
   $('#file_upload').on('ajax:success', function(){
-    debugger
+
   });
 
   $('#file_upload').on('ajax:failure', function(){
-    debugger
+
   });
 
   $('#file_upload').on('submit', function(e){
@@ -31749,7 +31749,7 @@ jQuery(function() {
     $.post(this.getAttribute('action'), data)
     // var xhr = new XMLHttpRequest();
     // xhr.open('POST', link, true);
-    // debugger
+
     // xhr.send(data);
     $.ajax({
       method: "POST",

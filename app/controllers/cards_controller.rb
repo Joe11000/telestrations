@@ -11,7 +11,9 @@ class CardsController < ApplicationController
   def bulk_upload
     begin
       # f = File.new(upload_params.first, "r")
+      byebug
       upload_params.each do |drawing_url|
+
         Card.create(uploader_id: current_user.id, drawing: drawing_url, drawing_or_description: 'drawing')
       end
 
