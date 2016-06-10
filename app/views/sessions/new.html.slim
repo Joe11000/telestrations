@@ -1,36 +1,28 @@
-.navbar
-  .container
-    /! .navbar-toggle is used as the toggle for collapsed navbar content
-    button.navbar-toggle data-target=".navbar-collapse" data-toggle="collapse" type="button"
-      span.icon-bar
-      span.icon-bar
-      span.icon-bar
-    /! Everything in here gets hidden at 940px or less
-    .navbar-collapse.collapse
-      /! menu items gets rendered here instead
+.session-new
+  .navbar
+    .container
+      /! .navbar-toggle is used as the toggle for collapsed navbar content
+      button.navbar-toggle data-target=".navbar-collapse" data-toggle="collapse" type="button"
+        span.icon-bar
+        span.icon-bar
+        span.icon-bar
+      /! Everything in here gets hidden at 940px or less
+      .navbar-collapse.collapse
+        /! menu items gets rendered here instead
 
-.jumbotron.masthead
-  h1 Telestrations
-  .sub-text
-    h3 Log in and play.
-    h5 You must have an account in order to back view your photos from games, That is it! No notifications. No emails. No friend requests.
-
-  br
-  .row
-    .social-media-col.col-xs-6.col-sm-6
-      = link_to '/auth/facebook', id: 'facebook_logo'
-        = image_tag 'facebook.png'
-    .social-media-col.col-xs-6.col-sm-6
-      = link_to '/auth/twitter', id: 'twitter_logo'
-        = image_tag 'twitter.png'
-
-  .clearfix
+  .jumbotron.masthead.col-xs-12.col-sm-offset-3.col-sm-6
+    h1.text-center Telestrations
+    h3.text-center Log in and play.
+    br
+    .row
+      .social-media-col.col-xs-6.col-sm-offset-2.col-sm-4
+        = link_to '/auth/facebook', id: 'facebook_logo'
+          = image_tag 'facebook.png'
+      .social-media-col.col-xs-6.col-sm-4
+        = link_to '/auth/twitter', id: 'twitter_logo'
+          = image_tag 'twitter.png'
+    br
+    h5.text-center = '(You must have an account in order to see all your games. That is it! No notifications. No emails. Nothing.)'
 
 
-
-
-/ <fb:login-button scope="public_profile,email" onlogin="checkLoginState();">
-/ </fb:login-button>
-
-/ #status
-
+    .clearfix

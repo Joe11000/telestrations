@@ -3,32 +3,42 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
 body{
-  background: url('images/large.jpg')  no-repeat fixed center;
+  .session-new {
+    background: url('images/large.jpg') no-repeat fixed center;
+    color: white;
+    font-weight: 300;
 
-  -moz-background-clip: padding;     /* Firefox 3.6 */
-  -webkit-background-clip: padding;  /* Safari 4? Chrome 6? */
-  background-clip: padding-box;      /* Firefox 4, Safari 5, Opera 10, IE 9 */
-}
-.jumbotron{
-  outline: 20px solid rebeccapurple;
-  border: 40px solid rgba(0,0,0,.15);
-  border-radius: 2px;
 
-  .social-media-col {
-    text-align: center;
+    .jumbotron{
+      & * {
+        font-weight: 200;
+      }
+      outline: 20px solid rebeccapurple;
+      border: solid 2px white;
+      background: rebeccapurple;
+      border-radius: 100px;
 
-    img{
-      width: 125px;
+
+
+      .social-media-col {
+        text-align: center;
+        border-radius: 10px;
+
+        img{
+          width: 125px;
+        }
+      }
+    }
+
+    .sub-text {
+      h5{
+        &::before, &::after { color: rebeccapurple; font-weight: bold }
+      }
     }
   }
 }
 
-.sub-text {
-  margin-left: 20px;
 
-  h5{
-    &::before { content: "* "; }
-    &::after { content: " *"; }
-    &::before, &::after { color: rebeccapurple; font-weight: bold }
-  }
-}
+
+
+
