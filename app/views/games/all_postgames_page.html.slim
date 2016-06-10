@@ -5,9 +5,29 @@
 
   - unless @unassociated_cards.blank?
     .unassociated-cards-i-uploaded
+      - carousel_id = "unassociated-cards"
+      .carousel.slide data-ride='carousel' data-interval='false' id=carousel_id
+        /! Indicators
+        ol.carousel-indicators
+          - @unassociated_cards.each_with_index do |card_container, card_container_index|
+            li data-slide-to="#{card_container_index}" data-target="##{carousel_id}" class=(card_container_index == 0 ? 'active' : '')
+        /! Wrapper for slides
+        .carousel-inner role="listbox" style='min-height: 285px;'
+          - @unassociated_cards.each_with_index do |card_container, card_container_index|
+            .item style='min-height: 285px;' class=(card_container_index == 0 ? 'active' : '')
+              = image_tag card_container.drawing.url, alt: 'User Drawing'
+
+          | What is this
+        /! Controls
+        a.left.carousel-control data-slide='prev' href="##{carousel_id}" role='button'
+          i.glyphicon.glyphicon-chevron-left.fa.fa-chevron-left aria-hidden='true'
+          span.sr-only Previous
+        a.right.carousel-control data-slide='next' href="##{carousel_id}" role='button'
+          i.glyphicon.glyphicon-chevron-right.fa.fa-chevron-right aria-hidden='true'
+          span.sr-only Next
+      hr
 
 
   h3.h3 All Games I've played
-
 
   = render partial: 'shared/card_slideshow', locals: { arr_of_postgame_card_sets: @arr_of_postgame_card_sets}

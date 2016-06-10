@@ -1,7 +1,7 @@
-= form_tag to_path, method: :post, id: 'file_upload', format: :js, html: { multipart: true } do
+= form_for :drawing, :url => to_path, id: 'file_upload', :html => { :multipart => true } do |form|
   .photoPreview
     p#uploadClick Click to Upload
-  = hidden_field_tag :authenticity_token, form_authenticity_token
-  = file_field_tag :avatar, accept: 'image/png,image/gif,image/jpeg, image/jpg', id: 'uploadAvatar', multiple: allow_multiple_file_upload
-  p.deletePhoto Delete
+
+  = form.file_field :avatar, accept: 'image/png,image/gif,image/jpeg, image/jpg', id: 'uploadAvatar', multiple: allow_multiple_file_upload
   = submit_tag 'Submit Photo', id: 'submitPhoto'
+

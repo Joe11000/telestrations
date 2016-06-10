@@ -10,11 +10,8 @@ class CardsController < ApplicationController
 
   def bulk_upload
     begin
-      # f = File.new(upload_params.first, "r")
-      byebug
-      upload_params.each do |drawing_url|
-
-        Card.create(uploader_id: current_user.id, drawing: drawing_url, drawing_or_description: 'drawing')
+      upload_files.each do |drawing|
+        Card.create(uploader_id: current_user.id, drawing: drawing, drawing_or_description: 'drawing')
       end
 
       flash.now[:notice] = 'Upload Successful'
@@ -29,7 +26,7 @@ class CardsController < ApplicationController
   end
 
   protected
-    def upload_params
-      params.require('drawings')
+    def upload_files
+      params.require('drawing')['avatar']
     end
 end
