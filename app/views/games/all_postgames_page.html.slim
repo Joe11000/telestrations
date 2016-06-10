@@ -28,6 +28,9 @@
       hr
 
 
-  h3.h3 All Games I've played
+  - if @arr_of_postgame_card_sets.blank?
+    h3.h3 No Games Have Been Played Yet
 
-  = render partial: 'shared/card_slideshow', locals: { arr_of_postgame_card_sets: @arr_of_postgame_card_sets}
+  - else
+    h3.h3 All Games I've played
+    = render partial: 'shared/card_slideshow', locals: { arr_of_postgame_card_sets: @arr_of_postgame_card_sets}
