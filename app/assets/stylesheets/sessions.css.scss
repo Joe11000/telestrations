@@ -2,6 +2,9 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
+
+@import 'shared/color_schemes';
+
 .session-new {
 
   font-weight: 300;
@@ -10,9 +13,9 @@
     & * {
       font-weight: 200;
     }
-    outline: 20px solid rebeccapurple;
-    border: solid 2px black;
-    background: rebeccapurple;
+    outline: 20px solid $first_color;
+    border: solid 2px $background_color;
+    background: $first_color;
     border-radius: 100px;
 
     .social-media-col {
@@ -26,13 +29,11 @@
   }
 
   .sub-text {
-    h5{
-      &::before, &::after { color: rebeccapurple; font-weight: bold }
+    h5 {
+      &::before, &::after {
+        color: $first_color;
+        font-weight: bold;
+      }
     }
   }
 }
-
-
-
-
-

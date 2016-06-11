@@ -13,7 +13,12 @@
   .jumbotron.masthead.col-xs-12.col-sm-offset-3.col-sm-6
     h1.text-center Telestrations
     h3.text-center Log in and play.
-    br
+
+    .instructions-container
+      h5.text-center How To Play?
+      i.fa.fa-question-circle.has-popover data-toggle="tooltip" data-placement="top" title="Instructions" data-content="At the start of the game each player thinks of something funny for the next person to draw and passes their card. Each player must draw the text they received. And so on."
+
+
     .row
       .social-media-col.col-xs-6.col-sm-offset-2.col-sm-4
         = link_to '/auth/facebook', id: 'facebook_logo'
@@ -22,7 +27,7 @@
         = link_to '/auth/twitter', id: 'twitter_logo'
           = image_tag 'twitter.png'
     br
-    h5.text-center = '(You must have an account in order to see all your games. That is it! No notifications. No emails. Nothing.)'
 
+    h5.text-center = '(You must have an account in order to see all your games. That is it! No notifications. No emails. Nothing.)'
 
     .clearfix

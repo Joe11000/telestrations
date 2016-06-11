@@ -2,16 +2,13 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
-$primary: '';
-$secondary: '';
-
-
+@import 'shared/color_schemes';
 
 #game{
 
   .tab-content{
     height: 400px;
-    background-color: lightgray;
+    background-color: $paint_surface_color;
     .tab-pane{
       margin: 5px 10px;
     }

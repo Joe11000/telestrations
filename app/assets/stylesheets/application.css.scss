@@ -1,3 +1,4 @@
+
 /*
  * This is a manifest file that'll be compiled into application.css, which will include all the files
  * listed below.
@@ -15,5 +16,25 @@
  *= require jquery-ui
  */
 
+@import 'shared/color_schemes';
+
 body { background: black; }
 body * { color: #DDDDDD; }
+
+.btn-primary{
+  background-color: $first_color;
+}
+.btn-info {
+  background-color: $third_color;
+}
+
+.popover {
+  border-color: $first_color;
+
+  & * {
+    background-color: $background_color;
+  }
+  .popover-title{
+    border-bottom-color: $first_color;
+  }
+}

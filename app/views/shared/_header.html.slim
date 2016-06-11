@@ -1,13 +1,14 @@
-.row
-  #header.col-xs-12.col-sm-offset-3.col-sm-5.text-right
-    a.log-out href="#{logout_path}" logout
+#header-partial
+  .row
+    #header.col-xs-12.col-sm-offset-3.col-sm-5.text-right
+      a.log-out href="#{logout_path}" logout
 
-    span |
-    span.user-name = current_user.name
+      span.seperator |
+      span.user-name = current_user.name
 
-    .user-avatar
-      = link_to all_postgames_page_path
-        - if !current_user.provider_avatar_override.blank?
-          = image_tag current_user.provider_avatar_override.url, class: 'img-thumbnail'
-        - else
-          = image_tag current_user.provider_avatar, class: 'img-thumbnail'
+      .user-avatar
+        = link_to all_postgames_page_path
+          - if !current_user.provider_avatar_override.blank?
+            = image_tag current_user.provider_avatar_override.url, class: 'img-thumbnail'
+          - else
+            = image_tag current_user.provider_avatar, class: 'img-thumbnail'

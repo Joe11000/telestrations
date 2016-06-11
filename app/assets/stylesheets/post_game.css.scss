@@ -1,3 +1,5 @@
+@import 'shared/color_schemes';
+
 #post-game, #all-postgames-page {
   margin-top: 25px;
 
@@ -11,12 +13,12 @@
       top: 25%;
     }
     .carousel-indicators li {
-      &.active { background-color: purple; }
+      &.active { background-color: $first_color; }
 
-      background-color: black;
+      background-color: $background_color;
     }
   }
   .glow {
-    color: yellow;
+    color: $glow_color;
   }
 }

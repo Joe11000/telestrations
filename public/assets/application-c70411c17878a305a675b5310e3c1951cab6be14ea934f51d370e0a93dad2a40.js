@@ -31603,11 +31603,38 @@ jQuery(function() {
 (function() {
   App.game = App.cable.subscriptions.create({
     channel: "GameChannel",
-    game_id: $('[data-game-id]').attr('data-game-id')
+    prev_card: Number.parseInt($('[data-prev-card-id]').attr('data-prev-card-id')) || '',
+    game_id: Number.parseInt($('[data-game-id]').attr('data-game-id')) || ''
   }, {
-    connected: function() {},
-    disconnected: function() {},
-    received: function(data) {}
+    connected: function() {
+      return 1 + 1;
+    },
+    disconnected: function() {
+      return 1 + 1;
+    },
+    received: function(data) {
+      console.log(data);
+      if (data['game_over'] === true) {
+        return window.location = '/game/postgame';
+      } else if (data['attention_users'] === Number.parseInt($('[data-user-id]').attr('data-user-id'))) {
+        if (data['set_complete'] === true) {
+          return showLoadingContainer('set_complete');
+        } else if ($("[data-id='loading-container']:visible").length === 0) {
+          return console.warn('received ' + data + ' and front end knew the user, but he is busy, so he dropped data on the floor');
+        } else if (data['prev_card']['description_text'] !== void 0) {
+          return window.updatePageForNextDrawingCard(data['prev_card']);
+        } else if (data['prev_card']['drawing_url'] !== void 0) {
+          return window.updatePageForNextDescriptionCard(data['prev_card']);
+        } else {
+          return console.warn('received ' + data + ' and current user knew message was for him, did nothing and dropped data on the floor');
+        }
+      } else {
+        return console.warn('received ' + data + ', and did not know if it was the intended user and dropped it on the floor');
+      }
+    },
+    upload_card: function(card_uri_info) {
+      return this.perform('upload_card', card_uri_info);
+    }
   });
 
 }).call(this);
@@ -31637,9 +31664,7 @@ jQuery(function() {
         return window.location = data.start_game_signal;
       }
     },
-    disconnected: function() {
-      return 1 + 1;
-    }
+    disconnected: function() {}
   });
 
 }).call(this);
@@ -31728,38 +31753,126 @@ jQuery(function() {
 })();
 (function(){
 
-  $('#drawing-tab a').click(function (e) {
-    e.preventDefault();
-    $(this).tab('show');
-  });
+  if ($("[data-id='game-page']").length > 0){
 
-  $('#file_upload').on('ajax:success', function(){
-    debugger
-  });
+    $("[data-id='make-description-form']").submit( function(e){
 
-  $('#file_upload').on('ajax:failure', function(){
-    debugger
-  });
-
-  $('#file_upload').on('submit', function(){
-    var files = this.files;
-    var data = new FormData();
-    for(var i = 0; i < files.length; i++) data.append('file'+i, files[i]);
-    $.post(this.getAttribute('action'), data)
-    // var xhr = new XMLHttpRequest();
-    // xhr.open('POST', link, true);
-    // debugger
-    // xhr.send(data);
-    $.ajax({
-      method: "POST",
-      url: this.getAttribute('action'),
-      data: data,
-      success: function(){  }
-      // ,failure: function(){}
+      $(this).find('button').prop('disabled', true); // prevent user from submitting multiple times
+      var description_text = $(this).find('input').val();
+      hideAndClearCardContainers();
+      App.game.upload_card({description_text: description_text});
+      return false;
     });
-  });
 
+    showLoadingContainer = function(status) {
+      if(status === 'set_complete')
+      {
+        $("[data-id='set_complete']").removeClass('hidden')
+        $("[data-id='set_not_complete']").addClass('hidden')
+      }
+
+      $("[data-id='loading-container']").removeClass('hidden')
+    }
+
+    hideLoadingContainer = function(status) {
+      $("[data-id='loading-container']").addClass('hidden')
+    }
+
+    hideAndClearCardContainers = function(){
+      // hide drawing container if it is visible
+      var $element = $("[data-id='make-drawing-container']:visible")
+      if ($element.length > 0 )
+      {
+        // hide the description input container
+          $("[data-id='make-drawing-container']").addClass('hidden')
+
+        // todo : clear the paint portion!!!
+      }
+
+      // hide description container if it is visible
+      var $element = $("[data-id='make-description-container']:visible")
+      if ($element.length > 0 )
+      {
+        // hide the description input container
+          $("[data-id='make-description-container']").addClass('hidden')
+
+        // clear description input field
+          $("[data-id='make-description-container'] form")[0].reset();
+      }
+      showLoadingContainer();
+    }
+
+    // prev_card_info: { id: card_id, description_text: description_text }
+    window.updatePageForNextDrawingCard = function(prev_card_info) {
+
+      hideLoadingContainer();
+
+      // change description text to draw
+        $("[data-id='description-text-to-draw']").html(prev_card_info['description_text'])
+
+      // show the drawing area
+        $("[data-id='make-drawing-container']").removeClass('hidden')
+
+      // replace prev card info at the top of the screen
+        $('[data-prev-card-id]').attr('data-prev-card-id', prev_card_info['id'])
+    };
+
+    // prev_card_info: { id: card_id, drawing_url: url }
+    window.updatePageForNextDescriptionCard = function(prev_card_info) {
+
+      hideLoadingContainer();
+
+      // enable user to submit description
+        $(this).find('button').prop('disabled', false);
+
+      // show the description area
+        $("[data-id='make-description-container']").removeClass('hidden')
+
+      // replace prev card info at the top of the screen
+        $('[data-prev-card-id]').attr('data-prev-card-id', prev_card_info['id'])
+    }
+
+    $('#drawing-tab a').click(function (e) {
+      e.preventDefault();
+      $(this).tab('show');
+    });
+
+    // file upload via game socket
+    var files = [];
+    $("#file_upload input[type=file]").change(function(event) {
+      $.each(event.target.files, function(index, file) {
+        var reader = new FileReader();
+        reader.onload = function(event) {
+          object = {};
+          object.filename = file.name;
+          object.data = event.target.result;
+          files.push(object);
+        };
+        reader.readAsDataURL(file);
+      });
+    });
+
+    $('#file_upload').submit(function(event) {
+      event.preventDefault();
+      showLoadingContainer();
+      hideAndClearCardContainers();
+
+      $.each(files, function(index, file) {
+        let image_info = {filename: file.filename, data: file.data};
+        App.game.upload_card(image_info);
+      });
+
+      //  reset form and ready for next time
+      files = [];
+      $("#file_upload input[type=file]").val('')
+    });
+  }
 })();
+
+
+// App.game.upload_card({  'description_text': "Suicidal Penguin"});
+// image_info['prev_card'] = 43
+;
 // $('#wPaint').wPaint({
 //     mode                 : 'Pencil',         // drawing mode - Rectangle, Ellipse, Line, Pencil, Eraser
 //     lineWidthMin         : '0',              // line width min for select drop down
