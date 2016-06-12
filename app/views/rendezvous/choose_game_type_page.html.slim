@@ -2,41 +2,42 @@
   = render partial: 'shared/header'
 
   .row#game-type-option-container
-    .col-xs-offset-1.col-xs-11.col-sm-offset-1.col-sm-11
+    .col-xs-12.col-sm-offset-2.col-sm-6
       h3 Play Game
-    .col-xs-12.col-sm-12
       .row.game-type-options
-        .col-xs-offset-2.col-xs-6.col-sm-offset-2.col-sm-10.description Start a New Game
+        .col-xs-offset-1.col-xs-6.col-sm-offset-3.col-sm-10.description Start a New Game
         .clearfix
-        #private-game-option.col-xs-offset-3.col-xs-6.col-sm-offset-3.col-sm-3
+        #private-game-option.col-xs-offset-2.col-xs-6.col-sm-offset-3.col-sm-3
           a href="#{rendezvous_page_path(:private)}"
             button.btn.btn-primary.btn-large Private
           i.fa.fa-question-circle.has-popover data-toggle="tooltip" data-placement="right" title="Game can only be joined if code is known."
 
         #public-game-option.col-xs-offset-1.col-sm-offset-1
           a href="#{rendezvous_page_path(:public)}"
-            button.btn.btn-info.btn-large Public
+            button.btn.btn-primary.btn-large Public
           i.fa.fa-question-circle.has-popover data-toggle="tooltip" data-placement="right" title="Game can be joined by the join code or random."
         .clearfix
 
       .row.game-type-option data-id="join-code-form"
-        .col-xs-offset-2.col-xs-6.col-sm-offset-2.col-sm-10.description Join a Public or Private Game
+        .col-xs-offset-1.col-xs-11.col-sm-offset-2.col-sm-10.description Join a Public or Private Game
         .clearfix
-        .col-xs-offset-3.col-xs-8.col-sm-offset-3.col-sm-4
-          = form_tag(join_game_path, class: 'form-horizontal', method: "post")
-            .form-group data-id='join-code-submit-group'
-              div class=(flash.now[:alert].blank? ? 'input-group' : 'input-group has-error')
-                = text_field_tag(:join_code, nil,  {data: {id: 'join-code-text-field'}, placeholder: 'Enter a Join Code', class: 'span2 form-control text-uppercase'})
-                .input-group-btn
-                  button.btn.btn-primary type='button' onclick='submit()' Join Game
+        .col-xs-offset-2.col-xs-9.col-sm-offset-3.col-sm-4
+          .row
+            .col-xs-12.col-sm-12
+              = form_tag(join_game_path, class: 'form-horizontal', method: "post")
+                .form-group data-id='join-code-submit-group'
+                  .input-group.join-code-input-group class=(flash.now[:alert].blank? ? '' : 'has-error')
+                    = text_field_tag(:join_code, nil,  {data: {id: 'join-code-text-field'}, placeholder: 'Enter a Join Code', class: 'form-control text-uppercase'})
+                    .input-group-btn
+                      button.btn.btn-primary type='button' onclick='submit()' Join Game
 
               small.hidden.help-block Invalid join code
         .clearfix
 
       .row.game-type-option
-        .col-xs-offset-2.col-xs-6.col-sm-offset-2.col-sm-10.description Join a Random Public Game
+        .col-xs-offset-1.col-xs-11.col-sm-offset-2.col-sm-10.description Join a Random Public Game
         .clearfix
-        .col-xs-offset-3.col-xs-6.col-sm-offset-3.col-sm-3
+        .col-xs-offset-2.col-xs-6.col-sm-offset-3.col-sm-3
           a href="#{rendezvous_page_path(:quick_start)}"
             button.btn.btn-primary.btn-large Join Random
         .clearfix

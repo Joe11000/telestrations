@@ -2,19 +2,26 @@
 
 #choose-game-type-page {
 
+
+  #game-type-option-container {
+  }
+
   font-size: 20px;
+
   i.fa-question-circle {
     margin-left: 10px;
   }
 
 
+  .join-code-input-group {
+    margin-left: 15px;
+  }
 
   .game-type-options {
     margin-bottom: 20px;
 
     .description{
       margin-bottom: 5px;
-
     }
   }
 

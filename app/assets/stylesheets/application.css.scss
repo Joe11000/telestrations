@@ -21,11 +21,9 @@
 body { background: black; }
 body * { color: #DDDDDD; }
 
-.btn-primary{
+.btn-primary {
   background-color: $first_color;
-}
-.btn-info {
-  background-color: $third_color;
+  border-color: $third_color;
 }
 
 .popover {
@@ -37,4 +35,9 @@ body * { color: #DDDDDD; }
   .popover-title{
     border-bottom-color: $first_color;
   }
+}
+
+a {
+  color: $third_color;
+  text-decoration: underline;
 }
