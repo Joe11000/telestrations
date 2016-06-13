@@ -91,7 +91,7 @@ class Game < ActiveRecord::Base
     if users.count == 1
       self.destroy
     else
-      games_users.find_by(user_id: user_id, game_id: id).destroy
+      games_users.find_by(user_id: user_id, game_id: id).try(:destroy)
     end
 
     true

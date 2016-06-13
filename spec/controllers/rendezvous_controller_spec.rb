@@ -34,7 +34,7 @@ RSpec.describe RendezvousController, type: :controller do
     end
   end
 
-  context '#join_game' do
+  context '#join_game', wip: true do
     it_behaves_like "redirect user to root if not logged in"
 
     context 'game/rendezvous/join' do
@@ -49,6 +49,7 @@ RSpec.describe RendezvousController, type: :controller do
           game.reload
           current_user.reload
 
+          expect(assigns[:user_already_joined].id).to eq false
           expect(assigns[:game].id).to eq game.id
           expect(assigns[:game].try(:is_private)).to eq false # private game created
           expect(assigns[:users_waiting]).to eq game.users.map(&:users_game_name) # has no users waiting in rendezvous

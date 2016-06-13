@@ -17,27 +17,38 @@ class RendezvousController < ApplicationController
     else
       @game.touch # remember activity for deleting if inactive later
       @users_waiting = Game.all_users_game_names(@game.id)
+
       render :rendezvous_page and return
     end
   end
 
   def rendezvous_page
-    case params[:game_type]
-      when 'private'
-        @game = Game.create(is_private: true)
-      when 'public'
-        @game = Game.create(is_private: false)
-      when 'quick_start'
-        @game = Game.random_public_game
-        if @game.blank?
-          @game = Game.create(is_private: false)
-        else
-          @game.touch
-        end
-      else
-        redirect_to rendezvous_choose_game_type_page_path and return
-      end
+    @game = current_user.current_game
 
+    if @game.try(:status) == 'pregame' && current_user.users_game_name  # user already joined this game
+      @user_already_joined = true
+    elsif @game.try(:status) == 'pregame'
+      @user_already_joined = false
+    else
+      @user_already_joined = false
+
+      case params[:game_type]
+        when 'private'
+          @game = Game.create(is_private: true)
+        when 'public'
+          @game = Game.create(is_private: false)
+        when 'quick_start'
+          @game = Game.random_public_game
+
+          if @game.blank?
+            @game = Game.create(is_private: false)
+          else
+            @game.touch
+          end
+      end
+    end
+
+    # if current_user.current_game == @game.id && @users_waiting.includes? current_user.users_game_name # user already has a
     @users_waiting = @game.users.map(&:users_game_name)
     @game.touch # remember activity for deleting if inactive later
     render :rendezvous_page
