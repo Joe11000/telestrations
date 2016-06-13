@@ -11,7 +11,7 @@ class RendezvousController < ApplicationController
 
   # joining a game
   def join_game
-    @game = Game.find_by(join_code: join_game_params)
+    @game = Game.find_by(join_code: join_game_params.upcase)
     if @game.blank?
       redirect_to(rendezvous_choose_game_type_page_path, alert: "No players in group #{join_game_params}") and return
     else

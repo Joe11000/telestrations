@@ -2,7 +2,7 @@ FactoryGirl.define do
 
   factory :card, aliases: [:description] do
     drawing_or_description "description"
-    description_text { Faker::Lorem.sentence(3)}
+    description_text { Faker::Lorem.sentence(3).upcase}
     association :uploader, :factory => :user
     association :starting_games_user, :factory => :games_user
 

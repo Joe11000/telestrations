@@ -27,7 +27,9 @@ body * { color: #DDDDDD; }
 }
 
 .popover {
+  min-width: 100px;
   border-color: $first_color;
+  background-color: $first_color;
 
   & * {
     background-color: $background_color;
@@ -37,7 +39,10 @@ body * { color: #DDDDDD; }
   }
 }
 
-a {
+a, a.h4{
+  &:hover{
+    color: darken( $third_color, 15% ) ;
+  }
   color: $third_color;
   text-decoration: underline;
 }

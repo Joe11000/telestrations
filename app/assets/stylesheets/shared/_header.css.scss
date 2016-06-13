@@ -1,8 +1,12 @@
 @import 'shared/color_schemes';
 
 #header-partial {
-  .log-out {
+  a.log-out {
     color: $reddish;
+
+    &:hover{
+      color: darken( $reddish, 15% ) ;
+    }
   }
   .seperator {
     margin: 0 5px;

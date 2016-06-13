@@ -4,35 +4,31 @@
 
 
   #game-type-option-container {
+    & .row{
+      margin-bottom: 15px;
+    }
   }
 
   font-size: 20px;
+
+  #join-code-submit-group {
+    margin-bottom: 0px;
+
+    .join-code-input-group {
+      margin-left: 15px;
+    }
+  }
 
   i.fa-question-circle {
     margin-left: 10px;
   }
 
 
-  .join-code-input-group {
-    margin-left: 15px;
-  }
-
-  .game-type-options {
-    margin-bottom: 20px;
-
-    .description{
-      margin-bottom: 5px;
-    }
-  }
-
-  #private-game-option, #public-game-option {
-
-  }
 
   #upload-cards-container{
     font-size: 20px;
   }
-  .user-avatar{
+  .user-avatar {
     display: inline-block;
     margin-left: 10px;
   }
