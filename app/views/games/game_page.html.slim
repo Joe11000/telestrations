@@ -3,7 +3,7 @@
     .drawing.col-xs-12.col-sm-offset-1.col-sm-10.col-md-offset-2.col-md-8
       #make-drawing-container data-id='make-drawing-container' class=(@placeholder_card.try(:is_drawing?) ? '' : 'hidden')
         #description-to-draw
-          p.h3.capitalize#text-to-draw data-id='description-text-to-draw' = @prev_card.blank? ? '' : @prev_card.try(:description_text)
+          p.h3.capitalize#text-to-draw.text-center data-id='description-text-to-draw' = @prev_card.blank? ? '' : @prev_card.try(:description_text)
         #drawing-tab
           ul.nav.nav-tabs.nav-justified
             li.active role="presentation"
@@ -13,19 +13,21 @@
 
           .tab-content
             #create-drawing.tab-pane.fade.in.active role="tabpanel"
-              p drawing here
+              div
+               span drawing here
             #upload-drawing.tab-pane.fade           role="tabpanel"
               #file_upload
                 = render partial: 'shared/file_upload', locals: { to_path: upload_card_in_game_path, allow_multiple_file_upload: false }
 
+
       #make-description-container data-id='make-description-container' class=(@placeholder_card.try(:is_description?) ? '' : 'hidden')
         #drawing-to-describe-container data-id='drawing-to-describe-container'
-          img#drawing-to-describe data-id='drawing-to-describe' src=(@prev_card.blank? ? '' : @prev_card.try(:drawing_url))
+          img#drawing-to-describe data-id='drawing-to-describe' src=( @prev_card.blank? ? '' : @prev_card.try(:drawing).try(:url) )
 
-        form data-id='make-description-form'
+        form.make-description-form data-id='make-description-form'
           .form-group data-id='make-description-group'
             .input-group
-              = text_field_tag(:description_text_input_field, nil,  {data: {id: 'description_text_input_field'}, placeholder: 'Enter A Description', class: 'span2 form-control text-uppercase'})
+              = text_field_tag(:description_text_input_field, nil,  {data: {id: 'description_text_input_field'}, placeholder: 'Enter A Description', class: 'span2 form-control text-capitalize'})
               .input-group-btn
                 button.btn.btn-primary type='submit'  Submit
 

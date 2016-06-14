@@ -6,6 +6,5 @@ $background_color: black;
 $reddish: #c12d2d; // reddish
 
 $button_color_1: $second_color;
-$button_color_2: #1a1a90;
-$glow_color: yellow;
-$paint_surface_color: lightgray;
+$glow_color: $reddish;
+$paint_surface_color: 999999;

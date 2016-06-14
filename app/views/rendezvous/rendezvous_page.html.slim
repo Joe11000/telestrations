@@ -5,7 +5,12 @@
       p
         i.fa.fa-arrow-circle-left &nbsp;
         | Leave Group
+  .clearfix
 
+  .col-xs-12.col-sm-12
+    h4.text-center
+      | Join Code :
+      span.h3.randezvous-join-code data-id="randezvous-join-code" data-game-id="#{@game.id}" =< @game.join_code
   .clearfix
 
   .col-xs-12.col-sm-12
@@ -13,23 +18,15 @@
       = image_tag 'loading_icon.gif', class: 'text-center', width:'80px'
   .clearfix
 
-  .col-xs-12.col-sm-12
-    h2.text-center
-      | Join Code :
-      span data-id="randezvous-join-code" data-game-id="#{@game.id}" =< @game.join_code
-    h4.text-center = "( While Waiting, Don't Refresh )"
-  .clearfix
-
-
   .col-xs-12.col-sm-12.text-center data-id='rendezvous-start-game-button-container' class=(@user_already_joined ? '' : 'hidden')
     h3.h3-text-center You're In
     = button_to 'Start The Game', game_page_path, class: 'btn btn-primary', data: {id: :start_game_button}
   .clearfix
 
-  .col-xs-10.col-xs-offset-1.col-sm-10.col-sm-offset-1 data-id="update-rendezvous-group-col"
-    h2.h2.text-center Join This #{@game.is_private ? 'Private' : 'Public'} Game
+  .col-xs-12.col-sm-10.col-sm-offset-1 data-id="update-rendezvous-group-col" class=(@user_already_joined ? 'hidden' : '')
+    h3.h3.text-center Join This #{@game.is_private ? 'Private' : 'Public'} Game
 
-    = form_tag '#', data: {id: 'update-rendezvous-form'}, class: @user_already_joined ? 'hidden' : ''
+    = form_tag '#', data: {id: 'update-rendezvous-form'}
       .form-group data-id='update-rendezvous-form-group'
         = label_tag 'name', 'Enter a name to join the game', class: 'sr-only'
         .input-group.col-xs-offset-2.col-xs-8.col-sm-4.col-sm-offset-4.col-md-offset-4.col-md-4

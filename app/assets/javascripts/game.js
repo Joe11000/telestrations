@@ -66,7 +66,7 @@
 
     // prev_card_info: { id: card_id, drawing_url: url }
     window.updatePageForNextDescriptionCard = function(prev_card_info) {
-
+      debugger
       hideLoadingContainer();
 
       // enable user to submit description
@@ -86,7 +86,7 @@
 
     // file upload via game socket
     var files = [];
-    $("#file_upload input[type=file]").change(function(event) {
+    $("[data-class='file_upload'] input[type=file]").change(function(event) {
       $.each(event.target.files, function(index, file) {
         var reader = new FileReader();
         reader.onload = function(event) {
@@ -99,7 +99,7 @@
       });
     });
 
-    $('#file_upload').submit(function(event) {
+    $("[data-class='file_upload']").submit(function(event) {
       event.preventDefault();
       showLoadingContainer();
       hideAndClearCardContainers();
@@ -111,7 +111,7 @@
 
       //  reset form and ready for next time
       files = [];
-      $("#file_upload input[type=file]").val('')
+      $("[data-class='file_upload'] input[type=file]").val('')
     });
   }
 })();

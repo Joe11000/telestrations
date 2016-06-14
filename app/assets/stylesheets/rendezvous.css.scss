@@ -1,7 +1,11 @@
 @import 'shared/color_schemes';
 
-#rendezvous-page.form-horizontal{
+#rendezvous-page{
   & > [class*='col-']{
     margin-bottom: 25px;
+  }
+
+  .randezvous-join-code {
+    color: $first_color;
   }
 }

@@ -1,5 +1,5 @@
 .col-xs-12.col-sm-12 data-id='currently-joined'
-  h2.text-center Currently Joined
+  h3.text-center = "Currently Joined ( #{users_waiting.compact.length} )"
   - users_waiting.each_slice(3) do |group|
     - unless group[0].blank?
       .text-center.col-xs-12.col-sm-12.col-md-2.col-md-offset-3

@@ -1,0 +1,26 @@
+@import 'shared/color_schemes';
+
+.carousel.slide {
+  max-width: 500px;
+  margin: auto;
+
+  .carousel-caption {
+    top: 25%;
+  }
+  .carousel-inner {
+    .item img {
+      margin: auto;
+    }
+  }
+  .carousel-indicators li {
+    position: absolute;
+    bottom: -25px;
+    background-color: $background_color;
+
+    &.active { background-color: $first_color; }
+  }
+}
+
+.glow {
+  color: $glow_color;
+}

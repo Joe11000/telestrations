@@ -10,5 +10,7 @@
         = link_to all_postgames_page_path
           - if !current_user.provider_avatar_override.blank?
             = image_tag current_user.provider_avatar_override.url, class: 'img-thumbnail'
+          - elsif current_user.provider_avatar.blank?
+            = image_tag 'anonymous.png', class: 'img-thumbnail'
           - else
             = image_tag current_user.provider_avatar, class: 'img-thumbnail'
