@@ -1,4 +1,8 @@
 .file_upload_form {
+  #uploadCard{
+    text-overflow: ellipsis;
+    width: 200px;
+  }
   & * {
     margin-bottom: 15px;
   }

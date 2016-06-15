@@ -98,9 +98,8 @@
       });
     });
 
-
-  $("[data-id=uploadAvatar]").change(function(){
-    debugger;
+  // disable or enable
+  $("[data-id=uploadCard]").change(function(){
     if(typeof files === 'array' && files.length > 0) {
       $('#submitPhoto').prop('disabled', false);
     }
@@ -108,7 +107,6 @@
       $('#submitPhoto').prop('disabled', true);
     }
   });
-
 
     $("[data-class='file_upload']").submit(function(event) {
       event.preventDefault();

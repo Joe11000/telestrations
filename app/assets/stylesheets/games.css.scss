@@ -5,10 +5,7 @@
 @import 'shared/color_schemes';
 
 #game {
-
   #make-drawing-container {
-    // & * { color: $text_color; }
-
     #description-to-draw{
       margin-bottom: 30px;
     }
@@ -33,7 +30,6 @@
 
         &:hover {
           border-color: $text_color;
-
         }
       }
 
@@ -64,7 +60,6 @@
     #upload-drawing {
       padding: 50px 0 0 30%;
       height: 380px;
-
     }
 
     #make-description-container{
@@ -81,6 +76,4 @@
       margin-top: 20px;
     }
   }
-
 }
-

@@ -20,7 +20,6 @@ App.game = App.cable.subscriptions.create { channel: "GameChannel", prev_card: N
     else if( data['attention_users'] == Number.parseInt($('[data-user-id]').attr('data-user-id')) )
       if(data['set_complete'] == true)
         showLoadingContainer('set_complete')
-        # hide drawing and description container and show waiting for users screen
 
       else if( $("[data-id='loading-container']:visible").length == 0 ) # current user is busy and can't take a new card yet.
         console.warn('received ' + data + ' and front end knew the user, but he is busy, so he dropped data on the floor')
@@ -28,14 +27,10 @@ App.game = App.cable.subscriptions.create { channel: "GameChannel", prev_card: N
       # current user is waiting for a card and received a description card
       else if(data['prev_card']['description_text'] != undefined)
         window.updatePageForNextDrawingCard(data['prev_card'])
-        # hide and clear the describing form
-        # set the description_text in the drawing area so the user can draw it
 
       # current user is waiting for a card and received a drawing card
       else if(data['prev_card']['drawing_url'] != undefined)
         window.updatePageForNextDescriptionCard(data['prev_card'])
-        # hide and clear picture drawing area and drawing upload form
-        # set the picture so the user can describe it
       else
         console.warn('received ' + data + ' and current user knew message was for him, did nothing and dropped data on the floor')
     else

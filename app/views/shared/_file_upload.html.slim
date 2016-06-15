@@ -2,6 +2,6 @@
   .photoPreview
     p#uploadClick Upload your drawing
 
-  = form.file_field :avatar, accept: 'image/png,image/gif,image/jpeg,image/jpg', id: 'uploadAvatar', data: { id: 'uploadAvatar' }, multiple: allow_multiple_file_upload
+  = form.file_field :avatar, accept: 'image/png,image/gif,image/jpeg,image/jpg', id: 'uploadCard', data: { id: 'uploadCard' }, multiple: allow_multiple_file_upload
   = submit_tag 'Submit Photo', id: 'submitPhoto', class: 'btn btn-primary', disabled: true
 
