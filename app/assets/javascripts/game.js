@@ -1,5 +1,4 @@
 (function(){
-
   if ($("[data-id='game-page']").length > 0){
 
     $("[data-id='make-description-form']").submit( function(e){
@@ -29,11 +28,12 @@
       // hide drawing container if it is visible
         var $element = $("[data-id='make-drawing-container']:visible");
 
-      // disable the button in the photo upload form
-        $('[data-id=submitPhoto]').prop('disabled', false);
 
       if ($element.length > 0 )
       {
+      // disable the button in the photo upload form
+        $('[data-id=submitPhoto]').prop('disabled', false);
+
         // hide the description input container
           $("[data-id='make-drawing-container']").addClass('hidden');
         // todo : clear the paint portion!!!
@@ -100,17 +100,17 @@
         reader.readAsDataURL(file);
       });
 
-      enableOrDisablePhotoSubmitButton();
+      if (event.target.files.length > 0) {
+        $('[data-id=submitPhoto]').prop('disabled', false);
+      }
+      else {
+        $('[data-id=submitPhoto]').prop('disabled', true);
+      }
     });
 
-  enableOrDisablePhotoSubmitButton = function() {
-    if(typeof files === 'object' && files.length > 0) {
-      $('[data-id=submitPhoto]').prop('disabled', false);
+    enableOrDisablePhotoSubmitButton = function() {
+      if(typeof files === 'object' && files.length > 0) {
     }
-    else {
-      $('[data-id=submitPhoto]').prop('disabled', true);
-    }
-  }
 
     $("[data-class='file_upload_form']").submit(function(event) {
       event.preventDefault();
