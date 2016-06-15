@@ -27,12 +27,15 @@
 
     hideAndClearCardContainers = function(){
       // hide drawing container if it is visible
-      var $element = $("[data-id='make-drawing-container']:visible");
+        var $element = $("[data-id='make-drawing-container']:visible");
+
+      // disable the button in the photo upload form
+        $('[data-id=submitPhoto]').prop('disabled', false);
+
       if ($element.length > 0 )
       {
         // hide the description input container
           $("[data-id='make-drawing-container']").addClass('hidden');
-          $('id="submitPhoto"').prop('disabled', true);
         // todo : clear the paint portion!!!
       }
 
@@ -85,7 +88,7 @@
 
     // file upload via game socket
     var files = [];
-    $("[data-class='file_upload'] input[type=file]").change(function(event) {
+    $("[data-class='file_upload_form'] input[type=file]").change(function(event) {
       $.each(event.target.files, function(index, file) {
         var reader = new FileReader();
         reader.onload = function(event) {
@@ -96,19 +99,20 @@
         };
         reader.readAsDataURL(file);
       });
+
+      enableOrDisablePhotoSubmitButton();
     });
 
-  // disable or enable
-  $("[data-id=uploadCard]").change(function(){
-    if(typeof files === 'array' && files.length > 0) {
-      $('#submitPhoto').prop('disabled', false);
+  enableOrDisablePhotoSubmitButton = function() {
+    if(typeof files === 'object' && files.length > 0) {
+      $('[data-id=submitPhoto]').prop('disabled', false);
     }
     else {
-      $('#submitPhoto').prop('disabled', true);
+      $('[data-id=submitPhoto]').prop('disabled', true);
     }
-  });
+  }
 
-    $("[data-class='file_upload']").submit(function(event) {
+    $("[data-class='file_upload_form']").submit(function(event) {
       event.preventDefault();
       showLoadingContainer();
       hideAndClearCardContainers();
@@ -120,7 +124,7 @@
 
       //  reset form and ready for next time
       files = [];
-      $("[data-class='file_upload'] input[type=file]").val('');
+      $("[data-class='file_upload_form'] input[type=file]").val('');
     });
   }
 })();
