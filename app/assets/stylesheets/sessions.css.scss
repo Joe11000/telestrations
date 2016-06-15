@@ -10,21 +10,29 @@
   font-weight: 300;
 
   .jumbotron{
-    & * {
-      font-weight: 200;
-    }
+    & * { font-weight: 200; }
+
     outline: 20px solid $first_color;
     border: solid 2px $background_color;
     background: $first_color;
     border-radius: 100px;
 
+    .instructions-container {
+      text-align: center;
+      height: 40px;
+
+      & * {
+        display: inline;
+        color: $third_color;
+        text-decoration: underline;
+      }
+    }
+
     .social-media-col {
       text-align: center;
       border-radius: 10px;
 
-      img{
-        width: 125px;
-      }
+      img { width: 125px; }
     }
   }
 
