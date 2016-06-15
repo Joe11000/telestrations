@@ -1,7 +1,7 @@
-= form_for :drawing, :url => to_path, data: {class: 'file_upload'}, html: { multipart: true, class: 'file_upload' }  do |form|
+= form_for :drawing, :url => to_path, data: {class: 'file_upload_form'}, html: { multipart: true, class: 'file_upload_form' }  do |form|
   .photoPreview
-    p#uploadClick Click to Upload
+    p#uploadClick Upload your drawing
 
-  = form.file_field :avatar, accept: 'image/png,image/gif,image/jpeg,image/jpg', id: 'uploadAvatar', multiple: allow_multiple_file_upload
-  = submit_tag 'Submit Photo', id: 'submitPhoto', class: 'btn btn-primary'
+  = form.file_field :avatar, accept: 'image/png,image/gif,image/jpeg,image/jpg', id: 'uploadAvatar', data: { id: 'uploadAvatar' }, multiple: allow_multiple_file_upload
+  = submit_tag 'Submit Photo', id: 'submitPhoto', class: 'btn btn-primary', disabled: true
 

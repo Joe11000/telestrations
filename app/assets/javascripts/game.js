@@ -14,25 +14,25 @@
     showLoadingContainer = function(status) {
       if(status === 'set_complete')
       {
-        $("[data-id='set_complete']").removeClass('hidden')
-        $("[data-id='set_not_complete']").addClass('hidden')
+        $("[data-id='set_complete']").removeClass('hidden');
+        $("[data-id='set_not_complete']").addClass('hidden');
       }
 
-      $("[data-id='loading-container']").removeClass('hidden')
+      $("[data-id='loading-container']").removeClass('hidden');
     }
 
     hideLoadingContainer = function(status) {
-      $("[data-id='loading-container']").addClass('hidden')
+      $("[data-id='loading-container']").addClass('hidden');
     }
 
     hideAndClearCardContainers = function(){
       // hide drawing container if it is visible
-      var $element = $("[data-id='make-drawing-container']:visible")
+      var $element = $("[data-id='make-drawing-container']:visible");
       if ($element.length > 0 )
       {
         // hide the description input container
-          $("[data-id='make-drawing-container']").addClass('hidden')
-
+          $("[data-id='make-drawing-container']").addClass('hidden');
+          $('id="submitPhoto"').prop('disabled', true);
         // todo : clear the paint portion!!!
       }
 
@@ -41,7 +41,7 @@
       if ($element.length > 0 )
       {
         // hide the description input container
-          $("[data-id='make-description-container']").addClass('hidden')
+          $("[data-id='make-description-container']").addClass('hidden');
 
         // clear description input field
           $("[data-id='make-description-container'] form")[0].reset();
@@ -55,18 +55,17 @@
       hideLoadingContainer();
 
       // change description text to draw
-        $("[data-id='description-text-to-draw']").html(prev_card_info['description_text'])
+        $("[data-id='description-text-to-draw']").html(prev_card_info['description_text']);
 
       // show the drawing area
-        $("[data-id='make-drawing-container']").removeClass('hidden')
+        $("[data-id='make-drawing-container']").removeClass('hidden');
 
       // replace prev card info at the top of the screen
-        $('[data-prev-card-id]').attr('data-prev-card-id', prev_card_info['id'])
+        $('[data-prev-card-id]').attr('data-prev-card-id', prev_card_info['id']);
     };
 
     // prev_card_info: { id: card_id, drawing_url: url }
     window.updatePageForNextDescriptionCard = function(prev_card_info) {
-      debugger
       hideLoadingContainer();
 
       // enable user to submit description
@@ -79,7 +78,7 @@
         $('[data-prev-card-id]').attr('data-prev-card-id', prev_card_info['id'])
     }
 
-    $('#drawing-tab a').click(function (e) {
+    $("[data-id='drawing-tab'] a").click(function (e) {
       e.preventDefault();
       $(this).tab('show');
     });
@@ -99,6 +98,18 @@
       });
     });
 
+
+  $("[data-id=uploadAvatar]").change(function(){
+    debugger;
+    if(typeof files === 'array' && files.length > 0) {
+      $('#submitPhoto').prop('disabled', false);
+    }
+    else {
+      $('#submitPhoto').prop('disabled', true);
+    }
+  });
+
+
     $("[data-class='file_upload']").submit(function(event) {
       event.preventDefault();
       showLoadingContainer();
@@ -111,11 +122,7 @@
 
       //  reset form and ready for next time
       files = [];
-      $("[data-class='file_upload'] input[type=file]").val('')
+      $("[data-class='file_upload'] input[type=file]").val('');
     });
   }
 })();
-
-
-// App.game.upload_card({  'description_text': "Suicidal Penguin"});
-// image_info['prev_card'] = 43

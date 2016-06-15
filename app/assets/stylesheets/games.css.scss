@@ -60,8 +60,12 @@
     }
   }
 
-  .drawing{
-      margin-top: 50px;
+  .drawing {
+    #upload-drawing {
+      padding: 50px 0 0 30%;
+      height: 380px;
+
+    }
 
     #make-description-container{
       #drawing-to-describe-container{

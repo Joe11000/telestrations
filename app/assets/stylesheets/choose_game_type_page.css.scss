@@ -1,13 +1,19 @@
 @import 'shared/color_schemes';
 
 #choose-game-type-page {
+  font-size: 20px;
+
   #game-type-option-container {
     & .row{
       margin-bottom: 15px;
     }
-  }
 
-  font-size: 20px;
+    #private-game-option {
+      .arrow {
+        display: none;
+      }
+    }
+  }
 
   #join-code-submit-group {
     margin-bottom: 0px;
@@ -20,8 +26,6 @@
   i.fa-question-circle {
     margin-left: 10px;
   }
-
-
 
   #upload-cards-container{
     font-size: 20px;
