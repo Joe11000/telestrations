@@ -4,23 +4,42 @@
   max-width: 500px;
   margin: auto;
 
-  .carousel-caption {
-    top: 25%;
-  }
-  .carousel-inner {
-    .item img {
-      margin: auto;
-    }
-  }
   .carousel-indicators li {
-    position: absolute;
-    bottom: -25px;
+    position: relative;
+    bottom: -35px;
     background-color: $background_color;
 
     &.active { background-color: $first_color; }
+  }
+  .carousel-inner {
+    min-height: 285px;
+
+    .carousel-caption {
+      height: 100%;
+      position: absolute;
+      top: 0px;
+
+      .description-text {
+        position: relative;
+        top: 38%;
+      }
+      .card-author-container {
+        position: absolute;
+        bottom: 0px;
+        width: 100%;
+      }
+    }
+    .item {
+      min-height: 285px;
+
+      img {
+        margin: auto;
+      }
+    }
   }
 }
 
 .glow {
   color: $glow_color;
 }
+

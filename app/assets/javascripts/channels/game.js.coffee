@@ -26,10 +26,12 @@ App.game = App.cable.subscriptions.create { channel: "GameChannel", prev_card: N
 
       # current user is waiting for a card and received a description card
       else if(data['prev_card']['description_text'] != undefined)
+        debugger
         window.updatePageForNextDrawingCard(data['prev_card'])
 
       # current user is waiting for a card and received a drawing card
       else if(data['prev_card']['drawing_url'] != undefined)
+        debugger
         window.updatePageForNextDescriptionCard(data['prev_card'])
       else
         console.warn('received ' + data + ' and current user knew message was for him, did nothing and dropped data on the floor')

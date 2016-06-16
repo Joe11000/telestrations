@@ -14,21 +14,20 @@
         - games_user.each_with_index do |card_container, card_container_index|
           li data-slide-to="#{card_container_index}" data-target="##{carousel_id}" class=(card_container_index == 0 ? 'active' : '')
       /! Wrapper for slides
-      .carousel-inner role="listbox" style='min-height: 285px;'
+      .carousel-inner role="listbox"
         - games_user.each_with_index do |card_container, card_container_index|
           - did_i_make_card = card_container[1].uploader_id == @current_user.id
-          .item style='min-height: 285px;' class=(card_container_index == 0 ? 'active' : '')
+          .item class=(card_container_index == 0 ? 'active' : '')
             - unless(card_container[1].drawing_file_name.blank?)
               = image_tag card_container[1].drawing.url, alt: 'User Drawing'
             .carousel-caption
               - unless(card_container[1].description_text.blank?)
-                h3.h3 = card_container[1].description_text
-              br
-              br
-              br
-              br
-              p class=(did_i_make_card == 0 ? 'glow' : '') class=(did_i_make_card ? 'glow': '') Created By:
-              p.h4 class=(did_i_make_card == 0 ? 'glow' : '') class=(did_i_make_card ? 'glow': '') = card_container[0]
+                h3.h3.description-text = card_container[1].description_text
+
+            - unless(card_container[1].description_text.blank?)
+              .card-author-container
+                p.h4 class=(did_i_make_card == 0 ? 'glow' : '') class=(did_i_make_card ? 'glow': '') Created By:
+                p.h4 class=(did_i_make_card == 0 ? 'glow' : '') class=(did_i_make_card ? 'glow': '') = card_container[0]
 
 
       /! Controls

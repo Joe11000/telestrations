@@ -12,9 +12,9 @@
           - @unassociated_cards.each_with_index do |card_container, card_container_index|
             li data-slide-to="#{card_container_index}" data-target="##{carousel_id}" class=(card_container_index == 0 ? 'active' : '')
         /! Wrapper for slides
-        .carousel-inner role="listbox" style='min-height: 285px;'
+        .carousel-inner role="listbox"
           - @unassociated_cards.each_with_index do |card_container, card_container_index|
-            .item style='min-height: 285px;' class=(card_container_index == 0 ? 'active' : '')
+            .item class=(card_container_index == 0 ? 'active' : '')
               = image_tag card_container.drawing.url, alt: 'User Drawing'
 
         /! Controls

@@ -54,7 +54,7 @@
 
     // prev_card_info: { id: card_id, description_text: description_text }
     window.updatePageForNextDrawingCard = function(prev_card_info) {
-
+      debugger;
       hideLoadingContainer();
 
       // change description text to draw
@@ -71,8 +71,11 @@
     window.updatePageForNextDescriptionCard = function(prev_card_info) {
       hideLoadingContainer();
 
+      // change the url of the image to describe
+        $("[data-id='drawing-to-describe']").attr('src', prev_card_info['drawing_url'])
+
       // enable user to submit description
-        $(this).find('button').prop('disabled', false);
+        $("[data-id='make-description-form'] button").prop('disabled', false);
 
       // show the description area
         $("[data-id='make-description-container']").removeClass('hidden')
@@ -81,7 +84,7 @@
         $('[data-prev-card-id]').attr('data-prev-card-id', prev_card_info['id'])
     }
 
-    $("[data-id='drawing-tab'] a").click(function (e) {
+    $("#drawing-tab a").click(function (e) {
       e.preventDefault();
       $(this).tab('show');
     });
@@ -107,10 +110,6 @@
         $('[data-id=submitPhoto]').prop('disabled', true);
       }
     });
-
-    enableOrDisablePhotoSubmitButton = function() {
-      if(typeof files === 'object' && files.length > 0) {
-    }
 
     $("[data-class='file_upload_form']").submit(function(event) {
       event.preventDefault();
