@@ -1,5 +1,8 @@
 @import 'shared/color_schemes';
 
+h3.game-index-counter{
+  text-decoration: uppercase;
+}
 .carousel.slide {
   max-width: 500px;
   margin: auto;
@@ -14,6 +17,13 @@
   .carousel-inner {
     min-height: 285px;
 
+    .card-author-container {
+      margin-bottom: 10px;
+      & * {
+        text-align: center;
+        margin: 5px 0 5px 0;
+      }
+    }
     .carousel-caption {
       height: 100%;
       position: absolute;
@@ -22,11 +32,6 @@
       .description-text {
         position: relative;
         top: 38%;
-      }
-      .card-author-container {
-        position: absolute;
-        bottom: 0px;
-        width: 100%;
       }
     }
     .item {
@@ -37,9 +42,11 @@
       }
     }
   }
+  .glyphicon {
+    color: $first_color;
+  }
 }
 
 .glow {
   color: $glow_color;
 }
-

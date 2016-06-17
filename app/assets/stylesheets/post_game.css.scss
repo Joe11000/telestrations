@@ -1,5 +1,13 @@
 @import 'shared/color_schemes';
 
-#postgame, #all-postgames-page {
-  margin-top: 25px;
+#postgame {
+  .game-counter {
+    display: none;
+  }
+}
+
+#all-postgames-page {
+  #unassociated-cards-header {
+    text-align: center;
+  }
 }

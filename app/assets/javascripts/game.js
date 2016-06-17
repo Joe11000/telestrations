@@ -54,7 +54,6 @@
 
     // prev_card_info: { id: card_id, description_text: description_text }
     window.updatePageForNextDrawingCard = function(prev_card_info) {
-      debugger;
       hideLoadingContainer();
 
       // change description text to draw

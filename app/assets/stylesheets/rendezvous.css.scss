@@ -1,6 +1,11 @@
 @import 'shared/color_schemes';
 
 #rendezvous-page{
+
+  .back-link-col{
+    margin-top: 0;
+  }
+
   & > [class*='col-']{
     margin-bottom: 25px;
   }
