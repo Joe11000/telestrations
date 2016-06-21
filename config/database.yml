@@ -81,5 +81,3 @@ test:
 production:
   <<: *default
   database: telestrations_production
-  username: telestrations
-  password: <%= ENV['TELESTRATIONS__DATABASE_PASSWORD'] %>

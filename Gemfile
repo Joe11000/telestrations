@@ -28,7 +28,6 @@ gem 'puma', '~> 3.0'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
 
-
 # Use ActiveModel has_secure_password
 gem 'bcrypt', '~> 3.1.7'
 
@@ -40,8 +39,6 @@ group :development, :test do
   gem 'byebug', platform: :mri
   gem 'factory_girl_rails', '4.5.0'
   gem 'faker', '1.6.1'
-
-
 end
 
 group :development do
@@ -98,3 +95,8 @@ end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
+
+group :production do
+  gem 'aws-sdk', '~> 2.3'
+  gem 'rails_12factor'
+end
