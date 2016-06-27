@@ -4,6 +4,7 @@
 
   / The card.uploader_id compared to @current_user.id will reveal if current_user drew that card
   / have text glow if
+  h3.red-card-info = "( Red cards were created by you )"
 - arr_of_postgame_card_sets.each_with_index do |game_card_set, game_card_set_index|
   h3.h3.game-index-counter = "game #{game_card_set_index + 1}"
   - game_card_set.each_with_index do |games_user, games_user_index|
