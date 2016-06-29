@@ -19,12 +19,3 @@ App.rendezvous = App.cable.subscriptions.create { channel: "RendezvousChannel", 
 
   disconnected: ->
   # Called when the subscription has been terminated by the server
-
-
-
-
-
-
-
-
-# $('[data-game-id]').attr('data-game-id')

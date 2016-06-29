@@ -75,9 +75,7 @@ test:
 #
 # You can use this database configuration with:
 #
-#   production:
-#     url: <%= ENV['DATABASE_URL'] %>
-#
-production:
-  <<: *default
-  database: telestrations_production
+  production:
+    url: <%= ENV['HEROKU_DATABASE_URL'] %>
+    database: telestrations_production
+    pool: 15

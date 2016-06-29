@@ -38,9 +38,12 @@ Rails.application.configure do
   # config.action_dispatch.x_sendfile_header = 'X-Sendfile' # for Apache
   # config.action_dispatch.x_sendfile_header = 'X-Accel-Redirect' # for NGINX
 
+  # We need to set the cable server's URI for production.
+  config.web_socket_server_url = "wss://action-cable-example.herokuapp.com/cable"
+
   # Action Cable endpoint configuration
-  config.action_cable.url = 'wss://play-telestrations.com/cable'
-  config.action_cable.allowed_request_origins = [ 'https://', /https:\/\/play-telestrations.com*/ ]
+  config.action_cable.url = 'wss://telestrations.herokuapp.com/cable'
+  config.action_cable.allowed_request_origins = [ /https:\/\/telestrations.herokuapp.com*/, /http:\/\/telestrations.herokuapp.com*/ ]
 
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
   config.force_ssl = false

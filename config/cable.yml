@@ -4,3 +4,5 @@ local: &local
   host: dev.telestrations.herokuapp.com:3000
 development: *local
 test: *local
+production:
+  url: <%= ENV['HEROKU_REDIS_URL'] %>

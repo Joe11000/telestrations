@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  # Serve websocket cable requests in-process
+  mount ActionCable.server => '/cable'
+
   root 'sessions#new'
 
   resource :game, only: [:new]
@@ -31,10 +34,4 @@ Rails.application.routes.draw do
   get 'auth/:provider/callback', to: 'sessions#create'
   get 'auth/failure', to: redirect('/')
 
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
-
-  # Serve websocket cable requests in-process
-  mount ActionCable.server => '/cable'
-
-  # match "/websocket", :to => ActionCable.server, via: [:get, :post]
 end
