@@ -19,8 +19,8 @@
 @import 'shared/color_schemes';
 
 body {
-  background: black;
-  padding-top: 20px;
+  background: $background_color;
+  margin-top: 20px;
 
   & * {
     color: #DDDDDD;

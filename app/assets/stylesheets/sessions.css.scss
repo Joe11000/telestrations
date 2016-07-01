@@ -12,6 +12,7 @@
   .jumbotron{
     & * { font-weight: 200; }
 
+    margin-top: 10px;
     outline: 20px solid $first_color;
     border: solid 2px $background_color;
     background: $first_color;
