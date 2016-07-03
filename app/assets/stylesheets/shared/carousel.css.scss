@@ -1,52 +1,56 @@
 @import 'shared/color_schemes';
 
-h3.game-index-counter{
-  text-decoration: uppercase;
-}
-.carousel.slide {
-  max-width: 500px;
-  margin: auto;
 
-  .carousel-indicators li {
-    position: relative;
-    bottom: -35px;
-    background-color: $background_color;
+.card_slideshow {
 
-    &.active { background-color: $first_color; }
+  h3.game-index-counter {
+    text-decoration: uppercase;
   }
-  .carousel-inner {
-    min-height: 285px;
+  .carousel.slide {
+    max-width: 500px;
+    margin: auto;
 
-    .card-author-container {
-      margin-bottom: 10px;
-      & * {
-        text-align: center;
-        margin: 5px 0 5px 0;
-      }
-    }
-    .carousel-caption {
-      height: 100%;
-      position: absolute;
-      top: 0px;
+    .carousel-indicators li {
+      position: relative;
+      bottom: -35px;
+      background-color: $background_color;
 
-      .description-text {
-        position: relative;
-        top: 38%;
-      }
+      &.active { background-color: $first_color; }
     }
-    .item {
+    .carousel-inner {
       min-height: 285px;
 
-      img {
-        margin: auto;
+      .card-author-container {
+        margin-bottom: 10px;
+        & * {
+          text-align: center;
+          margin: 5px 0 5px 0;
+        }
+      }
+      .carousel-caption {
+        height: 100%;
+        position: absolute;
+        top: 0px;
+
+        .description-text {
+          position: relative;
+          top: 38%;
+        }
+      }
+      .item {
+        min-height: 285px;
+
+        img {
+          margin: auto;
+        }
       }
     }
+    .glyphicon {
+      color: $first_color;
+    }
   }
-  .glyphicon {
-    color: $first_color;
-  }
-}
 
-.glow {
-  color: $glow_color;
+  .glow {
+    color: $glow_color;
+  }
 }
