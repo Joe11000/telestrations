@@ -1,13 +1,14 @@
 @import 'shared/color_schemes';
 
+
 #choose-game-type-page {
   font-size: 20px;
 
-  #game-type-option-container {
-    & .row{
-      margin-bottom: 15px;
-    }
+  .popover {
+    min-width: 225px;
+  }
 
+  #game-type-option-container {
     #private-game-option {
       .arrow {
         display: none;

@@ -5,6 +5,11 @@
 @import 'shared/color_schemes';
 
 #game {
+  .loading-container {
+    img{
+      margin-top: 20px;
+    }
+  }
   #make-drawing-container {
     #description-to-draw{
       margin-bottom: 30px;

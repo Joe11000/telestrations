@@ -6,7 +6,6 @@ class RendezvousController < ApplicationController
   layout proc { false if request.xhr? }
 
   def choose_game_type_page
-
     render :choose_game_type_page, layout: 'application'
   end
 

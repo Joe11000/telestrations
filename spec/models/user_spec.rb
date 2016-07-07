@@ -7,14 +7,6 @@ RSpec.describe User, type: :model do
     it { is_expected.to have_many(:games_users).inverse_of(:user) }
     it { is_expected.to have_many(:games).through(:games_users)}
     it { is_expected.to have_many(:starting_cards).through(:games_users)}
-
-    # paperclip
-    it { is_expected.to have_attached_file(:provider_avatar_override) }
-    it { is_expected.to validate_attachment_size(:provider_avatar_override).
-                  less_than(5.megabytes) }
-    it { is_expected.to validate_attachment_content_type(:provider_avatar_override).
-                  allowing("image/jpeg", "image/jpg", "image/gif", "image/png").
-                  rejecting('text/plain', 'text/xml') }
   end
 
   context 'factory'

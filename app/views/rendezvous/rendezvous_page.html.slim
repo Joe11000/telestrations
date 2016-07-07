@@ -1,41 +1,43 @@
 #rendezvous-page.form-horizontal data-id='rendezvous-page'
-  / back button
-  .col-xs-10.col-sm-10.col-sm-offset-1.back-link-col
-    a.leave_link data-id='leave_link' href="#{leave_pregame_url(@game.join_code)}"
-      p
-        i.fa.fa-arrow-circle-left &nbsp;
-        | Leave Group
-  .clearfix
+  .col-xs-12.col-sm-offset-2.col-sm-7
+    .row
+      / back button
+      .col-xs-12.col-sm-12.col-md-offset-2.back-link-col
+        a.leave_link data-id='leave_link' href="#{leave_pregame_url(@game.join_code)}"
+          p
+            i.fa.fa-arrow-circle-left &nbsp;
+            | Leave Group
+      .clearfix
 
-  .col-xs-12.col-sm-12
-    h4.text-center
-      | Join Code :
-      span.h3.randezvous-join-code data-id="randezvous-join-code" data-game-id="#{@game.id}" =< @game.join_code
-  .clearfix
+      .col-xs-12.col-sm-12
+        h4.text-center
+          | Join Code :
+          span.h3.randezvous-join-code data-id="randezvous-join-code" data-game-id="#{@game.id}" =< @game.join_code
+      .clearfix
 
-  .col-xs-12.col-sm-12
-    .loading-gif.text-center.invisible
-      = image_tag 'loading_icon.gif', class: 'text-center', width:'80px'
-  .clearfix
+      .col-xs-12.col-sm-12
+        .loading-gif.text-center.invisible
+          = image_tag 'loading_icon.gif', class: 'text-center', width:'80px'
+      .clearfix
 
-  .col-xs-12.col-sm-12.text-center data-id='rendezvous-start-game-button-container' class=(@user_already_joined ? '' : 'hidden')
-    h3.h3-text-center You're In
-    = button_to 'Start The Game', game_page_url, class: 'btn btn-primary', data: {id: :start_game_button}
-  .clearfix
+      .col-xs-12.col-sm-12.text-center data-id='rendezvous-start-game-button-container' class=(@user_already_joined ? '' : 'hidden')
+        h3.h3-text-center You're In
+        = button_to 'Start The Game', game_page_url, class: 'btn btn-primary', data: {id: :start_game_button}
+      .clearfix
 
-  .col-xs-12.col-sm-10.col-sm-offset-1 data-id="update-rendezvous-group-col" class=(@user_already_joined ? 'hidden' : '')
-    h3.h3.text-center Join This #{@game.is_private ? 'Private' : 'Public'} Game
+      .col-xs-12 data-id="update-rendezvous-group-col" class=(@user_already_joined ? 'hidden' : '')
+        h3.h3.text-center Join This #{@game.is_private ? 'Private' : 'Public'} Game
 
-    = form_tag '#', data: {id: 'update-rendezvous-form'}
-      .form-group data-id='update-rendezvous-form-group'
-        = label_tag 'name', 'Enter a name to join the game', class: 'sr-only'
-        .input-group.col-xs-offset-2.col-xs-8.col-sm-4.col-sm-offset-4.col-md-offset-4.col-md-4
-          = text_field_tag(:name, '', { data: {id: 'users_game_name'}, placeholder: 'Make up a name for the game.', class: 'form-control', autocorrect: 'off', autocapitalize: 'words' })
-          .input-group-btn
-            button.btn.btn-primary Join!
+        = form_tag '#', data: {id: 'update-rendezvous-form'}
+          .form-group data-id='update-rendezvous-form-group'
+            = label_tag 'name', 'Enter a name to join the game', class: 'sr-only'
+            .input-group.col-xs-offset-2.col-xs-8.col-sm-offset-4.col-sm-4.col-md-offset-3.col-md-6
+              = text_field_tag(:name, '', { data: {id: 'users_game_name'}, placeholder: 'Make up a name for the game.', class: 'form-control', autocorrect: 'off', autocapitalize: 'words' })
+              .input-group-btn
+                button.btn.btn-primary Join!
 
-        small.help-block.hidden You weren't added to the game yet. (Duplicating names is legal, but it's confusing. I'm not your mom. Do what you want.)
-  .clearfix
+            small.help-block.hidden You weren't added to the game yet. (Duplicating names is legal, but it's confusing. I'm not your mom. Do what you want.)
+      .clearfix
 
-  = render partial: 'currently_joined', locals: {users_waiting: @users_waiting}
-  .clearfix
+      = render partial: 'currently_joined', locals: {users_waiting: @users_waiting}
+      .clearfix

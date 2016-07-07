@@ -23,13 +23,20 @@ body {
   background: $background_color;
   margin-top: 20px;
 
+
   & * {
     color: #DDDDDD;
+    font-weight: 300;
   }
 }
 
-a.back_link * {
-  font-size: 20px;
+.row {
+  margin-bottom: 15px;
+}
+
+.back-link-col {
+  margin-top: 15px;
+  p { font-size: 20px; }
 }
 
 .btn-primary {
@@ -62,7 +69,4 @@ a {
   text-decoration: underline;
 }
 
-.back-link-col {
-  margin-top: 15px;
-  p { font-size: 16px; }
-}
+

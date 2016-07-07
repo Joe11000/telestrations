@@ -12,7 +12,7 @@ class GameChannel < ApplicationCable::Channel
 
   # input a XOR b
   # a) { prev_card: nil, description_text: "Suicidal Penguin"}
-  # b) { prev_card: nil, filename: file.filename,  data: file.data  };
+  # b) { prev_card: nil, filename: file.filename,  data: file.data };
   def upload_card upload_card_params
     current_user_game = current_user.current_game
     updated_card = current_user_game.try(:upload_info_into_existing_card, current_user.id, upload_card_params)
