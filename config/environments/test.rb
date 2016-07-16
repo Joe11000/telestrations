@@ -1,3 +1,5 @@
+Rails.application.routes.default_url_options[:host] = ENV['DOMAIN']
+
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
@@ -36,6 +38,8 @@ Rails.application.configure do
 
   # Print deprecation notices to the stderr.
   config.active_support.deprecation = :stderr
+
+  config.default_url_options = { host: ENV['DOMAIN'] }
 
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true

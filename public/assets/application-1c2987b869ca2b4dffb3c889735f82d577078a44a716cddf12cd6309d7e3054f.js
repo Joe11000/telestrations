@@ -31606,12 +31606,8 @@ jQuery(function() {
     prev_card: Number.parseInt($('[data-prev-card-id]').attr('data-prev-card-id')) || '',
     game_id: Number.parseInt($('[data-game-id]').attr('data-game-id')) || ''
   }, {
-    connected: function() {
-      return 1 + 1;
-    },
-    disconnected: function() {
-      return 1 + 1;
-    },
+    connected: function() {},
+    disconnected: function() {},
     received: function(data) {
       console.log(data);
       if (data['game_over'] === true) {
@@ -31978,7 +31974,7 @@ $(function(){
     });
   }
 
-  $("[data-id='leave_game_link']").click(function(e){
+  $("[data-id='leave_link']").on('click', function(e){
     e.preventDefault();
     App.rendezvous.unjoin_game();
     window.location = this.getAttribute('href');

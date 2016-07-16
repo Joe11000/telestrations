@@ -1,13 +1,13 @@
 #header-partial
   .row
     #header.col-xs-12.col-sm-offset-3.col-sm-5.text-right
-      a.log-out href="#{logout_path}" logout
+      a.log-out href="#{logout_url}" logout
 
       span.seperator |
       span.user-name = current_user.name
 
       .user-avatar
-        = link_to all_postgames_page_path
+        = link_to all_postgames_page_url
           - if !current_user.provider_avatar_override.blank?
             = image_tag current_user.provider_avatar_override.url, class: 'img-thumbnail'
           - elsif current_user.provider_avatar.blank?

@@ -42,10 +42,10 @@ class RendezvousChannel < ApplicationCable::Channel
     game.update(status: 'midgame', join_code: nil)
 
     # remove user games_users association to people that didn't submit a name
-    game.unassociated_rendezousing_games_users.destroy_all
+      game.unassociated_rendezousing_games_users.destroy_all
 
     # broadcast a message to try and go to the game start page. The before action will allow the commited people through to their game and send the uncommited people back to the game choice page.
-    ActionCable.server.broadcast("rendezvous_#{params[:join_code]}", start_game_signal: game_page_path)
+      ActionCable.server.broadcast("rendezvous_#{params[:join_code]}", start_game_signal: game_page_url)
 
     game.update( passing_order: game.users.order(:id).ids.shuffle.to_s )
   end

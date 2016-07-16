@@ -17,7 +17,7 @@
                span drawing here
             #upload-drawing.tab-pane.fade           role="tabpanel"
               #file_upload
-                = render partial: 'shared/file_upload', locals: { to_path: upload_card_in_game_path, allow_multiple_file_upload: false }
+                = render partial: 'shared/file_upload', locals: { to_url: upload_card_in_game_url, allow_multiple_file_upload: false }
 
 
       #make-description-container data-id='make-description-container' class=(@placeholder_card.try(:is_description?) ? '' : 'hidden')

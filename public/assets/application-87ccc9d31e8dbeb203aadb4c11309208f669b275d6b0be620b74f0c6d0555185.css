@@ -2142,23 +2142,47 @@ html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:1
   margin-top: 20px;
 }
 /* line 4, /Users/user/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/post_game.css.scss */
+#postgame .glow, #all-postgames-page .glow {
+  color: #c12d2d;
+}
+/* line 8, /Users/user/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/post_game.css.scss */
+#postgame hr, #all-postgames-page hr {
+  border-top: 2px solid #dddddd;
+  width: 100%;
+}
+/* line 13, /Users/user/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/post_game.css.scss */
+#postgame hr.dotted-line, #all-postgames-page hr.dotted-line {
+  border-top: 2px dotted #dddddd !important;
+  width: 75%;
+}
+/* line 19, /Users/user/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/post_game.css.scss */
+#postgame a.carousel-control, #all-postgames-page a.carousel-control {
+  opacity: .9;
+}
+/* line 22, /Users/user/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/post_game.css.scss */
+#postgame a.carousel-control > *, #all-postgames-page a.carousel-control > * {
+  color: rebeccapurple !important !important;
+  opacity: 1 !important !important;
+}
+
+/* line 30, /Users/user/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/post_game.css.scss */
 #postgame .game-index-counter {
   display: none;
 }
 
-/* line 10, /Users/user/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/post_game.css.scss */
+/* line 36, /Users/user/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/post_game.css.scss */
 #all-postgames-page #unassociated-cards-header {
   text-align: center;
 }
-/* line 5, /Users/user/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/rendezvous.css.scss */
+/* line 4, /Users/user/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/rendezvous.css.scss */
 #rendezvous-page .back-link-col {
   margin-top: 0;
 }
-/* line 9, /Users/user/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/rendezvous.css.scss */
+/* line 8, /Users/user/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/rendezvous.css.scss */
 #rendezvous-page > [class*='col-'] {
   margin-bottom: 25px;
 }
-/* line 13, /Users/user/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/rendezvous.css.scss */
+/* line 12, /Users/user/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/rendezvous.css.scss */
 #rendezvous-page .randezvous-join-code {
   color: rebeccapurple;
 }
@@ -2168,6 +2192,7 @@ html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:1
 }
 /* line 12, /Users/user/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/sessions.css.scss */
 .session-new .jumbotron {
+  margin-top: 10px;
   outline: 20px solid rebeccapurple;
   border: solid 2px black;
   background: rebeccapurple;
@@ -2177,112 +2202,106 @@ html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:1
 .session-new .jumbotron * {
   font-weight: 200;
 }
-/* line 20, /Users/user/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/sessions.css.scss */
+/* line 21, /Users/user/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/sessions.css.scss */
 .session-new .jumbotron .instructions-container {
   text-align: center;
   height: 40px;
 }
-/* line 24, /Users/user/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/sessions.css.scss */
+/* line 25, /Users/user/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/sessions.css.scss */
 .session-new .jumbotron .instructions-container * {
   display: inline;
   color: #428bca;
   text-decoration: underline;
 }
-/* line 31, /Users/user/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/sessions.css.scss */
+/* line 32, /Users/user/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/sessions.css.scss */
 .session-new .jumbotron .social-media-col {
   text-align: center;
   border-radius: 10px;
 }
-/* line 35, /Users/user/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/sessions.css.scss */
+/* line 36, /Users/user/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/sessions.css.scss */
 .session-new .jumbotron .social-media-col img {
   width: 125px;
 }
-/* line 41, /Users/user/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/sessions.css.scss */
+/* line 42, /Users/user/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/sessions.css.scss */
 .session-new .sub-text h5::before, .session-new .sub-text h5::after {
   color: rebeccapurple;
   font-weight: bold;
 }
-/* line 3, /Users/user/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/shared/_header.css.scss */
-#header-partial {
-  margin-top: 10px;
-}
-/* line 6, /Users/user/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/shared/_header.css.scss */
+/* line 4, /Users/user/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/shared/_header.css.scss */
 #header-partial a.log-out {
   color: #c12d2d;
 }
-/* line 9, /Users/user/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/shared/_header.css.scss */
+/* line 7, /Users/user/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/shared/_header.css.scss */
 #header-partial a.log-out:hover {
   color: #831f1f;
 }
-/* line 13, /Users/user/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/shared/_header.css.scss */
+/* line 11, /Users/user/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/shared/_header.css.scss */
 #header-partial .seperator {
   margin: 0 5px;
 }
 
-/* line 17, /Users/user/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/shared/_header.css.scss */
+/* line 15, /Users/user/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/shared/_header.css.scss */
 .img-thumbnail {
   width: 60px;
   height: 60px;
 }
-/* line 3, /Users/user/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/shared/carousel.css.scss */
-h3.game-index-counter {
+/* line 6, /Users/user/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/shared/carousel.css.scss */
+.card_slideshow h3.game-index-counter {
   text-decoration: uppercase;
 }
-
-/* line 6, /Users/user/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/shared/carousel.css.scss */
-.carousel.slide {
+/* line 9, /Users/user/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/shared/carousel.css.scss */
+.card_slideshow .carousel.slide {
   max-width: 500px;
   margin: auto;
 }
-/* line 10, /Users/user/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/shared/carousel.css.scss */
-.carousel.slide .carousel-indicators li {
+/* line 13, /Users/user/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/shared/carousel.css.scss */
+.card_slideshow .carousel.slide .carousel-indicators li {
   position: relative;
   bottom: -35px;
   background-color: black;
 }
-/* line 15, /Users/user/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/shared/carousel.css.scss */
-.carousel.slide .carousel-indicators li.active {
+/* line 18, /Users/user/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/shared/carousel.css.scss */
+.card_slideshow .carousel.slide .carousel-indicators li.active {
   background-color: rebeccapurple;
 }
-/* line 17, /Users/user/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/shared/carousel.css.scss */
-.carousel.slide .carousel-inner {
+/* line 20, /Users/user/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/shared/carousel.css.scss */
+.card_slideshow .carousel.slide .carousel-inner {
   min-height: 285px;
 }
-/* line 20, /Users/user/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/shared/carousel.css.scss */
-.carousel.slide .carousel-inner .card-author-container {
+/* line 23, /Users/user/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/shared/carousel.css.scss */
+.card_slideshow .carousel.slide .carousel-inner .card-author-container {
   margin-bottom: 10px;
 }
-/* line 22, /Users/user/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/shared/carousel.css.scss */
-.carousel.slide .carousel-inner .card-author-container * {
+/* line 25, /Users/user/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/shared/carousel.css.scss */
+.card_slideshow .carousel.slide .carousel-inner .card-author-container * {
   text-align: center;
   margin: 5px 0 5px 0;
 }
-/* line 27, /Users/user/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/shared/carousel.css.scss */
-.carousel.slide .carousel-inner .carousel-caption {
+/* line 30, /Users/user/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/shared/carousel.css.scss */
+.card_slideshow .carousel.slide .carousel-inner .carousel-caption {
   height: 100%;
   position: absolute;
   top: 0px;
 }
-/* line 32, /Users/user/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/shared/carousel.css.scss */
-.carousel.slide .carousel-inner .carousel-caption .description-text {
+/* line 35, /Users/user/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/shared/carousel.css.scss */
+.card_slideshow .carousel.slide .carousel-inner .carousel-caption .description-text {
   position: relative;
   top: 38%;
 }
-/* line 37, /Users/user/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/shared/carousel.css.scss */
-.carousel.slide .carousel-inner .item {
+/* line 40, /Users/user/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/shared/carousel.css.scss */
+.card_slideshow .carousel.slide .carousel-inner .item {
   min-height: 285px;
 }
-/* line 40, /Users/user/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/shared/carousel.css.scss */
-.carousel.slide .carousel-inner .item img {
+/* line 43, /Users/user/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/shared/carousel.css.scss */
+.card_slideshow .carousel.slide .carousel-inner .item img {
   margin: auto;
 }
-/* line 45, /Users/user/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/shared/carousel.css.scss */
-.carousel.slide .glyphicon {
+/* line 48, /Users/user/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/shared/carousel.css.scss */
+.card_slideshow .carousel.slide .glyphicon {
   color: rebeccapurple;
 }
-
-/* line 50, /Users/user/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/shared/carousel.css.scss */
-.glow {
+/* line 53, /Users/user/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/shared/carousel.css.scss */
+.card_slideshow .glow {
   color: #c12d2d;
 }
 /*
@@ -2301,56 +2320,61 @@ h3.game-index-counter {
 
 
  */
-/* line 22, /Users/user/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/application.css.scss */
+/* line 23, /Users/user/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/application.css.scss */
 body {
   background: black;
-  padding-top: 20px;
+  margin-top: 20px;
 }
-/* line 26, /Users/user/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/application.css.scss */
+/* line 27, /Users/user/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/application.css.scss */
 body * {
   color: #DDDDDD;
 }
 
-/* line 31, /Users/user/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/application.css.scss */
+/* line 32, /Users/user/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/application.css.scss */
+a.back_link * {
+  font-size: 20px;
+}
+
+/* line 36, /Users/user/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/application.css.scss */
 .btn-primary {
   background-color: rebeccapurple;
   border-color: #428bca;
 }
 
-/* line 36, /Users/user/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/application.css.scss */
+/* line 41, /Users/user/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/application.css.scss */
 .popover {
   min-width: 100px;
   border-color: rebeccapurple;
   background-color: rebeccapurple;
 }
-/* line 41, /Users/user/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/application.css.scss */
+/* line 46, /Users/user/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/application.css.scss */
 .popover * {
   background-color: black;
 }
-/* line 44, /Users/user/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/application.css.scss */
+/* line 49, /Users/user/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/application.css.scss */
 .popover .popover-title {
   border-bottom-color: rebeccapurple;
 }
 
-/* line 49, /Users/user/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/application.css.scss */
+/* line 54, /Users/user/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/application.css.scss */
 a {
   color: #428bca;
   text-decoration: underline;
 }
-/* line 50, /Users/user/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/application.css.scss */
+/* line 55, /Users/user/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/application.css.scss */
 a * {
   color: #428bca;
 }
-/* line 54, /Users/user/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/application.css.scss */
+/* line 59, /Users/user/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/application.css.scss */
 a:hover {
   color: #2a6496;
 }
 
-/* line 61, /Users/user/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/application.css.scss */
+/* line 66, /Users/user/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/application.css.scss */
 .back-link-col {
   margin-top: 15px;
 }
-/* line 63, /Users/user/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/application.css.scss */
+/* line 68, /Users/user/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/application.css.scss */
 .back-link-col p {
   font-size: 16px;
 }

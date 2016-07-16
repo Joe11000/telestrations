@@ -33,7 +33,7 @@ $(function(){
     });
   }
 
-  $("[data-id='leave_link']").click(function(e){
+  $("[data-id='leave_link']").on('click', function(e){
     e.preventDefault();
     App.rendezvous.unjoin_game();
     window.location = this.getAttribute('href');

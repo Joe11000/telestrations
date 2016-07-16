@@ -1,3 +1,5 @@
+Rails.application.routes.default_url_options[:host] = ENV['DOMAIN']
+
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
@@ -8,6 +10,8 @@ Rails.application.configure do
 
   # Do not eager load code on boot.
   config.eager_load = false
+  config.force_ssl = false
+
 
   # Show full error reports.
   config.consider_all_requests_local = true
@@ -47,6 +51,8 @@ Rails.application.configure do
   # Raises helpful error messages.
   config.assets.raise_runtime_errors = true
 
+
+  config.default_url_options = { host: ENV['DOMAIN'] }
 
   config.action_cable.allowed_request_origins = ['*', /http:\/\/ruby.*/]
 

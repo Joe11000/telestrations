@@ -116,7 +116,7 @@
       hideAndClearCardContainers();
 
       $.each(files, function(index, file) {
-        let image_info = {filename: file.filename, data: file.data};
+        var image_info = {filename: file.filename, data: file.data};
         App.game.upload_card(image_info);
       });
 

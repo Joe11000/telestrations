@@ -1,3 +1,5 @@
+Rails.application.routes.default_url_options[:host] = ENV['DOMAIN']
+
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
@@ -46,7 +48,7 @@ Rails.application.configure do
   config.action_cable.allowed_request_origins = [ /https:\/\/telestrations.herokuapp.com*/, /http:\/\/telestrations.herokuapp.com*/ ]
 
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
-  config.force_ssl = false
+  config.force_ssl = true
 
   # Use the lowest log level to ensure availability of diagnostic information
   # when problems arise.
@@ -78,4 +80,7 @@ Rails.application.configure do
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
+
+  config.default_url_options = { host: ENV['DOMAIN'] }
+
 end

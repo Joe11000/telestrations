@@ -38,9 +38,9 @@ class GamesController < ApplicationController
 
       case @game.try(:status)
       when 'pregame', nil
-        redirect_to rendezvous_choose_game_type_page_path
+        redirect_to rendezvous_choose_game_type_page_url
       when 'postgame'
-       redirect_to postgame_page_path
+       redirect_to postgame_page_url
       end
     end
 
@@ -49,9 +49,9 @@ class GamesController < ApplicationController
 
       case @game.try(:status)
       when 'pregame', nil
-        redirect_to rendezvous_choose_game_type_page_path
+        redirect_to rendezvous_choose_game_type_page_url
       when 'midgame'
-       redirect_to game_page_path
+       redirect_to game_page_url
       end
     end
 

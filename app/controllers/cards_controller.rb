@@ -17,7 +17,7 @@ class CardsController < ApplicationController
       flash.now[:notice] = 'Upload Successful'
       render :bulk_upload_page and return
     rescue => e
-      redirect_to bulk_upload_cards_page_path
+      redirect_to bulk_upload_cards_page_url
 
       flash.now[:alert] = 'Upload Unsuccessful'
       render :bulk_upload_page and return

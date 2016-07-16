@@ -1,17 +1,17 @@
 class SessionsController < ApplicationController
   def new
-    redirect_to rendezvous_choose_game_type_page_path if current_user
+    redirect_to rendezvous_choose_game_type_page_url if current_user
   end
 
   def create
     @user = User.find_or_create_by(create_params)
     cookies.signed[:user_id] = @user.id if @user
-    redirect_to rendezvous_choose_game_type_page_path
+    redirect_to rendezvous_choose_game_type_page_url
   end
 
   def destroy
     cookies.signed[:user_id] = ''
-    redirect_to root_path
+    redirect_to root_url
   end
 
   protected
