@@ -52,13 +52,9 @@ Rails.application.configure do
   config.assets.raise_runtime_errors = true
 
 
-<<<<<<< HEAD
   config.default_url_options = { host: ENV['DOMAIN'] }
 
-  config.action_cable.allowed_request_origins = ['*', /http:\/\/ruby.*/]
-=======
   config.action_cable.allowed_request_origins = ['*', /http:\/\/ruby.*/, 'dev.telestrations.herokuapp.com:3000/*']
->>>>>>> d7517a9... remove user image override. Upade styling. Change text in public popover
 
   config.action_cable.disable_request_forgery_protection = true
   # Raises error for missing translations
