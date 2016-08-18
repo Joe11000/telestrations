@@ -34,6 +34,7 @@
         p.h3#text-to-draw data-id='drawing-to-describe' = @text_to_draw
 
       .loading-container.text-center class=(@placeholder_card.blank? ? '' : 'hidden') data-id='loading-container'
-        p.h3 class=(@placeholder_card.blank? ? 'hidden' : '') data-id='set_not_complete' Waiting for a card to be passed to you.
-        p.h3 class=(@placeholder_card.blank? ? '' : 'hidden') data-id='set_complete' You are finished. Waiting for others to finish.
+        p.h3 class=(@player_is_finished ? 'hidden' : '' ) data-id='set_not_complete' Waiting for a card to be passed to you.
+        - byebug
+        p.h3 class=(@player_is_finished ? '' : 'hidden') data-id='set_complete' You are finished. Waiting for others to finish.
         = image_tag 'loading_icon.gif', class: 'text-center', width:'80px'

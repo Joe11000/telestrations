@@ -8,10 +8,23 @@ class GamesController < ApplicationController
   def game_page
     # @game from redirect method
     @placeholder_card = @game.get_placeholder_card current_user.id
+    @player_is_finished = false
 
     # create a starting placeholder card for this user if game is just beginning
     if( @placeholder_card.blank? && current_user.starting_card_in_current_game.blank? )
       @placeholder_card = @game.create_initial_placeholder_for_user current_user.id
+    end
+
+    #  is the user done or waiting for others to pass him a card
+    if( @placeholder_card.blank?)
+      # get array
+        passing_array = current_user.current_game.parse_passing_order
+      # find my position before mine in array
+        prev_user_index_in_passing_order = passing_array.index(current_user.id) - 1
+        prev_user_index_in_passing_order = passing_array.last if prev_user_index_in_passing_order < 0
+
+      # is gu from completed?
+      @player_is_finished = GamesUser.where(user_id: passing_array[prev_user_index_in_passing_order], game: current_user.current_game).order(:id).last.set_complete
     end
 
     @prev_card = @placeholder_card.try(:parent_card) || Card.none
@@ -54,9 +67,4 @@ class GamesController < ApplicationController
        redirect_to game_page_url
       end
     end
-
-    def redirect_if_user_is_midgame
-
-    end
-
 end
