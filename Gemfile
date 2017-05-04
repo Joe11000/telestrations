@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-ruby '2.3.0'
+ruby '2.4.0'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '>= 5.0.0.beta4', '< 5.1'
 
@@ -59,7 +59,6 @@ gem 'paperclip', '4.3.2'
 gem 'omniauth-twitter', '1.2.1'
 gem 'omniauth-facebook', '1.4.0'
 gem 'dotenv-rails', '2.1.0'
-gem 'paranoia', '1.2.0'
 gem 'redis', '3.2.2'
 gem 'em-hiredis'
 gem 'sidekiq'

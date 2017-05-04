@@ -11,10 +11,6 @@
     .unassociated-cards-i-uploaded
       - carousel_id = "unassociated-cards"
       .carousel.slide data-ride='carousel' data-interval='false' id=carousel_id
-        /! Indicators
-        ol.carousel-indicators
-          - @unassociated_cards.each_with_index do |card_container, card_container_index|
-            li data-slide-to="#{card_container_index}" data-target="##{carousel_id}" class=(card_container_index == 0 ? 'active' : '')
         /! Wrapper for slides
         .carousel-inner role="listbox"
           - @unassociated_cards.each_with_index do |card_container, card_container_index|
@@ -28,6 +24,10 @@
         a.right.carousel-control data-slide='next' href="##{carousel_id}" role='button'
           i.glyphicon.glyphicon-chevron-right.fa.fa-chevron-right aria-hidden='true'
           span.sr-only Next
+        /! Indicators
+        ol.carousel-indicators
+          - @unassociated_cards.each_with_index do |card_container, card_container_index|
+            li data-slide-to="#{card_container_index}" data-target="##{carousel_id}" class=(card_container_index == 0 ? 'active' : '')
       hr
 
 
