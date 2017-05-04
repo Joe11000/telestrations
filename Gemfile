@@ -2,15 +2,15 @@ source 'https://rubygems.org'
 
 ruby '2.4.0'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '>= 5.0.0.beta4', '< 5.1'
+gem 'rails'
 
 # gem "rails", github: "rails/rails", ref: "dbf67b3a6f549769c5f581b70bc0c0d880d5d5d1"
 # Use postgresql as the database for Active Record
-gem 'pg', '~> 0.18'
+gem 'pg'
 # Use Uglifier as compressor for JavaScript assets
-gem 'uglifier', '>= 1.3.0'
+gem 'uglifier'
 # Use CoffeeScript for .coffee assets and views
-gem 'coffee-rails', '~> 4.1.0'
+gem 'coffee-rails'
 # See https://github.com/rails/execjs#readme for more supported runtimes
 gem 'therubyracer', platforms: :ruby
 
@@ -18,19 +18,19 @@ gem 'therubyracer', platforms: :ruby
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
-gem 'turbolinks', '~> 5.x'
+gem 'turbolinks'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
-gem 'jbuilder', '~> 2.0'
+gem 'jbuilder'
 # Use Puma as the app server
-gem 'puma', '~> 3.0'
+gem 'puma'
 
 
 # Use Puma as the app server
 # Use SCSS for stylesheets
-gem 'sass-rails', '~> 5.0'
+gem 'sass-rails'
 
 # Use ActiveModel has_secure_password
-gem 'bcrypt', '~> 3.1.7'
+gem 'bcrypt'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
@@ -38,13 +38,13 @@ gem 'bcrypt', '~> 3.1.7'
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platform: :mri
-  gem 'factory_girl_rails', '4.5.0'
-  gem 'faker', '1.6.1'
+  gem 'factory_girl_rails'
+  gem 'faker'
 end
 
 group :development do
   # Access an IRB console on exception pages or by using <%= console %> in views
-  gem 'web-console', '~> 3.0'
+  gem 'web-console'
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
   gem 'foreman'
@@ -52,14 +52,14 @@ end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
-gem 'sass', '3.2.19'
-gem 'slim', '3.0.6'
+gem 'sass'
+gem 'slim'
 gem "twitter-bootstrap-rails"
-gem 'paperclip', '4.3.2'
-gem 'omniauth-twitter', '1.2.1'
-gem 'omniauth-facebook', '1.4.0'
-gem 'dotenv-rails', '2.1.0'
-gem 'redis', '3.2.2'
+gem 'paperclip'
+gem 'omniauth-twitter'
+gem 'omniauth-facebook'
+gem 'dotenv-rails'
+gem 'redis'
 gem 'em-hiredis'
 gem 'sidekiq'
 gem 'sidetiq'
@@ -75,14 +75,14 @@ gem 'sprockets-es6'
 
 # testing
 group :test do
-  gem 'database_cleaner', '1.5.1'
-  gem 'rspec-rails', '3.1.0'
-  gem 'selenium-webdriver', '2.49.0'
-  gem 'webmock', '1.22.6'
+  gem 'database_cleaner'
+  gem 'rspec-rails'
+  gem 'selenium-webdriver'
+  gem 'webmock'
   gem 'shoulda-matchers'
 
-  gem 'capybara', '2.6.0'
-  gem 'poltergeist', '1.8.1'
+  gem 'capybara'
+  gem 'poltergeist'
   gem 'rack-test'
   gem 'rails-controller-testing'
 end
@@ -90,10 +90,10 @@ end
 
 group :development do
   # Access an IRB console on exception pages or by using <%= console %> anywhere in the code.
-  gem 'listen', '~> 3.0.5'
+  gem 'listen'
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
-  gem 'spring-watcher-listen', '~> 2.0.0'
-  gem 'travis', '~> 1.8', '>= 1.8.2'
+  gem 'spring-watcher-listen'
+  gem 'travis'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
