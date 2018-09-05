@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-ruby '2.4.0'
+ruby '2.5.1'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails'
 
@@ -54,7 +54,8 @@ end
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 gem 'sass'
 gem 'slim'
-gem "twitter-bootstrap-rails"
+# gem "twitter-bootstrap-rails"
+gem 'bootstrap'
 gem 'paperclip'
 gem 'omniauth-twitter'
 gem 'omniauth-facebook'
@@ -64,7 +65,7 @@ gem 'em-hiredis'
 gem 'sidekiq'
 gem 'sidetiq'
 gem 'tcr'
-gem "paperclip-dropbox", ">= 1.3.2"
+# gem "paperclip-dropbox", ">= 1.3.2"
 
 # react-rails isn't compatible yet with latest Sprockets.
 # https://github.com/reactjs/react-rails/pull/322
@@ -75,7 +76,7 @@ gem 'sprockets-es6'
 
 # testing
 group :test do
-  gem 'database_cleaner'
+  # gem 'database_cleaner'
   gem 'rspec-rails'
   gem 'selenium-webdriver'
   gem 'webmock'
@@ -99,6 +100,8 @@ end
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
-group :production do
-  gem 'rails_12factor'
-end
+# group :production do
+#   gem 'rails_12factor'
+# end
+
+gem 'aws-sdk-s3'
