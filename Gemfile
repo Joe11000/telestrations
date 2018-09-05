@@ -38,7 +38,7 @@ gem 'bcrypt'
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platform: :mri
-  gem 'factory_girl_rails'
+  gem 'factory_bot_rails'
   gem 'faker'
 end
 
@@ -104,4 +104,7 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 #   gem 'rails_12factor'
 # end
 
+
+# Gems for revised project
 gem 'aws-sdk-s3'
+gem 'rails-erd'

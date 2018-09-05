@@ -100,6 +100,7 @@ GEM
       timers (>= 4.1.1)
     childprocess (0.9.0)
       ffi (~> 1.0, >= 1.0.11)
+    choice (0.2.0)
     climate_control (0.2.0)
     cliver (0.3.2)
     coffee-rails (4.2.2)
@@ -127,10 +128,10 @@ GEM
       ffi (>= 1.3.0)
     eventmachine (1.2.7)
     execjs (2.7.0)
-    factory_girl (4.9.0)
+    factory_bot (4.11.0)
       activesupport (>= 3.0.0)
-    factory_girl_rails (4.9.0)
-      factory_girl (~> 4.9.0)
+    factory_bot_rails (4.11.0)
+      factory_bot (~> 4.11.0)
       railties (>= 3.0.0)
     faker (1.9.1)
       i18n (>= 0.7)
@@ -262,6 +263,11 @@ GEM
     rails-dom-testing (2.0.3)
       activesupport (>= 4.2.0)
       nokogiri (>= 1.6)
+    rails-erd (1.5.2)
+      activerecord (>= 3.2)
+      activesupport (>= 3.2)
+      choice (~> 0.2.0)
+      ruby-graphviz (~> 1.2)
     rails-html-sanitizer (1.0.4)
       loofah (~> 2.2, >= 2.2.2)
     railties (5.2.1)
@@ -293,6 +299,7 @@ GEM
       rspec-mocks (~> 3.8.0)
       rspec-support (~> 3.8.0)
     rspec-support (3.8.0)
+    ruby-graphviz (1.2.3)
     ruby_dep (1.5.0)
     rubyzip (1.2.2)
     safe_yaml (1.0.4)
@@ -397,7 +404,7 @@ DEPENDENCIES
   coffee-rails
   dotenv-rails
   em-hiredis
-  factory_girl_rails
+  factory_bot_rails
   faker
   foreman
   jbuilder
@@ -413,6 +420,7 @@ DEPENDENCIES
   rack-test
   rails
   rails-controller-testing
+  rails-erd
   redis
   rspec-rails
   sass
