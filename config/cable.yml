@@ -1,8 +1,22 @@
-local: &local
-  adapter: redis
-  url: redis://dev.telestrations.herokuapp.com:6379/1
-  host: dev.telestrations.herokuapp.com:3000
-development: *local
-test: *local
+development:
+  adapter: async
+
+test:
+  adapter: async
+
 production:
-  url: <%= ENV['HEROKU_REDIS_URL'] %>
+  adapter: redis
+  url: <%= ENV.fetch("REDIS_URL") { "redis://localhost:6379/1" } %>
+  channel_prefix: telestrations_production
+
+
+
+
+# local: &local
+#   adapter: redis
+#   url: redis://dev.telestrations.herokuapp.com:6379/1
+#   host: dev.telestrations.herokuapp.com:3000
+# development: *local
+# test: *local
+# production:
+#   url: <%= ENV['HEROKU_REDIS_URL'] %>
