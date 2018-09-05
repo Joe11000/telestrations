@@ -1,10 +1,10 @@
 FactoryGirl.define do
 
   factory :game do
-    description_first true
+    description_first { true }
 
     factory :public_pregame do
-      is_private false
+      is_private { false }
 
       after(:create) do |game|
         3.times { game.users << create(:user) }
@@ -13,7 +13,7 @@ FactoryGirl.define do
 
     # midway through game
     factory :midgame do
-      status 'midgame'
+      status { 'midgame' }
 
       after(:create) do |game|
         midgame_associations game
@@ -23,7 +23,7 @@ FactoryGirl.define do
 
     # midway through game
     factory :midgame_without_cards do
-      status 'midgame'
+      status { 'midgame' }
 
       after(:create) do |game|
         midgame_associations_without_cards game
@@ -32,7 +32,7 @@ FactoryGirl.define do
     end
 
     factory :postgame do
-      status 'postgame'
+      status { 'postgame' }
 
       after(:create) do |game|
         postgame_associations game
