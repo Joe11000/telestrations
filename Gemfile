@@ -3,6 +3,13 @@ source 'https://rubygems.org'
 ruby '2.5.1'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails'
+gem 'sprockets', '>= 3.7.2'
+gem 'nokogiri', '>= 1.8.2'
+gem 'rubyzip', '>= 1.2.2'
+gem 'rails-html-sanitizer', '>= 1.0.4'
+gem 'rack-protection', '>= 1.5.5'
+gem 'loofah', '>= 2.2.1'
+gem 'ffi', '>= 1.9.24'
 
 # gem "rails", github: "rails/rails", ref: "dbf67b3a6f549769c5f581b70bc0c0d880d5d5d1"
 # Use postgresql as the database for Active Record
@@ -108,3 +115,4 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 # Gems for revised project
 gem 'aws-sdk-s3'
 gem 'rails-erd'
+

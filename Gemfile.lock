@@ -401,23 +401,29 @@ DEPENDENCIES
   em-hiredis
   factory_bot_rails
   faker
+  ffi (>= 1.9.24)
   foreman
   jbuilder
   jquery-rails
   jquery-ui-rails
   listen
+  loofah (>= 2.2.1)
+  nokogiri (>= 1.8.2)
   omniauth-facebook
   omniauth-twitter
   paperclip
   pg
   poltergeist
   puma
+  rack-protection (>= 1.5.5)
   rack-test
   rails
   rails-controller-testing
   rails-erd
+  rails-html-sanitizer (>= 1.0.4)
   redis
   rspec-rails
+  rubyzip (>= 1.2.2)
   sass
   sass-rails
   selenium-webdriver
@@ -427,6 +433,7 @@ DEPENDENCIES
   slim
   spring
   spring-watcher-listen
+  sprockets (>= 3.7.2)
   sprockets-es6
   tcr
   therubyracer
