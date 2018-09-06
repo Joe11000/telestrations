@@ -79,7 +79,7 @@ end
 
 
 
-Rails.application.routes.default_url_options[:host] = ENV['DOMAIN']
+Rails.application.routes.default_url_options[:host] = Rails.application.credentials.dig(Rails.env.to_sym, :domain)
 
 Rails.application.configure do
   # # Settings specified here will take precedence over those in config/application.rb.
@@ -91,7 +91,7 @@ Rails.application.configure do
 
   # # Do not eager load code on boot.
   # config.eager_load = false
-  config.force_ssl = false
+  # config.force_ssl = false
 
 
   # # Show full error reports.
@@ -133,7 +133,7 @@ Rails.application.configure do
   # config.assets.raise_runtime_errors = true
 
 
-  config.default_url_options = { host: ENV['DOMAIN'] }
+  config.default_url_options = { host: Rails.application.credentials.dig(Rails.env.to_sym, :domain) }
 
   config.action_cable.allowed_request_origins = ['*', /http:\/\/ruby.*/, 'dev.telestrations.herokuapp.com:3000/*']
 

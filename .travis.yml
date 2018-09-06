@@ -4,7 +4,7 @@ rvm: 2.3.0
 
 deploy:
   provider: heroku
-  api_key: <%= ENV['HEROKU_API_KEY'] %>
+  api_key: <%= Rails.application.credentials[Rails.env.to_sym][:heroku][:api_key] %>
   run:
     - "rake db:create"
     - "rake db:migrate"

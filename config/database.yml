@@ -76,6 +76,6 @@ test:
 # You can use this database configuration with:
 #
   production:
-    url: <%= ENV['HEROKU_DATABASE_URL'] %>
+    url: <%= Rails.application.credentials.dig(Rails.env.to_sym, :heroku, :databse_url) %>
     database: telestrations_production
     pool: 15
