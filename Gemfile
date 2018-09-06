@@ -19,7 +19,7 @@ gem 'uglifier'
 # Use CoffeeScript for .coffee assets and views
 gem 'coffee-rails'
 # See https://github.com/rails/execjs#readme for more supported runtimes
-gem 'therubyracer', platforms: :ruby
+gem 'mini_racer', platforms: :ruby
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
@@ -61,7 +61,7 @@ end
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 gem 'sass'
 gem 'slim'
-# gem "twitter-bootstrap-rails"
+gem "twitter-bootstrap-rails"
 gem 'bootstrap'
 gem 'paperclip'
 gem 'omniauth-twitter'
