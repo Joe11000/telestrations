@@ -12,8 +12,8 @@ RSpec.describe GamesController, :type => :controller do
       end
 
       it 'no current user game' do
-        game = FactoryGirl.create(:midgame_without_cards)
-        user = FactoryGirl.create(:user)
+        game = FactoryBot.create(:midgame_without_cards)
+        user = FactoryBot.create(:user)
         cookies.signed[:user_id] = user.id
 
         get :game_page
@@ -22,7 +22,7 @@ RSpec.describe GamesController, :type => :controller do
       end
 
       it 'current game.status == pregame' do
-        game = FactoryGirl.create(:public_pregame)
+        game = FactoryBot.create(:public_pregame)
         current_user = game.users.order(:id).first
         cookies.signed[:user_id] = current_user.id
 
@@ -31,7 +31,7 @@ RSpec.describe GamesController, :type => :controller do
       end
 
       it 'current game.status == postgame' do
-        game = FactoryGirl.create(:public_pregame)
+        game = FactoryBot.create(:public_pregame)
         current_user = game.users.order(:id).first
         cookies.signed[:user_id] = current_user.id
 
@@ -42,7 +42,7 @@ RSpec.describe GamesController, :type => :controller do
 
     context 'renders correct variables to page' do
       it "person first lands on game_page" do
-        game = FactoryGirl.create(:midgame_without_cards)
+        game = FactoryBot.create(:midgame_without_cards)
         current_user = game.users.order(:id).first
         cookies.signed[:user_id] = current_user.id
 
@@ -58,7 +58,7 @@ RSpec.describe GamesController, :type => :controller do
       end
 
       it "person refreshes page during game" do
-        game = FactoryGirl.create(:midgame)
+        game = FactoryBot.create(:midgame)
         gu = game.games_users.order(:id).second
         find_card = gu.starting_card.child_card
         current_user = find_card.uploader
@@ -87,8 +87,8 @@ RSpec.describe GamesController, :type => :controller do
       end
 
       it 'no current user game' do
-        game = FactoryGirl.create(:postgame)
-        user = FactoryGirl.create(:user)
+        game = FactoryBot.create(:postgame)
+        user = FactoryBot.create(:user)
         cookies.signed[:user_id] = user.id
 
         get :postgame_page
@@ -97,7 +97,7 @@ RSpec.describe GamesController, :type => :controller do
       end
 
       it 'current game.status == pregame' do
-        game = FactoryGirl.create(:public_pregame)
+        game = FactoryBot.create(:public_pregame)
         current_user = game.users.order(:id).first
         cookies.signed[:user_id] = current_user.id
 
@@ -106,7 +106,7 @@ RSpec.describe GamesController, :type => :controller do
       end
 
       it 'current game.status == midgame' do
-        game = FactoryGirl.create(:midgame)
+        game = FactoryBot.create(:midgame)
         current_user = game.users.order(:id).first
         cookies.signed[:user_id] = current_user.id
 
@@ -116,7 +116,7 @@ RSpec.describe GamesController, :type => :controller do
     end
 
     it 'has correct variables being displayed on the page', wip: true do
-      game = FactoryGirl.create(:postgame)
+      game = FactoryBot.create(:postgame)
       current_user = game.users.order(:id).first
       cookies.signed[:user_id] = current_user.id
 
@@ -141,7 +141,7 @@ RSpec.describe GamesController, :type => :controller do
       end
 
       it 'current game.status == midgame' do
-        game = FactoryGirl.create(:midgame)
+        game = FactoryBot.create(:midgame)
         current_user = game.users.order(:id).first
         cookies.signed[:user_id] = current_user.id
 
@@ -151,11 +151,11 @@ RSpec.describe GamesController, :type => :controller do
     end
 
     it 'has correct variables being displayed on the page', wip: true do
-      game = FactoryGirl.create(:postgame)
+      game = FactoryBot.create(:postgame)
       current_user = game.users.order(:id).first
       cookies.signed[:user_id] = current_user.id
-      card_to_find_1 = FactoryGirl.create(:drawing, uploader: current_user, starting_games_user: nil, idea_catalyst_id: nil)
-      card_to_find_2 = FactoryGirl.create(:description, uploader: current_user, starting_games_user: nil, idea_catalyst_id: nil)
+      card_to_find_1 = FactoryBot.create(:drawing, uploader: current_user, starting_games_user: nil, idea_catalyst_id: nil)
+      card_to_find_2 = FactoryBot.create(:description, uploader: current_user, starting_games_user: nil, idea_catalyst_id: nil)
       expect_any_instance_of(Game).to receive(:cards_from_finished_game).once.and_call_original
 
       get :all_postgames_page

@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
 
   factory :card, aliases: [:description] do
     drawing_or_description { "description" }

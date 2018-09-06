@@ -19,3 +19,6 @@
 .env
 .env.development
 .env.test
+
+# Ignore master key for decrypting credentials and more.
+/config/master.key

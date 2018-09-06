@@ -18,7 +18,7 @@ RSpec.describe RendezvousController, type: :controller do
 
     context 'user logged in' do
       it 'default layout is' do
-        controller.session[:user_id] = FactoryGirl.create(:user).id
+        controller.session[:user_id] = FactoryBot.create(:user).id
         get :choose_game_type_page
 
         expect(response).to render_template(:choose_game_type_page)
@@ -26,7 +26,7 @@ RSpec.describe RendezvousController, type: :controller do
       end
 
       it 'has correct response status' do
-        controller.session[:user_id] = FactoryGirl.create(:user).id
+        controller.session[:user_id] = FactoryBot.create(:user).id
         get :choose_game_type_page
 
         expect(response.status).to eq(200)
@@ -40,7 +40,7 @@ RSpec.describe RendezvousController, type: :controller do
     context 'game/rendezvous/join' do
       context 'One game exists with matching :join_code' do
         it 'user can join a public game' do
-          game = FactoryGirl.create(:public_pregame)
+          game = FactoryBot.create(:public_pregame)
           current_user = game.users.first
           controller.session[:user_id] = current_user.id
 
@@ -56,7 +56,7 @@ RSpec.describe RendezvousController, type: :controller do
         end
 
         it 'user can join a private game' do
-          game = FactoryGirl.create(:public_pregame, is_private: true)
+          game = FactoryBot.create(:public_pregame, is_private: true)
           current_user = game.users.first
           controller.session[:user_id] = current_user.id
 
@@ -71,7 +71,7 @@ RSpec.describe RendezvousController, type: :controller do
         end
 
         it 'renders the correct page' do
-          game = FactoryGirl.create(:public_pregame)
+          game = FactoryBot.create(:public_pregame)
           current_user = game.users.first
           controller.session[:user_id] = current_user.id
 
@@ -89,7 +89,7 @@ RSpec.describe RendezvousController, type: :controller do
           Game.destroy_all
 
           invalid_join_code = 'abcd'
-          current_user = FactoryGirl.create(:user)
+          current_user = FactoryBot.create(:user)
           controller.session[:user_id] = current_user.id
 
           post :join_game, join_code: invalid_join_code
@@ -109,7 +109,7 @@ RSpec.describe RendezvousController, type: :controller do
       context '/rendezvous/public' do
 
         it 'layout in this case is' do
-          controller.session[:user_id] = FactoryGirl.create(:user).id
+          controller.session[:user_id] = FactoryBot.create(:user).id
           get :rendezvous_page, game_type: 'public'
 
           expect(response).to render_template(:rendezvous_page)
@@ -117,7 +117,7 @@ RSpec.describe RendezvousController, type: :controller do
         end
 
         it 'has correct variabels assigned' do
-          controller.session[:user_id] = FactoryGirl.create(:user).id
+          controller.session[:user_id] = FactoryBot.create(:user).id
           get :rendezvous_page, game_type: 'public'
 
           # private game created
@@ -128,7 +128,7 @@ RSpec.describe RendezvousController, type: :controller do
         end
 
         it 'has correct response status' do
-          controller.session[:user_id] = FactoryGirl.create(:user).id
+          controller.session[:user_id] = FactoryBot.create(:user).id
           get :rendezvous_page, game_type: 'public'
 
           expect(response.status).to eq(200)
@@ -137,7 +137,7 @@ RSpec.describe RendezvousController, type: :controller do
 
       context '/rendezvous/private' do
         it 'layout in this case is' do
-          controller.session[:user_id] = FactoryGirl.create(:user).id
+          controller.session[:user_id] = FactoryBot.create(:user).id
           get :rendezvous_page, game_type: 'private'
 
           expect(response).to render_template(:rendezvous_page)
@@ -145,7 +145,7 @@ RSpec.describe RendezvousController, type: :controller do
         end
 
         it 'has correct variabels assigned' do
-          controller.session[:user_id] = FactoryGirl.create(:user).id
+          controller.session[:user_id] = FactoryBot.create(:user).id
           get :rendezvous_page, game_type: 'private'
 
           # private game created
@@ -156,7 +156,7 @@ RSpec.describe RendezvousController, type: :controller do
         end
 
         it 'has correct response status' do
-          controller.session[:user_id] = FactoryGirl.create(:user).id
+          controller.session[:user_id] = FactoryBot.create(:user).id
           get :rendezvous_page, game_type: 'private'
 
           expect(response.status).to eq(200)
@@ -165,7 +165,7 @@ RSpec.describe RendezvousController, type: :controller do
 
       context '/rendezvous/quick_start' do
         it 'layout in this case is' do
-          controller.session[:user_id] = FactoryGirl.create(:user).id
+          controller.session[:user_id] = FactoryBot.create(:user).id
           get :rendezvous_page, game_type: 'quick_start'
 
           expect(response).to render_template(:rendezvous_page)
@@ -176,10 +176,10 @@ RSpec.describe RendezvousController, type: :controller do
           it 'a public game exists with a player in it' do
             Game.destroy_all
 
-            user = FactoryGirl.create(:user)
-            game = FactoryGirl.create(:game, is_private: false)
+            user = FactoryBot.create(:user)
+            game = FactoryBot.create(:game, is_private: false)
             user.games << game
-            controller.session[:user_id] = FactoryGirl.create(:user).id
+            controller.session[:user_id] = FactoryBot.create(:user).id
 
             get :rendezvous_page, game_type: 'quick_start'
 
@@ -194,7 +194,7 @@ RSpec.describe RendezvousController, type: :controller do
 
           it 'NO public games exist, then make one and continue to rendezvous page' do
             Game.destroy_all
-            current_user = FactoryGirl.create(:user)
+            current_user = FactoryBot.create(:user)
             controller.session[:user_id] = current_user.id
 
             expect{
@@ -219,10 +219,10 @@ RSpec.describe RendezvousController, type: :controller do
     it_behaves_like "redirect user to root if not logged in"
 
     it 'returns same partial if any users_game_names in the html of the players that are waiting to start the game' do
-      controller.session[:user_id] = FactoryGirl.create(:user).id
-      @game = FactoryGirl.create(:game)
-      gu1 = FactoryGirl.create(:games_user, game: @game)
-      gu2 = FactoryGirl.create(:games_user, game: @game)
+      controller.session[:user_id] = FactoryBot.create(:user).id
+      @game = FactoryBot.create(:game)
+      gu1 = FactoryBot.create(:games_user, game: @game)
+      gu2 = FactoryBot.create(:games_user, game: @game)
 
       xhr :post, :get_updates, join_code: @game.join_code
 
@@ -232,8 +232,8 @@ RSpec.describe RendezvousController, type: :controller do
     end
 
     it 'returns same partial even if includes 0+ users_game_names in the html of the players that are waiting to start the game' do
-      controller.session[:user_id] = FactoryGirl.create(:user).id
-      @game = FactoryGirl.create(:game)
+      controller.session[:user_id] = FactoryBot.create(:user).id
+      @game = FactoryBot.create(:game)
 
       xhr :post, :get_updates, join_code: @game.join_code
 
@@ -247,9 +247,9 @@ RSpec.describe RendezvousController, type: :controller do
     it_behaves_like "redirect user to root if not logged in"
 
     it 'user can join a game', current: true do
-      current_user = FactoryGirl.create(:user)
+      current_user = FactoryBot.create(:user)
       controller.session[:user_id] = current_user.id
-      game = FactoryGirl.create(:public_pregame)
+      game = FactoryBot.create(:public_pregame)
 
       xhr :post, :update, join_code: game.join_code, users_game_name: Faker::Name.first_name
 
@@ -262,7 +262,7 @@ RSpec.describe RendezvousController, type: :controller do
 
     it "user can't associate it's name with a game that doesn't exist" do
       Game.destroy_all
-      current_user = FactoryGirl.create(:user)
+      current_user = FactoryBot.create(:user)
       controller.session[:user_id] = current_user.id
       invalid_join_code = 'aaaa'
 
@@ -276,7 +276,7 @@ RSpec.describe RendezvousController, type: :controller do
 
 
     it 'user is blocked from joining game twice' do
-      game = FactoryGirl.create(:public_pregame)
+      game = FactoryBot.create(:public_pregame)
       current_user = game.users.first
       controller.session[:user_id] = current_user.id
 
@@ -289,11 +289,11 @@ RSpec.describe RendezvousController, type: :controller do
     end
 
     it "user can be removed from another pre-game game" do
-      game = FactoryGirl.create(:public_pregame)
+      game = FactoryBot.create(:public_pregame)
       current_user = game.users.first
       controller.session[:user_id] = current_user.id
 
-      game2 = FactoryGirl.create(:public_pregame)
+      game2 = FactoryBot.create(:public_pregame)
 
       xhr :post, :update, join_code: game2.join_code, users_game_name: Faker::Name.first_name
 
@@ -304,11 +304,11 @@ RSpec.describe RendezvousController, type: :controller do
     end
 
     it "user can't be removed from an in progress game" do
-      game = FactoryGirl.create(:midgame)
+      game = FactoryBot.create(:midgame)
       current_user = game.users.first
       controller.session[:user_id] = current_user.id
 
-      join_code_of_game_i_cant_join = FactoryGirl.create(:public_pregame).join_code
+      join_code_of_game_i_cant_join = FactoryBot.create(:public_pregame).join_code
 
       xhr :post, :update, join_code: join_code_of_game_i_cant_join, users_game_name: Faker::Name.first_name
 
@@ -325,8 +325,8 @@ RSpec.describe RendezvousController, type: :controller do
 
     context 'user NOT currently associated with this game' do
       it 'redirects user to choose_game_type_page' do
-        game = FactoryGirl.create(:game)
-        current_user = FactoryGirl.create(:user)
+        game = FactoryBot.create(:game)
+        current_user = FactoryBot.create(:user)
         controller.session[:user_id] = current_user.id
         get :leave_pregame, join_code: game.join_code
 
@@ -340,7 +340,7 @@ RSpec.describe RendezvousController, type: :controller do
     context 'user IS currently associated with game' do
       context 'and is the only one attached to the game' do
         it 'removes user from game before redirecting user to choose_game_type_page' do
-          game = FactoryGirl.create(:public_pregame)
+          game = FactoryBot.create(:public_pregame)
           current_user = game.users.first
           game.users.where.not(id: current_user.id).destroy_all
           controller.session[:user_id] = current_user.id
@@ -355,7 +355,7 @@ RSpec.describe RendezvousController, type: :controller do
       end
       context 'and is one of many users attached to the game' do
         it 'removes user from game before redirecting user to choose_game_type_page' do
-          game = FactoryGirl.create(:public_pregame)
+          game = FactoryBot.create(:public_pregame)
           current_user = game.users.first
           other_players_ids = game.users.where.not(id: current_user.id).ids
           controller.session[:user_id] = current_user.id

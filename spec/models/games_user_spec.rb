@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe GamesUser, type: :model do
 
   it '#cards', working: true do
-    game = FactoryGirl.create(:midgame)
+    game = FactoryBot.create(:midgame)
     games_users = game.games_users
 
     expect(games_users.count).to eq 3

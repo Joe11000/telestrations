@@ -13,7 +13,7 @@ RSpec.describe User, type: :model do
 
   context 'LOOK UP methods' do
     before(:all) do
-      @game = FactoryGirl.create(:midgame)
+      @game = FactoryBot.create(:midgame)
       @user = @game.users.first
     end
 
@@ -35,8 +35,8 @@ RSpec.describe User, type: :model do
 
     it '#unassociated_cards', working: true do
       current_user = @game.users.order(:id).first
-      card_to_find_1 = FactoryGirl.create(:drawing, uploader: current_user, starting_games_user: nil, idea_catalyst_id: nil)
-      card_to_find_2 = FactoryGirl.create(:description, uploader: current_user, starting_games_user: nil, idea_catalyst_id: nil)
+      card_to_find_1 = FactoryBot.create(:drawing, uploader: current_user, starting_games_user: nil, idea_catalyst_id: nil)
+      card_to_find_2 = FactoryBot.create(:description, uploader: current_user, starting_games_user: nil, idea_catalyst_id: nil)
 
       expect(current_user.unassociated_cards).to eq [ card_to_find_1, card_to_find_2 ]
     end
