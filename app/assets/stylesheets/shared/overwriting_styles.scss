@@ -30,8 +30,16 @@ body {
   background-color: $first_color;
 
   & * {
-    background-color: $background_color;
+    // background-color: $background_color;
+    background-color: $pop_out_background_color;
   }
+
+
+    .popover-body{
+      color: $text_color !important;
+
+    }
+
   .popover-title{
     border-bottom-color: $first_color;
   }

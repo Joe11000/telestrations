@@ -31,7 +31,8 @@
         = form_tag '#', data: {id: 'update-rendezvous-form'}
           .form-group data-id='update-rendezvous-form-group'
             = label_tag 'name', 'Enter a name to join the game', class: 'sr-only'
-            .input-group.offset-xs-2.col-xs-8.offset-sm-4.col-sm-4.offset-md-3.col-md-6
+
+            .input-group.offset-xs-2.col-xs-8.offset-sm-2.col-sm-8
               = text_field_tag(:name, '', { data: {id: 'users_game_name'}, placeholder: 'Make up a name for the game.', class: 'form-control', autocorrect: 'off', autocapitalize: 'words' })
               .input-group-btn
                 button.btn.btn-primary Join!

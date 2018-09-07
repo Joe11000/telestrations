@@ -13,13 +13,14 @@
 
 
 //= require jquery3
+//= require popper
+//= require bootstrap-sprockets
+
 
 //  components
 //= require jquery_ujs
 //= require jquery-ui
 //= require turbolinks
-//= require bootstrap
-//= require popper
 
 //= requre channels
 //= require_tree .
