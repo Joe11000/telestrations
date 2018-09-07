@@ -34,7 +34,6 @@ gem 'puma'
 
 # Use Puma as the app server
 # Use SCSS for stylesheets
-# gem 'bootstrap', git: 'https://github.com/twbs/bootstrap-rubygem'
 gem 'sass-rails'
 
 # Use ActiveModel has_secure_password
@@ -62,12 +61,10 @@ end
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 gem 'sass'
 gem 'slim'
-# gem "twitter-bootstrap-rails"
 gem  'bootstrap', '>=4.1.3'
 gem 'paperclip'
 gem 'omniauth-twitter'
 gem 'omniauth-facebook'
-# gem 'dotenv-rails'
 gem 'redis'
 gem 'em-hiredis'
 gem 'sidekiq'

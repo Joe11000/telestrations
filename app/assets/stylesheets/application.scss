@@ -1,54 +1,13 @@
 @import "bootstrap";
+
+
 @import 'shared/color_schemes';
+@import 'sessions';
 
-body {
-  background: $background_color;
-  margin-top: 20px;
-
-
-  & * {
-    color: #DDDDDD;
-    font-weight: 300;
-  }
-}
-
-.row {
-  margin-bottom: 15px;
-}
-
-.back-link-col {
-  margin-top: 15px;
-  p { font-size: 20px; }
-}
-
-.btn-primary {
-  background-color: $first_color;
-  border-color: $third_color;
-}
-
-.popover {
-  min-width: 100px;
-  border-color: $first_color;
-  background-color: $first_color;
-
-  & * {
-    background-color: $background_color;
-  }
-  .popover-title{
-    border-bottom-color: $first_color;
-  }
-}
-
-a {
-  & * {
-    color: $third_color;
-  }
-
-  &:hover{
-    color: darken( $third_color, 15% ) ;
-  }
-  color: $third_color;
-  text-decoration: underline;
-}
-
-
+@import 'choose_game_type_page';
+@import 'currently_joined';
+@import 'file_upload';
+@import 'games';
+@import 'post_game';
+@import 'rendezvous';
+@import 'shared/overwriting_styles';

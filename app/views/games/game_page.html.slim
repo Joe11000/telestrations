@@ -1,6 +1,6 @@
 #game data-id='game-page' data-game-id=@game.id data-prev-card-id=(@prev_card.try(:id) || '') data-user-id=(@current_user.try(:id) || "")
   .form-horizontal
-    .drawing.col-xs-12.col-sm-offset-1.col-sm-10.col-md-offset-2.col-md-8
+    .drawing.col-xs-12.offset-sm-1.col-sm-10.offset-md-2.col-md-8
       #make-drawing-container data-id='make-drawing-container' class=(@placeholder_card.try(:is_drawing?) ? '' : 'hidden')
         #description-to-draw
           p.h3.capitalize#text-to-draw.text-center data-id='description-text-to-draw' = @prev_card.blank? ? '' : @prev_card.try(:description_text)
