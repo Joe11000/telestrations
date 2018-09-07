@@ -38,6 +38,4 @@ class Card < ActiveRecord::Base
 
     self.update(drawing: file)
   end
-
-
 end
