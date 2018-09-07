@@ -1,6 +1,5 @@
-
 class Card < ActiveRecord::Base
-  # acts_as_paranoid
+  acts_as_paranoid
 
   belongs_to :idea_catalyst, class_name: 'GamesUser', inverse_of: :starting_card # signifies this card is a starting card. Because trying to find all starting cards was harder before doing this
   belongs_to :parent_card, class_name: 'Card', inverse_of: :child_card

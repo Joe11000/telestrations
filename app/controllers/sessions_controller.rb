@@ -7,6 +7,8 @@ class SessionsController < ApplicationController
     @user = User.find_or_create_by(create_params)
     cookies.signed[:user_id] = @user.id if @user
     redirect_to rendezvous_choose_game_type_page_url
+    # au = env["omniauth.auth"]
+    # cookies.signed[:previous_provider] = au.dig(:provider)
   end
 
   def destroy
