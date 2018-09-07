@@ -70,6 +70,7 @@ gem 'em-hiredis'
 gem 'sidekiq'
 gem 'sidetiq'
 gem 'tcr'
+gem 'paranoia'
 # gem "paperclip-dropbox", ">= 1.3.2"
 
 # react-rails isn't compatible yet with latest Sprockets.

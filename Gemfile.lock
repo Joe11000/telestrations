@@ -229,6 +229,8 @@ GEM
       mime-types
       mimemagic (~> 0.3.0)
       terrapin (~> 0.6.0)
+    paranoia (2.4.1)
+      activerecord (>= 4.0, < 5.3)
     pg (1.1.2)
     poltergeist (1.18.1)
       capybara (>= 2.1, < 4)
@@ -416,6 +418,7 @@ DEPENDENCIES
   omniauth-facebook
   omniauth-twitter
   paperclip
+  paranoia
   pg
   poltergeist
   puma
