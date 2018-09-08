@@ -3,7 +3,6 @@
     h1.text-center Telestrations
     p.text-center Log in with account and play.
 
-    br
     .row
       .social-media-col.col-xs-6.offset-sm-2.col-sm-4
         = link_to '/auth/facebook', id: 'facebook_logo'
@@ -13,9 +12,9 @@
           = image_tag 'tw_img.png'
 
     .instructions-container.has-popover data-toggle="tooltip" data-placement="top" title="Instructions" data-content="Like the game telephone but with drawing at every other step. At the start of the game each player writes something for the next person to draw. Everyone passes their card to the next player to draw what the card says. Players alternate drawing or guessing a drawing until the game has gone the number of rounds equal to the number of players."
-      h3.text-center.instructions Instructions
+      i.fa.fa-question-circle
+      h3.text-center.instructions &nbsp; Instructions &nbsp;
       i.fa.fa-question-circle
 
-    h5.text-center = '( You must have an account in order to see your past games. That is it! No notifications. No emails. Nothing. )'
-
+    / h6.text-center = 'PSA : ( I will not send you use your account info to send you anything ever. )'
     .clearfix
