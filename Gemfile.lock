@@ -139,6 +139,8 @@ GEM
     faraday_middleware (0.12.2)
       faraday (>= 0.7.4, < 1.0)
     ffi (1.9.25)
+    font-awesome-rails (4.7.0.4)
+      railties (>= 3.2, < 6.0)
     foreman (0.85.0)
       thor (~> 0.19.1)
     gh (0.15.1)
@@ -357,6 +359,8 @@ GEM
     tilt (2.0.8)
     timers (4.1.2)
       hitimes
+    token_phrase (1.0.6)
+      backports
     travis (1.8.9)
       backports
       faraday (~> 0.9)
@@ -407,6 +411,7 @@ DEPENDENCIES
   factory_bot_rails
   faker
   ffi (>= 1.9.24)
+  font-awesome-rails
   foreman
   jbuilder
   jquery-rails
@@ -443,6 +448,7 @@ DEPENDENCIES
   sprockets (>= 3.7.2)
   sprockets-es6
   tcr
+  token_phrase
   travis
   turbolinks
   tzinfo-data

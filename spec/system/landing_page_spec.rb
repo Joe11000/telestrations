@@ -1,7 +1,6 @@
-require 'spec_helper'
 require 'rails_helper'
 
-RSpec.feature "User lands on correct root page when", :type => :feature do
+RSpec.describe "User lands on correct root page when", :type => :system do
 
   def login provider
     visit root_path
@@ -12,7 +11,7 @@ RSpec.feature "User lands on correct root page when", :type => :feature do
       end
   end
 
-  scenario "when they are not logged in" do
+  context "when they are not logged in" do
     visit root_path
 
     expect(current_path).to eq '/'
@@ -20,13 +19,13 @@ RSpec.feature "User lands on correct root page when", :type => :feature do
 
   describe "when they logged in as" do
 
-    scenario "a User in facebook" do
+    context "a User in facebook" do
       login 'facebook'
 
       expect(current_path).to eq new_game_path
     end
 
-    scenario "a User in twitter" do
+    context "a User in twitter" do
       login 'twitter'
 
       expect(current_path).to eq new_game_path

@@ -15,7 +15,7 @@
             #create-drawing.tab-pane.fade.in.active role="tabpanel"
               div
                span drawing here
-            #upload-drawing.tab-pane.fade           role="tabpanel"
+            #upload-drawing.tab-pane.fade role="tabpanel"
               #file_upload
                 = render partial: 'shared/file_upload', locals: { to_url: upload_card_in_game_url, allow_multiple_file_upload: false }
 
@@ -29,7 +29,7 @@
             .input-group
               = text_field_tag(:description_text_input_field, nil,  {data: {id: 'description_text_input_field'}, placeholder: 'Enter A Description', class: 'span2 form-control text-capitalize'})
               .input-group-btn
-                button.btn.btn-primary type='submit'  Submit
+                button.btn.btn-primary type='submit' Submit
 
         p.h3#text-to-draw data-id='drawing-to-describe' = @text_to_draw
 

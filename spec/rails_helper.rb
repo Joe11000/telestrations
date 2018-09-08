@@ -30,12 +30,12 @@ require 'spec_helper'
 require 'rspec/rails'
 
 # Capybara
-require 'capybara/rspec'
-Capybara.register_driver :selenium do |app|
-  Capybara::Selenium::Driver.new(app, :browser => :chrome)
-end
-Capybara.javascript_driver = :selenium
-# Capybara.default_driver = :webkit
+# require 'capybara/rspec'
+# Capybara.register_driver :selenium do |app|
+#   Capybara::Selenium::Driver.new(app, :browser => :chrome)
+# end
+# Capybara.javascript_driver = :selenium
+# # Capybara.default_driver = :webkit
 
 
 # OmniAuth
@@ -73,6 +73,9 @@ OmniAuth.config.mock_auth[:facebook] = OmniAuth::AuthHash.new({
 
 
 RSpec.configure do |config|
+
+  config.include Rails.application.routes.url_helpers
+
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
 

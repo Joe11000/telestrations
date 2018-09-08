@@ -38,6 +38,7 @@ gem 'sass-rails'
 
 # Use ActiveModel has_secure_password
 gem 'bcrypt'
+gem "font-awesome-rails"
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
@@ -116,3 +117,6 @@ gem 'aws-sdk-s3'
 gem 'rails-erd'
 gem 'bullet'
 
+# generate random words for user if they give up
+# ie TokenPhrase.generate(' ', numbers: false)
+gem 'token_phrase'
