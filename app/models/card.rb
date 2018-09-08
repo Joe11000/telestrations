@@ -7,12 +7,13 @@ class Card < ActiveRecord::Base
   has_one :child_card, class_name: 'Card', foreign_key: :parent_card_id, inverse_of: :parent_card
   belongs_to :uploader, foreign_key: :uploader_id, class_name: 'User'
 
-  has_attached_file :drawing, :styles => { :medium => "300x300>", :thumb => "100x100>" },
-                                          default_url: "/images/:style/missing.png",
-                                          storage: :dropbox,
-                                          dropbox_credentials: Rails.root.join("config/dropbox.yml"),
-                                          dropbox_visibility: 'public',
-                                          path: "#{Rails.env}/:id_partition/:style/:filename"
+  has_one_attached :drawing
+  # has_attached_file :drawing, :styles => { :medium => "300x300>", :thumb => "100x100>" },
+  #                                         default_url: "/images/:style/missing.png",
+  #                                         storage: :dropbox,
+  #                                         dropbox_credentials: Rails.root.join("config/dropbox.yml"),
+  #                                         dropbox_visibility: 'public',
+  #                                         path: "#{Rails.env}/:id_partition/:style/:filename"
 
 
   validates_attachment_content_type :drawing, :content_type => /\Aimage\/.*\Z/
