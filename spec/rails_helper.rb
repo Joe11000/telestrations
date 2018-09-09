@@ -112,10 +112,26 @@ Shoulda::Matchers.configure do |config|
     with.test_framework :rspec
 
     # Choose one or more libraries:
-    # with.library :active_record
-    # with.library :active_model
-    # with.library :action_controller
+    with.library :active_record
+    with.library :active_model
+    with.library :action_controller
     # Or, choose the following (which implies all of the above):
     with.library :rails
   end
+end
+
+
+
+
+require 'rubygems'
+# require 'test/unit'
+require 'vcr'
+
+VCR.configure do |config|
+  config.cassette_library_dir = "spec/vcr_cassettes"
+  config.hook_into :webmock
+  config.ignore_localhost = true
+  config.configure_rspec_metadata!
+  config.filter_sensitive_data('<twitter_api_key>') { Rails.application.credentials.dig(:twitter, :api_key) }
+  config.filter_sensitive_data('<facebook_api_key>') { Rails.application.credentials.dig(:facebook, :api_key) }
 end

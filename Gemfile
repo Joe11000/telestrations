@@ -90,9 +90,12 @@ group :test do
   gem 'shoulda-matchers'
 
   gem 'capybara'
-  gem 'poltergeist'
+  # gem 'poltergeist'
   gem 'rack-test'
   gem 'rails-controller-testing'
+  gem 'chromedriver-helper'
+  gem 'vcr', '< 4.0'
+  gem 'webmock'
 end
 
 

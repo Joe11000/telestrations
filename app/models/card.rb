@@ -16,7 +16,7 @@ class Card < ActiveRecord::Base
   #                                         path: "#{Rails.env}/:id_partition/:style/:filename"
 
 
-  validates_attachment_content_type :drawing, :content_type => /\Aimage\/.*\Z/
+  # validates_attachment_content_type :drawing, :content_type => /\Aimage\/.*\Z/
   validates :drawing_or_description, presence: true, inclusion: ['drawing', 'description']
 
   scope :all_starting_cards, -> { where.not(cards: { idea_catalyst_id: nil}) }

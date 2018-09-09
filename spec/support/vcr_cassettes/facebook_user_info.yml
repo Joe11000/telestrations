@@ -1,0 +1,228 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: http://127.0.0.1:9515/session
+    body:
+      encoding: UTF-8
+      string: '{"desiredCapabilities":{"browserName":"chrome","version":"","platform":"ANY","javascriptEnabled":true,"cssSelectorsEnabled":true,"takesScreenshot":false,"nativeEvents":false,"rotatable":false},"capabilities":{"firstMatch":[{"browserName":"chrome"}]}}'
+    headers:
+      Accept:
+      - application/json
+      Content-Type:
+      - application/json; charset=UTF-8
+      User-Agent:
+      - selenium/3.14.0 (ruby macosx)
+      Content-Length:
+      - '250'
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Length:
+      - '844'
+      Content-Type:
+      - application/json; charset=utf-8
+      Connection:
+      - close
+    body:
+      encoding: UTF-8
+      string: '{"sessionId":"eaba5d2407df328858875d02ace57477","status":0,"value":{"acceptInsecureCerts":false,"acceptSslCerts":false,"applicationCacheEnabled":false,"browserConnectionEnabled":false,"browserName":"chrome","chrome":{"chromedriverVersion":"2.40.565386
+        (45a059dc425e08165f9a10324bd1380cc13ca363)","userDataDir":"/var/folders/h0/lr6p8sj16mb3hrb2c67w_fsc0000gp/T/.org.chromium.Chromium.lz5QDa"},"cssSelectorsEnabled":true,"databaseEnabled":false,"handlesAlerts":true,"hasTouchScreen":false,"javascriptEnabled":true,"locationContextEnabled":true,"mobileEmulationEnabled":false,"nativeEvents":true,"networkConnectionEnabled":false,"pageLoadStrategy":"normal","platform":"Mac
+        OS X","rotatable":false,"setWindowRect":true,"takesHeapSnapshot":true,"takesScreenshot":true,"unexpectedAlertBehaviour":"","version":"69.0.3497.81","webStorageEnabled":true}}'
+    http_version: 
+  recorded_at: Sat, 08 Sep 2018 17:47:54 GMT
+- request:
+    method: post
+    uri: http://127.0.0.1:9515/session/eaba5d2407df328858875d02ace57477/window/current/size
+    body:
+      encoding: UTF-8
+      string: '{"width":1400,"height":1400}'
+    headers:
+      Accept:
+      - application/json
+      Content-Type:
+      - application/json; charset=UTF-8
+      User-Agent:
+      - selenium/3.14.0 (ruby macosx)
+      Content-Length:
+      - '28'
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Length:
+      - '72'
+      Content-Type:
+      - application/json; charset=utf-8
+      Connection:
+      - close
+    body:
+      encoding: UTF-8
+      string: '{"sessionId":"eaba5d2407df328858875d02ace57477","status":0,"value":null}'
+    http_version: 
+  recorded_at: Sat, 08 Sep 2018 17:47:54 GMT
+- request:
+    method: get
+    uri: http://127.0.0.1:50023/__identify__
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Length:
+      - '14'
+    body:
+      encoding: UTF-8
+      string: '70131355123400'
+    http_version: 
+  recorded_at: Sat, 08 Sep 2018 17:47:54 GMT
+- request:
+    method: post
+    uri: http://127.0.0.1:9515/session/eaba5d2407df328858875d02ace57477/url
+    body:
+      encoding: UTF-8
+      string: '{"url":"http://127.0.0.1:50023/"}'
+    headers:
+      Accept:
+      - application/json
+      Content-Type:
+      - application/json; charset=UTF-8
+      User-Agent:
+      - selenium/3.14.0 (ruby macosx)
+      Content-Length:
+      - '33'
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Length:
+      - '72'
+      Content-Type:
+      - application/json; charset=utf-8
+      Connection:
+      - close
+    body:
+      encoding: UTF-8
+      string: '{"sessionId":"eaba5d2407df328858875d02ace57477","status":0,"value":null}'
+    http_version: 
+  recorded_at: Sat, 08 Sep 2018 17:47:55 GMT
+- request:
+    method: post
+    uri: http://127.0.0.1:9515/session/eaba5d2407df328858875d02ace57477/elements
+    body:
+      encoding: UTF-8
+      string: '{"using":"css selector","value":"#facebook_logo"}'
+    headers:
+      Accept:
+      - application/json
+      Content-Type:
+      - application/json; charset=UTF-8
+      User-Agent:
+      - selenium/3.14.0 (ruby macosx)
+      Content-Length:
+      - '49'
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Length:
+      - '104'
+      Content-Type:
+      - application/json; charset=utf-8
+      Connection:
+      - close
+    body:
+      encoding: UTF-8
+      string: '{"sessionId":"eaba5d2407df328858875d02ace57477","status":0,"value":[{"ELEMENT":"0.6429087597461411-1"}]}'
+    http_version: 
+  recorded_at: Sat, 08 Sep 2018 17:47:55 GMT
+- request:
+    method: get
+    uri: http://127.0.0.1:9515/session/eaba5d2407df328858875d02ace57477/element/0.6429087597461411-1/displayed
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - application/json
+      Content-Type:
+      - application/json; charset=UTF-8
+      User-Agent:
+      - selenium/3.14.0 (ruby macosx)
+      Cache-Control:
+      - no-cache
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Length:
+      - '72'
+      Content-Type:
+      - application/json; charset=utf-8
+      Connection:
+      - close
+    body:
+      encoding: UTF-8
+      string: '{"sessionId":"eaba5d2407df328858875d02ace57477","status":0,"value":true}'
+    http_version: 
+  recorded_at: Sat, 08 Sep 2018 17:47:55 GMT
+- request:
+    method: post
+    uri: http://127.0.0.1:9515/session/eaba5d2407df328858875d02ace57477/element/0.6429087597461411-1/click
+    body:
+      encoding: UTF-8
+      string: "{}"
+    headers:
+      Accept:
+      - application/json
+      Content-Type:
+      - application/json; charset=UTF-8
+      User-Agent:
+      - selenium/3.14.0 (ruby macosx)
+      Content-Length:
+      - '2'
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Length:
+      - '72'
+      Content-Type:
+      - application/json; charset=utf-8
+      Connection:
+      - close
+    body:
+      encoding: UTF-8
+      string: '{"sessionId":"eaba5d2407df328858875d02ace57477","status":0,"value":null}'
+    http_version: 
+  recorded_at: Sat, 08 Sep 2018 17:47:55 GMT
+recorded_with: VCR 4.0.0
