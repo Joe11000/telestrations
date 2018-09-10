@@ -1,4 +1,4 @@
-module Login
+module LoginHelper
   def login_with provider
     visit root_path
 
@@ -8,5 +8,10 @@ module Login
         find('#' + provider + '_logo').click
       end
     end
+  end
+
+  def logged_in_as provider
+    request.session[]
+
   end
 end

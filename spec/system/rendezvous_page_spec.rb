@@ -1,29 +1,32 @@
 require 'rails_helper'
+require 'support/login'
 
 RSpec.describe 'A User can' do
+  include LoginHelper
+
   it 'logout' do
-
+    expect(1).to eq 1
   end
 
-  it 'see username' do
+  it 'see username'
 
-  end
 
-  it 'see avatar picture' do
+  it 'see avatar picture'
 
-  end
 
   context 'get info on' do
     it 'private games'
     it 'public games'
   end
 
-  context 'start a new' do
+  context 'create a new' do
     context 'private game' do
-      it ''
+      it 'has a game id'
+      it 'has no one else in it'
+
     end
 
-    context 'public game'
+    context 'public game' do
 
     end
   end
@@ -33,13 +36,13 @@ RSpec.describe 'A User can' do
       it ''
     end
 
-    context 'public game'
+    context 'public game' do
 
     end
   end
 
   context 'Join a random' do
-    context 'public game'
+    context 'public game' do
 
     end
   end

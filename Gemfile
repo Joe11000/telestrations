@@ -123,3 +123,4 @@ gem 'bullet'
 # generate random words for user if they give up
 # ie TokenPhrase.generate(' ', numbers: false)
 gem 'token_phrase'
+gem 'guard-rails'

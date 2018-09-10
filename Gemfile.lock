@@ -110,6 +110,7 @@ GEM
       archive-zip (~> 0.10)
       nokogiri (~> 1.8)
     climate_control (0.2.0)
+    coderay (1.1.2)
     coffee-rails (4.2.2)
       coffee-script (>= 2.2.0)
       railties (>= 4.0.0)
@@ -147,6 +148,7 @@ GEM
       railties (>= 3.2, < 6.0)
     foreman (0.85.0)
       thor (~> 0.19.1)
+    formatador (0.2.5)
     gh (0.15.1)
       addressable (~> 2.4.0)
       backports
@@ -156,6 +158,19 @@ GEM
       net-http-pipeline
     globalid (0.4.1)
       activesupport (>= 4.2.0)
+    guard (2.14.2)
+      formatador (>= 0.2.4)
+      listen (>= 2.7, < 4.0)
+      lumberjack (>= 1.0.12, < 2.0)
+      nenv (~> 0.1)
+      notiffany (~> 0.0)
+      pry (>= 0.9.12)
+      shellany (~> 0.0)
+      thor (>= 0.18.1)
+    guard-compat (1.2.1)
+    guard-rails (0.8.1)
+      guard (~> 2.11)
+      guard-compat (~> 1.0)
     hashdiff (0.3.7)
     hashie (3.5.7)
     highline (1.7.10)
@@ -187,6 +202,7 @@ GEM
     loofah (2.2.2)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
+    lumberjack (1.0.13)
     mail (2.7.0)
       mini_mime (>= 0.1.1)
     marcel (0.3.2)
@@ -204,11 +220,15 @@ GEM
     multi_json (1.13.1)
     multi_xml (0.6.0)
     multipart-post (2.0.0)
+    nenv (0.3.0)
     net-http-persistent (2.9.4)
     net-http-pipeline (1.0.1)
     nio4r (2.3.1)
     nokogiri (1.8.4)
       mini_portile2 (~> 2.3.0)
+    notiffany (0.1.1)
+      nenv (~> 0.1)
+      shellany (~> 0.0)
     oauth (0.5.4)
     oauth2 (1.4.0)
       faraday (>= 0.8, < 0.13)
@@ -240,6 +260,9 @@ GEM
       activerecord (>= 4.0, < 5.3)
     pg (1.1.2)
     popper_js (1.14.3)
+    pry (0.11.3)
+      coderay (~> 1.1.0)
+      method_source (~> 0.9.0)
     puma (3.12.0)
     pusher-client (0.6.2)
       json
@@ -322,6 +345,7 @@ GEM
     selenium-webdriver (3.14.0)
       childprocess (~> 0.5)
       rubyzip (~> 1.2)
+    shellany (0.0.1)
     shoulda-matchers (3.1.2)
       activesupport (>= 4.0.0)
     sidekiq (5.2.1)
@@ -416,6 +440,7 @@ DEPENDENCIES
   ffi (>= 1.9.24)
   font-awesome-rails
   foreman
+  guard-rails
   jbuilder
   jquery-rails
   jquery-ui-rails

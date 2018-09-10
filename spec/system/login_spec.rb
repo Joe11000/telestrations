@@ -6,7 +6,7 @@ RSpec.describe "User lands on correct root page when", :type => :system do
     driven_by(:selenium)
   end
 
-  include Login
+  include LoginHelper
 
   context "when they are not logged in" do
     it do
