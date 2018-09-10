@@ -2,6 +2,7 @@
 ENV["RAILS_ENV"] ||= 'test'
 require 'spec_helper'
 require File.expand_path("../../config/environment", __FILE__)
+require "action_cable/testing/rspec"
 require 'rspec/rails'
 # Add additional requires below this line. Rails is not loaded until this point!
 
@@ -25,10 +26,6 @@ require 'rspec/rails'
 ActiveRecord::Migration.maintain_test_schema!
 
 
-
-require 'spec_helper'
-require 'rspec/rails'
-
 # Capybara
 # require 'capybara/rspec'
 # Capybara.register_driver :selenium do |app|
@@ -41,13 +38,18 @@ require 'rspec/rails'
 # OmniAuth
 OmniAuth.config.test_mode = true
 OmniAuth.config.mock_auth[:twitter] = OmniAuth::AuthHash.new({
-  :provider => 'twitter',
-  :uid => '222222'
+  provider: 'twitter',
+  uid: '222222',
+  name: "Twitter User",
+  provider_avatar: "http://joe-noonan-101.herokuapp.com/assets/formal_me/1-00e70838635a49004071492dcfe4e154600e684f8f3e81899ac265286c7fd685.jpg"
+
   # etc.
 })
 OmniAuth.config.mock_auth[:facebook] = OmniAuth::AuthHash.new({
-  :provider => 'facebook',
-  :uid => '111111'
+  provider: 'facebook',
+  uid: '111111',
+  name: "Facebook User",
+  provider_avatar: "http://joe-noonan-101.herokuapp.com/assets/formal_me/1-00e70838635a49004071492dcfe4e154600e684f8f3e81899ac265286c7fd685.jpg"
   # etc.
 })
 

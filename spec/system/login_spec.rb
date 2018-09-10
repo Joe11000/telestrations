@@ -19,21 +19,30 @@ RSpec.describe "User lands on correct root page when", :type => :system do
   describe "when they logged in via" do
     context "facebook", vcr: true,  js: true do
       it 'user can see facebook username' do
+        byebug
         login_with 'facebook'
 
-        expect(current_path).to eq rendezvous_choose_game_type_page_path
-        expect(page).to have_css('.user-name', text: /Joe Noonan/)
+        expect(page).to have_css('.user-name', text: /Facebook User/)
         expect(page).to have_css('.user-avatar')
+        # byebug
+        click_on 'logout'
+        # sleep 2
+        # byebug
+        expect(page.current_path).to '/'
+
       end
     end
 
     context "twitter" do
-      fit 'user can see twitter username' do
+      it 'user can see twitter username' do
+        byebug
         login_with 'twitter'
-
         expect(current_path).to eq rendezvous_choose_game_type_page_path
-        expect(page).to have_css('.user-name', text: /Joe Noonan/)
+        expect(page).to have_css('.user-name', text: /Facebook User/)
         expect(page).to have_css('.user-avatar')
+
+        click_on 'logout'
+        expect(page.current_path).to '/'
       end
     end
   end

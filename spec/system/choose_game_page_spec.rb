@@ -5,7 +5,7 @@ RSpec.describe 'A User can' do
   include LoginHelper
 
   it 'logout' do
-    expect(1).to eq 1
+    login_with 'facebook'
   end
 
   it 'see username'
@@ -15,13 +15,22 @@ RSpec.describe 'A User can' do
 
 
   context 'get info on' do
-    it 'private games'
+    it 'private games' do
+      login_with 'facebook'
+
+      click_on "Private"
+      expect(page).to have_content?("Join This Private Game")
+    end
+
     it 'public games'
   end
 
   context 'create a new' do
     context 'private game' do
-      it 'has a game id'
+      it 'has a game id' do
+
+      end
+
       it 'has no one else in it'
 
     end

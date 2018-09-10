@@ -70,7 +70,6 @@ gem 'redis'
 gem 'em-hiredis'
 gem 'sidekiq'
 gem 'sidetiq'
-gem 'tcr'
 gem 'paranoia'
 # gem "paperclip-dropbox", ">= 1.3.2"
 
@@ -95,7 +94,10 @@ group :test do
   gem 'rails-controller-testing'
   gem 'chromedriver-helper'
   gem 'vcr', '< 4.0'
+  gem 'tcr'
   gem 'webmock'
+  gem 'action-cable-testing'
+
 end
 
 

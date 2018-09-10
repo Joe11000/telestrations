@@ -1,7 +1,7 @@
 OmniAuth.config.logger = Rails.logger
 
 Rails.application.config.middleware.use OmniAuth::Builder do
-  # provider :developer if Rails.env.test?
+  provider :developer if Rails.env.test?
 
   provider :twitter, \
            Rails.application.credentials.dig( :twitter, :key), \

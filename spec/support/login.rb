@@ -9,9 +9,4 @@ module LoginHelper
       end
     end
   end
-
-  def logged_in_as provider
-    request.session[]
-
-  end
 end
