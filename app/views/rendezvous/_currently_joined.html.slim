@@ -1,6 +1,7 @@
-- if local_assigns[:currently-joined]
-.col-xs-12.col-sm-12.currently-joined data-id='currently-joined'
-  h5.text-center = "Users on page (#{local[:assigns][@currently_joined})"
+- if local_assigns[:users_on_page]
+  .col-xs-12.col-sm-12.users-on-page data-id='users-on-page'
+    h5.text-center = "Users In lobby (#{local_assigns[:users_on_page]})"
+
 .col-xs-12.col-sm-12.currently-joined data-id='currently-joined'
   h3.text-center = "Currently Joined ( #{users_waiting.compact.length} )"
   - users_waiting.each_slice(3) do |group|

@@ -16,7 +16,7 @@ class RendezvousController < ApplicationController
       redirect_to(rendezvous_choose_game_type_page_url, alert: "No players in group #{join_game_params}") and return
     else
       @game.touch # remember activity for deleting if inactive later
-      @users_waiting = Game.all_users_game_names(@game.id)
+      @users_on_page = Game.all_users_game_names(@game.id)
 
       render :rendezvous_page and return
     end
@@ -24,7 +24,6 @@ class RendezvousController < ApplicationController
 
   def rendezvous_page
     @game = current_user.current_game
-    @users_on_page = User.where(join_code: @game.join_code)
 
     if @game.try(:status) == 'pregame' && current_user.users_game_name  # user already joined this game
       @user_already_joined = true
@@ -49,8 +48,8 @@ class RendezvousController < ApplicationController
       end
     end
 
-    # if current_user.current_game == @game.id && @users_waiting.includes? current_user.users_game_name # user already has a
-    @users_waiting = @game.users.map(&:users_game_name)
+    # if current_user.current_game == @game.id && @users_on_page.includes? current_user.users_game_name # user already has a
+    @users_on_page = @game.users.map(&:users_game_name)
     @game.touch # remember activity for deleting if inactive later
     render :rendezvous_page
   end
