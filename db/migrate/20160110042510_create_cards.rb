@@ -1,4 +1,4 @@
-class CreateCards < ActiveRecord::Migration
+class CreateCards < ActiveRecord::Migration[5.2]
   def change
     create_table :cards do |t|
       t.references :uploader, class_name: 'User'

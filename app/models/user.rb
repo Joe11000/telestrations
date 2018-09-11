@@ -1,11 +1,9 @@
 class User < ActiveRecord::Base
   acts_as_paranoid
 
-
-
   has_many :games_users, inverse_of: :user
   has_many :games, through: :games_users #, after_add: Proc.new { || self.current_game =  }
-  has_one  :current_game, through: :games_users
+  has_one  :current_game, through: :games_users, optional: true
 
   has_many :starting_cards, through: :games_users
 

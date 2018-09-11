@@ -1,4 +1,4 @@
-class CreateGamesUsers < ActiveRecord::Migration
+class CreateGamesUsers < ActiveRecord::Migration[5.2]
   def change
     create_table :games_users do |t|
       t.references :user

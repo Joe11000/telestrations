@@ -1,15 +1,35 @@
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
+  context 'factory' do
+    it 'is valid' do
+      user1 = FactoryBot.build :user
+      user2 = FactoryBot.build :user, :twitter
+      user3 = FactoryBot.build :user, :facebook
+
+      expect(user1).to be_valid
+      expect(user2).to be_valid
+      expect(user3).to be_valid
+    end
+  end
+
+  context 'in schema' do
+    it { is_expected.to have_db_column(:name).of_type(:string).with_options({null: false}) }
+    it { is_expected.to have_db_column(:provider).of_type(:string).with_options(null: false) }
+    it { is_expected.to have_db_column(:uid).of_type(:integer).with_options(null: false) }
+    it { is_expected.to have_db_column(:proveder_avatar).of_type(:string).with_options(null: false) }
+  end
 
   xcontext 'model validations' do
+    it { is_expected.to act_as_paranoid }
     it { is_expected.to act_as_paranoid }
     it { is_expected.to have_many(:games_users).inverse_of(:user) }
     it { is_expected.to have_many(:games).through(:games_users)}
     it { is_expected.to have_many(:starting_cards).through(:games_users)}
+    it { is_expected.to have_one(:current_game).through(:games_users).optional}
+
   end
 
-  context 'factory'
 
   context 'LOOK UP methods' do
     before(:all) do

@@ -1,4 +1,4 @@
-class AddDrawingColumnToCards < ActiveRecord::Migration
+class AddDrawingColumnToCards < ActiveRecord::Migration[5.2]
   def up
     add_attachment :cards, :drawing
   end
