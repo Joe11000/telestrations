@@ -20,12 +20,12 @@
           = image_tag 'loading_icon.gif', class: 'text-center', width:'80px'
       .clearfix
 
-      .col-xs-12.col-sm-12.text-center data-id='rendezvous-start-game-button-container' class=(@user_already_joined ? '' : 'hidden')
-        h3.h3-text-center You're In
+      .col-xs-12.col-sm-12.text-center data-id='rendezvous-start-game-button-container' class=(@user_already_joined ? '' : 'd-none')
+        h3.h3.text-center You're In
         = button_to 'Start The Game', game_page_url, class: 'btn btn-primary', data: {id: :start_game_button}
       .clearfix
 
-      .col-xs-12.col-sm-12 data-id="update-rendezvous-group-col" class=(@user_already_joined ? 'hidden' : '')
+      .col-xs-12.col-sm-12.col-md-8.offset-md-2.text-center data-id="update-rendezvous-group-col" class=(@user_already_joined ? 'd-none' : '')
         h3.h3.text-center Join This #{@game.is_private ? 'Private' : 'Public'} Game
 
         = form_tag '#', data: {id: 'update-rendezvous-form'}
@@ -37,8 +37,8 @@
               .input-group-btn
                 button.btn.btn-primary Join!
 
-            / small.help-block.hidden You weren't added to the game yet. (Duplicating names is legal, but it's confusing. I'm not your mom. Do what you want.)
+            / small.help-block.d-none You weren't added to the game yet. (Duplicating names is legal, but it's confusing. I'm not your mom. Do what you want.)
       .clearfix
 
-      = render partial: 'currently_joined', locals: {users_waiting: @users_waiting}
+      = render partial: 'currently_joined' , locals: {users_on_page: @users_on_page, users_waiting: @users_waiting}
       .clearfix

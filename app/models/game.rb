@@ -27,6 +27,7 @@ class Game < ActiveRecord::Base
   def cards
     Card.includes(:starting_games_user).where(games_users: { game_id: id }).order(:id)
   end
+
   # being scoping methods
   def self.all_users_game_names join_code
     GamesUser.includes(:game).where(games: { join_code: join_code }).map(&:users_game_name)
@@ -36,9 +37,14 @@ class Game < ActiveRecord::Base
     Game.pregame.public_game.sample
   end
 
-  def unassociated_rendezousing_games_users
-    GamesUser.where(game_id: id, users_game_name: nil)
+  def rendezousing_games_users
+    GamesUser.where(game_id: id)
   end
+
+  def unassociated_rendezousing_games_users
+    rendezousing_games_users.where(users_game_name: nil)
+  end
+
   # end scoping methods
 
   # working!!!

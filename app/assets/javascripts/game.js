@@ -13,15 +13,15 @@
     showLoadingContainer = function(status) {
       if(status === 'set_complete')
       {
-        $("[data-id='set_complete']").removeClass('hidden');
-        $("[data-id='set_not_complete']").addClass('hidden');
+        $("[data-id='set_complete']").removeClass('d-none');
+        $("[data-id='set_not_complete']").addClass('d-none');
       }
 
-      $("[data-id='loading-container']").removeClass('hidden');
+      $("[data-id='loading-container']").removeClass('d-none');
     }
 
     hideLoadingContainer = function(status) {
-      $("[data-id='loading-container']").addClass('hidden');
+      $("[data-id='loading-container']").addClass('d-none');
     }
 
     hideAndClearCardContainers = function(){
@@ -35,7 +35,7 @@
         $('[data-id=submitPhoto]').prop('disabled', false);
 
         // hide the description input container
-          $("[data-id='make-drawing-container']").addClass('hidden');
+          $("[data-id='make-drawing-container']").addClass('d-none');
         // todo : clear the paint portion!!!
       }
 
@@ -44,7 +44,7 @@
       if ($element.length > 0 )
       {
         // hide the description input container
-          $("[data-id='make-description-container']").addClass('hidden');
+          $("[data-id='make-description-container']").addClass('d-none');
 
         // clear description input field
           $("[data-id='make-description-container'] form")[0].reset();
@@ -60,7 +60,7 @@
         $("[data-id='description-text-to-draw']").html(prev_card_info['description_text']);
 
       // show the drawing area
-        $("[data-id='make-drawing-container']").removeClass('hidden');
+        $("[data-id='make-drawing-container']").removeClass('d-none');
 
       // replace prev card info at the top of the screen
         $('[data-prev-card-id]').attr('data-prev-card-id', prev_card_info['id']);
@@ -77,7 +77,7 @@
         $("[data-id='make-description-form'] button").prop('disabled', false);
 
       // show the description area
-        $("[data-id='make-description-container']").removeClass('hidden')
+        $("[data-id='make-description-container']").removeClass('d-none')
 
       // replace prev card info at the top of the screen
         $('[data-prev-card-id]').attr('data-prev-card-id', prev_card_info['id'])

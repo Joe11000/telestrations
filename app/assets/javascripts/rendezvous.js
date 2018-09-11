@@ -11,7 +11,7 @@ $(function(){
       // display_error_name_submission_error = function(element){
       //   var input_group = $(this).closest('.form-group');
       //   input_group.addClass('has-error');
-      //   input_group.find('.help-block:hidden').removeClass('hidden');
+      //   input_group.find('.help-block:hidden').removeClass('d-none');
       // }
 
       users_game_name = $form.find('[data-id=users_game_name]').val();
@@ -23,8 +23,8 @@ $(function(){
 
         App.rendezvous.join_game(users_game_name);
 
-        $('[data-id=update-rendezvous-group-col]').addClass('hidden')
-        $('[data-id=rendezvous-start-game-button-container]').removeClass('hidden')
+        $('[data-id=update-rendezvous-group-col]').addClass('d-none')
+        $('[data-id=rendezvous-start-game-button-container]').removeClass('d-none')
       }
       // else
       // {

@@ -62,7 +62,7 @@ end
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 gem 'sass'
 gem 'slim'
-gem  'bootstrap', '>=4.1.3'
+gem 'bootstrap', '~> 4.1.3'
 gem 'paperclip'
 gem 'omniauth-twitter'
 gem 'omniauth-facebook'

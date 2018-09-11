@@ -1,7 +1,7 @@
 #game data-id='game-page' data-game-id=@game.id data-prev-card-id=(@prev_card.try(:id) || '') data-user-id=(@current_user.try(:id) || "")
   .form-horizontal
     .drawing.col-xs-12.offset-sm-1.col-sm-10.offset-md-2.col-md-8
-      #make-drawing-container data-id='make-drawing-container' class=(@placeholder_card.try(:is_drawing?) ? '' : 'hidden')
+      #make-drawing-container data-id='make-drawing-container' class=(@placeholder_card.try(:is_drawing?) ? '' : 'd-none')
         #description-to-draw
           p.h3.capitalize#text-to-draw.text-center data-id='description-text-to-draw' = @prev_card.blank? ? '' : @prev_card.try(:description_text)
         #drawing-tab data-id='drawing-tab'
@@ -20,7 +20,7 @@
                 = render partial: 'shared/file_upload', locals: { to_url: upload_card_in_game_url, allow_multiple_file_upload: false }
 
 
-      #make-description-container data-id='make-description-container' class=(@placeholder_card.try(:is_description?) ? '' : 'hidden')
+      #make-description-container data-id='make-description-container' class=(@placeholder_card.try(:is_description?) ? '' : 'd-none')
         #drawing-to-describe-container data-id='drawing-to-describe-container'
           img#drawing-to-describe data-id='drawing-to-describe' src=( @prev_card.blank? ? '' : @prev_card.try(:drawing).try(:url) )
 
@@ -33,8 +33,8 @@
 
         p.h3#text-to-draw data-id='drawing-to-describe' = @text_to_draw
 
-      .loading-container.text-center class=(@placeholder_card.blank? ? '' : 'hidden') data-id='loading-container'
-        p.h3 class=(@player_is_finished ? 'hidden' : '' ) data-id='set_not_complete' Waiting for a card to be passed to you.
+      .loading-container.text-center class=(@placeholder_card.blank? ? '' : 'd-none') data-id='loading-container'
+        p.h3 class=(@player_is_finished ? 'd-none' : '' ) data-id='set_not_complete' Waiting for a card to be passed to you.
         /- byebug
-        p.h3 class=(@player_is_finished ? '' : 'hidden') data-id='set_complete' You are finished. Waiting for others to finish.
+        p.h3 class=(@player_is_finished ? '' : 'd-none') data-id='set_complete' You are finished. Waiting for others to finish.
         = image_tag 'loading_icon.gif', class: 'text-center', width:'80px'
