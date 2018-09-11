@@ -8,11 +8,11 @@ class User < ActiveRecord::Base
   has_many :starting_cards, through: :games_users
 
 
-  scope :current_game, -> { order(:id).last }
+  # scope :current_game, -> { games.order(:id).last }
 
-  # def current_game
-  #   games.order(:id).last || Game.none
-  # end
+  def current_game
+    games.order(:id).last || Game.none
+  end
 
   def gamesuser_in_current_game
     GamesUser.includes(:game).where(user_id: id).order(:id).try(:last) || GamesUser.none

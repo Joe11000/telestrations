@@ -6,11 +6,11 @@ class Game < ActiveRecord::Base
   validates :join_code, uniqueness: true, length: { is: 4 }, if: Proc.new { !join_code.blank? }
 
   enum status: %w( pregame midgame postgame )
-  enum game_type: %w( public private ), suffix: 'game'
+  enum game_type: %w( public private ), _suffix: 'game'
 
   # this may get problematic if the number of groups playing gets a certain percentage close enough to 456976....not likely
   before_validation(on: :create) do
-    active_codes = Game.not.postgame.pluck(:join_code)
+    active_codes = Game.where.not(status: 'postgame').pluck(:join_code)
     letters = ('A'..'Z').to_a
     new_code = ''
 

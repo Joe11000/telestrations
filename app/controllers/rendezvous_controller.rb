@@ -24,6 +24,7 @@ class RendezvousController < ApplicationController
 
   def rendezvous_page
     @game = current_user.current_game
+    @users_on_page = User.where(join_code: @game.join_code)
 
     if @game.try(:status) == 'pregame' && current_user.users_game_name  # user already joined this game
       @user_already_joined = true
