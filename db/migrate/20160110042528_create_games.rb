@@ -1,8 +1,8 @@
 class CreateGames < ActiveRecord::Migration[5.2]
   def change
     create_table :games do |t|
-      t.boolean :is_private, default: true
-      t.string :status, default: 'pregame'
+      t.integer :is_private, default: 0
+      t.integer :status, default: 0
       t.string :join_code
 
       t.datetime   :deleted_at, index: true

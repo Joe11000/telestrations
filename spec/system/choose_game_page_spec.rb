@@ -1,11 +1,22 @@
 require 'rails_helper'
 require 'support/login'
+require 'support/helpers'
 
 RSpec.describe 'A User can' do
   include LoginHelper
+  include Helpers
 
   it 'logout' do
-    login_with 'facebook'
+    in_browser(:facebook_user) do
+      login_with 'facebook'
+      click_on "Private"
+      fill_in
+    end
+
+    in_browser(:twitter_user) do
+      login_with 'twitter'
+    end
+
   end
 
   it 'see username'

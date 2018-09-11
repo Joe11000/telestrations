@@ -26,7 +26,7 @@ RSpec.describe User, type: :model do
     it { is_expected.to have_many(:games_users).inverse_of(:user) }
     it { is_expected.to have_many(:games).through(:games_users)}
     it { is_expected.to have_many(:starting_cards).through(:games_users)}
-    it { is_expected.to have_one(:current_game).through(:games_users).optional}
+    it { is_expected.to have_one(:current_game).through(:games_users)}
 
   end
 

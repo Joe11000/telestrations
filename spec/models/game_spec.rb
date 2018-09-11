@@ -79,7 +79,7 @@ RSpec.describe Game, type: :model do
       end
 
       it 'is a public game' do
-        expect(@public_pregame.is_private).to eq false
+        expect(@public_pregame.game_type).to eq 'public_game'
       end
 
       it 'allows additional players' do
@@ -103,8 +103,8 @@ RSpec.describe Game, type: :model do
       Game.delete_all
     end
 
-    it 'is_private is set to true' do
-      expect(game.is_private).to eq true
+    it 'game_type is set to public_game' do
+      expect(game.game_type).to eq 'true'
     end
 
     it 'status is defaulted to pregame' do
@@ -121,9 +121,9 @@ RSpec.describe Game, type: :model do
     it 'random_public_game' do
       Game.destroy_all
       g1 = FactoryBot.create(:public_pregame)
-      FactoryBot.create(:public_pregame, is_private: true)
+      FactoryBot.create(:public_pregame, game_type: 'private_game')
       FactoryBot.create(:midgame)
-      FactoryBot.create(:midgame, is_private: true)
+      FactoryBot.create(:midgame, game_type: 'private_game')
 
       expect(Game.random_public_game).to eq g1
       expect(Game.random_public_game).to eq g1 # intentionally duplicated test

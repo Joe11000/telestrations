@@ -4,17 +4,13 @@ class Game < ActiveRecord::Base
   has_many :starting_cards, through: :games_users
 
   validates :join_code, uniqueness: true, length: { is: 4 }, if: Proc.new { !join_code.blank? }
-  validates :status, inclusion: { in: %w( pregame midgame postgame ) }
 
-  scope :pregames, -> { where(status: 'pregame') }
-  scope :midgames, -> { where(status: 'midgame') }
-  scope :postgames, -> { where(status: 'postgame') }
-  scope :not_postgames, -> { where.not(status: 'postgame') }
-  scope :public_games, -> { where(is_private: false) }
+  enum status: %w( pregame midgame postgame )
+  enum game_type: %w( public private ), suffix: 'game'
 
   # this may get problematic if the number of groups playing gets a certain percentage close enough to 456976....not likely
   before_validation(on: :create) do
-    active_codes = Game.not_postgames.pluck(:join_code)
+    active_codes = Game.not.postgame.pluck(:join_code)
     letters = ('A'..'Z').to_a
     new_code = ''
 
@@ -37,7 +33,7 @@ class Game < ActiveRecord::Base
   end
 
   def self.random_public_game
-    Game.pregames.public_games.sample
+    Game.pregame.public_game.sample
   end
 
   def unassociated_rendezousing_games_users
