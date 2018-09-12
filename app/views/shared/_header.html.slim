@@ -1,14 +1,14 @@
 #header-partial
   .row
-    #header.col-xs-12.col-sm-offset-3.col-sm-6.text-right
-      a.log-out href="#{logout_url}" logout
+    #header.col-xs-12.offset-sm-2.col-sm-6.text-right
+      a.log-out.mr-2 href="#{logout_url}" logout
 
       span.seperator |
-      span.user-name = current_user.name
+      span#user-name.ml-2 data-id='user-name' = current_user.name
 
-      .user-avatar
+      #user-avatar-container.d-inline.ml-2
         = link_to all_postgames_page_url
           - if current_user.provider_avatar.blank?
-            = image_tag 'anonymous.png', class: 'img-thumbnail'
+            = image_tag 'anonymous.png', class: 'img-thumbnail', id: 'user-avatar', data: {id: 'user-avatar'}
           - else
-            = image_tag current_user.provider_avatar, class: 'img-thumbnail'
+            = image_tag current_user.provider_avatar, class: 'img-thumbnail', id: 'user-avatar', data: {id: 'user-avatar'}

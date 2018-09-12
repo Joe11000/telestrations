@@ -23,8 +23,8 @@ $(function(){
 
         App.rendezvous.join_game(users_game_name);
 
-        $('[data-id=update-rendezvous-group-col]').addClass('d-none')
-        $('[data-id=rendezvous-start-game-button-container]').removeClass('d-none')
+        $('[data-id=update-rendezvous-group-col]').addClass('d-none');
+        $('[data-id=rendezvous-start-game-button-container]').removeClass('d-none');
       }
       // else
       // {

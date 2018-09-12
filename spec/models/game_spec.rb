@@ -364,7 +364,7 @@ RSpec.describe Game, type: :model do
 
         expect(card.drawing.blank?).to eq true
         expect(card.description_text).to eq nil
-        expect(card.type).to eq 'drawing'
+        expect(card.medium).to eq 'drawing'
         expect(card.uploader_id).to eq user_id
       end
 
@@ -547,7 +547,7 @@ RSpec.describe Game, type: :model do
           expect(card_returned.uploader_id).to eq current_user.id
           expect(card_returned.starting_games_user_id).to eq gu.id
           expect(card_returned.description_text).to eq nil
-          expect(card_returned.type).to eq 'drawing'
+          expect(card_returned.medium).to eq 'drawing'
           expect(card_returned.drawing_file_name).to eq fake_file_name
           expect(card_returned.drawing_file_size).not_to eq nil
         end
@@ -565,7 +565,7 @@ RSpec.describe Game, type: :model do
           expect(card_returned.uploader_id).to eq current_user.id
           expect(card_returned.starting_games_user_id).to eq gu.id
           expect(card_returned.description_text).to eq sample_description_text
-          expect(card_returned.type).to eq 'description'
+          expect(card_returned.medium).to eq 'description'
           expect(card_returned.drawing_file_name).to eq nil
           expect(card_returned.drawing_file_size).to eq nil
         end
@@ -580,7 +580,7 @@ RSpec.describe Game, type: :model do
           card = game.create_initial_placeholder_for_user user.id
           gu = card.starting_games_user
 
-          expect(card.type).to eq 'description'
+          expect(card.medium).to eq 'description'
           expect(card.description_text).to eq nil
           expect(card.drawing_file_name).to eq nil
           expect(card.uploader_id).to eq user.id
@@ -600,7 +600,7 @@ RSpec.describe Game, type: :model do
           card = game.create_initial_placeholder_for_user user.id
           gu = card.starting_games_user
 
-          expect(card.type).to eq 'drawing'
+          expect(card.medium).to eq 'drawing'
           expect(card.description_text).to eq nil
           expect(card.drawing_file_name).to eq nil
           expect(card.uploader_id).to eq user.id
@@ -630,7 +630,7 @@ RSpec.describe Game, type: :model do
 
           card = game.create_subsequent_placeholder_for_next_player user.id, prev_card.id
 
-          expect(card.type).to eq 'description'
+          expect(card.medium).to eq 'description'
           expect(card.description_text).to eq nil
           expect(card.drawing_file_name).to eq nil
           expect(card.uploader_id).to eq user.id
@@ -655,7 +655,7 @@ RSpec.describe Game, type: :model do
 
           card = game.create_subsequent_placeholder_for_next_player user.id, prev_card.id
 
-          expect(card.type).to eq 'drawing'
+          expect(card.medium).to eq 'drawing'
           expect(card.description_text).to eq nil
           expect(card.drawing_file_name).to eq nil
           expect(card.uploader_id).to eq user.id

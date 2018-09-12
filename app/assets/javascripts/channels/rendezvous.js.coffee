@@ -13,7 +13,7 @@ App.rendezvous = App.cable.subscriptions.create { channel: "RendezvousChannel", 
 
   received: (data) ->
     if data.partial != undefined
-      $("[data-id=currently-joined]").replaceWith(data.partial);
+      $("[data-id='currently-joined-partial-wrapper']").replaceWith(data.partial);
     else if data.start_game_signal
       window.location = data.start_game_signal
 

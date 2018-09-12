@@ -42,7 +42,7 @@ ActiveRecord::Schema.define(version: 2018_09_08_015552) do
     t.bigint "starting_games_user_id"
     t.bigint "idea_catalyst_id"
     t.text "description_text"
-    t.text "drawing_or_description"
+    t.integer "medium", default: 0
     t.datetime "deleted_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

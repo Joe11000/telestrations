@@ -1,12 +1,16 @@
 class Game < ActiveRecord::Base
   has_many :games_users, inverse_of: :game, dependent: :destroy
   has_many :users, through: :games_users
-  has_many :starting_cards, through: :games_users
+  has_many :starting_card, through: :games_users
 
   validates :join_code, uniqueness: true, length: { is: 4 }, if: Proc.new { !join_code.blank? }
 
   enum status: %w( pregame midgame postgame )
   enum game_type: %w( public private ), _suffix: 'game'
+
+  after_find do
+    self.touch # remember activity for deleting if inactive later
+  end
 
   # this may get problematic if the number of groups playing gets a certain percentage close enough to 456976....not likely
   before_validation(on: :create) do
@@ -34,9 +38,8 @@ class Game < ActiveRecord::Base
   end
 
   def self.random_public_game
-    byebug
-    public_game = Game.pregame.public_game
-    public_game
+    # byebug
+    Game.pregame.public_game
   end
 
   def rendezousing_games_users
@@ -158,7 +161,7 @@ class Game < ActiveRecord::Base
       create_subsequent_placeholder_for_next_player next_player.id, card.id
       next_player_message_params = { game_over: false, set_complete: false, attention_users: next_player.id }
 
-      if card.is_description?
+      if card.description?
         next_player_message_params.merge!({ prev_card: {id: card.id, description_text: card.description_text} })
       else
         next_player_message_params.merge!({ prev_card: {id: card.id, drawing_url: card.drawing.url} })
@@ -173,7 +176,7 @@ class Game < ActiveRecord::Base
       unless existing_placeholder_for_uploading_user.blank?
         current_player_message_params = { game_over: false, set_complete: false, attention_users: current_user_id }
 
-        if card.is_description?
+        if card.description?
           current_player_message_params.merge!({ prev_card: {id: existing_placeholder_for_uploading_user.parent_card.id, description_text: existing_placeholder_for_uploading_user.parent_card.description_text} })
         else
           current_player_message_params.merge!({ prev_card: {id: existing_placeholder_for_uploading_user.parent_card.id, drawing_url: existing_placeholder_for_uploading_user.parent_card.drawing.url} })
@@ -187,7 +190,8 @@ class Game < ActiveRecord::Base
   # working!!!
   def create_subsequent_placeholder_for_next_player next_player_id, prev_card_id
     prev_card = Card.find(prev_card_id)
-    card = create_placeholder_card( next_player_id, (prev_card.is_drawing? ? 'description' : 'drawing') )
+    byebug
+    card = create_placeholder_card( next_player_id, (prev_card.drawing? ? 'description' : 'drawing') )
     card.update(starting_games_user: prev_card.starting_games_user)
 
     return prev_card.child_card = card
@@ -209,7 +213,7 @@ class Game < ActiveRecord::Base
   # working!!!
   # find the earliest placeholder created for user
   def get_placeholder_card current_user_id
-    Card.where(uploader_id: current_user_id, starting_games_user_id: games_users.ids, drawing_file_name: nil, description_text: nil).order(:id).try(:first) || Card.none
+    Card.where(attached: false).where(uploader_id: current_user_id, starting_games_user_id: games_users.ids, description_text: nil).order(:id).try(:first) || Card.none
   end
 
 

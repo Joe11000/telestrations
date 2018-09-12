@@ -4,7 +4,7 @@ class SessionsController < ApplicationController
   end
 
   def create
-
+    byebug
     @user = User.find_or_create_by(create_params)
     cookies.signed[:user_id] = @user.id if @user
     redirect_to rendezvous_choose_game_type_page_url

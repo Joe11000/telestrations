@@ -26,6 +26,7 @@ require 'rspec/rails'
 ActiveRecord::Migration.maintain_test_schema!
 
 
+
 # Capybara
 # require 'capybara/rspec'
 # Capybara.register_driver :selenium do |app|
@@ -37,19 +38,23 @@ ActiveRecord::Migration.maintain_test_schema!
 
 # OmniAuth
 OmniAuth.config.test_mode = true
+Rails.application.env_config["omniauth.auth"] = OmniAuth.config.mock_auth[:twitter]
 OmniAuth.config.mock_auth[:twitter] = OmniAuth::AuthHash.new({
   provider: 'twitter',
   uid: '222222',
-  name: "Twitter User",
-  provider_avatar: "http://joe-noonan-101.herokuapp.com/assets/formal_me/1-00e70838635a49004071492dcfe4e154600e684f8f3e81899ac265286c7fd685.jpg"
-
+  info: {
+    name: "Twitter User",
+    image: "http://joe-noonan-101.herokuapp.com/assets/formal_me/1-00e70838635a49004071492dcfe4e154600e684f8f3e81899ac265286c7fd685.jpg"
+  }
   # etc.
 })
 OmniAuth.config.mock_auth[:facebook] = OmniAuth::AuthHash.new({
   provider: 'facebook',
   uid: '111111',
-  name: "Facebook User",
-  provider_avatar: "http://joe-noonan-101.herokuapp.com/assets/formal_me/1-00e70838635a49004071492dcfe4e154600e684f8f3e81899ac265286c7fd685.jpg"
+  info: {
+    name: "Facebook User",
+    image: "http://joe-noonan-101.herokuapp.com/assets/formal_me/1-00e70838635a49004071492dcfe4e154600e684f8f3e81899ac265286c7fd685.jpg"
+  }
   # etc.
 })
 

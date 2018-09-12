@@ -53,7 +53,10 @@ class RendezvousChannel < ApplicationCable::Channel
   protected
 
     def render_user_partial_for_game join_code
+      game = Game.find_by(join_code: join_code)
       users_waiting = Game.all_users_game_names(join_code)
-      ApplicationController.render(partial: 'rendezvous/currently_joined', locals: { users_waiting: users_waiting })
+      users_on_page = game.unassociated_rendezousing_games_users.count
+
+      ApplicationController.render(partial: 'rendezvous/currently_joined', locals: { users_waiting: users_waiting, users_on_page: users_on_page })
     end
 end

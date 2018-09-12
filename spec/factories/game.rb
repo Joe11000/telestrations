@@ -57,11 +57,12 @@ def midgame_associations game
   game.users << user2
   game.users << user3
 
+  byebug
   gu1, gu2, gu3 = GamesUser.where(game_id: game.id, user_id: [ user1.id, user2.id, user3.id ])
 
   byebug
   # player 1 is making a move
-  gu1.starting_cards << FactoryBot.create(:description, uploader_id: user1.id, idea_catalyst_id: gu1.id, description_text: nil, starting_games_user: gu1) # description placeholder card
+  gu1.starting_card = FactoryBot.create(:description, uploader_id: user1.id, idea_catalyst_id: gu1.id, description_text: nil, starting_games_user: gu1) # description placeholder card
 
   byebug
   # player 3 is making a move

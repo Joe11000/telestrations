@@ -20,7 +20,7 @@
                 = render partial: 'shared/file_upload', locals: { to_url: upload_card_in_game_url, allow_multiple_file_upload: false }
 
 
-      #make-description-container data-id='make-description-container' class=(@placeholder_card.try(:is_description?) ? '' : 'd-none')
+      #make-description-container data-id='make-description-container' class=(@placeholder_card.try(:description?) ? '' : 'd-none')
         #drawing-to-describe-container data-id='drawing-to-describe-container'
           img#drawing-to-describe data-id='drawing-to-describe' src=( @prev_card.blank? ? '' : @prev_card.try(:drawing).try(:url) )
 
