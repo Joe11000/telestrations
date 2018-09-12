@@ -10,7 +10,7 @@ class Game < ActiveRecord::Base
 
   # this may get problematic if the number of groups playing gets a certain percentage close enough to 456976....not likely
   before_validation(on: :create) do
-    active_codes = Game.where.not(status: 'postgame').pluck(:join_code)
+    active_codes = Game.where(status: ['pregame', 'midgame']).pluck(:join_code)
     letters = ('A'..'Z').to_a
     new_code = ''
 
@@ -34,7 +34,9 @@ class Game < ActiveRecord::Base
   end
 
   def self.random_public_game
-    Game.pregame.public_game.sample
+    byebug
+    public_game = Game.pregame.public_game
+    public_game
   end
 
   def rendezousing_games_users
@@ -231,12 +233,12 @@ class Game < ActiveRecord::Base
   protected
 
     # working!!!
-    def create_placeholder_card uploader_id, drawing_or_description
-      if drawing_or_description == 'description'
-        return Card.create( drawing_or_description: "description",
+    def create_placeholder_card uploader_id, type
+      if type == 'description'
+        return Card.create( type: "description",
                             uploader_id: uploader_id)
       else
-        return Card.create( drawing_or_description: "drawing", uploader_id: uploader_id)
+        return Card.create( type: "drawing", uploader_id: uploader_id)
       end
     end
 

@@ -11,7 +11,7 @@ class CardsController < ApplicationController
   def bulk_upload
     begin
       upload_files.each do |drawing|
-        Card.create(uploader_id: current_user.id, drawing: drawing, drawing_or_description: 'drawing')
+        Card.create(uploader_id: current_user.id, drawing: drawing, type: 'drawing')
       end
 
       flash.now[:notice] = 'Upload Successful'

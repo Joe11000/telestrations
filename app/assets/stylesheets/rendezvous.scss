@@ -1,31 +1,6 @@
 @import 'shared/color_schemes';
 
 #rendezvous-page{
-
-  h3 {
-    margin-top: 0;
-  }
-
-  h4, p {
-    margin: 0;
-  }
-
-  .row > * {
-    margin: 20px 0;
-  }
-
-  .clearfix {
-    margin: 0;
-  }
-
-  .back-link-col{
-    margin-top: 0;
-  }
-
-  & > [class*='col-']{
-    margin-bottom: 25px;
-  }
-
   .randezvous-join-code {
     color: $first_color;
   }

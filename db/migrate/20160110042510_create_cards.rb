@@ -6,7 +6,7 @@ class CreateCards < ActiveRecord::Migration[5.2]
       t.references :starting_games_user
       t.references :idea_catalyst, class_name: 'GamesUser'
       t.text       :description_text, default: nil
-      t.text       :drawing_or_description
+      t.integer    :type
 
       t.datetime   :deleted_at, index: true
       t.timestamps

@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe RendezvousController, type: :controller do
+RSpec.describe RendezvousController, type: :request do
 
   shared_examples_for "redirect user to root if not logged in" do
     context 'user NOT logged in' do
@@ -51,8 +51,8 @@ RSpec.describe RendezvousController, type: :controller do
 
           expect(assigns[:user_already_joined].id).to eq false
           expect(assigns[:game].id).to eq game.id
-          expect(assigns[:game].try(:is_private)).to eq false # private game created
-          expect(assigns[:users_waiting]).to eq game.users.map(&:users_game_name) # has no users waiting in rendezvous
+          expect(assigns[:game].try(:game_type)).to eq 'public'
+          expect(assigns[:users_waiting]).to eq game.users.map(&:users_game_name)
         end
 
         it 'user can join a private game' do
@@ -66,8 +66,8 @@ RSpec.describe RendezvousController, type: :controller do
           current_user.reload
 
           expect(assigns[:game].id).to eq game.id
-          expect(assigns[:game].try(:is_private)).to eq true # private game created
-          expect(assigns[:users_waiting]).to eq game.users.map(&:users_game_name) # has no users waiting in rendezvous
+          expect(assigns[:game].try(:game_type)).to eq 'private'
+          expect(assigns[:users_waiting]).to eq game.users.map(&:users_game_name)
         end
 
         it 'renders the correct page' do

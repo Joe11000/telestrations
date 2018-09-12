@@ -431,7 +431,7 @@ DEPENDENCIES
   action-cable-testing
   aws-sdk-s3
   bcrypt
-  bootstrap (>= 4.1.3)
+  bootstrap (~> 4.1.3)
   bullet
   byebug
   capybara

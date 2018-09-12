@@ -34,14 +34,14 @@ class RendezvousController < ApplicationController
 
       case params[:game_type]
         when 'private'
-          @game = Game.create(is_private: true)
+          @game = Game.create(game_type: :private)
         when 'public'
-          @game = Game.create(is_private: false)
+          @game = Game.create(game_type: :public)
         when 'quick_start'
           @game = Game.random_public_game
 
           if @game.blank?
-            @game = Game.create(is_private: false)
+            @game = Game.create(game_type: :public)
           else
             @game.touch
           end

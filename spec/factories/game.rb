@@ -4,7 +4,7 @@ FactoryBot.define do
     description_first { true }
 
     factory :public_pregame do
-      is_private { false }
+      game_type { 'public' }
 
       after(:create) do |game|
         3.times { game.users << create(:user) }

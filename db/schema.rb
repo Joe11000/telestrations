@@ -54,7 +54,7 @@ ActiveRecord::Schema.define(version: 2018_09_08_015552) do
   end
 
   create_table "games", force: :cascade do |t|
-    t.integer "is_private", default: 0
+    t.integer "game_type", default: 0
     t.integer "status", default: 0
     t.string "join_code"
     t.datetime "deleted_at"

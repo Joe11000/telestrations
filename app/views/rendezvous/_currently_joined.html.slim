@@ -1,17 +1,18 @@
-- if local_assigns[:users_on_page]
-  .col-xs-12.col-sm-12.users-on-page data-id='users-on-page'
-    h5.text-center = "Unjoined users ( #{local_assigns[:users_on_page]} )"
+.currently-joined-partial-wrapper.col-xs-12.col-sm-12.users-on-page.mt-5.mb-0
+  .col-xs-12.col-sm-12.users-on-page.mt-1.mb-0 data-id='users-on-page'
+    h5.text-center.mt-0.mb-0 = "Unjoined Users in Group ( #{local_assigns[:users_on_page]} )"
 
-.col-xs-12.col-sm-12.currently-joined data-id='currently-joined'
-  h3.text-center = "Currently Joined ( #{local_assigns[:users_waiting].compact.length} )"
-  - local_assigns[:users_waiting].each_slice(3) do |group|
-    - unless group[0].blank?
-      .text-center.col-xs-12.col-sm-12.col-md-2.offset-md-3
-        p = group[0]
-    - unless group[1].blank?
-      .text-center.col-xs-12.col-sm-12.col-md-2
-        p = group[1]
-    - unless group[2].blank?
-      .text-center.col-xs-12.col-sm-12.col-md-2
-        p = group[2]
-    .clearfix
+  .col-xs-12.col-sm-12.currently-joined.mt-0.mb-1 data-id='currently-joined'
+    h3.text-center = "Users Joined ( #{local_assigns[:users_waiting].compact.length} )"
+    .row
+      - local_assigns[:users_waiting].each_slice(3) do |group|
+        - unless group[0].blank?
+          .text-center.col-xs-12.col-sm-12.col-md-4
+            p = group[0]
+        - unless group[1].blank?
+          .text-center.col-xs-12.col-sm-12.col-md-4
+            p = group[1]
+        - unless group[2].blank?
+          .text-center.col-xs-12.col-sm-12.col-md-4
+            p = group[2]
+        / .clearfix

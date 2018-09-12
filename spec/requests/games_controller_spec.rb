@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe GamesController, :type => :controller do
+RSpec.describe GamesController, :type => :request do
 
   describe "GET game_page", working: true do
 
