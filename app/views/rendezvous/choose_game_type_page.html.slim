@@ -14,22 +14,22 @@
             #private-game-option.offset-2.col-4.offset-sm-2.col-sm-4.col-xl-2
               a href="#{rendezvous_page_url(:private)}"
                 button.btn.btn-primary.btn-large Private
-              i.fa.fa-question-circle.has-popover data-toggle="popover" data-placement="bottom" title='A Private Game' data-content="This game type can only be joined if code is known." data-trigger="focus"
+              i.fa.fa-question-circle.has-popover.ml-2 data-toggle="popover" data-placement="bottom" title='A Private Game' data-content="This game type can only be joined if code is known." data-trigger="focus"
 
             #public-game-option.offset-1.offset-md-1
               a href="#{rendezvous_page_url(:public)}"
                 button.btn.btn-primary.btn-large Public
-              i.fa.fa-question-circle.has-popover data-toggle="popover" data-placement="bottom" title='A Public Game' data-content="This game type can be joined by either the join code or any player randomly joining a game." data-trigger="focus"
+              i.fa.fa-question-circle.has-popover.ml-2 data-toggle="popover" data-placement="bottom" title='A Public Game' data-content="This game type can be joined by either the join code or any player randomly joining a game." data-trigger="focus"
             .clearfix
 
           .row data-id="join-code-form"
             .description.offset-1.col-11.offset-sm-1.col-sm-10
               h4 Join a Public or Private Game
             .clearfix
-            .offset-2.col-8.offset-sm-2.col-sm-7
+            .offset-2.col-8.offset-sm-2.col-sm-7.col-lg-5
               = form_tag(join_game_url, class: 'form-horizontal', method: "post")
-                .form-group#join-code-submit-group data-id='join-code-submit-group'
-                  .input-group.join-code-input-group class=(flash.now[:alert].blank? ? '' : 'has-error')
+                .form-group#join-code-submit-group.mb-0 data-id='join-code-submit-group'
+                  .input-group.join-code-input-group.mb-0 class=(flash.now[:alert].blank? ? '' : 'has-error')
                     = text_field_tag(:join_code, nil,  {data: {id: 'join-code-text-field'}, placeholder: 'Join Code', class: 'form-control text-uppercase'})
                     .input-group-btn
                       button.btn.btn-primary type='button' Join Game

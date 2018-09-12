@@ -1,39 +1,10 @@
 @import 'shared/color_schemes';
 
-
 #choose-game-type-page {
   font-size: 20px;
 
   .popover {
     min-width: 225px;
-  }
-
-  #game-type-option-container {
-    #private-game-option {
-      .arrow {
-        display: none;
-      }
-    }
-  }
-
-  #join-code-submit-group {
-    margin-bottom: 0px;
-
-    .join-code-input-group {
-      margin-left: 15px;
-    }
-  }
-
-  i.fa-question-circle {
-    margin-left: 10px;
-  }
-
-  #upload-cards-container{
-    font-size: 20px;
-  }
-  .user-avatar {
-    display: inline-block;
-    margin-left: 10px;
   }
 }
 

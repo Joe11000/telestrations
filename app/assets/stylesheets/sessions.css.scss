@@ -7,9 +7,7 @@
 
 .session-new {
 
-  // font-weight: 300;
-
-  .jumbotron{
+  .jumbotron {
     margin-bottom: 15px;
 
     & * { font-weight: 200; }
@@ -28,7 +26,6 @@
       text-align: center;
       cursor: pointer;
       margin: 35px auto 15px auto;
-      // height: 40px;
       .instructions{
         font-size: 2.25em;
 

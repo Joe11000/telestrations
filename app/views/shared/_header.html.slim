@@ -6,7 +6,7 @@
       span.seperator |
       span#user-name.ml-2 data-id='user-name' = current_user.name
 
-      #user-avatar-container.d-inline.ml-2
+      #user-avatar-container.d-inline-block.ml-2
         = link_to all_postgames_page_url
           - if current_user.provider_avatar.blank?
             = image_tag 'anonymous.png', class: 'img-thumbnail', id: 'user-avatar', data: {id: 'user-avatar'}
