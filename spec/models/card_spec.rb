@@ -10,7 +10,7 @@ RSpec.describe Card, type: :model do
         u1 = gu1.user
         gu1.starting_card = FactoryBot.create(:drawing, uploader_id: u1.id)
         c1 = gu1.starting_card
-        1 + 1
+
         # incorrect uploader
         gu2 = FactoryBot.create(:games_user)
         g2 = gu2.game
