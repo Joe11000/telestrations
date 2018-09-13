@@ -56,6 +56,8 @@ group :development do
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
   gem 'foreman'
+  gem 'guard-rails', require: false
+
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
@@ -125,4 +127,3 @@ gem 'bullet'
 # generate random words for user if they give up
 # ie TokenPhrase.generate(' ', numbers: false)
 gem 'token_phrase'
-gem 'guard-rails'
