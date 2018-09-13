@@ -41,14 +41,10 @@ RSpec.describe "User lands on correct root page when", :type => :system do
       fit 'user can see twitter username' do
         login_with 'twitter'
         expect(current_path).to eq '/auth/twitter'
-        sleep 2
+        sleep 1
         byebug
         expect(page).to have_css('#user-name', text: /Twitter User/)
-        expect(page).to have_css('#user-avatar')
-        expect(page).to evaluate_script(%( document.querySelectorAll("[data-id='user-avatar']").attribute('src')  ))
-        expect(scr).to eq "http://joe-noonan-101.herokuapp.com/assets/formal_me/1-00e70838635a49004071492dcfe4e154600e684f8f3e81899ac265286c7fd685.jpg"
-
-        # click_on 'logout'
+         all('#user-avatar').each {|img| img['src'] }
       end
     end
   end

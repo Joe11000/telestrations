@@ -2,7 +2,7 @@ FactoryBot.define do
 
   factory :card, aliases: [:description] do
     medium { "description" }
-    description_text { Faker::Lorem.sentence(3).upcase}
+    description_text { TokenPhrase.generate(' ', numbers: false) }
     association :uploader, factory: :user
     association :starting_games_user, factory: :games_user
 

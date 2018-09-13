@@ -6,7 +6,6 @@ class User < ActiveRecord::Base
   has_one  :current_game, through: :games_users
   has_many :starting_cards, through: :games_users
 
-
   def current_game
     games.order(:id).last || Game.none
   end
