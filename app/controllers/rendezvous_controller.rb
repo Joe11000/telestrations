@@ -47,7 +47,6 @@ class RendezvousController < ApplicationController
           end
       end
     end
-    byebug
     @users_on_page = @game.unassociated_rendezousing_games_users.count
     # if current_user.current_game == @game.id && @users_waiting.includes? current_user.users_game_name # user already has a
     @users_waiting = @game.users.map(&:users_game_name)

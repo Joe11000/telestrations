@@ -1,5 +1,4 @@
 .currently-joined-partial-wrapper.col-xs-12.col-sm-12.users-on-page.mt-5.mb-0 data-id='currently-joined-partial-wrapper'
-  - byebug
   .col-xs-12.col-sm-12.users-on-page.mt-1.mb-0 data-id='users-on-page'
     h5.text-center.mt-0.mb-0 = "Unjoined Users in Group ( #{local_assigns[:users_on_page]} )"
 
@@ -16,4 +15,3 @@
         - unless group[2].blank?
           .text-center.col-xs-12.col-sm-12.col-md-4
             p = group[2]
-        / .clearfix

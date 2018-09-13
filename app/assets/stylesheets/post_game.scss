@@ -11,7 +11,7 @@
   }
 
   hr.dotted-line {
-    border-top: 2px dotted $text_color !important;
+    border-top: 2px dotted $text_color;
     width: 75%;
   }
 
@@ -20,20 +20,8 @@
     opacity: .9;
 
     & > * {
-    color: $first_color !important !important;
-    opacity: 1 !important !important;
+      color: $first_color;
+      opacity: 1;
     }
-  }
-}
-
-#postgame {
-  .game-index-counter {
-    display: none;
-  }
-}
-
-#all-postgames-page {
-  #unassociated-cards-header {
-    text-align: center;
   }
 }

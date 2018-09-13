@@ -23,9 +23,9 @@ Rails.application.routes.draw do
   end
 
   scope 'cards' do
-    post 'in_game_upload' => 'cards#in_game_upload', as: :in_game_upload
-    get  'out_of_game_upload' => 'cards#out_of_game_upload', as: :out_of_game_upload_page
-    post 'out_of_game_upload' => 'cards#out_of_game_upload', as: :out_of_game_upload
+    post 'in_game_upload' => 'in_game_card_upload#in_game_upload', as: :in_game_upload
+    get  'out_of_game_card_upload' => 'out_of_game_card_upload#new', as: :out_of_game_card_upload
+    post 'out_of_game_card_upload' => 'out_of_game_card_upload#create'
   end
 
   get  'login'          => 'sessions#new'

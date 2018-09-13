@@ -38,7 +38,6 @@ class Game < ActiveRecord::Base
   end
 
   def self.random_public_game
-    # byebug
     Game.pregame.public_game
   end
 
@@ -190,7 +189,6 @@ class Game < ActiveRecord::Base
   # working!!!
   def create_subsequent_placeholder_for_next_player next_player_id, prev_card_id
     prev_card = Card.find(prev_card_id)
-    byebug
     card = create_placeholder_card( next_player_id, (prev_card.drawing? ? 'description' : 'drawing') )
     card.update(starting_games_user: prev_card.starting_games_user)
 
@@ -237,12 +235,12 @@ class Game < ActiveRecord::Base
   protected
 
     # working!!!
-    def create_placeholder_card uploader_id, type
-      if type == 'description'
-        return Card.create( type: "description",
+    def create_placeholder_card uploader_id, medium
+      if medium == 'description'
+        return Card.create( medium: "description",
                             uploader_id: uploader_id)
       else
-        return Card.create( type: "drawing", uploader_id: uploader_id)
+        return Card.create( medium: "drawing", uploader_id: uploader_id)
       end
     end
 

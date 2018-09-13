@@ -1,11 +1,11 @@
 - if flash[:notice]
-  .alert.alert-success.alert-dismissible.fade.in role="alert"
-    button.close type="button" data-dismiss="alert" aria-label="Close"
+  .alert.alert-primary.alert-dismissible.fade.show role="alert"
+    button.close type="button" data-dismiss="alert" aria="close"
       span aria-hidden="true" &times;
-    = flash[:notice]
+    == flash[:notice]
 
 - if flash[:alert]
-  .alert.alert-danger.alert-dismissible.fade.in role="alert"
-    button.close type="button" data-dismiss="alert" aria-label="Close"
+  .alert.alert-danger.alert-dismissible.fade.show role="alert"
+    button.close type="button" data-dismiss="alert" aria="close"
       span aria-hidden="true" &times;
-    = flash[:alert]
+    == flash[:alert]

@@ -1,0 +1,17 @@
+=> #<File:log.txt>
+=> true
+=> 2
+=> 4
+[1mTraceback[m (most recent call last):
+[1mSyntaxError ([4m(irb):5: syntax error, unexpected keyword_end[0;1m)[m
+[1mTraceback[m (most recent call last):
+        1: from (irb):6
+[1mLoadError ([4mcannot load such file -- mini_magick[0;1m)[m
+=> false
+[1mTraceback[m (most recent call last):
+        1: from (irb):8
+[1mLoadError ([4mcannot load such file -- active_support/core_ext/*[0;1m)[m
+=> false
+[1mTraceback[m (most recent call last):
+        1: from (irb):10
+[1mLoadError ([4mcannot load such file -- active_support/core_ext/object/tryf[0;1m)[m

@@ -1,0 +1,19 @@
+= render partial: 'shared/header'
+
+
+/ - byebug
+.row
+  / .col-6.offset-sm-1.col-md-9.offset-md-2.mt-3.h4
+  /   = link_to '<< Back', root_url
+  .col-8.offset-2.text-center.mt-3
+    p.h3 Upload Pictures From Your Games At Home
+  .col-6.offset-3.col-md-4.offset-md-4.mt-3
+    = form_with scope: :drawing , url: out_of_game_card_upload_path do |f|
+      .form-group
+        = f.file_field :drawings, multiple: true
+          - if flash[:notice]
+            p.small.success.help-text = flash[:notice]
+          - elsif flash[:alert]
+            p.small.danger.help-text = flash[:alert]
+      .form-group
+        = f.submit 'Upload'

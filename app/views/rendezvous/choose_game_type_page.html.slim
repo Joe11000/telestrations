@@ -13,12 +13,12 @@
             #private-game-option.offset-2.col-4.offset-sm-2.col-sm-4.col-xl-2
               a href="#{rendezvous_page_url(:private)}"
                 button.btn.btn-primary.btn-large Private
-              i.fa.fa-question-circle.has-popover.ml-2 data-toggle="popover" data-placement="bottom" title='A Private Game' data-content="This game type can only be joined if code is known." data-trigger="focus"
+              i.fa.fa-question-circle.ml-2 data-toggle="popover" data-placement="bottom" title='A Private Game' data-trigger='focus' tabindex="0" data-content="This game type can only be joined if code is known."
 
             #public-game-option.offset-1.offset-md-1
               a href="#{rendezvous_page_url(:public)}"
                 button.btn.btn-primary.btn-large Public
-              i.fa.fa-question-circle.has-popover.ml-2 data-toggle="popover" data-placement="bottom" title='A Public Game' data-content="This game type can be joined by either the join code or any player randomly joining a game." data-trigger="focus"
+              i.fa.fa-question-circle.ml-2 data-toggle="popover" data-placement="bottom" data-trigger='focus' tabindex="0" title='A Public Game' data-content="This game type can be joined by either the join code or any player randomly joining a game."
 
           .row data-id="join-code-form"
             .description.offset-1.col-11.offset-sm-1.col-sm-10
@@ -27,7 +27,7 @@
               = form_tag(join_game_url, class: 'form-horizontal', method: "post")
                 .form-group#join-code-submit-group.mb-0 data-id='join-code-submit-group'
                   .input-group.join-code-input-group.mb-0 class=(flash.now[:alert].blank? ? '' : 'has-error')
-                    = text_field_tag(:join_code, nil,  {data: {id: 'join-code-text-field'}, placeholder: 'Join Code', class: 'form-control text-uppercase'})
+                    = text_field_tag(:join_code, nil,  {data: {id: 'join-code-text-field'}, placeholder: 'Join Code', class: 'form-control'})
                     .input-group-btn
                       button.btn.btn-primary type='button' Join Game
 
@@ -44,5 +44,5 @@
         .col-12.col-sm-12
           h3 Upload Cards
         .offset-1.col-11.offset-sm-1.col-sm-11.description
-          a href=out_of_game_upload_page_path data-id='out-of-game-drawings-link'
+          a href=out_of_game_card_upload_path data-id='out-of-game-drawings-link'
             h4 Save Drawings From Games You've Played at Home

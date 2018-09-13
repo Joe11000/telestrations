@@ -7,7 +7,7 @@
   .clearfix
 
   - unless @unassociated_cards.blank?
-    h3.h3#unassociated-cards-header = "Unassociated Cards I've uploaded"
+    h3.h3#unassociated-cards-header.text-center = "Unassociated Cards I've uploaded"
     .unassociated-cards-i-uploaded
       - carousel_id = "unassociated-cards"
       .carousel.slide data-ride='carousel' data-interval='false' id=carousel_id
@@ -31,10 +31,11 @@
       hr
 
 
-  - if @arr_of_postgame_card_sets.blank?
-    h3.h3 No Games Have Been Played
+  .col-12.col-sm-12.text-center
+    - if @arr_of_postgame_card_sets.blank?
+      h3.h3 No Games Have Been Played
 
-  - else
-    h3.h3.text-center All Games I've played
-    h6.h6.text-center.glow = "( Colored 'Created By' cards were made by you. )"
-    = render partial: 'shared/card_slideshow', locals: { arr_of_postgame_card_sets: @arr_of_postgame_card_sets}
+    - else
+      h3.h3.text-center All Games I've played
+      h6.h6.text-center.glow = "( Colored 'Created By' cards were made by you. )"
+      = render partial: 'shared/card_slideshow', locals: { arr_of_postgame_card_sets: @arr_of_postgame_card_sets}

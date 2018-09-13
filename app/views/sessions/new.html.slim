@@ -1,20 +1,18 @@
 .session-new
-  .jumbotron.masthead.col-xs-12.offset-sm-3.col-sm-6
+  .jumbotron.masthead.col-12.offset-sm-2.col-sm-8.offset-md-3.col-md-6
     h1.text-center Telestrations
     p.text-center Log in with account and play.
 
     .row
-      .social-media-col.col-xs-6.offset-sm-2.col-sm-4
+      .social-media-col.offset-2.col-4.offset-sm-2.col-sm-4.text-center
         = link_to '/auth/facebook', id: 'facebook_logo'
           = image_tag 'fb_img.png'
-      .social-media-col.col-xs-6.col-sm-4
+      .social-media-col.col-4.col-sm-4.text-center
         = link_to '/auth/twitter', id: 'twitter_logo'
           = image_tag 'tw_img.png'
 
-    .instructions-container.has-popover data-toggle="tooltip" data-placement="top" title="Instructions" data-content="Like the game telephone but with drawing at every other step. At the start of the game each player writes something for the next person to draw. Everyone passes their card to the next player to draw what the card says. Players alternate drawing or guessing a drawing until the game has gone the number of rounds equal to the number of players."
-      i.fa.fa-question-circle
-      h3.text-center.instructions &nbsp; Instructions &nbsp;
-      i.fa.fa-question-circle
+    .instructions-container.text-center data-toggle="popover" data-placement="top" title="Instructions" data-trigger='focus' tabindex="0" data-content="Like the game telephone but with drawing at every other step. At the start of the game each player writes something for the next person to draw. Everyone passes their card to the next player to draw what the card says. Players alternate drawing or guessing a drawing until the game has gone the number of rounds equal to the number of players."
 
-    / h6.text-center = 'PSA : ( I will not send you use your account info to send you anything ever. )'
-    .clearfix
+      i.fa.fa-question-circle.d-inline-block.td-underline
+      h3.text-center.instructions.d-inline-block &nbsp; Instructions &nbsp;
+      i.fa.fa-question-circle

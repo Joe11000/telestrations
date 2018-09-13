@@ -17,7 +17,7 @@ FactoryBot.define do
 
       after(:create) do |game|
         midgame_associations game
-        byebug
+        # byebug
         game.update(passing_order: game.users.ids.to_s, join_code: nil)
       end
     end
@@ -57,19 +57,19 @@ def midgame_associations game
   game.users << user2
   game.users << user3
 
-  byebug
+  # byebug
   gu1, gu2, gu3 = GamesUser.where(game_id: game.id, user_id: [ user1.id, user2.id, user3.id ])
 
-  byebug
+  # byebug
   # player 1 is making a move
   gu1.starting_card = FactoryBot.create(:description, uploader_id: user1.id, idea_catalyst_id: gu1.id, description_text: nil, starting_games_user: gu1) # description placeholder card
 
-  byebug
+  # byebug
   # player 3 is making a move
   gu2.starting_card = FactoryBot.create(:description, uploader_id: user2.id, idea_catalyst_id: gu2.id, starting_games_user: gu2)
-  byebug
+  # byebug
   gu2.starting_card.child_card = FactoryBot.create(:drawing, uploader_id: user3.id, drawing: nil, starting_games_user: gu2) # drawing placeholder card
-  byebug
+  # byebug
 
 
   # gu3.starting_card = FactoryBot.create(:description, uploader_id: user3.id, idea_catalyst_id: user3.id)

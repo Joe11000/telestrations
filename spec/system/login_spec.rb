@@ -42,7 +42,7 @@ RSpec.describe "User lands on correct root page when", :type => :system do
         login_with 'twitter'
         expect(current_path).to eq '/auth/twitter'
         sleep 1
-        byebug
+        # byebug
         expect(page).to have_css('#user-name', text: /Twitter User/)
          all('#user-avatar').each {|img| img['src'] }
       end

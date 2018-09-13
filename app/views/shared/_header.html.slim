@@ -1,14 +1,19 @@
 #header-partial
-  .row
-    #header.col-xs-12.offset-sm-2.col-sm-6.text-right
-      a.log-out.mr-2 href="#{logout_url}" logout
+  #header
+    .row
+      .col-3.offset-sm-2.col-sm-2.col-md-2.offset-md-2.h5.d-inline-block.text-left.pt-3
+        - unless controller_name == 'rendezvous' && action_name == 'choose_game_type_page'
+          = link_to '<< Back', root_url
 
-      span.seperator |
-      span#user-name.ml-2 data-id='user-name' = current_user.name
+      .col-9.col-sm-6.col-xl-5.text-right
+        a.log-out.mr-2 href="#{logout_url}" logout
 
-      #user-avatar-container.d-inline-block.ml-2
-        = link_to all_postgames_page_url
-          - if current_user.provider_avatar.blank?
-            = image_tag 'anonymous.png', class: 'img-thumbnail', id: 'user-avatar', data: {id: 'user-avatar'}
-          - else
-            = image_tag current_user.provider_avatar, class: 'img-thumbnail', id: 'user-avatar', data: {id: 'user-avatar'}
+        span.seperator |
+        span#user-name.ml-2 data-id='user-name' = current_user.name
+
+        #user-avatar-container.d-inline.ml-2
+          = link_to all_postgames_page_url
+            - if current_user.provider_avatar.blank?
+              = image_tag 'anonymous.png', class: 'img-thumbnail', id: 'user-avatar', data: {id: 'user-avatar'}
+            - else
+              = image_tag current_user.provider_avatar, class: 'img-thumbnail', id: 'user-avatar', data: {id: 'user-avatar'}
