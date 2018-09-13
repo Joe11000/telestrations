@@ -14,17 +14,18 @@ Rails.application.routes.draw do
       get  'leave_pregame/:join_code' => 'rendezvous#leave_pregame',         as: :leave_pregame
     end
 
-    get  '/'          => 'games#game_page',  as: :game_page
-    post '/'          => 'games#game',       as: :game
+    get  '/'          => 'games#game_page', as: :game_page
+    post '/'          => 'games#game',      as: :game
 
-    post 'upload_card'  => 'games#upload_card', as: :upload_card_in_game
-    get  'postgame'    => 'games#postgame_page',   as: :postgame_page
-    get  'postgames'    => 'games#all_postgames_page',   as: :all_postgames_page
+    post 'upload_card' => 'games#upload_card',        as: :upload_card_in_game
+    get  'postgame'    => 'games#postgame_page',      as: :postgame_page
+    get  'postgames'   => 'games#all_postgames_page', as: :all_postgames_page
   end
 
   scope 'cards' do
-    get  'bulk_upload'  => 'cards#bulk_upload_page', as: :bulk_upload_cards_page
-    post 'bulk_upload'  => 'cards#bulk_upload',      as: :bulk_upload_cards
+    post 'in_game_upload' => 'cards#in_game_upload', as: :in_game_upload
+    get  'out_of_game_upload' => 'cards#out_of_game_upload', as: :out_of_game_upload_page
+    post 'out_of_game_upload' => 'cards#out_of_game_upload', as: :out_of_game_upload
   end
 
   get  'login'          => 'sessions#new'

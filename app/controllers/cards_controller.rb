@@ -1,28 +1,25 @@
 class CardsController < ApplicationController
-  def new
+  before_action :upload_files, only: [:out_of_game_upload, :in_game_upload]
+
+  def in_game_upload
+
   end
 
-  def create
+  def out_of_game_upload_page
   end
 
-  def bulk_upload_page
-  end
-
-  def bulk_upload
+  def out_of_game_upload
     begin
       upload_files.each do |drawing|
         Card.create(uploader_id: current_user.id, drawing: drawing, type: 'drawing')
       end
 
       flash.now[:notice] = 'Upload Successful'
-      render :bulk_upload_page and return
+      render :out_of_game_upload and return
     rescue => e
-      redirect_to bulk_upload_cards_page_url
-
       flash.now[:alert] = 'Upload Unsuccessful'
-      render :bulk_upload_page and return
+      render :out_of_game_upload and return
     end
-    render nothing: true
   end
 
   protected
