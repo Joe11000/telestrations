@@ -24,11 +24,7 @@ class RendezvousController < ApplicationController
   def rendezvous_page
     @game = current_user.current_game
 
-    if @game.try(:status) == 'pregame' && current_user.users_game_name  # user already joined this game
-      @user_already_joined = true
-    elsif @game.try(:status) == 'pregame'
-      @user_already_joined = false
-    else
+    if @game.blank?
       @user_already_joined = false
 
       case params[:game_type]
@@ -45,9 +41,14 @@ class RendezvousController < ApplicationController
             @game.touch
           end
       end
+    elsif @game.pregame? && current_user.users_game_name  # user already joined this game
+      @user_already_joined = true
+    elsif @game.pregame?
+      @user_already_joined = false
+    else
+      # shouldn't have gotten here, something is wrong
     end
-    byebug
-    @users_on_page = @game.unassociated_rendezousing_games_users.count
+    @users_on_page = @game.unassociated_rendezousing_games_users
     @users_waiting = @game.users.map(&:users_game_name)
   end
 

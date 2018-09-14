@@ -2,40 +2,51 @@ FactoryBot.define do
 
   factory :game do
     description_first { true }
+    game_type { 'private'}
 
-    factory :public_pregame do
+    transient do
+      num_of_players { 3 }
+    end
+
+    trait :public_game
       game_type { 'public' }
+    end
 
-      after(:create) do |game|
-        3.times { game.users << create(:user) }
+    trait :private_game
+      game_type { 'private' }
+    end
+
+
+    trait :pregame do
+      after(:create) do |game, evaluator|
+        add_players game, evaluator
       end
     end
 
-    # midway through game
-    factory :midgame do
+    trait :midgame_without_cards do
       status { 'midgame' }
 
-      after(:create) do |game|
-        midgame_associations game
-        # byebug
+      after(:create) do |game, evaluator|
+        add_players game, evaluator
         game.update(passing_order: game.users.ids.to_s, join_code: nil)
       end
     end
 
     # midway through game
-    factory :midgame_without_cards do
+    trait :midgame do
+
       status { 'midgame' }
 
-      after(:create) do |game|
-        midgame_associations_without_cards game
+      after(:create) do |game, evaluator|
+        midgame_associations game, evaluator
         game.update(passing_order: game.users.ids.to_s, join_code: nil)
       end
     end
 
-    factory :postgame do
+    trait :postgame do
       status { 'postgame' }
 
-      after(:create) do |game|
+      after(:create) do |game, evaluator|
         postgame_associations game
         game.update(passing_order: game.users.ids.to_s, join_code: nil)
       end
@@ -44,11 +55,11 @@ FactoryBot.define do
 end
 
 
-def midgame_associations_without_cards game
-  3.times { game.users << create(:user) }
+def add_players game, evaluator
+  game.users << create_list(:user, evaluator.num_of_players)
 end
 
-def midgame_associations game
+def midgame_associations game, description_first
   user1 = create(:user, name: "game_#{game.id}_user_with_description_placeholder")
   user2 = create(:user, name: "game_#{game.id}_user_with_drawing_placeholder")
   user3 = create(:user, name: "game_#{game.id}_user_completed_card_set")

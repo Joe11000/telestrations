@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
-  context 'factory' do
+  context 'factory', r5: true do
     it 'is valid' do
       user1 = FactoryBot.build :user
       user2 = FactoryBot.build :user, :twitter
@@ -13,37 +13,39 @@ RSpec.describe User, type: :model do
     end
   end
 
-  context 'in schema' do
+  context 'in schema', r5: true do
     it { is_expected.to have_db_column(:name).of_type(:string).with_options({null: false}) }
     it { is_expected.to have_db_column(:provider).of_type(:string).with_options(null: false) }
-    it { is_expected.to have_db_column(:uid).of_type(:integer).with_options(null: false) }
-    it { is_expected.to have_db_column(:proveder_avatar).of_type(:string).with_options(null: false) }
+    it { is_expected.to have_db_column(:uid).of_type(:string).with_options(null: false) }
   end
 
-  context 'model validations' do
+  context 'model validations', r5: true do
     it { is_expected.to act_as_paranoid }
     it { is_expected.to have_many(:games_users).inverse_of(:user) }
     it { is_expected.to have_many(:games).through(:games_users)}
     it { is_expected.to have_many(:starting_cards).through(:games_users)}
-    it { is_expected.to have_one(:current_game).through(:games_users)}
+    it { is_expected.to have_one(:current_game).through(:games_users).class_name('Game')}
   end
 
 
-  context 'LOOK UP methods' do
-    before(:all) do
-      @game = FactoryBot.create(:midgame)
-      @user = @game.users.first
-    end
-
+  context 'methods' do
+    # before(:all) do
+    #   @game = FactoryBot.create(:midgame)
+    #   @user = @game.users.first
+    # end
     context '#current_game' do
-      context 'returns a game instance if a user' do
-        it "is in the lobby(rendezvous page) and hasn't entered a character name" do
-          @user.current_game
-          expect(@user.current_game).to eq @game
-          expect(@user.current_game.postgame?).to eq false
+
+      context 'returns a game instance' do
+        context 'if a user' do
+          it "is in the lobby(rendezvous page) and hasn't entered a character name" do
+            @game = FactoryBot.create :game, :pregame
+            @user.current_game
+            expect(@user.current_game).to eq @game
+            expect(@user.current_game.postgame?).to eq false
+          end
+          it 'has entered a character name and is waiting for other users to join game'
+          it 'is midgame'
         end
-        it 'has entered a character name and is waiting for other users to join game'
-        it 'is midgame'
       end
 
       context 'returns a empty relation' do

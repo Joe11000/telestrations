@@ -3,12 +3,12 @@ require 'support/login'
 
 RSpec.describe "On the Sessions Page,", :type => :system do
   before :all do
-    driven_by(:selenium)
+    driven_by(:selenium_chrome_headless)
   end
 
   include LoginHelper
 
-  context "user can read the game instuctions", js: true do
+  context "user can read the game instuctions", r5: true do
     it do
       visit root_path
 
@@ -19,15 +19,14 @@ RSpec.describe "On the Sessions Page,", :type => :system do
   end
 
 
-  describe "user logs in via" do
+  describe "user logs in via", r5: true do
     context "facebook" do
       it 'sees his facebook username on the next page' do
         login_with 'facebook'
 
-        expect(page).to redirect_to rendezvous_choose_game_type_page_path
         expect(page).to have_css('#user-name', text: /Facebook User/)
-        all('#user-avatar').each {|img| img['src'] == User.last.provider_avatar.}
-        expect(User.last.attached?).to eq true
+        # all('#user-avatar').each {|img| img['src'] == User.last.provider_avatar}
+        expect(User.last.provider_avatar.attached?).to eq true
       end
     end
 
@@ -35,10 +34,9 @@ RSpec.describe "On the Sessions Page,", :type => :system do
       it 'sees his twitter info on the next page' do
         login_with 'twitter'
 
-        expect(page).to redirect_to rendezvous_choose_game_type_page_path
         expect(page).to have_css('#user-name', text: /Twitter User/)
         all('#user-avatar').each {|img| img['src'] }
-        expect(User.last.attached?).to eq true
+        expect(User.last.provider_avatar.attached?).to eq true
       end
     end
   end

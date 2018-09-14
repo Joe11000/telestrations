@@ -38,7 +38,7 @@ class Game < ActiveRecord::Base
   end
 
   def self.random_public_game
-    Game.pregame.public_game
+    Game.pregame.public_game.last
   end
 
   def rendezousing_games_users

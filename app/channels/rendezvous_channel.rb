@@ -9,6 +9,8 @@ class RendezvousChannel < ApplicationCable::Channel
       stop_all_streams
       stream_from "rendezvous_#{params[:join_code]}"
       game.rendezvous_a_new_user(current_user.id)
+      html = render_user_partial_for_game( params[:join_code] )
+      ActionCable.server.broadcast("rendezvous_#{params[:join_code]}", partial: html)
     end
   end
 

@@ -15,11 +15,11 @@ RSpec.describe Game, type: :model do
 
     context ':midgame' do
       before :all do
-        @midgame = FactoryBot.create(:midgame)
+        @midgame = FactoryBot.create(:game, :midgame)
       end
 
       it 'is valid' do
-        expect(FactoryBot.create(:midgame).valid?).to eq true
+        expect(FactoryBot.create(:game, :midgame).valid?).to eq true
       end
 
       xit 'has correct associations' do
@@ -44,7 +44,7 @@ RSpec.describe Game, type: :model do
 
     context ':postgame' do
       before :all do
-        @postgame = FactoryBot.create(:postgame)
+        @postgame = FactoryBot.create(:game, :postgame)
       end
 
       it 'is valid' do
@@ -71,7 +71,7 @@ RSpec.describe Game, type: :model do
 
     context 'public_pregame' do
       before :all do
-        @public_pregame = FactoryBot.create(:public_pregame)
+        @public_pregame = FactoryBot.create(:game, :pregame)
       end
 
       it 'has 3 users attached' do
@@ -118,22 +118,20 @@ RSpec.describe Game, type: :model do
   end
 
   context 'scope' do
-    it 'random_public_game' do
-      Game.destroy_all
-      g1 = FactoryBot.create(:public_pregame)
-      FactoryBot.create(:public_pregame, game_type: 'private_game')
-      FactoryBot.create(:midgame)
-      FactoryBot.create(:midgame, game_type: 'private_game')
-
-      expect(Game.random_public_game).to eq g1
-      expect(Game.random_public_game).to eq g1 # intentionally duplicated test
-    end
   end
 
   context 'methods', working: true do
+    it 'random_public_game' do
+      Game.destroy_all
+      g1 = FactoryBot.create(:game, :pregame, :public_game)
+      FactoryBot.create(:game, :midgame)
+      FactoryBot.create(:game, :midgame)
+
+      2.times { expect(Game.random_public_game).to eq g1 }
+    end
 
     it '#cards'  do
-      game = FactoryBot.create(:midgame)
+      game = FactoryBot.create(:game, :midgame)
       games_users = game.games_users
 
       ids_array = []
@@ -151,7 +149,7 @@ RSpec.describe Game, type: :model do
 
     context '#cards_from_finished_game', working: true do
       before(:all) do
-        @game = FactoryBot.create(:postgame)
+        @game = FactoryBot.create(:game, :postgame)
         @cards = @game.cards_from_finished_game
       end
 
@@ -184,7 +182,7 @@ RSpec.describe Game, type: :model do
     context '#remove_player', working: true do
       context 'does nothing and returns false if' do
         it 'user does not exist' do
-          game = FactoryBot.create(:public_pregame)
+          game = FactoryBot.create(:game, :pregame)
           user_ids = game.users.ids
           invalid_id = (User.ids.last + 1)
 
@@ -194,7 +192,7 @@ RSpec.describe Game, type: :model do
         end
 
         it 'user not associated with game' do
-          game = FactoryBot.create(:public_pregame)
+          game = FactoryBot.create(:game, :pregame)
           random_user = FactoryBot.create(:user)
 
           user_ids = game.users.ids
@@ -208,7 +206,7 @@ RSpec.describe Game, type: :model do
 
       context 'if other users are rendezvouing' do
         it 'removes only the user' do
-          game = FactoryBot.create(:public_pregame)
+          game = FactoryBot.create(:game, :pregame)
           user_ids = game.users.ids
           valid_id = user_ids.first
 
@@ -220,7 +218,7 @@ RSpec.describe Game, type: :model do
 
       context 'if NO other users are rendezvouing' do
         it 'removes the user and the game' do
-          game = FactoryBot.create(:public_pregame)
+          game = FactoryBot.create(:game, :pregame)
           user = game.users.first
           game.users.where.not(id: user.id).destroy_all
 
@@ -235,7 +233,7 @@ RSpec.describe Game, type: :model do
     context '#rendezvous_a_new_user', working: true do
       context 'does nothing and returns false if' do
         it 'user doesnt exist' do
-          game = FactoryBot.create(:public_pregame)
+          game = FactoryBot.create(:game, :pregame)
           user_ids = game.users.ids
           invalid_id = (User.ids.last + 1)
 
@@ -245,7 +243,7 @@ RSpec.describe Game, type: :model do
         end
 
         it 'user is already associated with game' do
-          game = FactoryBot.create(:public_pregame)
+          game = FactoryBot.create(:game, :pregame)
           user_ids = game.users.ids
           repeated_id = user_ids.first
 
@@ -255,8 +253,8 @@ RSpec.describe Game, type: :model do
         end
 
         it 'player playing another game' do
-          user_associated_game = FactoryBot.create(:midgame)
-          new_game = FactoryBot.create(:public_pregame)
+          user_associated_game = FactoryBot.create(:game, :midgame)
+          new_game = FactoryBot.create(:game, :pregame)
           user = user_associated_game.users.last
 
           user_associated_game_user_ids = user_associated_game.users.ids
@@ -269,7 +267,7 @@ RSpec.describe Game, type: :model do
         end
 
         it 'the game is not in pregame mode' do
-          new_game = FactoryBot.create(:midgame)
+          new_game = FactoryBot.create(:game, :midgame)
           user = FactoryBot.create(:user)
 
           new_game_user_ids = new_game.users.ids
@@ -282,7 +280,7 @@ RSpec.describe Game, type: :model do
 
       context 'creates a GamesUser association from game to the new player' do
         it 'when a user is rendezvouing with a new game and isnt currently playing one' do
-          game = FactoryBot.create(:public_pregame)
+          game = FactoryBot.create(:game, :pregame)
           user = FactoryBot.create(:user)
           game_user_ids = game.users.ids
 
@@ -296,7 +294,7 @@ RSpec.describe Game, type: :model do
     context '#commit_a_rendezvoused_user', working: true do
       context 'does nothing and returns false if' do
         it 'user is not associated with the game already' do
-          game = FactoryBot.create(:public_pregame)
+          game = FactoryBot.create(:game, :pregame)
           user =  FactoryBot.create(:user)
           users_game_name = 'NameName'
 
@@ -307,7 +305,7 @@ RSpec.describe Game, type: :model do
         end
 
         it "the game's status != pregame" do
-          game = FactoryBot.create(:public_pregame)
+          game = FactoryBot.create(:game, :pregame)
           user =  FactoryBot.create(:user)
           users_game_name = 'NameName'
 
@@ -323,7 +321,7 @@ RSpec.describe Game, type: :model do
 
       context "assigns the user's game name to games_users.users_game_name if" do
         it 'associated user id and name string is received' do
-          game = FactoryBot.create(:public_pregame)
+          game = FactoryBot.create(:game, :pregame)
           user =  FactoryBot.create(:user)
           users_game_name = 'NameName'
 
@@ -339,14 +337,14 @@ RSpec.describe Game, type: :model do
 
     context '#next_player_after', working: true do
       it 'returns Empty relation if user not in game' do
-        game = FactoryBot.create(:midgame_without_cards)
+        game = FactoryBot.create(:game, :midgame_without_cards)
         invalid_id = game.users.last.id + 1
 
         expect(game.send(:next_player_after, invalid_id)).to eq User.none
       end
 
       it 'returns the next user' do
-        game = FactoryBot.create(:midgame_without_cards)
+        game = FactoryBot.create(:game, :midgame_without_cards)
         users = game.users.order(:id)
 
         expect(game.send(:next_player_after, users.first.id)).to eq users.second
@@ -357,7 +355,7 @@ RSpec.describe Game, type: :model do
 
     context '#create_placeholder_card', working: true do
       it "creates a drawing card if params passed a user_id and type = 'drawing'" do
-        game = FactoryBot.create(:midgame_without_cards, description_first: false)
+        game = FactoryBot.create(:game, :midgame_without_cards, description_first: false)
         user_id = game.users.first.id
 
         card = game.send(:create_placeholder_card, user_id, 'drawing')
@@ -369,7 +367,7 @@ RSpec.describe Game, type: :model do
       end
 
       it "creates a drawing card if params passed a user_id and type = 'description'" do
-        game = FactoryBot.create(:midgame_without_cards)
+        game = FactoryBot.create(:game, :midgame_without_cards)
         user_id = game.users.first.id
 
         card = game.send(:create_placeholder_card, user_id, 'description')
@@ -387,7 +385,7 @@ RSpec.describe Game, type: :model do
       context 'can set up a normal next drawing' do
 
         it 'with NO placeholder waiting for current user' do
-          game = FactoryBot.create(:midgame_without_cards)
+          game = FactoryBot.create(:game, :midgame_without_cards)
           gu = game.games_users.order(:id).first
           users = game.users.order(:id)
           card = FactoryBot.create(:description, uploader: users.first, idea_catalyst: gu, starting_games_user: gu) # description placeholder card
@@ -405,7 +403,7 @@ RSpec.describe Game, type: :model do
         end
 
         it 'with >= 1 placeholders waiting for current user' do
-          game = FactoryBot.create(:midgame_without_cards)
+          game = FactoryBot.create(:game, :midgame_without_cards)
           users = game.users.order(:id)
           games_users = game.games_users.order(:id)
 
@@ -439,7 +437,7 @@ RSpec.describe Game, type: :model do
 
       context 'can set up a normal next description', working: true do
         it 'with NO placeholder waiting for current user' do
-          game = FactoryBot.create(:midgame_without_cards, description_first: false)
+          game = FactoryBot.create(:game, :midgame_without_cards, description_first: false)
           gu = game.games_users.order(:id).first
           users = game.users.order(:id)
           card = FactoryBot.create(:drawing, uploader: users.first, idea_catalyst: gu, starting_games_user: gu) # drawing placeholder card
@@ -457,7 +455,7 @@ RSpec.describe Game, type: :model do
         end
 
         it 'with >= 1 placeholders waiting for current user' do
-          game = FactoryBot.create(:midgame_without_cards, description_first: false)
+          game = FactoryBot.create(:game, :midgame_without_cards, description_first: false)
           users = game.users.order(:id)
           games_users = game.games_users.order(:id)
 
@@ -490,7 +488,7 @@ RSpec.describe Game, type: :model do
       end
 
       it 'current card finished the set, but other sets are not finished. Not Game Over' do
-        game = FactoryBot.create(:midgame_without_cards)
+        game = FactoryBot.create(:game, :midgame_without_cards)
         gu = game.games_users.order(:id).first
         users = game.users.order(:id)
         gu.starting_card = FactoryBot.create(:description, uploader: users.first, starting_games_user: gu, idea_catalyst: gu) # description placeholder card
@@ -539,7 +537,7 @@ RSpec.describe Game, type: :model do
 
           expect_any_instance_of(Card).to receive(:parse_and_save_uri_for_drawing).once.and_call_original
 
-          game = FactoryBot.create(:midgame_without_cards, description_first: false)
+          game = FactoryBot.create(:game, :midgame_without_cards, description_first: false)
           gu = game.games_users.order(:id).first
           current_user = gu.user
           card_to_update = game.create_initial_placeholder_for_user current_user.id
@@ -557,7 +555,7 @@ RSpec.describe Game, type: :model do
         end
 
         it 'updating description' do
-          game = FactoryBot.create(:midgame_without_cards)
+          game = FactoryBot.create(:game, :midgame_without_cards)
 
           gu = game.games_users.order(:id).first
           current_user = gu.user
@@ -579,7 +577,7 @@ RSpec.describe Game, type: :model do
     context '#create_initial_placeholder_for_user', working: true do
       context 'starts game for a user by creating their initial' do
         it 'description placeholder card' do
-          game = FactoryBot.create(:midgame_without_cards)
+          game = FactoryBot.create(:game, :midgame_without_cards)
           user = game.users.last
           card = game.create_initial_placeholder_for_user user.id
           gu = card.starting_games_user
@@ -599,7 +597,7 @@ RSpec.describe Game, type: :model do
         end
 
         it 'drawing placeholder card' do
-          game = FactoryBot.create(:midgame_without_cards, description_first: false)
+          game = FactoryBot.create(:game, :midgame_without_cards, description_first: false)
           user = game.users.last
           card = game.create_initial_placeholder_for_user user.id
           gu = card.starting_games_user
@@ -624,7 +622,7 @@ RSpec.describe Game, type: :model do
     context '#create_subsequent_placeholder_for_next_player', working: true do
       context 'creates a placeholder card for the next player to be able to go' do
         it 'description placeholder card' do
-          game = FactoryBot.create(:midgame_without_cards, description_first: false)
+          game = FactoryBot.create(:game, :midgame_without_cards, description_first: false)
 
           user = game.users.order(:id).first
           gu = user.gamesuser_in_current_game
@@ -650,7 +648,7 @@ RSpec.describe Game, type: :model do
         end
 
         it 'drawing placeholder card' do
-          game = FactoryBot.create(:midgame_without_cards)
+          game = FactoryBot.create(:game, :midgame_without_cards)
 
           user = game.users.order(:id).first
           gu = user.gamesuser_in_current_game
@@ -678,7 +676,7 @@ RSpec.describe Game, type: :model do
 
     context '#send_out_broadcasts_to_players_after_card_upload', working: true do
       it 'broadcasts params to game channel ' do
-        game = FactoryBot.create(:midgame_without_cards)
+        game = FactoryBot.create(:game, :midgame_without_cards)
         sample_broadcast = [ { game_over: true }  ]
         allow(ActionCable).to receive_message_chain('server.broadcast').with("game_#{game.id}", sample_broadcast[0])
 
@@ -688,7 +686,7 @@ RSpec.describe Game, type: :model do
 
     context '#get_placeholder_card', working: true do
       it 'find a placeholder card' do
-        game = FactoryBot.create(:midgame_without_cards)
+        game = FactoryBot.create(:game, :midgame_without_cards)
 
         gu = game.games_users.order(:id).first
         gu2 = game.games_users.order(:id).second
