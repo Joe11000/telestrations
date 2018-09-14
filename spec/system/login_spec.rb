@@ -1,14 +1,14 @@
 require 'rails_helper'
 require 'support/login'
 
-RSpec.describe "On the Sessions Page", :type => :system do
+RSpec.describe "On the Sessions Page,", :type => :system do
   before :all do
     driven_by(:selenium)
   end
 
   include LoginHelper
 
-  context "can read the game instuctions", js: true do
+  context "user can read the game instuctions", js: true do
     it do
       visit root_path
 
@@ -19,27 +19,26 @@ RSpec.describe "On the Sessions Page", :type => :system do
   end
 
 
-  describe "logged in via" do
-    context "facebook", vcr: true,  js: true do
-      it 'user can see facebook username' do
+  describe "user logs in via" do
+    context "facebook" do
+      it 'sees his facebook username on the next page' do
         login_with 'facebook'
 
         expect(page).to redirect_to rendezvous_choose_game_type_page_path
-        # expect(page.current_path).to eq rendezvous_choose_game_type_page_path
         expect(page).to have_css('#user-name', text: /Facebook User/)
-        all('#user-avatar').each {|img| img['src'] }
+        all('#user-avatar').each {|img| img['src'] == User.last.provider_avatar.}
+        expect(User.last.attached?).to eq true
       end
     end
 
     context "twitter" do
-      it 'user can see twitter username' do
+      it 'sees his twitter info on the next page' do
         login_with 'twitter'
 
-        sleep 1
-        byebug
-        # expect(page.current_path).to eq rendezvous_choose_game_type_page_path
+        expect(page).to redirect_to rendezvous_choose_game_type_page_path
         expect(page).to have_css('#user-name', text: /Twitter User/)
         all('#user-avatar').each {|img| img['src'] }
+        expect(User.last.attached?).to eq true
       end
     end
   end

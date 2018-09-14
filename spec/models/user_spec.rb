@@ -13,14 +13,14 @@ RSpec.describe User, type: :model do
     end
   end
 
-  fcontext 'in schema' do
+  context 'in schema' do
     it { is_expected.to have_db_column(:name).of_type(:string).with_options({null: false}) }
     it { is_expected.to have_db_column(:provider).of_type(:string).with_options(null: false) }
     it { is_expected.to have_db_column(:uid).of_type(:integer).with_options(null: false) }
     it { is_expected.to have_db_column(:proveder_avatar).of_type(:string).with_options(null: false) }
   end
 
-  fcontext 'model validations' do
+  context 'model validations' do
     it { is_expected.to act_as_paranoid }
     it { is_expected.to have_many(:games_users).inverse_of(:user) }
     it { is_expected.to have_many(:games).through(:games_users)}

@@ -1,5 +1,4 @@
 class GamesController < ApplicationController
-  # layout 'layouts/game'
 
   before_action :redirect_if_not_logged_in
   before_action :redirect_if_can_not_view_game_page, only: :game_page

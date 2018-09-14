@@ -16,7 +16,8 @@
 
         #user-avatar-container.d-inline.ml-2
           = link_to all_postgames_page_url
-            - if current_user.provider_avatar.blank?
-              = image_tag 'anonymous.png', class: 'img-thumbnail', id: 'user-avatar', data: {id: 'user-avatar'}
+            - if current_user.provider_avatar.attached?
+              = image_tag polymorphic_url(current_user.provider_avatar.variant(resize: '50x50').processed), class: 'img-thumbnail', id: 'user-avatar', data: {id: 'user-avatar'}, size: '50x50'
             - else
-              = image_tag current_user.provider_avatar, class: 'img-thumbnail', id: 'user-avatar', data: {id: 'user-avatar'}
+              = image_tag 'anonymous.png', class: 'img-thumbnail', id: 'user-avatar', data: {id: 'user-avatar'}, size: '40x40'
+
