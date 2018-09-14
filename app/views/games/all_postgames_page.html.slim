@@ -6,14 +6,14 @@
         | Leave Group
   .clearfix
 
-  - unless @unassociated_cards.blank?
+  - unless @out_of_game_cards.blank?
     h3.h3#unassociated-cards-header.text-center = "Unassociated Cards I've uploaded"
     .unassociated-cards-i-uploaded
       - carousel_id = "unassociated-cards"
       .carousel.slide data-ride='carousel' data-interval='false' id=carousel_id
         /! Wrapper for slides
         .carousel-inner role="listbox"
-          - @unassociated_cards.each_with_index do |card_container, card_container_index|
+          - @out_of_game_cards.each_with_index do |card_container, card_container_index|
             .item class=(card_container_index == 0 ? 'active' : '')
               = image_tag card_container.drawing.url, alt: 'User Drawing'
 
@@ -26,7 +26,7 @@
           span.sr-only Next
         /! Indicators
         ol.carousel-indicators
-          - @unassociated_cards.each_with_index do |card_container, card_container_index|
+          - @out_of_game_cards.each_with_index do |card_container, card_container_index|
             li data-slide-to="#{card_container_index}" data-target="##{carousel_id}" class=(card_container_index == 0 ? 'active' : '')
       hr
 

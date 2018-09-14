@@ -160,7 +160,7 @@ RSpec.describe GamesController, :type => :request do
 
       get :all_postgames_page
 
-      expect(assigns[:unassociated_cards]).to eq [ card_to_find_1, card_to_find_2 ]
+      expect(assigns[:out_of_game_cards]).to eq [ card_to_find_1, card_to_find_2 ]
       expect(assigns[:current_user]).to eq current_user
       expect(assigns[:arr_of_postgame_card_sets]).to be_an Array
       expect(response).to have_http_status(:success)

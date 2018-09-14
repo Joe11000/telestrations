@@ -34,5 +34,19 @@ RSpec.describe Card, type: :model do
         expect(results.first).to eq c4
       end
     end
+
+
+    it '#unassociated_cards_for' do
+      current_user = @game.users.order(:id).first
+      random_games_user = FactoryBot.create :games_user
+      card_to_find_1 = FactoryBot.create(:drawing, uploader: current_user, starting_games_user: nil, idea_catalyst_id: nil)
+      card_to_find_2 = FactoryBot.create(:description, uploader: current_user, starting_games_user: nil, idea_catalyst_id: current_user)
+      card_to_find_3 = FactoryBot.create(:drawing, uploader: current_user, starting_games_user: random_games_user, idea_catalyst_id: nil)
+      card_to_find_4 = FactoryBot.create(:description, uploader: current_user, starting_games_user: random_games_user, idea_catalyst_id: current_user)
+
+      expect(Card.unassociated_cards(current_user.id)).to eq [ card_to_find_1 ]
+    end
   end
+
+
 end

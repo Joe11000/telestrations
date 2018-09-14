@@ -40,7 +40,7 @@ class GamesController < ApplicationController
   def all_postgames_page
     # want to pass down who the player was in each game so that i can highlight their games_user_name in the (postgame_page + all_postgames_page)
     @current_user = current_user
-    @unassociated_cards = current_user.unassociated_cards
+    @out_of_game_cards = Card.out_of_game_cards_for current_user.id
     @arr_of_postgame_card_sets = current_user.games.map(&:cards_from_finished_game)
   end
 

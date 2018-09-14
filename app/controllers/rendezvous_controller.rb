@@ -1,5 +1,4 @@
 class RendezvousController < ApplicationController
-
   before_action :redirect_if_not_logged_in
   before_action :redirect_if_currently_playing_game
 
@@ -25,9 +24,9 @@ class RendezvousController < ApplicationController
   def rendezvous_page
     @game = current_user.current_game
 
-    if @game.pregame? && current_user.users_game_name  # user already joined this game
+    if @game.try(:status) == 'pregame' && current_user.users_game_name  # user already joined this game
       @user_already_joined = true
-    elsif @game.pregame?
+    elsif @game.try(:status) == 'pregame'
       @user_already_joined = false
     else
       @user_already_joined = false
@@ -47,11 +46,9 @@ class RendezvousController < ApplicationController
           end
       end
     end
+    byebug
     @users_on_page = @game.unassociated_rendezousing_games_users.count
-    # if current_user.current_game == @game.id && @users_waiting.includes? current_user.users_game_name # user already has a
     @users_waiting = @game.users.map(&:users_game_name)
-    # @game.touch # remember activity for deleting if inactive later
-    render :rendezvous_page
   end
 
   def leave_pregame

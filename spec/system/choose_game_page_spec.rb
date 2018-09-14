@@ -19,7 +19,9 @@ RSpec.describe 'A User can' do
 
   end
 
-  it 'see username'
+  it 'see username' do
+
+  end
 
 
   it 'see avatar picture'
@@ -29,8 +31,22 @@ RSpec.describe 'A User can' do
     it 'private games' do
       login_with 'facebook'
 
-      click_on "Private"
-      expect(page).to have_content?("Join This Private Game")
+      private_game_info_str = "This game type can only be joined if code is known."
+      public_game_info_str = "This game type can be joined by either the join code or any player randomly joining a game."
+
+      # no popovers visible at first
+      expect(page).not_to have_content(Regex.new(private_game_info_str))
+      expect(page).not_to have_content(Regex.new(public_game_info_str))
+
+      # click public game popover and see info
+      page.execute_script(%( $("[data-id='info-about-public-game']").popover('show'))); # simulate clicking on instructions
+      expect(page).not_to have_content(Regex.new(private_game_info_str))
+      expect(page).to have_content(Regex.new(public_game_info_str))
+
+      # click private game popover and see info
+      page.execute_script(%( $("[data-id='info-about-private-game']").popover('show'))); # simulate clicking on instructions
+      expect(page).to have_content(Regex.new(private_game_info_str))
+      expect(page).not_to have_content(Regex.new(public_game_info_str))
     end
 
     it 'public games'
@@ -39,10 +55,24 @@ RSpec.describe 'A User can' do
   context 'create a new' do
     context 'private game' do
       it 'has a game id' do
+        login_with 'facebook'
 
+        within '#private-game-option' do
+          click_on "Private"
+        end
+
+        expect(page).to have_content?("Join This Private Game")
       end
 
-      it 'has no one else in it'
+      it 'has no one else in it' do
+        login_with 'facebook'
+
+        within '#private-game-option' do
+          click_on "Private"
+        end
+
+        expect(page).to have_content?("Join This Private Game")
+      end
 
     end
 

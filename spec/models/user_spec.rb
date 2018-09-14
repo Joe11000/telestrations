@@ -13,21 +13,19 @@ RSpec.describe User, type: :model do
     end
   end
 
-  context 'in schema' do
+  fcontext 'in schema' do
     it { is_expected.to have_db_column(:name).of_type(:string).with_options({null: false}) }
     it { is_expected.to have_db_column(:provider).of_type(:string).with_options(null: false) }
     it { is_expected.to have_db_column(:uid).of_type(:integer).with_options(null: false) }
     it { is_expected.to have_db_column(:proveder_avatar).of_type(:string).with_options(null: false) }
   end
 
-  xcontext 'model validations' do
-    it { is_expected.to act_as_paranoid }
+  fcontext 'model validations' do
     it { is_expected.to act_as_paranoid }
     it { is_expected.to have_many(:games_users).inverse_of(:user) }
     it { is_expected.to have_many(:games).through(:games_users)}
     it { is_expected.to have_many(:starting_cards).through(:games_users)}
     it { is_expected.to have_one(:current_game).through(:games_users)}
-
   end
 
 
@@ -37,8 +35,20 @@ RSpec.describe User, type: :model do
       @user = @game.users.first
     end
 
-    it '#current_game' do
-      expect(@user.current_game).to eq @game
+    context '#current_game' do
+      context 'returns a game instance if a user' do
+        it "is in the lobby(rendezvous page) and hasn't entered a character name" do
+          @user.current_game
+          expect(@user.current_game).to eq @game
+          expect(@user.current_game.postgame?).to eq false
+        end
+        it 'has entered a character name and is waiting for other users to join game'
+        it 'is midgame'
+      end
+
+      context 'returns a empty relation' do
+         it 'no game attached'
+       end
     end
 
     it '#gamesuser_in_current_game' do
@@ -53,13 +63,6 @@ RSpec.describe User, type: :model do
       expect(@user.users_game_name).to eq @user.gamesuser_in_current_game.users_game_name
     end
 
-    it '#unassociated_cards', working: true do
-      current_user = @game.users.order(:id).first
-      card_to_find_1 = FactoryBot.create(:drawing, uploader: current_user, starting_games_user: nil, idea_catalyst_id: nil)
-      card_to_find_2 = FactoryBot.create(:description, uploader: current_user, starting_games_user: nil, idea_catalyst_id: nil)
-
-      expect(current_user.unassociated_cards).to eq [ card_to_find_1, card_to_find_2 ]
-    end
 
   end
 end

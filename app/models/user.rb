@@ -7,11 +7,11 @@ class User < ActiveRecord::Base
   has_many :starting_cards, through: :games_users
 
   def current_game
-    games.order(:id).last || Game.none
+    games.order(:id).try(:last) || Game.none
   end
 
   def gamesuser_in_current_game
-    GamesUser.includes(:game).where(user_id: id).order(:id).try(:last) || GamesUser.none
+    GamesUser.where(user_id: id).order(:id).try(:last) || GamesUser.none
   end
 
   def starting_card_in_current_game
@@ -20,10 +20,6 @@ class User < ActiveRecord::Base
 
   def users_game_name
     gamesuser_in_current_game.try(:users_game_name)
-  end
-
-  def unassociated_cards
-    Card.where(uploader_id: id, starting_games_user_id: nil, idea_catalyst_id: nil).order(:id)
   end
 
 end

@@ -83,7 +83,7 @@ RSpec.describe RendezvousController, type: :request do
 
 
       context 'NO games exist with that join_code' do
-        render_views
+        # render_views
 
         it 'user is redirected to the same page with an alert message', future_test: true do
           Game.destroy_all
@@ -214,7 +214,7 @@ RSpec.describe RendezvousController, type: :request do
   end
 
   context '#get_updates', current: true do
-    render_views
+    # render_views
 
     it_behaves_like "redirect user to root if not logged in"
 
@@ -242,7 +242,7 @@ RSpec.describe RendezvousController, type: :request do
   end
 
   context '#update', js: true do
-    render_views
+    # render_views
 
     it_behaves_like "redirect user to root if not logged in"
 
