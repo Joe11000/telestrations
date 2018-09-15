@@ -12,6 +12,7 @@ App.rendezvous = App.cable.subscriptions.create { channel: "RendezvousChannel", 
     @perform 'start_game'
 
   received: (data) ->
+    debugger;
     if data.partial != undefined
       $("[data-id='currently-joined-partial-wrapper']").replaceWith(data.partial);
     else if data.start_game_signal

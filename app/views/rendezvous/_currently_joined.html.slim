@@ -3,7 +3,6 @@
     h5.text-center.my-0 = "Unjoined Users in Group ( #{local_assigns[:users_on_page].length} )"
 
   .col-xs-12.col-sm-12.currently-joined.mt-0.mb-1 data-id='currently-joined'
-    - byebug
     h3.text-center = "Users Joined ( #{local_assigns[:users_waiting].compact.length} )"
     .row
       - local_assigns[:users_waiting].each_slice(3) do |group|

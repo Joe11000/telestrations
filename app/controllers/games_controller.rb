@@ -1,10 +1,11 @@
 class GamesController < ApplicationController
 
   before_action :redirect_if_not_logged_in
-  before_action :redirect_if_can_not_view_game_page, only: :game_page
-  before_action :redirect_if_can_not_view_postgame_page, only: :postgame_page
+  before_action :redirect_if_can_not_view_game_page, if: :game_page
+  before_action :redirect_if_can_not_view_postgame_page, if: :postgame_page
 
   def game_page
+    byebug
     # @game from redirect method
     @placeholder_card = @game.get_placeholder_card current_user.id
     @player_is_finished = false
@@ -39,31 +40,35 @@ class GamesController < ApplicationController
   def all_postgames_page
     # want to pass down who the player was in each game so that i can highlight their games_user_name in the (postgame_page + all_postgames_page)
     @current_user = current_user
-    @out_of_game_cards = Card.out_of_game_cards_for current_user.id
+    @out_of_game_cards = Card.where(out_of_game_card_upload: true, user: current_user)
     @arr_of_postgame_card_sets = current_user.games.map(&:cards_from_finished_game)
   end
 
 
   protected
     def redirect_if_can_not_view_game_page
-      @game = current_user.try(:current_game)
+      set_user
 
       case @game.try(:status)
       when 'pregame', nil
         redirect_to rendezvous_choose_game_type_page_url
       when 'postgame'
-       redirect_to postgame_page_url
+        redirect_to postgame_page_url
       end
     end
 
     def redirect_if_can_not_view_postgame_page
-      @game = current_user.try(:current_game)
+      set_user
 
       case @game.try(:status)
       when 'pregame', nil
         redirect_to rendezvous_choose_game_type_page_url
       when 'midgame'
-       redirect_to game_page_url
+        redirect_to game_page_url
       end
+    end
+
+    def set_user
+      @game ||= current_user.try(:current_game)
     end
 end

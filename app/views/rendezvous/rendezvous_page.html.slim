@@ -14,7 +14,7 @@
           span.h3.randezvous-join-code data-id="randezvous-join-code" data-game-id="#{@game.id}" =< @game.join_code
 
       .col-xs-12.col-sm-12.mt-5
-        .loading-gif.text-center.invisible
+        .loading-gif.text-center
           = image_tag 'loading_icon.gif', class: 'text-center', width:'80px'
 
       .col-xs-12.col-sm-12.text-center.mt-5 data-id='rendezvous-start-game-button-container' class=(@user_already_joined ? '' : 'd-none')

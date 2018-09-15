@@ -9,7 +9,9 @@ class RendezvousChannel < ApplicationCable::Channel
       stop_all_streams
       stream_from "rendezvous_#{params[:join_code]}"
       game.rendezvous_a_new_user(current_user.id)
+
       html = render_user_partial_for_game( params[:join_code] )
+
       ActionCable.server.broadcast("rendezvous_#{params[:join_code]}", partial: html)
     end
   end
@@ -39,7 +41,7 @@ class RendezvousChannel < ApplicationCable::Channel
   def start_game
     game = Game.find_by(join_code: params[:join_code])
 
-    return if game.blank? || game.status == 'midgame' # return if game doesn't exist or simultaneous press race condition
+    return if game.blank? || game.status != 'pregame' # return if game doesn't exist or simultaneous press race condition
 
     game.update(status: 'midgame', join_code: nil)
 
@@ -47,7 +49,7 @@ class RendezvousChannel < ApplicationCable::Channel
       game.unassociated_rendezousing_games_users.destroy_all
 
     # broadcast a message to try and go to the game start page. The before action will allow the commited people through to their game and send the uncommited people back to the game choice page.
-      ActionCable.server.broadcast("rendezvous_#{params[:join_code]}", start_game_signal: game_page_url)
+    ActionCable.server.broadcast("rendezvous_#{params[:join_code]}", start_game_signal: game_page_url)
 
     game.update( passing_order: game.users.order(:id).ids.shuffle.to_s )
   end
@@ -57,8 +59,8 @@ class RendezvousChannel < ApplicationCable::Channel
     def render_user_partial_for_game join_code
       game = Game.find_by(join_code: join_code)
       users_waiting = Game.all_users_game_names(join_code)
-      users_on_page = game.unassociated_rendezousing_games_users.count
-
+      users_on_page = game.unassociated_rendezousing_games_users
+      # byebug
       ApplicationController.render(partial: 'rendezvous/currently_joined', locals: { users_waiting: users_waiting, users_on_page: users_on_page })
     end
 end

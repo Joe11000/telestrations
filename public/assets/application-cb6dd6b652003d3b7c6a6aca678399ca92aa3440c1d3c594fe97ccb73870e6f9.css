@@ -10573,7 +10573,7 @@ a.text-dark:hover, a.text-dark:focus {
 }
 
 /* line 36, /Users/joe/Dropbox/coding/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/post_game.scss */
-#all-postgames-page #unassociated-cards-header {
+#all-postgames-page #out-of-game-cards-header {
   text-align: center;
 }
 

@@ -8,7 +8,7 @@ class OutOfGameCardUploadController < ApplicationController
   def create
     begin
       create_params[:drawings].each do |drawing|
-        Card.create(uploader_id: current_user.id, medium: 'drawing', drawing: drawing)
+        Card.create(uploader_id: current_user.id, medium: 'drawing', drawing: drawing, out_of_game_card_upload: true)
       end
       flash[:notice] = %(Successfully Uploaded #{create_params[:drawings].length} #{'Image'.pluralize(create_params[:drawings].length)}. <a href=#{all_postgames_page_path}>View Uploaded Drawings</a> )
       redirect_to(action: :new) and return

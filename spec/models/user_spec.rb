@@ -30,21 +30,34 @@ RSpec.describe User, type: :model do
 
   context 'methods' do
     # before(:all) do
-    #   @game = FactoryBot.create(:midgame)
-    #   @user = @game.users.first
+    #   game = FactoryBot.create(:midgame)
+    #   @user = game.users.first
     # end
     context '#current_game' do
 
-      context 'returns a game instance' do
+      context 'returns a game instance', r5: true do
         context 'if a user' do
           it "is in the lobby(rendezvous page) and hasn't entered a character name" do
-            @game = FactoryBot.create :game, :pregame
-            @user.current_game
-            expect(@user.current_game).to eq @game
-            expect(@user.current_game.postgame?).to eq false
+            game = FactoryBot.create :game, :pregame
+            user = game.users.first
+
+            expect(user.current_game).to eq game
           end
-          it 'has entered a character name and is waiting for other users to join game'
-          it 'is midgame'
+
+          it 'has entered a character name and is waiting for other users to join game' do
+            game = FactoryBot.create :game, :pregame
+            game.games_users.update(users_game_name: 'Yogi')
+            user = game.users.first
+
+            expect(user.current_game).to eq game
+          end
+
+          it 'is midgame' do
+            game = FactoryBot.create :game, :midgame
+            user = game.users.first
+
+            expect(user.current_game).to eq game
+          end
         end
       end
 
@@ -54,7 +67,7 @@ RSpec.describe User, type: :model do
     end
 
     it '#gamesuser_in_current_game' do
-      expect(@user.gamesuser_in_current_game).to eq GamesUser.find_by(game_id: @game.id, user_id: @user.id)
+      expect(@user.gamesuser_in_current_game).to eq GamesUser.find_by(game_id: game.id, user_id: @user.id)
     end
 
     it '#starting_card_in_current_game' do

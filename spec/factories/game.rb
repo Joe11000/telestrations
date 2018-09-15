@@ -8,11 +8,12 @@ FactoryBot.define do
       num_of_players { 3 }
     end
 
-    trait :public_game
-      game_type { 'public' }
+    trait :public_game do
+      game_type { 'public'}
+
     end
 
-    trait :private_game
+    trait :private_game do
       game_type { 'private' }
     end
 
@@ -56,7 +57,7 @@ end
 
 
 def add_players game, evaluator
-  game.users << create_list(:user, evaluator.num_of_players)
+  game.users << FactoryBot.create_list(:user, evaluator.num_of_players)
 end
 
 def midgame_associations game, description_first

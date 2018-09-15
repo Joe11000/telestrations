@@ -27,7 +27,7 @@
               = form_tag(join_game_url, class: 'form-horizontal', method: "post")
                 .form-group#join-code-submit-group.mb-0 data-id='join-code-submit-group'
                   .input-group.join-code-input-group.mb-0 class=(flash.now[:alert].blank? ? '' : 'has-error')
-                    = text_field_tag(:join_code, nil,  {data: {id: 'join-code-text-field'}, placeholder: 'Join Code', class: 'form-control'})
+                    = text_field_tag(:join_code, nil,  {data: {id: 'join-code-text-field'}, placeholder: 'Join Code', class: 'form-control join-code-text-field'})
                     .input-group-btn
                       button.btn.btn-primary type='button' Join Game
 

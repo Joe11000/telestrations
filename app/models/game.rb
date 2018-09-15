@@ -9,7 +9,7 @@ class Game < ActiveRecord::Base
   enum game_type: %w( public private ), _suffix: 'game'
 
   after_find do
-    self.touch # remember activity for deleting if inactive later
+    # self.touch # remember activity for deleting if inactive later
   end
 
   # this may get problematic if the number of groups playing gets a certain percentage close enough to 456976....not likely
@@ -131,7 +131,7 @@ class Game < ActiveRecord::Base
       card.update(description_text: upload_card_params['description_text'])
       return card
     else
-      card.parse_and_save_uri_for_drawing upload_card_params
+      # card.parse_and_save_uri_for_drawing upload_card_params
       return card
     end
   end
