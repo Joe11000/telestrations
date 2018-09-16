@@ -12,7 +12,7 @@ class RendezvousController < ApplicationController
   def join_game
     @game = Game.find_by(join_code: join_game_params.upcase)
     if @game.blank?
-      redirect_to(rendezvous_choose_game_type_page_url, alert: "No players in group #{join_game_params}") and return
+      redirect_to(rendezvous_choose_game_type_page_url, alert: "Group #{join_game_params} doesn't exist.") and return
     else
       @game.touch # remember activity for deleting if inactive later
       @users_waiting = Game.all_users_game_names(@game.id)
@@ -22,6 +22,7 @@ class RendezvousController < ApplicationController
   end
 
   def rendezvous_page
+    byebug
     @game = current_user.current_game
 
     if @game.blank?

@@ -29,7 +29,7 @@
                   .input-group.join-code-input-group.mb-0 class=(flash.now[:alert].blank? ? '' : 'has-error')
                     = text_field_tag(:join_code, nil,  {data: {id: 'join-code-text-field'}, placeholder: 'Join Code', class: 'form-control join-code-text-field'})
                     .input-group-btn
-                      button.btn.btn-primary type='button' Join Game
+                      button.btn.btn-primary required='required' type='button' Join Game
 
               small.d-none.help-block Invalid join code
 

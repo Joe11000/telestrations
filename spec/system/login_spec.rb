@@ -13,6 +13,7 @@ RSpec.describe "On the Sessions Page,", :type => :system do
       visit root_path
 
       expect(current_path).to eq('/')
+
       page.execute_script("$('.instructions-container').popover('show')"); # simulate clicking on instructions
       expect(page).to have_content(/Like the game telephone/)
     end

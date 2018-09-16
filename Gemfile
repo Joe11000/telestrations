@@ -129,3 +129,4 @@ gem 'bullet'
 # ie TokenPhrase.generate(' ', numbers: false)
 gem 'token_phrase'
 gem 'mini_magick'
+gem 'rubocop'

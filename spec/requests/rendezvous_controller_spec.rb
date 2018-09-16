@@ -5,6 +5,7 @@ RSpec.describe RendezvousController, type: :request do
   shared_examples_for "redirect user to root if not logged in" do
     context 'user NOT logged in' do
       it 'redirects them back to home page' do
+        byebug
         controller.session.clear
         get :choose_game_type_page
 
