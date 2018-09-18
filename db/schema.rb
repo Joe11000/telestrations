@@ -61,7 +61,7 @@ ActiveRecord::Schema.define(version: 2018_09_15_194459) do
     t.datetime "deleted_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.text "passing_order", default: ""
+    t.string "passing_order", default: ""
     t.boolean "description_first", default: true
     t.index ["deleted_at"], name: "index_games_on_deleted_at"
   end

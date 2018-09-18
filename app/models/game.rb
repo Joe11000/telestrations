@@ -1,12 +1,12 @@
 class Game < ActiveRecord::Base
   has_many :games_users, inverse_of: :game, dependent: :destroy
   has_many :users, through: :games_users
-  has_many :starting_card, through: :games_users
+  has_many :starting_cards, through: :games_users
 
   validates :join_code, uniqueness: true, length: { is: 4 }, if: Proc.new { !join_code.blank? }
 
   enum status: %w( pregame midgame postgame )
-  enum game_type: %w( public private ), _suffix: 'game'
+  enum game_type: %w( public private ), _suffix: :game
 
   after_find do
     # self.touch # remember activity for deleting if inactive later
@@ -33,7 +33,12 @@ class Game < ActiveRecord::Base
   end
 
   # being scoping methods
-  def self.all_users_game_names join_code
+  def self.all_users_game_names_2 join_code
+    byebug
+    Game.find_by(join_code: join_code).games_users.pluck(:users_game_name)
+  end
+
+    def self.all_users_game_names join_code
     GamesUser.includes(:game).where(games: { join_code: join_code }).map(&:users_game_name)
   end
 
@@ -58,7 +63,22 @@ class Game < ActiveRecord::Base
   end
 
 
+  def self.start_game join_code
+    Game.find_by(join_code: params[:join_code]).try(:start_game)
+  end
 
+  def start_game
+    return false unless game.pregame? # return if game doesn't exist or simultaneous press race condition
+
+    self.update(status: 'midgame', join_code: nil)
+
+    # remove user games_users association to people that didn't submit a name
+    self.unassociated_rendezousing_games_users.destroy_all
+
+    self.update( passing_order: game.users.order(:id).ids.shuffle.to_s )
+
+    true
+  end
 
 
 # ie
@@ -221,7 +241,7 @@ class Game < ActiveRecord::Base
     return [] unless status == 'postgame'
 
     result = []
-    games_users.order(:id).each do |gu|
+    games_users.each do |gu|
       gu_set = []
       gu.cards.each do |card|
         gu_set << [ card.uploader.users_game_name, card ]

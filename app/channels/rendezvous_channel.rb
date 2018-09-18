@@ -39,19 +39,10 @@ class RendezvousChannel < ApplicationCable::Channel
   end
 
   def start_game
-    game = Game.find_by(join_code: params[:join_code])
-
-    return if game.blank? || game.status != 'pregame' # return if game doesn't exist or simultaneous press race condition
-
-    game.update(status: 'midgame', join_code: nil)
-
-    # remove user games_users association to people that didn't submit a name
-      game.unassociated_rendezousing_games_users.destroy_all
+    Game.start_game params[:join_code]
 
     # broadcast a message to try and go to the game start page. The before action will allow the commited people through to their game and send the uncommited people back to the game choice page.
     ActionCable.server.broadcast("rendezvous_#{params[:join_code]}", start_game_signal: game_page_url)
-
-    game.update( passing_order: game.users.order(:id).ids.shuffle.to_s )
   end
 
   protected

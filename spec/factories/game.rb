@@ -1,5 +1,6 @@
 FactoryBot.define do
 
+  # default game is private 3 person game with drawing first
   factory :game do
     description_first { true }
     game_type { 'private'}
@@ -10,7 +11,6 @@ FactoryBot.define do
 
     trait :public_game do
       game_type { 'public'}
-
     end
 
     trait :private_game do

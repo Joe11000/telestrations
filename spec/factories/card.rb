@@ -21,25 +21,6 @@ FactoryBot.define do
       end
     end
 
-
-
-    # factory :drawing do
-
-    #   medium { 'drawing' }
-
-    #   trait :out_of_game_card_upload do
-    #     association :starting_games_user, factory: :nil
-    #     association :idea_catalyst, factory: :nil
-    #     out_of_game_card_upload { true}
-    #   end
-
-    #   trait :starting_card do
-    #     association :idea_catalyst, :factory => :games_user
-    #   end
-
-    # end
-
-
     factory :drawing do
       medium { "drawing" }
 
@@ -56,6 +37,10 @@ FactoryBot.define do
         after(:build) do |user|
           user.idea_catalyst = user.starting_games_user
         end
+      end
+
+      trait :out_of_game_card_upload do
+        out_of_game_card_upload { true }
       end
     end
   end
