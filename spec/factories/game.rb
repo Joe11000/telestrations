@@ -29,7 +29,8 @@ FactoryBot.define do
 
       after(:create) do |game, evaluator|
         add_players game, evaluator
-        game.update(passing_order: game.users.ids.to_s, join_code: nil)
+        game.start_game
+        game.update(passing_order: game.user_ids.to_s, join_code: nil)
       end
     end
 
@@ -40,7 +41,7 @@ FactoryBot.define do
 
       after(:create) do |game, evaluator|
         midgame_associations game, evaluator
-        game.update(passing_order: game.users.ids.to_s, join_code: nil)
+        game.update(passing_order: game.user_ids.to_s, join_code: nil)
       end
     end
 
@@ -49,7 +50,7 @@ FactoryBot.define do
 
       after(:create) do |game, evaluator|
         postgame_associations game
-        game.update(passing_order: game.users.ids.to_s, join_code: nil)
+        game.update(passing_order: game.user_ids.to_s, join_code: nil)
       end
     end
   end
@@ -115,7 +116,7 @@ def postgame_associations game
   gu3.starting_card.child_card = FactoryBot.create(:drawing, uploader: user1, starting_games_user: gu3)
   gu3.starting_card.child_card.child_card = FactoryBot.create(:description, uploader: user2, starting_games_user: gu3)
 
-  game.update(passing_order: game.users.ids.to_s)
+  game.update(passing_order: game.user_ids.to_s)
 end
 
 

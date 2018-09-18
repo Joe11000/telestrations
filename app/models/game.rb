@@ -68,14 +68,14 @@ class Game < ActiveRecord::Base
   end
 
   def start_game
-    return false unless game.pregame? # return if game doesn't exist or simultaneous press race condition
+    return false if (!pregame? && games_user_ids.length < 2) # return if game doesn't exist or simultaneous press race condition
 
-    self.update(status: 'midgame', join_code: nil)
-
+    update(status: 'midgame', join_code: nil)
+    byebug
     # remove user games_users association to people that didn't submit a name
-    self.unassociated_rendezousing_games_users.destroy_all
+    unassociated_rendezousing_games_users.destroy_all
 
-    self.update( passing_order: game.users.order(:id).ids.shuffle.to_s )
+    update( passing_order: user_ids.shuffle.to_s )
 
     true
   end
