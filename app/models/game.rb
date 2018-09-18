@@ -32,13 +32,7 @@ class Game < ActiveRecord::Base
     Card.includes(:starting_games_user).where(games_users: { game_id: id }).order(:id)
   end
 
-  # being scoping methods
-  def self.all_users_game_names_2 join_code
-    byebug
-    Game.find_by(join_code: join_code).games_users.pluck(:users_game_name)
-  end
-
-    def self.all_users_game_names join_code
+  def self.all_users_game_names join_code
     GamesUser.includes(:game).where(games: { join_code: join_code }).map(&:users_game_name)
   end
 
@@ -244,7 +238,7 @@ class Game < ActiveRecord::Base
     games_users.each do |gu|
       gu_set = []
       gu.cards.each do |card|
-        gu_set << [ card.uploader.users_game_name, card ]
+        gu_set << [ card.uploader.users_game_name_in_current_game, card ]
       end
        result << gu_set
     end

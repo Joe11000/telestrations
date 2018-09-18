@@ -65,7 +65,8 @@ RSpec.describe User, type: :model do
         @pregame = FactoryBot.create :game, :pregame
 
         @pregame_with_gu_update = FactoryBot.create :game, :pregame
-        @pregame_with_gu_update.games_users.update(users_game_name: 'Yogi')
+        @updated_gu = @pregame_with_gu_update.games_users.first
+        @updated_gu.update(users_game_name: 'Yogi')
 
         @midgame = FactoryBot.create :game, :midgame
         @postgame = FactoryBot.create :game, :postgame
@@ -161,7 +162,7 @@ RSpec.describe User, type: :model do
     end
 
 
-    context '#users_game_name', :r5 do
+    context '#users_game_name_in_current_game', :r5 do
       before :all do
         @game1 = FactoryBot.create :game, :pregame
         @user1 = @game1.users.first
@@ -169,23 +170,37 @@ RSpec.describe User, type: :model do
         @game2 = FactoryBot.create :game, :midgame
         @user2 = @game2.users.first
 
+        @pregame_with_gu_update = FactoryBot.create :game, :pregame
+        @updated_gu = @pregame_with_gu_update.games_users.first
+        @updated_gu.update(users_game_name: 'Yogi')
+
+        @midgame_with_gu_update = FactoryBot.create :game, :midgame
+        @updated_gu = @midgame_with_gu_update.games_users.first
+        @updated_gu.update(users_game_name: 'Yogi')
+
+
+
         @game3 = FactoryBot.create :game, :postgame
         @user3 = @game3.users.first
       end
 
       context 'returns a games user of the current game if' do
+        it 'game status is pregame' do
+          expect(@updated_gu.user.users_game_name_in_current_game).to eq 'Yogi'
+        end
+
         it 'game status is midgame' do
-          expect(@user2.users_game_name).to eq GamesUser.find_by(game_id: @game2.id, user_id: @user2.id).users_game_name
+          expect(@updated_gu.user.users_game_name_in_current_game).to eq 'Yogi'
         end
       end
 
       context 'returns a nil user of the current game if' do
-        it 'game status is pregame' do
-          expect(@user1.users_game_name).to eq nil
+        it 'game status without updateis pregame' do
+          expect(@user1.users_game_name_in_current_game).to eq nil
         end
 
         it 'game status is postgame' do
-          expect(@user3.users_game_name).to eq nil
+          expect(@user3.users_game_name_in_current_game).to eq nil
         end
       end
     end

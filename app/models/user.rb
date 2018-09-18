@@ -8,7 +8,7 @@ class User < ActiveRecord::Base
   has_many :starting_cards, through: :games_users
 
   def current_game
-    games.where(status: ['pregame', 'midgame']).order(:id).try(:last) # || Game.none
+    games.where(status: ['pregame', 'midgame']).order(id: :asc).try(:last) # || Game.none
   end
 
   def gamesuser_in_current_game
@@ -19,7 +19,7 @@ class User < ActiveRecord::Base
     gamesuser_in_current_game.try(:starting_card)
   end
 
-  def users_game_name
+  def users_game_name_in_current_game
     gamesuser_in_current_game.try(:users_game_name)
   end
 

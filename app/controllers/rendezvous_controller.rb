@@ -42,7 +42,7 @@ class RendezvousController < ApplicationController
             @game.touch
           end
       end
-    elsif @game.pregame? && current_user.users_game_name  # user already joined this game
+    elsif @game.pregame? && current_user.users_game_name_in_current_game  # user already joined this game
       @user_already_joined = true
     elsif @game.pregame?
       @user_already_joined = false
@@ -50,7 +50,7 @@ class RendezvousController < ApplicationController
       # shouldn't have gotten here, something is wrong
     end
     @users_on_page = @game.unassociated_rendezousing_games_users
-    @users_waiting = @game.users.map(&:users_game_name)
+    @users_waiting = @game.users.map(&:users_game_name_in_current_game)
   end
 
   def leave_pregame

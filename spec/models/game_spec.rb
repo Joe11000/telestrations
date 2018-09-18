@@ -198,7 +198,7 @@ RSpec.describe Game, type: :model do
     end
   end
 
-  context 'methods', :r5_wip do
+  context 'methods'  do
     it '#random_public_game' do
       g1 = FactoryBot.create(:game, :pregame, :public_game)
       FactoryBot.create(:game, :midgame)
@@ -231,9 +231,7 @@ RSpec.describe Game, type: :model do
 
       it 'returns correct ordering of cards', :r5_wip do
         first_user, second_user, third_user = @game.users
-        first_user_next_card, second_user, third_user
 
-        while()
         @game.games_users.pluck(:users_game_name)
 
         first_starting_card, second_starting_card, third_starting_card = @game.starting_cards
