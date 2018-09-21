@@ -51,7 +51,7 @@ RSpec.describe GamesController, :type => :request do
         end.to change{Card.count}.by(1)
 
         expect(assigns[:game]).to eq game
-        expect(assigns[:placeholder_card]).to eq current_user.starting_card_in_current_game
+        expect(assigns[:placeholder_card]).to eq current_user.current_starting_card
         expect(assigns[:prev_card]).to eq Card.none
         expect(assigns[:current_user]).to eq current_user
         expect(response).to have_http_status(:success)

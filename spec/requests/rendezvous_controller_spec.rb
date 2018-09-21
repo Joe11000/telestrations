@@ -53,7 +53,7 @@ RSpec.describe RendezvousController, type: :request do
           expect(assigns[:user_already_joined].id).to eq false
           expect(assigns[:game].id).to eq game.id
           expect(assigns[:game].try(:game_type)).to eq 'public'
-          expect(assigns[:users_waiting]).to eq game.users.map(&:users_game_name_in_current_game)
+          expect(assigns[:users_waiting]).to eq game.users.map(&:current_games_user_name)
         end
 
         it 'user can join a private game' do
@@ -68,7 +68,7 @@ RSpec.describe RendezvousController, type: :request do
 
           expect(assigns[:game].id).to eq game.id
           expect(assigns[:game].try(:game_type)).to eq 'private'
-          expect(assigns[:users_waiting]).to eq game.users.map(&:users_game_name_in_current_game)
+          expect(assigns[:users_waiting]).to eq game.users.map(&:current_games_user_name)
         end
 
         it 'renders the correct page' do
@@ -189,7 +189,7 @@ RSpec.describe RendezvousController, type: :request do
 
             expect(assigns[:game].id).to eq game.id
             expect(assigns[:game].try(:is_private)).to eq false # public game created
-            expect(assigns[:users_waiting]).to eq game.users.map(&:users_game_name_in_current_game) # has a user waiting in rendezvous
+            expect(assigns[:users_waiting]).to eq game.users.map(&:current_games_user_name) # has a user waiting in rendezvous
             expect(response.status).to eq(200)
           end
 

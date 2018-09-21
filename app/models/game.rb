@@ -58,7 +58,7 @@ class Game < ActiveRecord::Base
 
 
   def self.start_game join_code
-    Game.find_by(join_code: params[:join_code]).try(:start_game)
+    Game.find_by(join_code: join_code).try(:start_game)
   end
 
   def start_game
@@ -70,7 +70,6 @@ class Game < ActiveRecord::Base
     unassociated_rendezousing_games_users.destroy_all
 
     update( passing_order: user_ids.shuffle.to_s )
-
     true
   end
 
@@ -84,20 +83,21 @@ class Game < ActiveRecord::Base
     user = User.find_by(id: user_id)
     user_current_game = user.try(:current_game)
     if  user.blank? ||                        # player doesn't exist or
-        users.find_by(id: user.id) ||         # player already rendezvousing with game
-        user_current_game.try(:status) == 'midgame' || # c) player is currently in the middle of a game
-        status != 'pregame'
+        user.current_games_user_name ||         # player already rendezvousing with game
+        user_current_game.try(:midgame?)  # c) player is currently in the middle of a game
+
       return false
 
-    elsif user_current_game.try(:status) == 'pregame'
-      # current game is not underway or over
-      user.gamesuser_in_current_game.destroy
+    elsif user_current_game.try(:pregame?)
+      # remove other game user that the user wishes to not be associated with any more
+      user.current_games_user.destroy
     end
 
     self.users << user
     true
   end
 
+  # test right now
   def commit_a_rendezvoused_user user_id, users_game_name=''
     gu = GamesUser.find_by(user_id: user_id, game_id: id)
     return false if gu.blank? || status != 'pregame'
@@ -145,6 +145,7 @@ class Game < ActiveRecord::Base
       card.update(description_text: upload_card_params['description_text'])
       return card
     else
+      card.drawing.attach upload_card_params
       # card.parse_and_save_uri_for_drawing upload_card_params
       return card
     end
@@ -238,7 +239,7 @@ class Game < ActiveRecord::Base
     games_users.each do |gu|
       gu_set = []
       gu.cards.each do |card|
-        gu_set << [ card.uploader.users_game_name_in_current_game, card ]
+        gu_set << [ card.uploader.current_games_user_name, card ]
       end
        result << gu_set
     end

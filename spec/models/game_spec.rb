@@ -309,66 +309,75 @@ RSpec.describe Game, type: :model do
       end
     end
 
-    # context '#rendezvous_a_new_user', working: true do
-    #   context 'does nothing and returns false if' do
-    #     it 'user doesnt exist' do
-    #       game = FactoryBot.create(:game, :pregame)
-    #       user_ids = game.users.ids
-    #       invalid_id = (User.ids.last + 1)
+    context '#rendezousing_games_users', :r5_wip do
+      it do
+        gu = FactoryBot.create(:games_user)
+        FactoryBot.create(:games_user)
 
-    #       expect(game.rendezvous_a_new_user invalid_id).to eq false
-    #       game.reload
-    #       expect(game.users.ids).to eq user_ids
-    #     end
 
-    #     it 'user is already associated with game' do
-    #       game = FactoryBot.create(:game, :pregame)
-    #       user_ids = game.users.ids
-    #       repeated_id = user_ids.first
+      end
+    end
 
-    #       expect(game.rendezvous_a_new_user repeated_id).to eq false
-    #       game.reload
-    #       expect(game.users.ids).to eq user_ids
-    #     end
+    xcontext '#rendezvous_a_new_user', :r5_wip do
+      context 'does nothing and returns false if' do
+        it 'user doesnt exist' do
+          game = FactoryBot.create(:game, :pregame)
+          user_ids = game.users.ids
+          invalid_id = (User.ids.last + 1)
+          byebug
+          expect(game.rendezvous_a_new_user invalid_id).to eq false
+          game.reload
+          expect(game.users.ids).to eq user_ids
+        end
 
-    #     it 'player playing another game' do
-    #       user_associated_game = FactoryBot.create(:game, :midgame)
-    #       new_game = FactoryBot.create(:game, :pregame)
-    #       user = user_associated_game.users.last
+        it 'user is already associated with game' do
+          game = FactoryBot.create(:game, :pregame)
+          user_ids = game.users.ids
+          repeated_id = user_ids.first
 
-    #       user_associated_game_user_ids = user_associated_game.users.ids
-    #       new_game_user_ids = new_game.users.ids
+          expect(game.rendezvous_a_new_user repeated_id).to eq false
+          game.reload
+          expect(game.users.ids).to eq user_ids
+        end
 
-    #       expect(new_game.rendezvous_a_new_user user.id).to eq false
-    #       new_game.reload
-    #       expect(new_game.users.ids).to eq new_game_user_ids
-    #       expect(user_associated_game.users.ids).to eq user_associated_game_user_ids
-    #     end
+        it 'player playing another game' do
+          user_associated_game = FactoryBot.create(:game, :midgame)
+          new_game = FactoryBot.create(:game, :pregame)
+          user = user_associated_game.users.last
 
-    #     it 'the game is not in pregame mode' do
-    #       new_game = FactoryBot.create(:game, :midgame)
-    #       user = FactoryBot.create(:user)
+          user_associated_game_user_ids = user_associated_game.users.ids
+          new_game_user_ids = new_game.users.ids
 
-    #       new_game_user_ids = new_game.users.ids
+          expect(new_game.rendezvous_a_new_user user.id).to eq false
+          new_game.reload
+          expect(new_game.users.ids).to eq new_game_user_ids
+          expect(user_associated_game.users.ids).to eq user_associated_game_user_ids
+        end
 
-    #       expect(new_game.rendezvous_a_new_user user.id).to eq false
-    #       new_game.reload
-    #       expect(new_game.users.ids).to eq new_game_user_ids
-    #     end
-    #   end
+        it 'the game is not in pregame mode' do
+          new_game = FactoryBot.create(:game, :midgame)
+          user = FactoryBot.create(:user)
 
-    #   context 'creates a GamesUser association from game to the new player' do
-    #     it 'when a user is rendezvouing with a new game and isnt currently playing one' do
-    #       game = FactoryBot.create(:game, :pregame)
-    #       user = FactoryBot.create(:user)
-    #       game_user_ids = game.users.ids
+          new_game_user_ids = new_game.users.ids
 
-    #       expect(game.rendezvous_a_new_user user.id).to eq true
-    #       game.reload
-    #       expect(game.users.ids).to eq game_user_ids + [user.id]
-    #     end
-    #   end
-    # end
+          expect(new_game.rendezvous_a_new_user user.id).to eq false
+          new_game.reload
+          expect(new_game.users.ids).to eq new_game_user_ids
+        end
+      end
+
+      context 'creates a GamesUser association from game to the new player' do
+        it 'when a user is rendezvouing with a new game and isnt currently playing one' do
+          game = FactoryBot.create(:game, :pregame)
+          user = FactoryBot.create(:user)
+          game_user_ids = game.users.ids
+
+          expect(game.rendezvous_a_new_user user.id).to eq true
+          game.reload
+          expect(game.users.ids).to eq game_user_ids + [user.id]
+        end
+      end
+    end
 
     # context '#commit_a_rendezvoused_user', working: true do
     #   context 'does nothing and returns false if' do
@@ -702,7 +711,7 @@ RSpec.describe Game, type: :model do
     #       game = FactoryBot.create(:game, :midgame_without_cards, description_first: false)
 
     #       user = game.users.order(:id).first
-    #       gu = user.gamesuser_in_current_game
+    #       gu = user.current_games_user
 
     #       gu.starting_card = FactoryBot.create(:drawing, uploader_id: user.id, starting_games_user: gu)
     #       prev_card = gu.starting_card
@@ -728,7 +737,7 @@ RSpec.describe Game, type: :model do
     #       game = FactoryBot.create(:game, :midgame_without_cards)
 
     #       user = game.users.order(:id).first
-    #       gu = user.gamesuser_in_current_game
+    #       gu = user.current_games_user
     #       gu.starting_card = FactoryBot.create(:description, uploader_id: user.id, starting_games_user: gu)
     #       prev_card = gu.starting_card
 

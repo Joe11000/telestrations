@@ -11,7 +11,7 @@ class GamesController < ApplicationController
     @player_is_finished = false
 
     # create a starting placeholder card for this user if game is just beginning
-    if( @placeholder_card.blank? && current_user.starting_card_in_current_game.blank? )
+    if( @placeholder_card.blank? && current_user.current_starting_card.blank? )
       @placeholder_card = @game.create_initial_placeholder_for_user current_user.id
     end
 

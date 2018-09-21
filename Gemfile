@@ -58,7 +58,7 @@ group :development do
   gem 'foreman'
   # gem 'guard'
 end
-  # gem 'guard-rails'
+  gem 'guard-rails'
   # gem 'guard-rspec'
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

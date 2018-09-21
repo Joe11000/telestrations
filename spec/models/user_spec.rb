@@ -103,7 +103,7 @@ RSpec.describe User, type: :model do
       end
     end
 
-    context '#gamesuser_in_current_game', :r5 do
+    context '#current_games_user', :r5 do
       before :all do
         @game1 = FactoryBot.create :game, :pregame
         @user1 = @game1.users.first
@@ -117,22 +117,22 @@ RSpec.describe User, type: :model do
 
       context 'returns a games user of the current game if' do
         it 'game status is pregame' do
-          expect(@user1.gamesuser_in_current_game).to eq GamesUser.find_by(game_id: @game1.id, user_id: @user1.id)
+          expect(@user1.current_games_user).to eq GamesUser.find_by(game_id: @game1.id, user_id: @user1.id)
         end
 
         it 'game status is midgame' do
-          expect(@user2.gamesuser_in_current_game).to eq GamesUser.find_by(game_id: @game2.id, user_id: @user2.id)
+          expect(@user2.current_games_user).to eq GamesUser.find_by(game_id: @game2.id, user_id: @user2.id)
         end
       end
 
       context 'returns a nil user of the current game if' do
         it 'game status is postgame' do
-          expect(@user3.gamesuser_in_current_game).to eq nil
+          expect(@user3.current_games_user).to eq nil
         end
       end
     end
 
-    context '#starting_card_in_current_game', :r5 do
+    context '#current_starting_card', :r5 do
       before :all do
         @game1 = FactoryBot.create :game, :pregame
         @user1 = @game1.users.first
@@ -146,23 +146,23 @@ RSpec.describe User, type: :model do
 
       context 'returns the starting card the player made up to pass around the circle if' do
         it 'game status is midgame' do
-          expect(@user2.starting_card_in_current_game).to eq GamesUser.find_by(user_id: @user2.id, game_id: @game2.id).starting_card
+          expect(@user2.current_starting_card).to eq GamesUser.find_by(user_id: @user2.id, game_id: @game2.id).starting_card
         end
       end
 
       context 'returns a nil user of the current game if' do
         it 'game status is pregame' do
-          expect(@user1.starting_card_in_current_game).to eq nil
+          expect(@user1.current_starting_card).to eq nil
         end
 
         it 'game status is postgame' do
-          expect(@user3.starting_card_in_current_game).to eq nil
+          expect(@user3.current_starting_card).to eq nil
         end
       end
     end
 
 
-    context '#users_game_name_in_current_game', :r5 do
+    context '#current_games_user_name', :r5 do
       before :all do
         @game1 = FactoryBot.create :game, :pregame
         @user1 = @game1.users.first
@@ -186,21 +186,21 @@ RSpec.describe User, type: :model do
 
       context 'returns a games user of the current game if' do
         it 'game status is pregame' do
-          expect(@updated_gu.user.users_game_name_in_current_game).to eq 'Yogi'
+          expect(@updated_gu.user.current_games_user_name).to eq 'Yogi'
         end
 
         it 'game status is midgame' do
-          expect(@updated_gu.user.users_game_name_in_current_game).to eq 'Yogi'
+          expect(@updated_gu.user.current_games_user_name).to eq 'Yogi'
         end
       end
 
       context 'returns a nil user of the current game if' do
         it 'game status without updateis pregame' do
-          expect(@user1.users_game_name_in_current_game).to eq nil
+          expect(@user1.current_games_user_name).to eq nil
         end
 
         it 'game status is postgame' do
-          expect(@user3.users_game_name_in_current_game).to eq nil
+          expect(@user3.current_games_user_name).to eq nil
         end
       end
     end

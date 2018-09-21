@@ -11,16 +11,16 @@ class User < ActiveRecord::Base
     games.where(status: ['pregame', 'midgame']).order(id: :asc).try(:last) # || Game.none
   end
 
-  def gamesuser_in_current_game
+  def current_games_user
     GamesUser.includes(:game).where(user_id: id, games: { status: ['pregame', 'midgame']}).order(id: :asc).try(:last) # || nil
   end
 
-  def starting_card_in_current_game
-    gamesuser_in_current_game.try(:starting_card)
+  def current_starting_card
+    current_games_user.try(:starting_card)
   end
 
-  def users_game_name_in_current_game
-    gamesuser_in_current_game.try(:users_game_name)
+  def current_games_user_name
+    current_games_user.try(:users_game_name)
   end
 
 end
