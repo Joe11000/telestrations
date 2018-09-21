@@ -20,15 +20,15 @@ FactoryBot.define do
 
     trait :pregame do
       after(:create) do |game, evaluator|
-        add_players game, evaluator
+        game.users << FactoryBot.create_list(:user, evaluator.num_of_players)
       end
     end
 
-    trait :midgame_without_cards do
+    trait :midgame_with_no_moves do
       status { 'midgame' }
 
       after(:create) do |game, evaluator|
-        add_players game, evaluator
+        new_game_associations game, evaluator
         game.start_game
         game.update(passing_order: game.user_ids.to_s, join_code: nil)
       end
@@ -41,10 +41,11 @@ FactoryBot.define do
 
       after(:create) do |game, evaluator|
         new_game_associations game
-        additional_player_moves game
+        additional_player_moves
         game.update(passing_order: game.user_ids.to_s, join_code: nil)
       end
     end
+
 
     trait :postgame do
       status { 'postgame' }
@@ -57,12 +58,7 @@ FactoryBot.define do
   end
 end
 
-
-def add_players game, evaluator
-  game.users << FactoryBot.create_list(:user, evaluator.num_of_players)
-end
-
-
+# these add users with their users_game_names and a placeholder starting card
 def new_game_associations game
   gu1 = FactoryBot.create :games_user, game_id: game.id
   gu2 = FactoryBot.create :games_user, game_id: game.id

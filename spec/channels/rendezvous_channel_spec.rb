@@ -194,16 +194,7 @@ end
 
 
 
-
-
-
-
-
-      # let(:new_user) { FactoryBot.create :user }
-      # Connection is `identified_by :current_profile`
       # let(:connection) { TestConnection.new(user_id: current_profile) }
 
          # expect { connect "/cable" }.to have_rejected_connection
         # connect "/cable", cookies: { user_id:  @new_user.id }
-        # expect(action_cable).to receive(:broadcast).with("rendezvous_#{@game.join_code}").exactly(2).times
-        # expect(ActionCable.server).to receive(:broadcast).with(no_args)
