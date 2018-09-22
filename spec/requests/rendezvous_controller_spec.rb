@@ -4,6 +4,17 @@ require 'support/login'
 RSpec.describe RendezvousController, type: :request do
   include LoginHelper
 
+  def set_signed_cookies params={}
+    signed_cookies = ActionDispatch::Request.new(Rails.application.env_config.deep_dup).cookie_jar
+
+    params.each do |key, value|
+      signed_cookies.signed[key.to_sym] = value
+      cookies[key.to_sym] = signed_cookies[key.to_sym]
+    end
+
+    cookies
+  end
+
   shared_examples_for "redirect user to root if not logged in" do
     context 'user NOT logged in' do
       it 'redirects them back to home page' do
@@ -29,9 +40,7 @@ RSpec.describe RendezvousController, type: :request do
         @game = FactoryBot.create(:game, :pregame)
         @user = @game.users.first
 
-        signed_cookies = ActionDispatch::Request.new(Rails.application.env_config.deep_dup).cookie_jar
-        signed_cookies.signed[:user_id] = @user.id
-        cookies[:user_id] = signed_cookies[:user_id]
+        set_signed_cookies({ user_id: @user.id })
 
         get rendezvous_choose_game_type_page_path
       end
