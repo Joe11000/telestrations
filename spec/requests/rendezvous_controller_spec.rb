@@ -1,42 +1,60 @@
 require 'rails_helper'
+require 'support/login'
 
 RSpec.describe RendezvousController, type: :request do
+  include LoginHelper
 
   shared_examples_for "redirect user to root if not logged in" do
     context 'user NOT logged in' do
       it 'redirects them back to home page' do
-        byebug
-        controller.session.clear
-        get :choose_game_type_page
+        # controller.session.clear
+        # cookies[:user_id] = nil
 
-        expect(response).to redirect_to(login_path)
+        expect { get rendezvous_choose_game_type_page_path }.to redirect_to(login_path)
       end
+    end
+
+    context 'user not connected to a game' do
+      # cookies[:user_id] = FactoryBot.create(:user).id
+
+      expect{ get rendezvous_choose_game_type_page_path }.to redirect_to(login_path)
     end
   end
 
-  context '#choose_game_type_page' do
-    it_behaves_like "redirect user to root if not logged in"
+  context '#choose_game_type_page', :r5_wip do
+    # it_behaves_like "redirect user to root if not logged in"
 
     context 'user logged in' do
-      it 'default layout is' do
-        controller.session[:user_id] = FactoryBot.create(:user).id
-        get :choose_game_type_page
+      before :each do
+        @game = FactoryBot.create(:game, :pregame)
+        @user = @game.users.first
 
-        expect(response).to render_template(:choose_game_type_page)
-        expect(response).to render_template('layouts/application')
+        signed_cookies = ActionDispatch::Request.new(Rails.application.env_config.deep_dup).cookie_jar
+        signed_cookies.signed[:user_id] = @user.id
+        cookies[:user_id] = signed_cookies[:user_id]
+
+        get rendezvous_choose_game_type_page_path
+      end
+
+      it 'default layout is' do
+        expect(response.body).to match(/logout/)
+        expect(response.body).to match(/#{@user.name}/)
+        expect(response.body).to match(/Play Game/)
+        expect(response.body).to match(/Create a New Game/)
+        expect(response.body).to match(/Join a Public or Private Game/)
+        expect(response.body).to match(/Join a Public or Private Game/)
+        expect(response.body).to match(/Upload Cards/)
+        expect(response.body).to match(/Save Drawings From Games You\'ve Played at Home/)
       end
 
       it 'has correct response status' do
-        controller.session[:user_id] = FactoryBot.create(:user).id
-        get :choose_game_type_page
-
-        expect(response.status).to eq(200)
+        expect(response).to have_http_status :ok
       end
     end
   end
 
-  context '#join_game', wip: true do
-    it_behaves_like "redirect user to root if not logged in"
+  xcontext '#join_game', wip: true do
+    # it_behaves_like "redirect user to root if not logged in"
 
     context 'game/rendezvous/join' do
       context 'One game exists with matching :join_code' do
@@ -103,8 +121,8 @@ RSpec.describe RendezvousController, type: :request do
     end
   end
 
-  context '#rendezvous_page' do
-    it_behaves_like "redirect user to root if not logged in"
+  xcontext '#rendezvous_page' do
+    # it_behaves_like "redirect user to root if not logged in"
 
     context 'user logged in' do
       context '/rendezvous/public' do
@@ -214,10 +232,10 @@ RSpec.describe RendezvousController, type: :request do
     end
   end
 
-  context '#get_updates', current: true do
+  xcontext '#get_updates', current: true do
     # render_views
 
-    it_behaves_like "redirect user to root if not logged in"
+    # it_behaves_like "redirect user to root if not logged in"
 
     it 'returns same partial if any users_game_names in the html of the players that are waiting to start the game' do
       controller.session[:user_id] = FactoryBot.create(:user).id
@@ -242,10 +260,10 @@ RSpec.describe RendezvousController, type: :request do
     end
   end
 
-  context '#update', js: true do
+  xcontext '#update', js: true do
     # render_views
 
-    it_behaves_like "redirect user to root if not logged in"
+    # it_behaves_like "redirect user to root if not logged in"
 
     it 'user can join a game', current: true do
       current_user = FactoryBot.create(:user)
@@ -321,8 +339,8 @@ RSpec.describe RendezvousController, type: :request do
     end
   end
 
-  context '#leave_group' , current: true do
-    it_behaves_like "redirect user to root if not logged in"
+  xcontext '#leave_group' , current: true do
+    # it_behaves_like "redirect user to root if not logged in"
 
     context 'user NOT currently associated with this game' do
       it 'redirects user to choose_game_type_page' do

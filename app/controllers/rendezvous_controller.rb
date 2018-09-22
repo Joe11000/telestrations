@@ -22,7 +22,6 @@ class RendezvousController < ApplicationController
   end
 
   def rendezvous_page
-    byebug
     @game = current_user.current_game
 
     if @game.blank?
@@ -49,8 +48,9 @@ class RendezvousController < ApplicationController
     else
       # shouldn't have gotten here, something is wrong
     end
-    @users_on_page = @game.unassociated_rendezousing_games_users
-    @users_waiting = @game.users.map(&:current_games_user_name)
+    @users_not_joined = @game.unassociated_rendezousing_games_users
+    @users_joined = @game.users.map(&:current_games_user_name).try(:compact)
+    byebug
   end
 
   def leave_pregame

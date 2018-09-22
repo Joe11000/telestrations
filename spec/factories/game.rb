@@ -28,8 +28,7 @@ FactoryBot.define do
       status { 'midgame' }
 
       after(:create) do |game, evaluator|
-        new_game_associations game, evaluator
-        game.start_game
+        new_game_associations game
         game.update(passing_order: game.user_ids.to_s, join_code: nil)
       end
     end

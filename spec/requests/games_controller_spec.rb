@@ -2,52 +2,53 @@ require 'rails_helper'
 
 RSpec.describe GamesController, :type => :request do
 
-  describe "GET game_page", working: true do
+  describe "GET game_page" do
 
     context 'redirected if' do
-      it 'user not logged in' do
-        get :game_page
+      it 'user not logged in', :r5 do
+        get game_page_path
 
         expect(response).to redirect_to login_path
       end
 
-      it 'no current user game' do
-        game = FactoryBot.create(:midgame_without_cards)
+      it 'no current user game', :r5_wip do
+        byebug
+        game = FactoryBot.create(:game, :midgame_with_no_moves)
         user = FactoryBot.create(:user)
-        cookies.signed[:user_id] = user.id
+        # cookies[:user_id] = user.id
 
-        get :game_page
+        get game_page_path
 
         expect(response).to redirect_to rendezvous_choose_game_type_page_path
       end
 
       it 'current game.status == pregame' do
-        game = FactoryBot.create(:public_pregame)
+        game = FactoryBot.create(:game, :pregame, :public_game)
         current_user = game.users.order(:id).first
-        cookies.signed[:user_id] = current_user.id
+        cookies[:user_id] = current_user.id
 
-        get :game_page
+        get game_page_path
         expect(response).to redirect_to rendezvous_choose_game_type_page_path
       end
 
       it 'current game.status == postgame' do
-        game = FactoryBot.create(:public_pregame)
+        game = FactoryBot.create(:game, :pregame, :public_game)
         current_user = game.users.order(:id).first
-        cookies.signed[:user_id] = current_user.id
+        cookies[:user_id] = current_user.id
 
-        get :game_page
+        get game_page_path
         expect(response).to redirect_to rendezvous_choose_game_type_page_path
       end
     end
 
     context 'renders correct variables to page' do
       it "person first lands on game_page" do
-        game = FactoryBot.create(:midgame_without_cards)
+        game = FactoryBot.create(:game, :midgame_with_no_moves)
         current_user = game.users.order(:id).first
-        cookies.signed[:user_id] = current_user.id
+        # cookies.signed[:user_id] = current_user.id
 
         expect do
-          get :game_page
+          get game_page_path
         end.to change{Card.count}.by(1)
 
         expect(assigns[:game]).to eq game
@@ -58,14 +59,14 @@ RSpec.describe GamesController, :type => :request do
       end
 
       it "person refreshes page during game" do
-        game = FactoryBot.create(:midgame)
+        game = FactoryBot.create(:game, :midgame)
         gu = game.games_users.order(:id).second
         find_card = gu.starting_card.child_card
         current_user = find_card.uploader
         cookies.signed[:user_id] = current_user.id
 
         expect do
-          get :game_page
+          get game_page_path
         end.to change{Card.count}.by(0)
 
         expect(assigns[:game]).to eq game
@@ -87,7 +88,7 @@ RSpec.describe GamesController, :type => :request do
       end
 
       it 'no current user game' do
-        game = FactoryBot.create(:postgame)
+        game = FactoryBot.create(:game, :postgame)
         user = FactoryBot.create(:user)
         cookies.signed[:user_id] = user.id
 
@@ -97,7 +98,7 @@ RSpec.describe GamesController, :type => :request do
       end
 
       it 'current game.status == pregame' do
-        game = FactoryBot.create(:public_pregame)
+        game = FactoryBot.create(:game, :pregame, :public_game)
         current_user = game.users.order(:id).first
         cookies.signed[:user_id] = current_user.id
 
@@ -106,7 +107,7 @@ RSpec.describe GamesController, :type => :request do
       end
 
       it 'current game.status == midgame' do
-        game = FactoryBot.create(:midgame)
+        game = FactoryBot.create(:game, :midgame)
         current_user = game.users.order(:id).first
         cookies.signed[:user_id] = current_user.id
 
@@ -116,7 +117,7 @@ RSpec.describe GamesController, :type => :request do
     end
 
     it 'has correct variables being displayed on the page', wip: true do
-      game = FactoryBot.create(:postgame)
+      game = FactoryBot.create(:game, :postgame)
       current_user = game.users.order(:id).first
       cookies.signed[:user_id] = current_user.id
 
@@ -141,7 +142,7 @@ RSpec.describe GamesController, :type => :request do
       end
 
       it 'current game.status == midgame' do
-        game = FactoryBot.create(:midgame)
+        game = FactoryBot.create(:game, :midgame)
         current_user = game.users.order(:id).first
         cookies.signed[:user_id] = current_user.id
 
@@ -151,7 +152,7 @@ RSpec.describe GamesController, :type => :request do
     end
 
     it 'has correct variables being displayed on the page', wip: true do
-      game = FactoryBot.create(:postgame)
+      game = FactoryBot.create(:game, :postgame)
       current_user = game.users.order(:id).first
       cookies.signed[:user_id] = current_user.id
       card_to_find_1 = FactoryBot.create(:drawing, uploader: current_user, starting_games_user: nil, idea_catalyst_id: nil)
