@@ -12,7 +12,7 @@ RSpec.describe GamesController, :type => :request do
       end
 
       it 'no current user game', :r5_wip do
-        byebug
+
         game = FactoryBot.create(:game, :midgame_with_no_moves)
         user = FactoryBot.create(:user)
         # cookies[:user_id] = user.id

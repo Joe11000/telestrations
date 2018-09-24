@@ -1,12 +1,10 @@
 .currently-joined-partial-wrapper.col-xs-12.col-sm-12.users-on-page.mt-5.mb-0 data-id='currently-joined-partial-wrapper'
   .col-xs-12.col-sm-12.users-on-page.mt-1.mb-0 data-id='users-on-page'
-    h5.text-center.my-0 = "Unjoined Users in Group ( #{local_assigns[:users_not_joined].try(:length) || 0} )"
+    h5.text-center.my-0 = "Users Not Joined ( #{local_assigns[:users_not_joined].try(:length) || 0} )"
 
-  / - byebug
   .col-xs-12.col-sm-12.currently-joined.mt-0.mb-1 data-id='currently-joined'
     h3.text-center = "Users Joined ( #{local_assigns[:users_joined].try(:length) || 0} )"
     .row
-      - byebug
       - local_assigns[:users_joined].try(:each_slice, 3) do |group|
         - unless group[0].blank?
           .text-center.col-xs-12.col-sm-12.col-md-4

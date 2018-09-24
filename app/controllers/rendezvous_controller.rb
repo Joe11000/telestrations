@@ -5,7 +5,6 @@ class RendezvousController < ApplicationController
   layout proc { false if request.xhr? }
 
   def choose_game_type_page
-    render :choose_game_type_page
   end
 
   # joining a game
@@ -14,43 +13,56 @@ class RendezvousController < ApplicationController
     if @game.blank?
       redirect_to(rendezvous_choose_game_type_page_url, alert: "Group #{join_game_params} doesn't exist.") and return
     else
-      @game.touch # remember activity for deleting if inactive later
-      @users_waiting = Game.all_users_game_names(@game.id)
-
-      render :rendezvous_page and return
+      redirect_to rendezvous_page_path(@game.game_type) and return
     end
   end
 
   def rendezvous_page
-    @game = current_user.current_game
+    respond_to do |format|
+      format.html do
 
-    if @game.blank?
-      @user_already_joined = false
+        @game = current_user.current_game
 
-      case params[:game_type]
-        when 'private'
-          @game = Game.create(game_type: :private)
-        when 'public'
-          @game = Game.create(game_type: :public)
-        when 'quick_start'
-          @game = Game.random_public_game
+        # user associated with another pregame that has a different status and wants to join another game. This will only happen when user uses browser's back button instead of the "Leave Group" button on the rendezvous page
+        if @game.try(:pregame?) && params[:game_type] != @game.try(:game_type)
+          @game.remove_player current_user.id
+          @user_already_joined = false
+          @game = nil
+        end
 
-          if @game.blank?
-            @game = Game.create(game_type: :public)
-          else
-            @game.touch
+        if @game.blank?
+          @user_already_joined = false
+
+          case params[:game_type]
+            when 'private'
+              @game = Game.create(game_type: :private)
+            when 'public'
+              @game = Game.create(game_type: :public)
+            when 'quick_start'
+              @game = Game.random_public_game
+
+              if @game.blank?
+                @game = Game.create(game_type: :public)
+              else
+                @game.touch
+              end
           end
+        elsif @game.pregame? && params[:game_type] != @game.game_type # user associated with another pregame that has a different status
+          @game.remove_player current_user.id
+          @user_already_joined = false
+
+        elsif @game.pregame? && current_user.current_games_user_name  # user already joined this game
+          @user_already_joined = true
+        elsif @game.pregame?
+          @user_already_joined = false
+        else
+          raise "shouldn't have gotten here, something is wrong: game_id: #{@game.try(:id)}, current_user_id: #{current_user.id}"
+        end
+        @users_not_joined = @game.unassociated_rendezousing_games_users
+        @users_joined = @game.users.map(&:current_games_user_name).try(:compact)
+
       end
-    elsif @game.pregame? && current_user.current_games_user_name  # user already joined this game
-      @user_already_joined = true
-    elsif @game.pregame?
-      @user_already_joined = false
-    else
-      # shouldn't have gotten here, something is wrong
     end
-    @users_not_joined = @game.unassociated_rendezousing_games_users
-    @users_joined = @game.users.map(&:current_games_user_name).try(:compact)
-    byebug
   end
 
   def leave_pregame

@@ -17,7 +17,7 @@ class RendezvousChannel < ApplicationCable::Channel
     end
 
     unless kill_switch
-      # byebug
+      #
       stop_all_streams
       stream_from "rendezvous_#{params[:join_code]}"
 

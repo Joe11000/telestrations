@@ -28,7 +28,7 @@ class GamesController < ApplicationController
 
     @prev_card = @placeholder_card.try(:parent_card) || Card.none
     @current_user = current_user
-    byebug
+
   end
 
   def postgame_page

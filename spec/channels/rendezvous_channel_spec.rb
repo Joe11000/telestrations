@@ -23,12 +23,11 @@ RSpec.describe RendezvousChannel, type: :channel do
         stub_connection( current_user: @new_user )
 
         expect { subscribe join_code: @game.join_code}.to have_broadcasted_to("rendezvous_#{@game.join_code}").with { |data|
-          expect(data[:partial]).to match(/Unjoined Users in Group \( #{@game.users.count} \)/)
+          expect(data[:partial]).to match(/Users Not Joined \( #{@game.users.count} \)/)
           expect(data[:partial]).to match(/Users Joined \( 0 \)/)
         }
 
         @game.reload
-
         expect(@game.user_ids).to include @new_user.id
         expect(subscription).to be_confirmed
         expect(streams).to eq(["rendezvous_#{@game.join_code}"])
@@ -103,7 +102,7 @@ RSpec.describe RendezvousChannel, type: :channel do
 
       it do
         expect { perform :join_game, ({users_game_name: 'Kirmit the Yoda', action: :join_game}) }.to have_broadcasted_to("rendezvous_#{@game.join_code}").with { |data|
-          expect(data[:partial]).to match(/Unjoined Users in Group \( #{@game.users.count - 1} \)/)
+          expect(data[:partial]).to match(/Users Not Joined \( #{@game.users.count - 1} \)/)
           expect(data[:partial]).to match(/Users Joined \( 1 \)/)
           expect(data[:partial]).to match(/Kirmit the Yoda/)
         }
@@ -127,7 +126,7 @@ RSpec.describe RendezvousChannel, type: :channel do
 
       it do
         expect { perform :unjoin_game, {join_code: @game.join_code} }.to have_broadcasted_to("rendezvous_#{@game.join_code}").with { |data|
-          expect(data[:partial]).to match(/Unjoined Users in Group \( #{@game.users.count} \)/)
+          expect(data[:partial]).to match(/Users Not Joined \( #{@game.users.count} \)/)
           expect(data[:partial]).to match(/Users Joined \( 0 \)/)
           expect(data[:partial]).not_to match(/Kirmit the Yoda/)
         }

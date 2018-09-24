@@ -238,7 +238,7 @@ RSpec.describe Game, type: :model do
 
         first_starting_card, second_starting_card, third_starting_card = @game.starting_cards
 
-        # byebug
+        #
         expect(@cards).to match_array [
                                         [
                                           [first_starting_card.uploader.users_game_name, first_starting_card ],
@@ -326,7 +326,7 @@ RSpec.describe Game, type: :model do
           game = FactoryBot.create(:game, :pregame)
           user_ids = game.users.ids
           invalid_id = (User.ids.last + 1)
-          # byebug
+          #
           expect(game.rendezvous_a_new_user invalid_id).to eq false
           game.reload
           expect(game.users.ids).to eq user_ids

@@ -1,0 +1,73 @@
+Searching 6201 files for "all_users_game_names" (regex)
+
+/Users/joe/Dropbox/coding/coding/ruby/rails/wip/rails5/telestrations/app/channels/rendezvous_channel.rb:
+   62      def render_user_partial_for_game join_code
+   63        game = Game.find_by(join_code: join_code)
+   64:       users_waiting = Game.all_users_game_names(join_code)
+   65        users_on_page = game.unassociated_rendezousing_games_users
+   66        ApplicationController.render(partial: 'rendezvous/currently_joined', locals: { users_waiting: users_waiting, users_on_page: users_on_page })
+
+/Users/joe/Dropbox/coding/coding/ruby/rails/wip/rails5/telestrations/app/controllers/rendezvous_controller.rb:
+   15      else
+   16        # @game.touch # remember activity for deleting if inactive later
+   17:       # @users_waiting = Game.all_users_game_names(@game.id)
+   18
+   19        redirect_to rendezvous_page_path(@game.status) and return
+
+/Users/joe/Dropbox/coding/coding/ruby/rails/wip/rails5/telestrations/app/models/game.rb:
+   33    end
+   34
+   35:   def self.all_users_game_names join_code
+   36      GamesUser.includes(:game).where(games: { join_code: join_code }).map(&:users_game_name)
+   37    end
+
+3 matches across 3 files
+
+
+Searching 6302 files for "users unjoined in group" (regex)
+
+0 matches
+
+Searching 6302 files for "Unjoined Users in Group" (regex)
+
+/Users/joe/Dropbox/coding/coding/ruby/rails/wip/rails5/telestrations/._history:
+  215            expect(data[:partial]).to match(/Kirmit the Yoda/)
+  216            expect(data[:partial]).to match(/Users Joined \( 1 \)/)
+  217:           expect(data[:partial]).to match(/Unjoined Users in Group \( #{@game.users.count - 1} \)/)
+  218:           expect(data[:partial]).to match(/Unjoined Users in Group \( #{@game.users - 1} \)/)
+  219  data.partial.find(:css, "['data-id='currently-joined']")
+  220  find(:css, "['data-id='currently-joined']")
+
+/Users/joe/Dropbox/coding/coding/ruby/rails/wip/rails5/telestrations/app/views/rendezvous/_currently_joined.html.slim:
+    1  .currently-joined-partial-wrapper.col-xs-12.col-sm-12.users-on-page.mt-5.mb-0 data-id='currently-joined-partial-wrapper'
+    2    .col-xs-12.col-sm-12.users-on-page.mt-1.mb-0 data-id='users-on-page'
+    3:     h5.text-center.my-0 = "Unjoined Users in Group ( #{local_assigns[:users_not_joined].try(:length) || 0} )"
+    4
+    5    / -
+
+/Users/joe/Dropbox/coding/coding/ruby/rails/wip/rails5/telestrations/log/development.log:
+    <binary>
+
+/Users/joe/Dropbox/coding/coding/ruby/rails/wip/rails5/telestrations/log/test.log:
+    <binary>
+
+/Users/joe/Dropbox/coding/coding/ruby/rails/wip/rails5/telestrations/spec/channels/rendezvous_channel_spec.rb:
+   24
+   25          expect { subscribe join_code: @game.join_code}.to have_broadcasted_to("rendezvous_#{@game.join_code}").with { |data|
+   26:           expect(data[:partial]).to match(/Unjoined Users in Group \( #{@game.users.count} \)/)
+   27            expect(data[:partial]).to match(/Users Joined \( 0 \)/)
+   28          }
+   ..
+  104        it do
+  105          expect { perform :join_game, ({users_game_name: 'Kirmit the Yoda', action: :join_game}) }.to have_broadcasted_to("rendezvous_#{@game.join_code}").with { |data|
+  106:           expect(data[:partial]).to match(/Unjoined Users in Group \( #{@game.users.count - 1} \)/)
+  107            expect(data[:partial]).to match(/Users Joined \( 1 \)/)
+  108            expect(data[:partial]).to match(/Kirmit the Yoda/)
+  ...
+  128        it do
+  129          expect { perform :unjoin_game, {join_code: @game.join_code} }.to have_broadcasted_to("rendezvous_#{@game.join_code}").with { |data|
+  130:           expect(data[:partial]).to match(/Unjoined Users in Group \( #{@game.users.count} \)/)
+  131            expect(data[:partial]).to match(/Users Joined \( 0 \)/)
+  132            expect(data[:partial]).not_to match(/Kirmit the Yoda/)
+
+462 matches across 5 files

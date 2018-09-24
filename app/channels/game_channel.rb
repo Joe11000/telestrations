@@ -3,9 +3,9 @@ class GameChannel < ApplicationCable::Channel
 
   # {channel: "GameChannel", prev_card: num || '', game_id: num || ''}
   def subscribed
-    byebug
+
     current_user_game = current_user.current_game
-    byebug
+
     stream_from "game_#{params[:game_id]}" if current_user_game.try(:id) == params[:game_id]
   end
 

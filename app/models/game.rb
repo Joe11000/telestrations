@@ -83,7 +83,7 @@ class Game < ActiveRecord::Base
     user = User.find_by(id: user_id)
     user_current_game = user.try(:current_game)
     if  user.blank? ||                        # player doesn't exist or
-        user.current_games_user_name ||         # player already rendezvousing with game
+        user.current_games_user_name ||         # player already created a game name for a game rendezvousing with game
         user_current_game.try(:midgame?)  # c) player is currently in the middle of a game
 
       return false

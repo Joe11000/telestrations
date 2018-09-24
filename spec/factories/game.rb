@@ -17,7 +17,6 @@ FactoryBot.define do
       game_type { 'private' }
     end
 
-
     trait :pregame do
       after(:create) do |game, evaluator|
         game.users << FactoryBot.create_list(:user, evaluator.num_of_players)
@@ -29,6 +28,7 @@ FactoryBot.define do
 
       after(:create) do |game, evaluator|
         new_game_associations game
+
         game.update(passing_order: game.user_ids.to_s, join_code: nil)
       end
     end
@@ -40,7 +40,8 @@ FactoryBot.define do
 
       after(:create) do |game, evaluator|
         new_game_associations game
-        additional_player_moves
+        additional_player_moves game
+
         game.update(passing_order: game.user_ids.to_s, join_code: nil)
       end
     end
@@ -50,8 +51,11 @@ FactoryBot.define do
       status { 'postgame' }
 
       after(:create) do |game, evaluator|
-        completed_game_associations game
+        new_game_associations game
+        additional_player_moves game
         game.update(passing_order: game.user_ids.to_s, join_code: nil)
+
+        complete_the_game_associations game
       end
     end
   end
@@ -67,9 +71,9 @@ def new_game_associations game
   user2 = gu2.user
   user3 = gu3.user
 
-  gu2.starting_card = FactoryBot.create(:description, uploader_id: user1.id, idea_catalyst_id: gu1.id, description_text: nil, starting_games_user: gu1)
-  gu2.starting_card = FactoryBot.create(:description, uploader_id: user2.id, idea_catalyst_id: gu2.id, description_text: nil, starting_games_user: gu2)
-  gu3.starting_card = FactoryBot.create(:description, uploader_id: user3.id, idea_catalyst_id: gu3.id, description_text: nil, starting_games_user: gu3 )
+  gu1.starting_card = FactoryBot.create(:description, :placeholder, uploader_id: user1.id, idea_catalyst_id: gu1.id, starting_games_user: gu1)
+  gu2.starting_card = FactoryBot.create(:description, :placeholder, uploader_id: user2.id, idea_catalyst_id: gu2.id, starting_games_user: gu2)
+  gu3.starting_card = FactoryBot.create(:description, :placeholder, uploader_id: user3.id, idea_catalyst_id: gu3.id, starting_games_user: gu3)
 end
 
 def additional_player_moves game
@@ -79,52 +83,38 @@ def additional_player_moves game
   user2 = gu2.user
   user3 = gu3.user
 
-  user1 = create(:user, name: "game_#{game.id}_user_completed_card_set")
-  user2 = create(:user, name: "game_#{game.id}_user_with_drawing_placeholder")
-  user3.update(name: "game_#{game.id}_user_with_description_placeholder")
+  # No Moves for user 1...He is still thinking about what to make user2 draw
 
-  byebug
+  # user 2 passed their first card
+  gu2.starting_card.update(description_text: TokenPhrase.generate(' ', numbers: false))
+  gu2.starting_card.child_card  = FactoryBot.create(:drawing, :placeholder, uploader: user3, starting_games_user: gu2)
 
-  gu1.starting_card                       = FactoryBot.create(:description, uploader: user1, starting_games_user: gu1, idea_catalyst: gu1)
-  gu1.starting_card.child_card            = FactoryBot.create(:drawing,     uploader: user2, starting_games_user: gu1)
-  gu1.starting_card.child_card.child_card = FactoryBot.create(:description, uploader: user3, starting_games_user: gu1)
-
-  gu2.starting_card                       = FactoryBot.create(:description, uploader: user2, starting_games_user: gu2, idea_catalyst: gu2)
-  gu2.starting_card.child_card            = FactoryBot.create(:drawing,     uploader: user3, starting_games_user: gu2)
-  gu2.starting_card.child_card.child_card = FactoryBot.create(:description, uploader: user1, starting_games_user: gu2, description_text: nil)
-
-  gu3.starting_card                       = FactoryBot.create(:description, uploader: user3, starting_games_user: gu3, idea_catalyst: gu3)
+  # user 3 passed their first card and second card
+  gu3.starting_card.update(description_text: TokenPhrase.generate(' ', numbers: false))
   gu3.starting_card.child_card            = FactoryBot.create(:drawing,     uploader: user1, starting_games_user: gu3)
-  gu3.starting_card.child_card.child_card = FactoryBot.create(:description, uploader: user2, starting_games_user: gu3, description_text: nil)
-
-  game.update(passing_order: game.user_ids.to_s)
-
-
+  gu3.starting_card.child_card.child_card = FactoryBot.create(:description, :placeholder, uploader: user2, starting_games_user: gu3)
 end
 
+# this finishes the game that additional_player_moves() started
+def complete_the_game_associations game
+  gu1, gu2, gu3 = game.games_users
+  user1 = gu1.user
+  user2 = gu2.user
+  user3 = gu3.user
 
-def completed_game_associations game
-  user1 = create(:user, name: "game_#{game.id}_user_with_description_placeholder")
-  user2 = create(:user, name: "game_#{game.id}_user_with_drawing_placeholder")
-  user3 = create(:user, name: "game_#{game.id}_user_completed_card_set")
-
-  gu1 = FactoryBot.create(:games_user, game: game, user: user1, set_complete: true)
-  gu2 = FactoryBot.create(:games_user, game: game, user: user2, set_complete: true)
-  gu3 = FactoryBot.create(:games_user, game: game, user: user3, set_complete: true)
-
-  gu1.starting_card                       = FactoryBot.create(:description, uploader: user1, starting_games_user: gu1, idea_catalyst: gu1)
+  gu1.starting_card.update( description_text: TokenPhrase.generate(' ', numbers: false) )
   gu1.starting_card.child_card            = FactoryBot.create(:drawing,     uploader: user2, starting_games_user: gu1)
   gu1.starting_card.child_card.child_card = FactoryBot.create(:description, uploader: user3, starting_games_user: gu1)
+  gu1.update(set_complete: true)
 
-  gu2.starting_card                       = FactoryBot.create(:description, uploader: user2, starting_games_user: gu2, idea_catalyst: gu2)
-  gu2.starting_card.child_card            = FactoryBot.create(:drawing,     uploader: user3, starting_games_user: gu2)
+  # user 2 is on their last card
+  gu2.starting_card.child_card            = FactoryBot.create(:drawing,     uploader: user3, starting_games_user: gu2) # replace the placeholder card because it was easier than updating it with a new attachment
   gu2.starting_card.child_card.child_card = FactoryBot.create(:description, uploader: user1, starting_games_user: gu2)
+  gu2.update(set_complete: true)
 
-  gu3.starting_card                       = FactoryBot.create(:description, uploader: user3, starting_games_user: gu3, idea_catalyst: gu3)
-  gu3.starting_card.child_card            = FactoryBot.create(:drawing,     uploader: user1, starting_games_user: gu3)
+  # user 3 is on their last card
   gu3.starting_card.child_card.child_card = FactoryBot.create(:description, uploader: user2, starting_games_user: gu3)
-
-  game.update(passing_order: game.user_ids.to_s)
+  gu3.update(set_complete: true)
 end
 
 
