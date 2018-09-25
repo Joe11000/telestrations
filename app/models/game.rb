@@ -32,9 +32,6 @@ class Game < ActiveRecord::Base
     Card.includes(:starting_games_user).where(games_users: { game_id: id }).order(:id)
   end
 
-  def self.all_users_game_names join_code
-    GamesUser.includes(:game).where(games: { join_code: join_code }).map(&:users_game_name)
-  end
 
   def self.random_public_game
     Game.pregame.public_game.last
@@ -47,6 +44,15 @@ class Game < ActiveRecord::Base
   def unassociated_rendezousing_games_users
     rendezousing_games_users.where(users_game_name: nil)
   end
+
+
+  # def users_game_names
+  #   users.map(&:current_games_user_name).try(:compact)
+  # end
+  def self.all_users_game_names join_code
+    GamesUser.includes(:game).where(games: { join_code: join_code }).map(&:users_game_name).try(:compact)
+  end
+
 
   # end scoping methods
 

@@ -2,11 +2,31 @@ require 'rails_helper'
 
 RSpec.describe GamesUser, type: :model do
 
+  context 'factory', :r5 do
+    before :all do
+      @factory = FactoryBot.create :games_user
+    end
+
+    it 'is valid' do
+      expect(@factory).to be_valid
+    end
+
+    it 'has associations' do
+      expect(@factory.user).to be_a User
+      expect(@factory.game).to be_a Game
+    end
+
+    it 'has a users_game_name' do
+      expect(@factory.users_game_name).to be_a String
+    end
+  end
+
   context 'associations', :r5 do
     it { is_expected.to act_as_paranoid }
     it { is_expected.to belong_to :user }
     it { is_expected.to belong_to(:game).touch(true) }
     it { is_expected.to have_one(:starting_card).class_name('Card') }
+    # it { is_expected.to have_one(:starting_card).class_name('Card').foreign_key(:idea_catalyst_id) }
   end
 
   context 'db schema', :r5 do
@@ -26,21 +46,24 @@ RSpec.describe GamesUser, type: :model do
       @games_user3 = @game.games_users[2]
     end
 
-    it '' do
+    it 'assuming there are exactly 3 people playing the game' do
       expect(@games_users.count).to eq 3
     end
 
-    it 'games_user with no cards return empty relation' do
-      expect(@games_users.third.cards).to be_blank
-      expect(@games_users.third.cards).to be_a ActiveRecord::Relation
+    it 'games_user with 1 placeholder starting card' do
+      expect(@games_user1.cards).to match_array [ @games_user1.starting_card ]
     end
 
-    it 'games_user with 1 cards return empty relation' do
-      expect(@games_users.first.cards).to eq [ @games_users.first.starting_card ]
+    it 'games_user with 1 cards and 1 placeholder card returns 2 cards' do
+      expect(@games_user2.cards).to match_array [ @games_user2.starting_card, @games_user2.starting_card.child_card ]
     end
 
     it 'games_user with one card nested inside another card returns 2 cards' do
-      expect(@games_users.second.cards).to eq [ @games_users.second.starting_card, @games_users.second.starting_card.child_card ]
+      expect(@games_user3.cards).to match_array [
+                                                   @games_user3.starting_card,
+                                                   @games_user3.starting_card.child_card,
+                                                   @games_user3.starting_card.child_card.child_card
+                                                 ]
     end
 
   end

@@ -58,9 +58,9 @@ class RendezvousController < ApplicationController
         else
           raise "shouldn't have gotten here, something is wrong: game_id: #{@game.try(:id)}, current_user_id: #{current_user.id}"
         end
-        @users_not_joined = @game.unassociated_rendezousing_games_users
-        @users_joined = @game.users.map(&:current_games_user_name).try(:compact)
 
+        @users_not_joined = @game.unassociated_rendezousing_games_users
+        @users_joined = Game.all_users_game_names @game.join_code
       end
     end
   end

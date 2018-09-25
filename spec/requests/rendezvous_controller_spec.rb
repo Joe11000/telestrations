@@ -145,15 +145,15 @@ RSpec.describe RendezvousController, type: :request do
           end
 
 
-          it 'sees content expected to be seen on the page', :r5 do
+          it 'sees content expected to be seen on the page, (reminder: the current user until after the rendezvous channel subscribe method creates a games_user join connection)', :r5 do
             current_user = FactoryBot.create(:user)
             set_signed_cookies({ user_id: current_user.id })
 
             get rendezvous_page_path('public')
 
             expect(response.body).to match(/Leave Group/)
-            raise "Join code below should check page for visible join code and it currently is not"
-            expect(response.body).to match(/Join Code :/)
+            expect(response.body).to match(/Join Code : .*>#{Game.last.join_code}</)
+
             expect(response.body).to match(/Join This Public Game/)
 
             expect(response.body).to match(/Users Not Joined \( 0 \)/) # current user not counted in this number until after the rendezvous channel subscribe method establishes a games_user join connection
@@ -229,7 +229,7 @@ RSpec.describe RendezvousController, type: :request do
               end
             end
 
-            it 'user has chosen a game name', :r5_wip do
+            it 'user has chosen a game name', :r5 do
                 FactoryBot.create(:game, :pregame, :public_game)
 
                 other_game = FactoryBot.create(:game, :pregame, :public_game)

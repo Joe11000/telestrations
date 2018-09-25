@@ -23,7 +23,7 @@ RSpec.describe RendezvousChannel, type: :channel do
         stub_connection( current_user: @new_user )
 
         expect { subscribe join_code: @game.join_code}.to have_broadcasted_to("rendezvous_#{@game.join_code}").with { |data|
-          expect(data[:partial]).to match(/Users Not Joined \( #{@game.users.count} \)/)
+          expect(data[:partial]).to match(/Users Not Joined \( 4 \)/)
           expect(data[:partial]).to match(/Users Joined \( 0 \)/)
         }
 
