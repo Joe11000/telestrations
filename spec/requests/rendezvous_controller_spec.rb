@@ -63,7 +63,7 @@ RSpec.describe RendezvousController, type: :request do
     end
   end
 
-  context '#join_game' do
+  context '#join_game', :r5 do
     it_behaves_like "redirect user elsewhere if they shouldn't be on rendezvous page"
 
     context 'game/rendezvous/join' do
@@ -119,15 +119,16 @@ RSpec.describe RendezvousController, type: :request do
 
     context 'a logged in user can visit' do
       context '/rendezvous/public' do
-        context 'if NOT currently associated with any other games' do
-          it 'creates a newly created public game', :r5 do
+        context 'if NOT currently associated with any other games', :r5 do
+          it 'creates a newly created public game' do
             current_user = FactoryBot.create(:user)
             set_signed_cookies({ user_id: current_user.id })
 
             expect{ get rendezvous_page_path('public')}.to change{Game.count}.by(1)
+            expect(Game.last.public_game?).to eq true
           end
 
-          it 'has correct status', :r5 do
+          it 'has correct status' do
             current_user = FactoryBot.create(:user)
             set_signed_cookies({ user_id: current_user.id })
 
@@ -137,7 +138,7 @@ RSpec.describe RendezvousController, type: :request do
           end
 
 
-          it 'sees content expected to be seen on the page, (reminder: the current user until after the rendezvous channel subscribe method creates a games_user join connection)', :r5 do
+          it 'sees content expected to be seen on the page, (reminder: the current user until after the rendezvous channel subscribe method creates a games_user join connection)' do
             current_user = FactoryBot.create(:user)
             set_signed_cookies({ user_id: current_user.id })
 
@@ -153,30 +154,7 @@ RSpec.describe RendezvousController, type: :request do
           end
         end
 
-        context 'if user wants to leave game and join a different game type and does so by editing the search bar or using browser back arrow' do
-
-          context 'leaving a public pregame to join a private game' do
-            it "removes user's games_user association to previous game and displays new private game", :r5 do
-              other_game = FactoryBot.create(:game, :pregame, :public_game)
-              current_user = other_game.users.first
-              set_signed_cookies({ user_id: current_user.id })
-
-              get rendezvous_page_path('private')
-
-              current_user.reload
-              other_game.reload
-
-              expect(other_game.user_ids).not_to include current_user.id
-              last_game = Game.last
-
-              expect(last_game.id).not_to eq other_game.id
-              expect(last_game.user_ids).not_to include current_user.id
-              expect(last_game.private_game?).to eq true
-
-              expect(current_user.current_game).to eq nil # the user is not associated to the game when they land on the page they are attached to game through the subscribe method on the rendezvous channel
-            end
-          end
-
+        context 'if user wants to leave game and join a different game type and does so by editing the search bar or using browser back arrow', :r5 do
           context 'leaving a private pregame to join a public game' do
             it "removes user's games_user association to previous game and displays new private game", :r5 do
               other_game = FactoryBot.create(:game, :pregame, :private_game)
@@ -200,11 +178,31 @@ RSpec.describe RendezvousController, type: :request do
           end
         end
 
-        context 'user refreshes the page on rendezous page' do
-          context 'for a public game' do
-            context 'and user has not chosen a game name yet' do
-              it 'then user should still see the join code they were looking at before', :r5 do
+        context 'user refreshes the page on rendezous page', :r5 do
+          context 'and user has not chosen a game name yet' do
+            it 'then user should still see the join code they were looking at before' do
+              FactoryBot.create(:game, :pregame, :public_game)
+
+              game = FactoryBot.create(:game, :pregame, :public_game)
+              current_user = game.users.first
+              set_signed_cookies({user_id: current_user.id})
+
+              get rendezvous_page_path('public')
+
+              game.reload
+              current_user.reload
+
+              expect(current_user.current_game.id).to eq game.id
+
+              expect(response.body).to match(/Join This Public Game/)
+              expect(response.body).to match(/Join Code : .*>#{game.join_code}</)
+            end
+          end
+
+          context 'user has chosen a game name', :r5 do
+            it 'then user should still see the join code they were looking at before' do
                 FactoryBot.create(:game, :pregame, :public_game)
+                FactoryBot.create(:game, :pregame, :private_game)
 
                 game = FactoryBot.create(:game, :pregame, :public_game)
                 current_user = game.users.first
@@ -217,64 +215,118 @@ RSpec.describe RendezvousController, type: :request do
 
                 expect(current_user.current_game.id).to eq game.id
 
+                expect(response.body).to match(/Join This Public Game/)
                 expect(response.body).to match(/Join Code : .*>#{game.join_code}</)
-              end
+                expect(response.body).to match(/Users Joined .*>#{current_user.current_games_user_name}</)
             end
-
-            it 'user has chosen a game name', :r5 do
-                FactoryBot.create(:game, :pregame, :public_game)
-
-                other_game = FactoryBot.create(:game, :pregame, :public_game)
-                current_user = other_game.users.first
-                set_signed_cookies({user_id: current_user.id})
-
-                get rendezvous_page_path('public')
-
-                other_game.reload
-                current_user.reload
-
-                expect(current_user.current_game.id).to eq other_game.id
-
-                expect(response.body).to match(/Join Code : .*>#{other_game.join_code}</)
-            end
-
-          end
-          context 'a games user association was exists for a private game' do
-            it 'user has not chosen a game name yet'
-            it 'user has chosen a game name'
           end
         end
       end
 
       context '/rendezvous/private' do
-        it 'layout in this case is' do
-          controller.session[:user_id] = FactoryBot.create(:user).id
-          get :rendezvous_page, game_type: 'private'
+        context 'if NOT currently associated with any other games', :r5 do
+          it 'creates a newly created private game' do
+            current_user = FactoryBot.create(:user)
+            set_signed_cookies({ user_id: current_user.id })
 
-          expect(response).to render_template(:rendezvous_page)
-          expect(response).to render_template('layouts/application')
+            expect{ get rendezvous_page_path('private')}.to change{Game.count}.by(1)
+            expect(Game.last.private_game?).to eq true
+          end
+
+          it 'has correct status' do
+            current_user = FactoryBot.create(:user)
+            set_signed_cookies({ user_id: current_user.id })
+
+            get rendezvous_page_path('private')
+
+            expect(response).to have_http_status :ok
+          end
+
+
+          it 'sees content expected to be seen on the page, (reminder: the current user until after the rendezvous channel subscribe method creates a games_user join connection)' do
+            current_user = FactoryBot.create(:user)
+            set_signed_cookies({ user_id: current_user.id })
+
+            get rendezvous_page_path('private')
+
+            expect(response.body).to match(/Leave Group/)
+            expect(response.body).to match(/Join Code : .*>#{Game.last.join_code}</)
+
+            expect(response.body).to match(/Join This Private Game/)
+
+            expect(response.body).to match(/Users Not Joined \( 0 \)/) # current user not counted in this number until after the rendezvous channel subscribe method establishes a games_user join connection
+            expect(response.body).to match(/Users Joined \( 0 \)/)
+          end
         end
 
-        it 'has correct variabels assigned' do
-          controller.session[:user_id] = FactoryBot.create(:user).id
-          get :rendezvous_page, game_type: 'private'
+        context 'if user wants to leave game and join a different game type and does so by editing the search bar or using browser back arrow', :r5 do
+          context 'leaving a public pregame to join a private game' do
+            it "removes user's games_user association to previous game and displays new private game", :r5_wip do
+              other_game = FactoryBot.create(:game, :pregame, :public_game)
+              current_user = other_game.users.first
+              set_signed_cookies({ user_id: current_user.id })
 
-          # private game created
-          expect(assigns[:game].try(:is_private)).to eq true
+              get rendezvous_page_path('private')
 
-          # has no users waiting in rendezvous
-          expect(assigns[:users_waiting]).to eq []
+              current_user.reload
+              other_game.reload
+
+              expect(other_game.user_ids).not_to include current_user.id
+
+              last_game = Game.last
+              expect(last_game.id).not_to eq other_game.id
+              expect(last_game.user_ids).not_to include current_user.id
+              expect(last_game.private_game?).to eq true
+
+              expect(current_user.current_game).to eq nil # the user is not associated to the game when they land on the page they are attached to game through the subscribe method on the rendezvous channel
+            end
+          end
         end
 
-        it 'has correct response status' do
-          controller.session[:user_id] = FactoryBot.create(:user).id
-          get :rendezvous_page, game_type: 'private'
+        context 'user refreshes the page', :r5 do
+          context 'and user has not chosen a game name yet' do
+            it 'then user should still see the join code they were looking at before' do
+              FactoryBot.create(:game, :pregame, :private_game)
 
-          expect(response.status).to eq(200)
+              game = FactoryBot.create(:game, :pregame, :private_game)
+              current_user = game.users.first
+              set_signed_cookies({user_id: current_user.id})
+
+              get rendezvous_page_path('private')
+
+              game.reload
+              current_user.reload
+
+              expect(current_user.current_game.id).to eq game.id
+
+              expect(response.body).to match(/Join This Private Game/)
+              expect(response.body).to match(/Join Code : .*>#{game.join_code}</)
+            end
+          end
+
+          context 'and user has chosen a game name' do
+            it 'then user should still see the join code they were looking at before' do
+                FactoryBot.create(:game, :pregame, :private_game)
+                FactoryBot.create(:game, :pregame, :public_game)
+
+                game = FactoryBot.create(:game, :pregame, :private_game)
+                current_user = game.users.first
+                set_signed_cookies({user_id: current_user.id})
+
+                get rendezvous_page_path('private')
+
+                game.reload
+                current_user.reload
+
+                expect(current_user.current_game.id).to eq game.id
+                expect(response.body).to match(/Join Code : .*>#{game.join_code}</)
+                expect(response.body).to match(/Users Joined .*>#{current_user.current_games_user_name}</)
+            end
+          end
         end
       end
 
-      context '/rendezvous/quick_start' do
+      context '/rendezvous/quick_start', :r5_wip do
         it 'layout in this case is' do
           controller.session[:user_id] = FactoryBot.create(:user).id
           get :rendezvous_page, game_type: 'quick_start'
@@ -325,7 +377,7 @@ RSpec.describe RendezvousController, type: :request do
   end
 
   xcontext '#leave_group' , current: true do
-    # it_behaves_like "redirect user elsewhere if they shouldn't be on rendezvous page"
+    it_behaves_like "redirect user elsewhere if they shouldn't be on rendezvous page"
 
     context 'user NOT currently associated with this game' do
       it 'redirects user to choose_game_type_page' do

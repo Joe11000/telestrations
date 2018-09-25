@@ -179,34 +179,26 @@ RSpec.describe Game, type: :model do
     # end
   end
 
-  xcontext 'basic instantiation' do
-    let(:game){ FactoryBot.create(:game) }
-
-    # before(:each) do
-    #   Game.delete_all
-    # end
-
-    it 'game_type is set to public_game' do
-      expect(game.game_type).to eq 'true'
-    end
-
-    it 'status is defaulted to pregame' do
-      expect(game.status).to eq 'pregame'
-    end
-
-    it 'a 4 digit join_code' do
-      10.times{ FactoryBot.create(:game)}
-      expect(Game.pluck(:join_code).length).to eq 10
-    end
-  end
+# def rendezousing_games_users
+# def unassociated_rendezousing_games_users
+# def users_game_names
+# def self.all_users_game_names join_code
+# def parse_passing_order
+# def self.start_game join_code
+# def start_game
+# def rendezvous_a_new_user user_id
+# def commit_a_rendezvoused_user user_id, users_game_name=''
+# def remove_player user_id
+# cards_from_finished_game
 
   context 'methods'  do
-    it '#random_public_game' do
+    it '.random_public_game', :r5 do
       g1 = FactoryBot.create(:game, :pregame, :public_game)
+      g2 = FactoryBot.create(:game, :pregame, :public_game)
       FactoryBot.create(:game, :midgame)
       FactoryBot.create(:game, :postgame)
 
-      3.times { expect(Game.random_public_game).to eq g1 }
+      3.times { expect(Game.random_public_game).to be_in [g1, g2] }
     end
 
     it '#cards', :r5  do
@@ -232,30 +224,34 @@ RSpec.describe Game, type: :model do
       end
 
       it 'returns correct ordering of cards', :r5_wip do
-        first_user, second_user, third_user = @game.users
+        gu1, gu2, gu3 = @game.games_users
+        starting_card1 = gu1.starting_card
+        starting_card2 = gu2.starting_card
+        starting_card3 = gu3.starting_card
 
-        @game.games_users.pluck(:users_game_name)
 
-        first_starting_card, second_starting_card, third_starting_card = @game.starting_cards
+        users_game_names = Hash.new (@game.games_user_ids.zip @game.games_users.pluck(:users_game_name))
+
+        expected_result = [
+                            [
+                              [starting_card1.uploader.games_users.last.users_game_name, starting_card1 ],
+                              [starting_card1.child_card.uploader.games_users.last.users_game_name, starting_card1.child_card ],
+                              [starting_card1.child_card.child_card.uploader.games_users.last.users_game_name, starting_card1.child_card.child_card ]
+                            ],
+                            [
+                              [starting_card2.uploader.games_users.last.users_game_name, starting_card2 ],
+                              [starting_card2.child_card.uploader.games_users.last.users_game_name, starting_card2.child_card ],
+                              [starting_card2.child_card.child_card.uploader.games_users.last.users_game_name, starting_card2.child_card.child_card ]
+                            ],                                        [
+                              [starting_card3.uploader.games_users.last.users_game_name, starting_card3 ],
+                              [starting_card3.child_card.uploader.games_users.last.users_game_name, starting_card3.child_card ],
+                              [starting_card3.child_card.child_card.uploader.games_users.last.users_game_name, starting_card3.child_card.child_card ]
+                            ]
+                          ]
 
         #
-        expect(@cards).to match_array [
-                                        [
-                                          [first_starting_card.uploader.users_game_name, first_starting_card ],
-                                          [first_starting_card.child_card.uploader.users_game_name, first_starting_card.child_card ],
-                                          [first_starting_card.child_card.child_card.uploader.users_game_name, first_starting_card.child_card.child_card ]
-                                        ],
-                                        [
-                                          [second_starting_card.uploader.users_game_name, second_starting_card ],
-                                          [second_starting_card.child_card.uploader.users_game_name, second_starting_card.child_card ],
-                                          [second_starting_card.child_card.child_card.uploader.users_game_name, second_starting_card.child_card.child_card ]
-                                        ],
-                                        [
-                                          [third_starting_card.uploader.users_game_name, third_starting_card ],
-                                          [third_starting_card.child_card.uploader.users_game_name, third_starting_card.child_card ],
-                                          [third_starting_card.child_card.child_card.uploader.users_game_name, third_starting_card.child_card.child_card ]
-                                        ]
-                                      ]
+        byebug
+        expect(@cards).to match_array expected_result
 
       end
     end

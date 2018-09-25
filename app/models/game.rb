@@ -34,7 +34,7 @@ class Game < ActiveRecord::Base
 
 
   def self.random_public_game
-    Game.pregame.public_game.last
+    Game.pregame.public_game.sample
   end
 
   def rendezousing_games_users
@@ -244,9 +244,13 @@ class Game < ActiveRecord::Base
     result = []
     games_users.each do |gu|
       gu_set = []
-      gu.cards.each do |card|
-        gu_set << [ card.uploader.current_games_user_name, card ]
+      card = gu.starting_card
+
+      until card.blank? do
+        gu_set << [ GamesUser.find_by(game_id: id, user_id: card.uploader).users_game_name, card ]
+        card = card.child_card
       end
+
        result << gu_set
     end
 
