@@ -212,7 +212,7 @@ RSpec.describe Game, type: :model do
       expect(game.cards).to match_array Card.where(starting_games_user: game.games_user_ids)
     end
 
-    context '#cards_from_finished_game' do
+    context '#cards_from_finished_game', :r5 do
       before(:all) do
         @game = FactoryBot.create(:game, :postgame)
         FactoryBot.create(:drawing, :out_of_game_card_upload)
@@ -223,36 +223,26 @@ RSpec.describe Game, type: :model do
         @cards = @game.cards_from_finished_game
       end
 
-      it 'returns correct ordering of cards', :r5_wip do
+      it 'returns correct ordering of cards' do
         gu1, gu2, gu3 = @game.games_users
-        starting_card1 = gu1.starting_card
-        starting_card2 = gu2.starting_card
-        starting_card3 = gu3.starting_card
+        starting_card1, starting_card2, starting_card3 = @game.games_users.map(&:starting_card)
 
-
-        users_game_names = Hash.new (@game.games_user_ids.zip @game.games_users.pluck(:users_game_name))
-
-        expected_result = [
-                            [
-                              [starting_card1.uploader.games_users.last.users_game_name, starting_card1 ],
-                              [starting_card1.child_card.uploader.games_users.last.users_game_name, starting_card1.child_card ],
-                              [starting_card1.child_card.child_card.uploader.games_users.last.users_game_name, starting_card1.child_card.child_card ]
-                            ],
-                            [
-                              [starting_card2.uploader.games_users.last.users_game_name, starting_card2 ],
-                              [starting_card2.child_card.uploader.games_users.last.users_game_name, starting_card2.child_card ],
-                              [starting_card2.child_card.child_card.uploader.games_users.last.users_game_name, starting_card2.child_card.child_card ]
-                            ],                                        [
-                              [starting_card3.uploader.games_users.last.users_game_name, starting_card3 ],
-                              [starting_card3.child_card.uploader.games_users.last.users_game_name, starting_card3.child_card ],
-                              [starting_card3.child_card.child_card.uploader.games_users.last.users_game_name, starting_card3.child_card.child_card ]
-                            ]
-                          ]
-
-        #
-        byebug
-        expect(@cards).to match_array expected_result
-
+        expect(@cards).to match_array [
+                                        [
+                                          [starting_card1.uploader.games_users.last.users_game_name, starting_card1 ],
+                                          [starting_card1.child_card.uploader.games_users.last.users_game_name, starting_card1.child_card ],
+                                          [starting_card1.child_card.child_card.uploader.games_users.last.users_game_name, starting_card1.child_card.child_card ]
+                                        ],
+                                        [
+                                          [starting_card2.uploader.games_users.last.users_game_name, starting_card2 ],
+                                          [starting_card2.child_card.uploader.games_users.last.users_game_name, starting_card2.child_card ],
+                                          [starting_card2.child_card.child_card.uploader.games_users.last.users_game_name, starting_card2.child_card.child_card ]
+                                        ],                                        [
+                                          [starting_card3.uploader.games_users.last.users_game_name, starting_card3 ],
+                                          [starting_card3.child_card.uploader.games_users.last.users_game_name, starting_card3.child_card ],
+                                          [starting_card3.child_card.child_card.uploader.games_users.last.users_game_name, starting_card3.child_card.child_card ]
+                                        ]
+                                      ]
       end
     end
 
