@@ -17,14 +17,14 @@ Rails.application.routes.draw do
     get  '/'          => 'games#game_page', as: :game_page
     post '/'          => 'games#game',      as: :game
 
-    post 'upload_card' => 'games#upload_card',        as: :upload_card_in_game
+    # post 'upload_card' => 'games#upload_card',        as: :upload_card_in_game
     get  'postgame'    => 'games#postgame_page',      as: :postgame_page
     get  'postgames'   => 'games#all_postgames_page', as: :all_postgames_page
   end
 
   scope 'cards' do
-    post 'in_game_upload' => 'in_game_card_upload#in_game_upload', as: :in_game_upload
-    get  'out_of_game_card_upload' => 'out_of_game_card_upload#new', as: :out_of_game_card_upload
+    post 'in_game_card_upload' => 'in_game_card_upload#create', as: :in_game_card_upload
+    get  'out_of_game_card_upload' => 'out_of_game_card_upload#new', as: :new_out_of_game_card_upload
     post 'out_of_game_card_upload' => 'out_of_game_card_upload#create'
   end
 

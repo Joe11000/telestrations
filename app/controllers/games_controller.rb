@@ -5,6 +5,7 @@ class GamesController < ApplicationController
   before_action :redirect_if_can_not_view_postgame_page, if: :postgame_page
 
   def game_page
+    byebug
     # @game from redirect method
     @placeholder_card = @game.get_placeholder_card current_user.id
     @player_is_finished = false

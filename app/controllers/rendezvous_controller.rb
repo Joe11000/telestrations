@@ -26,12 +26,10 @@ class RendezvousController < ApplicationController
         # user associated with another pregame that has a different status and wants to join another game. This will only happen when user uses browser's back button instead of the "Leave Group" button on the rendezvous page
         if @game.try(:pregame?) && different_game_type_chosen?(params[:game_type], @game.game_type)
           @game.remove_player current_user.id
-          @user_already_joined = false
           @game = nil
         end
 
         if @game.blank?
-
           @user_already_joined = false
 
           case params[:game_type]
@@ -54,10 +52,8 @@ class RendezvousController < ApplicationController
         #   @user_already_joined = false
 
         elsif @game.pregame? && current_user.current_games_user_name  # user already joined this game
-
           @user_already_joined = true
         elsif @game.pregame?
-
           @user_already_joined = false
         else
           raise "shouldn't have gotten here, something is wrong: game_id: #{@game.try(:id)}, current_user_id: #{current_user.id}"

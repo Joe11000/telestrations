@@ -4,17 +4,6 @@ require 'support/login'
 RSpec.describe RendezvousController, type: :request do
   include LoginHelper
 
-  def set_signed_cookies params={}
-    signed_cookies = ActionDispatch::Request.new(Rails.application.env_config.deep_dup).cookie_jar
-
-    params.each do |key, value|
-      signed_cookies.signed[key.to_sym] = value
-      cookies[key.to_sym] = signed_cookies[key.to_sym]
-    end
-
-    cookies
-  end
-
   shared_examples_for "redirect user elsewhere if they shouldn't be on rendezvous page" do
     context 'user NOT logged in' do
       it 'redirects them back to home page' do
@@ -383,10 +372,11 @@ RSpec.describe RendezvousController, type: :request do
           end
         end
 
-        context 'if currently associated with any other games' do
-          context 'if user wants to leave game and join a different game type and does so by editing the search bar or using browser back arrow' do
+        context 'if currently associated with a game' do
+          context 'if user wants to leave a game and join a different game type and does so by editing the search bar or using browser back arrow' do
             context 'leaving a private pregame to join a quick_start .... which is a public game' do
               it "removes user's games_user association to previous game and displays" do
+                Game.destroy_all
                 other_game = FactoryBot.create(:game, :pregame, :private_game)
                 current_user = other_game.users.first
                 set_signed_cookies({ user_id: current_user.id })

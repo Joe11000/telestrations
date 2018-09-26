@@ -2,7 +2,6 @@ class InGameCardUploadController < ApplicationController
   before_action :upload_files, only: :create
 
   def new
-    #
   end
 
   def create

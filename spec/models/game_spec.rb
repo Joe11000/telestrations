@@ -173,9 +173,9 @@ RSpec.describe Game, type: :model do
       end
     end
 
-    context 'FactoryBot.create(:game)' do
+    context 'FactoryBot.create(:game)', :r5 do
       context 'FactoryBot.create(:game, :public_game)' do
-        context 'FactoryBot.create(:game, :public_game, :pregame)', :r5 do
+        context 'FactoryBot.create(:game, :public_game, :pregame)' do
           it_behaves_like 'a pregame', FactoryBot.create(:game, :public_game, :pregame)
 
           it 'is valid' do
@@ -184,7 +184,7 @@ RSpec.describe Game, type: :model do
           end
         end
 
-        context 'FactoryBot.create(:game, :public_game, :midgame_with_no_moves)', :r5 do
+        context 'FactoryBot.create(:game, :public_game, :midgame_with_no_moves)' do
           it_behaves_like 'a midgame_with_no_moves', FactoryBot.create(:game, :public_game, :midgame_with_no_moves)
 
           it 'is valid' do
@@ -193,7 +193,7 @@ RSpec.describe Game, type: :model do
           end
         end
 
-        context 'FactoryBot.create(:game, :public_game, :midgame)', :r5 do
+        context 'FactoryBot.create(:game, :public_game, :midgame)' do
           it_behaves_like 'a midgame', FactoryBot.create(:game, :public_game, :midgame)
 
           it 'is valid' do
@@ -202,7 +202,7 @@ RSpec.describe Game, type: :model do
           end
         end
 
-        context 'FactoryBot.create(:game, :public_game, :postgame)', :r5 do
+        context 'FactoryBot.create(:game, :public_game, :postgame)' do
           it_behaves_like 'a postgame', FactoryBot.create(:game, :public_game, :postgame)
 
           it 'is valid' do
@@ -214,7 +214,7 @@ RSpec.describe Game, type: :model do
       end
 
       context 'FactoryBot.create(:game, :private_game)' do
-        context 'FactoryBot.create(:game, :private_game, :pregame)', :r5  do
+        context 'FactoryBot.create(:game, :private_game, :pregame)'  do
           it_behaves_like 'a pregame', FactoryBot.create(:game, :private_game, :pregame)
 
           it 'is valid' do
@@ -223,7 +223,7 @@ RSpec.describe Game, type: :model do
           end
         end
 
-        context 'FactoryBot.create(:game, :private_game, :midgame_with_no_moves)', :r5 do
+        context 'FactoryBot.create(:game, :private_game, :midgame_with_no_moves)' do
           it_behaves_like 'a midgame_with_no_moves', FactoryBot.create(:game, :private_game, :midgame_with_no_moves)
 
           it 'is valid' do
@@ -232,7 +232,7 @@ RSpec.describe Game, type: :model do
           end
         end
 
-        context 'FactoryBot.create(:game, :private_game, :midgame)', :r5 do
+        context 'FactoryBot.create(:game, :private_game, :midgame)' do
           it_behaves_like 'a midgame', FactoryBot.create(:game, :private_game, :midgame)
 
           it 'is valid' do
@@ -241,7 +241,7 @@ RSpec.describe Game, type: :model do
           end
         end
 
-        context 'FactoryBot.create(:game, :private_game, :postgame)', :r5 do
+        context 'FactoryBot.create(:game, :private_game, :postgame)' do
           it_behaves_like 'a postgame', FactoryBot.create(:game, :private_game, :postgame)
 
           it 'is valid' do
@@ -298,7 +298,7 @@ RSpec.describe Game, type: :model do
         @cards = @game.cards_from_finished_game
       end
 
-      it 'returns correct ordering of cards' do
+      it 'returns correct ordering of cards', :r5 do
         gu1, gu2, gu3 = @game.games_users
         starting_card1, starting_card2, starting_card3 = @game.games_users.map(&:starting_card)
 
