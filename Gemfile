@@ -100,6 +100,7 @@ group :test do
   gem 'tcr'
   gem 'webmock'
   gem 'action-cable-testing'
+  gem 'database_cleaner'
 end
 
 

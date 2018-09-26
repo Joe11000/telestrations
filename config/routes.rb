@@ -9,9 +9,9 @@ Rails.application.routes.draw do
   scope 'game' do
     scope 'rendezvous' do
       get '/'                         => 'rendezvous#choose_game_type_page', as: :rendezvous_choose_game_type_page
-      get  ':game_type'               => 'rendezvous#rendezvous_page',       as: :rendezvous_page
+      get  'leave_pregame'            => 'rendezvous#leave_pregame',         as: :leave_pregame
       post 'join'                     => 'rendezvous#join_game',             as: :join_game
-      get  'leave_pregame/:join_code' => 'rendezvous#leave_pregame',         as: :leave_pregame
+      get  ':game_type'               => 'rendezvous#rendezvous_page',       as: :rendezvous_page
     end
 
     get  '/'          => 'games#game_page', as: :game_page

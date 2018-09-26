@@ -29,7 +29,7 @@ class Game < ActiveRecord::Base
   end
 
   def cards
-    Card.includes(:starting_games_user).where(games_users: { game_id: id }).order(:id)
+    Card.includes(:starting_games_user).where(games_users: { game_id: id }).order(id: :asc)
   end
 
 
@@ -112,9 +112,10 @@ class Game < ActiveRecord::Base
 
   def remove_player user_id
     user = users.find_by(id: user_id)
+
     return false if (user.blank? || status != 'pregame')
 
-    if users.count == 1
+    if users.count <= 1
       self.destroy
     else
       games_users.find_by(user_id: user_id, game_id: id).try(:destroy)
@@ -229,15 +230,15 @@ class Game < ActiveRecord::Base
     end
   end
 
-  # working!!!
+  # r5_wip
   # find the earliest placeholder created for user
   def get_placeholder_card current_user_id
-    Card.where(attached: false).where(uploader_id: current_user_id, starting_games_user_id: games_users.ids, description_text: nil).order(:id).try(:first) || Card.none
+    Card.where(uploader_id: current_user_id, description_text: nil, card_type: :description).or(Card.with_attached_drawing.where(uploader_id: current_user_id, card_type: :drawing, attached: true))
+    Card.where(uploader_id: current_user_id, starting_games_user_id: games_users.ids).order(:id).try(:first) || Card.none
   end
 
-
-# working!!!
-# postgame public methods
+  # r5 tested
+  # postgame public methods
   def cards_from_finished_game
     return [] unless status == 'postgame'
 

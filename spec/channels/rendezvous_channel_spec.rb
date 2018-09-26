@@ -137,8 +137,9 @@ RSpec.describe RendezvousChannel, type: :channel do
     end
   end
 
-  context '#start_game', :r5_wip do
-    before(:all) do
+  context '#start_game', :r5 do
+
+    before(:each) do
       # 3 players rendezvousing on game and logged in as user_1
         @game = FactoryBot.create(:game, :pregame)
         @user = @game.users.first
@@ -150,12 +151,17 @@ RSpec.describe RendezvousChannel, type: :channel do
         @gu2.update(users_game_name: Faker::Name.first_name)
     end
 
-    it do
-      expect { perform :start_game, {join_code: @game.join_code} }.to have_broadcasted_to("rendezvous_#{@game.join_code}").with({start_game_signal: game_page_url})
+    it 'removes games_user association for any player that did not submit a users_game_name' do
+      perform :start_game, {join_code: @game.join_code}
+
       @game.reload
-      expect(@game.user_ids).to eq [@gu1.user_id, @gu2.user_id]
+      expect(@game.user_ids).to match_array [@gu1.user_id, @gu2.user_id]
       expect(@game.midgame?).to eq true
       expect(JSON.parse(@game.passing_order)).to match_array([@gu1.user_id, @gu2.user_id])
+    end
+
+    it 'redirects all users games page url (where expected players will be redirected to the rendezvous choose game path if they were just removed from the game)' do
+      expect { perform :start_game, {join_code: @game.join_code} }.to have_broadcasted_to("rendezvous_#{@game.join_code}").with({start_game_signal: game_page_url})
     end
   end
 end

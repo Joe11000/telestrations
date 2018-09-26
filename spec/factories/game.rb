@@ -53,9 +53,9 @@ FactoryBot.define do
       after(:create) do |game, evaluator|
         new_game_associations game
         additional_player_moves game
-        game.update(passing_order: game.user_ids.to_s, join_code: nil)
-
         complete_the_game_associations game
+
+        game.update(passing_order: game.user_ids.to_s, join_code: nil)
       end
     end
   end
@@ -82,7 +82,6 @@ def additional_player_moves game
   user1 = gu1.user
   user2 = gu2.user
   user3 = gu3.user
-
   # No Moves for user 1...He is still thinking about what to make user2 draw
 
   # user 2 passed their first card
@@ -108,12 +107,14 @@ def complete_the_game_associations game
   gu1.update(set_complete: true)
 
   # user 2 is on their last card
-  gu2.starting_card.child_card            = FactoryBot.create(:drawing,     uploader: user3, starting_games_user: gu2) # replace the placeholder card because it was easier than updating it with a new attachment
+  gu2.starting_card.child_card.drawing.attach(io: File.open(File.join(Rails.root, 'spec', 'support', 'images', 'thumbnail_selfy.jpg')), \
+                                             content_type: 'image/jpg', \
+                                             filename: 'provider_avatar.jpg') # replace the placeholder card because it was easier than updating it with a new attachment
   gu2.starting_card.child_card.child_card = FactoryBot.create(:description, uploader: user1, starting_games_user: gu2)
   gu2.update(set_complete: true)
 
   # user 3 is on their last card
-  gu3.starting_card.child_card.child_card = FactoryBot.create(:description, uploader: user2, starting_games_user: gu3)
+  gu3.starting_card.child_card.child_card.update( description_text: TokenPhrase.generate(' ', numbers: false) )
   gu3.update(set_complete: true)
 end
 
