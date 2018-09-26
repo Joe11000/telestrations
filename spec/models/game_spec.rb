@@ -88,6 +88,7 @@ RSpec.describe Game, type: :model do
         users = midgame.users
         gus = midgame.games_users
 
+        expect( JSON.parse(midgame.passing_order) ).to match_array users.pluck(:id)
         expect(midgame.valid?).to eq true
         expect(midgame.join_code).to be_nil
         expect(midgame.description_first?).to eq true
@@ -166,7 +167,8 @@ RSpec.describe Game, type: :model do
           expect(starting_card.child_card.child_card.child_card).to eq nil
 
         end
-
+        users = postgame.users
+        expect( JSON.parse(postgame.passing_order) ).to match_array users.pluck(:id)
         expect(postgame.users.length).to eq 3
       end
     end
@@ -249,96 +251,6 @@ RSpec.describe Game, type: :model do
         end
       end
     end
-
-    # xcontext ':midgame' do
-
-    #   it ':game is valid' do
-    #     expect(@pregame).to be_valid
-    #     expect(@midgame).to be_valid
-    #     expect(@postgame).to be_valid
-    #   end
-
-    #   context ':midgame' do
-    #     before :all do
-    #       @midgame = FactoryBot.create(:game, :midgame)
-    #     end
-
-    #     it 'is valid' do
-    #       expect(FactoryBot.create(:game, :midgame).valid?).to eq true
-    #     end
-
-    #     xit 'has correct associations' do
-    #       expect(@midgame.users.count).to eq 3
-
-
-    #       @midgame.users.each do |user|
-    #         expect(user.starting_cards.length).to eq 1
-    #         expect(user.starting_cards.order(:id).first.child_card.parent_card).to eq user.starting_cards.order(:id).first
-    #       end
-    #     end
-
-    #     it 'status' do
-    #       expect(@midgame.status).to eq 'midgame'
-    #     end
-
-    #     it 'removes join code' do
-    #       expect(@midgame.join_code).to eq nil
-    #     end
-    #   end
-    # end
-
-    # xcontext ':postgame' do
-    #   before :all do
-    #     @postgame = FactoryBot.create(:game, :postgame)
-    #   end
-
-    #   it 'is valid' do
-    #     expect(@postgame.valid?).to eq true
-    #   end
-
-    #   it 'has correct associations' do
-    #     expect(@postgame.users.count).to eq 3
-
-    #     @postgame.users.each do |user|
-    #       expect(user.starting_cards.length).to eq 1
-    #       expect(user.starting_cards.first.child_card.parent_card).to eq user.starting_cards.first
-    #     end
-    #   end
-
-    #   it 'status' do
-    #     expect(@postgame.status).to eq 'postgame'
-    #   end
-
-    #   it 'does not allow additional players' do
-    #     expect(@postgame.join_code).to eq nil
-    #   end
-    # end
-
-    # xcontext 'public_pregame' do
-    #   before :all do
-    #     @public_pregame = FactoryBot.create(:game, :pregame, :public_game)
-    #   end
-
-    #   it 'has 3 users attached' do
-    #     expect(@public_pregame.users.count).to eq 3
-    #   end
-
-    #   it 'is a public game' do
-    #     expect(@public_pregame.public_game?).to eq true
-    #   end
-
-    #   it 'allows additional players' do
-    #     expect(@public_pregame.join_code).to match /^[a-zA-Z]{4}$/
-    #   end
-
-    #   it 'game has not been completed' do
-    #     expect(@public_pregame.status).to eq 'pregame'
-    #   end
-
-    #   it 'game has not been deleted for some strange reason' do
-    #     expect(@public_pregame.deleted_at).to eq nil
-    #   end
-    # end
   end
 
 # def rendezousing_games_users
@@ -355,6 +267,7 @@ RSpec.describe Game, type: :model do
 
   context 'methods'  do
     it '.random_public_game', :r5 do
+      Game.destroy_all
       g1 = FactoryBot.create(:game, :pregame, :public_game)
       g2 = FactoryBot.create(:game, :pregame, :public_game)
       FactoryBot.create(:game, :midgame)
