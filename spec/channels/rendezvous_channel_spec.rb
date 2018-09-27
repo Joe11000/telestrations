@@ -2,13 +2,6 @@ require 'rails_helper'
 # require 'support/rendezvous_channel_helpers'
 
 RSpec.describe RendezvousChannel, type: :channel do
-  before(:all) do
-    Game.delete_all
-    User.delete_all
-    GamesUser.delete_all
-    Card.delete_all
-  end
-
   let(:action_cable) { ActionCable.server }
 
   context '#subscribe', :r5 do

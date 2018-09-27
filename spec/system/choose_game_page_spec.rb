@@ -7,16 +7,9 @@ RSpec.describe 'A User can' do
   include Helpers
 
   it 'logout' do
-    in_browser(:facebook_user) do
-      login_with 'facebook'
-      click_button "Private"
-      fill_in
-    end
-
-    in_browser(:twitter_user) do
-      login_with 'twitter'
-    end
-
+    login_with 'facebook'
+    click_button "logout"
+    expect(page.current_path).to eq root_path
   end
 
   it 'see username' do

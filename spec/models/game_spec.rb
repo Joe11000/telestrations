@@ -267,7 +267,6 @@ RSpec.describe Game, type: :model do
 
   context 'methods'  do
     it '.random_public_game', :r5 do
-      Game.destroy_all
       g1 = FactoryBot.create(:game, :pregame, :public_game)
       g2 = FactoryBot.create(:game, :pregame, :public_game)
       FactoryBot.create(:game, :midgame)

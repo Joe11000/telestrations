@@ -318,9 +318,6 @@ RSpec.describe RendezvousController, type: :request do
       context '/rendezvous/quick_start' do
 
         context 'if NOT currently associated with any other games' do
-          before :each do
-            Game.destroy_all
-          end
 
           it 'creates a newly created public game if none exist' do
             current_user = FactoryBot.create(:user)
@@ -376,7 +373,6 @@ RSpec.describe RendezvousController, type: :request do
           context 'if user wants to leave a game and join a different game type and does so by editing the search bar or using browser back arrow' do
             context 'leaving a private pregame to join a quick_start .... which is a public game' do
               it "removes user's games_user association to previous game and displays" do
-                Game.destroy_all
                 other_game = FactoryBot.create(:game, :pregame, :private_game)
                 current_user = other_game.users.first
                 set_signed_cookies({ user_id: current_user.id })
@@ -505,7 +501,6 @@ RSpec.describe RendezvousController, type: :request do
 
     context 'user leaving IS the only one attached to the game' do
       it 'removes user from game before redirecting user to choose_game_type_page' do
-        Game.destroy_all
         game = FactoryBot.create(:game, :pregame, :public_game)
         game_id = game.id
         game.users.limit(game.users.count - 1).destroy_all
@@ -521,7 +516,6 @@ RSpec.describe RendezvousController, type: :request do
 
     context 'user leaving IS NOT the only one attached to the game' do
       it 'removes user from game before redirecting user to choose_game_type_page' do
-        Game.destroy_all
         game = FactoryBot.create(:game, :pregame, :public_game)
         game_id = game.id
         current_user = game.users.first

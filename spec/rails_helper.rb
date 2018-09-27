@@ -26,16 +26,6 @@ require 'rspec/rails'
 ActiveRecord::Migration.maintain_test_schema!
 
 
-
-# Capybara
-# require 'capybara/rspec'
-# Capybara.register_driver :selenium do |app|
-#   Capybara::Selenium::Driver.new(app, :browser => :chrome)
-# end
-# Capybara.javascript_driver = :selenium
-# # Capybara.default_driver = :webkit
-
-
 # OmniAuth
 OmniAuth.config.test_mode = true
 Rails.application.env_config["omniauth.auth"] = OmniAuth.config.mock_auth[:twitter]
@@ -57,25 +47,6 @@ OmniAuth.config.mock_auth[:facebook] = OmniAuth::AuthHash.new({
   }
   # etc.
 })
-
-
-# Database cleaner
-# require 'database_cleaner'
-
-# RSpec.configure do |config|
-
-#   config.before(:suite) do
-#     DatabaseCleaner.strategy = :transaction
-#     DatabaseCleaner.clean_with(:truncation)
-#   end
-
-#   config.around(:each) do |example|
-#     DatabaseCleaner.cleaning do
-#       example.run
-#     end
-#   end
-# end
-
 
 
 
@@ -146,23 +117,14 @@ end
 
 
 RSpec.configure do |config|
- config.use_transactional_fixtures = true
+  config.before(:suite) do
+    DatabaseCleaner.strategy = :transaction
+    DatabaseCleaner.clean_with(:truncation)
+  end
 
-  config.before(:each) do
-    DatabaseCleaner.start
+  config.around(:each) do |example|
+    DatabaseCleaner.cleaning do
+      example.run
+    end
   end
 end
-
-# RSpec.configure do |config|
-#   config.before(:suite) do
-#     DatabaseCleaner.strategy = :transaction
-#     DatabaseCleaner.clean_with(:truncation)
-#   end
-
-#   config.around(:each) do |example|
-#     DatabaseCleaner.cleaning do
-#       example.run
-#     end
-#   end
-
-# end
