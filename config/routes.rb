@@ -23,7 +23,6 @@ Rails.application.routes.draw do
   end
 
   scope 'cards' do
-    post 'in_game_card_upload' => 'in_game_card_upload#create', as: :in_game_card_upload
     get  'out_of_game_card_upload' => 'out_of_game_card_upload#new', as: :new_out_of_game_card_upload
     post 'out_of_game_card_upload' => 'out_of_game_card_upload#create'
   end

@@ -48,7 +48,7 @@ RSpec.describe GamesController, :type => :request do
     it 'user can see', :r5_wip do
       game = FactoryBot.create(:game, :midgame_with_no_moves)
       current_user = game.users.first
-      set_signed_cookies({user_id: current_user})
+      set_signed_cookies({user_id: current_user.id})
 
       get game_page_path
       byebug

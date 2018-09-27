@@ -1,6 +1,6 @@
 example_id                                                           | status  | run_time        |
 -------------------------------------------------------------------- | ------- | --------------- |
-./spec/channels/game_channel_spec.rb[1:1:1]                          | failed  | 0.18749 seconds |
+./spec/channels/game_channel_spec.rb[1:1:1]                          | failed  | 0.15362 seconds |
 ./spec/channels/rendezvous_channel_spec.rb[1:1:1:1]                  | passed  | 0.15142 seconds |
 ./spec/channels/rendezvous_channel_spec.rb[1:1:2:1:1]                | passed  | 0.03285 seconds |
 ./spec/channels/rendezvous_channel_spec.rb[1:1:2:2:1]                | passed  | 0.28332 seconds |
@@ -32,39 +32,39 @@ example_id                                                           | status  |
 ./spec/models/card_spec.rb[1:3:12]                                   | passed  | 0.00512 seconds |
 ./spec/models/card_spec.rb[1:3:13]                                   | passed  | 0.00456 seconds |
 ./spec/models/card_spec.rb[1:3:14]                                   | passed  | 0.00526 seconds |
-./spec/models/game_spec.rb[1:1:1]                                    | passed  | 0.00234 seconds |
-./spec/models/game_spec.rb[1:1:2]                                    | passed  | 0.00128 seconds |
-./spec/models/game_spec.rb[1:1:3]                                    | passed  | 0.00213 seconds |
-./spec/models/game_spec.rb[1:2:1]                                    | passed  | 0.00134 seconds |
-./spec/models/game_spec.rb[1:2:2]                                    | passed  | 0.00107 seconds |
-./spec/models/game_spec.rb[1:2:3:1]                                  | pending | 0.00003 seconds |
+./spec/models/game_spec.rb[1:1:1]                                    | passed  | 0.00261 seconds |
+./spec/models/game_spec.rb[1:1:2]                                    | passed  | 0.00118 seconds |
+./spec/models/game_spec.rb[1:1:3]                                    | passed  | 0.00201 seconds |
+./spec/models/game_spec.rb[1:2:1]                                    | passed  | 0.00101 seconds |
+./spec/models/game_spec.rb[1:2:2]                                    | passed  | 0.00095 seconds |
+./spec/models/game_spec.rb[1:2:3:1]                                  | pending | 0.00002 seconds |
 ./spec/models/game_spec.rb[1:2:3:2]                                  | pending | 0.00001 seconds |
-./spec/models/game_spec.rb[1:3:1]                                    | passed  | 0.0017 seconds  |
-./spec/models/game_spec.rb[1:3:2]                                    | passed  | 0.00133 seconds |
-./spec/models/game_spec.rb[1:3:3]                                    | passed  | 0.00172 seconds |
-./spec/models/game_spec.rb[1:3:4]                                    | passed  | 0.00111 seconds |
-./spec/models/game_spec.rb[1:3:5]                                    | passed  | 0.00102 seconds |
-./spec/models/game_spec.rb[1:3:6]                                    | passed  | 0.00098 seconds |
-./spec/models/game_spec.rb[1:3:7]                                    | passed  | 0.00102 seconds |
-./spec/models/game_spec.rb[1:4:1:1:1:1:1]                            | passed  | 0.02204 seconds |
-./spec/models/game_spec.rb[1:4:1:1:1:2]                              | passed  | 0.00405 seconds |
-./spec/models/game_spec.rb[1:4:1:1:2:1:1]                            | passed  | 5.04 seconds    |
-./spec/models/game_spec.rb[1:4:1:1:2:2]                              | passed  | 0.00245 seconds |
-./spec/models/game_spec.rb[1:4:1:1:3:1:1]                            | passed  | 0.0173 seconds  |
-./spec/models/game_spec.rb[1:4:1:1:3:2]                              | passed  | 0.00161 seconds |
-./spec/models/game_spec.rb[1:4:1:1:4:1:1]                            | passed  | 0.00998 seconds |
-./spec/models/game_spec.rb[1:4:1:1:4:2]                              | passed  | 0.00215 seconds |
-./spec/models/game_spec.rb[1:4:1:2:1:1:1]                            | passed  | 0.01042 seconds |
-./spec/models/game_spec.rb[1:4:1:2:1:2]                              | passed  | 0.0015 seconds  |
-./spec/models/game_spec.rb[1:4:1:2:2:1:1]                            | passed  | 0.56242 seconds |
-./spec/models/game_spec.rb[1:4:1:2:2:2]                              | passed  | 0.00151 seconds |
-./spec/models/game_spec.rb[1:4:1:2:3:1:1]                            | passed  | 0.02174 seconds |
-./spec/models/game_spec.rb[1:4:1:2:3:2]                              | passed  | 0.00228 seconds |
-./spec/models/game_spec.rb[1:4:1:2:4:1:1]                            | passed  | 0.01329 seconds |
-./spec/models/game_spec.rb[1:4:1:2:4:2]                              | passed  | 0.00263 seconds |
-./spec/models/game_spec.rb[1:5:1]                                    | passed  | 1.29 seconds    |
-./spec/models/game_spec.rb[1:5:2]                                    | passed  | 1.43 seconds    |
-./spec/models/game_spec.rb[1:5:3:1]                                  | passed  | 0.0159 seconds  |
+./spec/models/game_spec.rb[1:3:1]                                    | passed  | 0.00103 seconds |
+./spec/models/game_spec.rb[1:3:2]                                    | passed  | 0.00098 seconds |
+./spec/models/game_spec.rb[1:3:3]                                    | passed  | 0.00112 seconds |
+./spec/models/game_spec.rb[1:3:4]                                    | passed  | 0.00112 seconds |
+./spec/models/game_spec.rb[1:3:5]                                    | passed  | 0.00109 seconds |
+./spec/models/game_spec.rb[1:3:6]                                    | passed  | 0.0011 seconds  |
+./spec/models/game_spec.rb[1:3:7]                                    | passed  | 0.00098 seconds |
+./spec/models/game_spec.rb[1:4:1:1:1:1:1]                            | passed  | 0.02198 seconds |
+./spec/models/game_spec.rb[1:4:1:1:1:2]                              | passed  | 0.00434 seconds |
+./spec/models/game_spec.rb[1:4:1:1:2:1:1]                            | passed  | 0.02467 seconds |
+./spec/models/game_spec.rb[1:4:1:1:2:2]                              | passed  | 0.00205 seconds |
+./spec/models/game_spec.rb[1:4:1:1:3:1:1]                            | passed  | 0.0212 seconds  |
+./spec/models/game_spec.rb[1:4:1:1:3:2]                              | passed  | 0.00183 seconds |
+./spec/models/game_spec.rb[1:4:1:1:4:1:1]                            | passed  | 0.01245 seconds |
+./spec/models/game_spec.rb[1:4:1:1:4:2]                              | passed  | 0.00173 seconds |
+./spec/models/game_spec.rb[1:4:1:2:1:1:1]                            | passed  | 0.01161 seconds |
+./spec/models/game_spec.rb[1:4:1:2:1:2]                              | passed  | 0.00197 seconds |
+./spec/models/game_spec.rb[1:4:1:2:2:1:1]                            | passed  | 0.02302 seconds |
+./spec/models/game_spec.rb[1:4:1:2:2:2]                              | passed  | 0.00212 seconds |
+./spec/models/game_spec.rb[1:4:1:2:3:1:1]                            | passed  | 0.01854 seconds |
+./spec/models/game_spec.rb[1:4:1:2:3:2]                              | passed  | 0.0018 seconds  |
+./spec/models/game_spec.rb[1:4:1:2:4:1:1]                            | passed  | 0.00995 seconds |
+./spec/models/game_spec.rb[1:4:1:2:4:2]                              | passed  | 0.00184 seconds |
+./spec/models/game_spec.rb[1:5:1]                                    | passed  | 1.57 seconds    |
+./spec/models/game_spec.rb[1:5:2]                                    | passed  | 1.53 seconds    |
+./spec/models/game_spec.rb[1:5:3:1]                                  | passed  | 0.01462 seconds |
 ./spec/models/game_spec.rb[1:5:4:1:1]                                | pending | 0.00001 seconds |
 ./spec/models/game_spec.rb[1:5:4:1:2]                                | pending | 0.00001 seconds |
 ./spec/models/game_spec.rb[1:5:4:2:1]                                | pending | 0.00001 seconds |
@@ -75,6 +75,8 @@ example_id                                                           | status  |
 ./spec/models/game_spec.rb[1:5:6:1:3]                                | pending | 0 seconds       |
 ./spec/models/game_spec.rb[1:5:6:1:4]                                | pending | 0.00001 seconds |
 ./spec/models/game_spec.rb[1:5:6:2:1]                                | pending | 0.00001 seconds |
+./spec/models/game_spec.rb[1:5:7:1:1]                                | passed  | 0.51991 seconds |
+./spec/models/game_spec.rb[1:5:8:1]                                  | passed  | 0.31852 seconds |
 ./spec/models/games_user_spec.rb[1:1:1]                              | passed  | 0.0021 seconds  |
 ./spec/models/games_user_spec.rb[1:1:2]                              | passed  | 0.01124 seconds |
 ./spec/models/games_user_spec.rb[1:1:3]                              | passed  | 0.00105 seconds |
@@ -121,7 +123,7 @@ example_id                                                           | status  |
 ./spec/requests/games_controller_spec.rb[1:1:1:2:1:1]                | unknown |                 |
 ./spec/requests/games_controller_spec.rb[1:1:1:2:2:1]                | unknown |                 |
 ./spec/requests/games_controller_spec.rb[1:1:1:2:3:1]                | unknown |                 |
-./spec/requests/games_controller_spec.rb[1:1:2]                      | passed  | 22.79 seconds   |
+./spec/requests/games_controller_spec.rb[1:1:2]                      | passed  | 13.53 seconds   |
 ./spec/requests/out_of_game_card_upload_controllers_spec.rb[1:1:1]   | failed  | 0.00162 seconds |
 ./spec/requests/rendezvous_controller_spec.rb[1:1:1:1:1]             | passed  | 0.24664 seconds |
 ./spec/requests/rendezvous_controller_spec.rb[1:1:1:2:1]             | passed  | 1.1 seconds     |

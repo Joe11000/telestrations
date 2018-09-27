@@ -230,11 +230,10 @@ class Game < ActiveRecord::Base
     end
   end
 
-  # r5_wip
+  # r5 tested
   # find the earliest placeholder created for user
   def get_placeholder_card current_user_id
-    Card.where(uploader_id: current_user_id, description_text: nil, card_type: :description).or(Card.with_attached_drawing.where(uploader_id: current_user_id, card_type: :drawing, attached: true))
-    Card.where(uploader_id: current_user_id, starting_games_user_id: games_users.ids).order(:id).try(:first) || Card.none
+    Card.find_by(uploader_id: current_user_id, starting_games_user_id: games_users.ids)
   end
 
   # r5 tested
