@@ -1,4 +1,4 @@
-class OutOfGameCardUploadController < ApplicationController
+class OutOfGameCardUploadsController < ApplicationController
   before_action :create_params, only: :create
 
   def new

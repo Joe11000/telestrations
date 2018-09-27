@@ -9,7 +9,7 @@ RSpec.describe 'A User can' do
   it 'logout' do
     in_browser(:facebook_user) do
       login_with 'facebook'
-      click_on "Private"
+      click_button "Private"
       fill_in
     end
 

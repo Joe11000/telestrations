@@ -50,6 +50,8 @@ class RendezvousChannel < ApplicationCable::Channel
   end
 
   def start_game
+    byebug
+
     Game.start_game params[:join_code]
 
     # broadcast a message to try and go to the game start page. The before action will allow the commited people through to their game and send the uncommited people back to the game choice page.

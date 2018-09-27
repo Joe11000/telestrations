@@ -135,6 +135,7 @@ require 'rubygems'
 require 'vcr'
 
 VCR.configure do |config|
+  config.allow_http_connections_when_no_cassette = true
   config.cassette_library_dir = "spec/vcr_cassettes"
   config.hook_into :webmock
   config.ignore_localhost = true
@@ -142,3 +143,26 @@ VCR.configure do |config|
   config.filter_sensitive_data('<twitter_api_key>') { Rails.application.credentials.dig(:twitter, :api_key) }
   config.filter_sensitive_data('<facebook_api_key>') { Rails.application.credentials.dig(:facebook, :api_key) }
 end
+
+
+RSpec.configure do |config|
+ config.use_transactional_fixtures = true
+
+  config.before(:each) do
+    DatabaseCleaner.start
+  end
+end
+
+# RSpec.configure do |config|
+#   config.before(:suite) do
+#     DatabaseCleaner.strategy = :transaction
+#     DatabaseCleaner.clean_with(:truncation)
+#   end
+
+#   config.around(:each) do |example|
+#     DatabaseCleaner.cleaning do
+#       example.run
+#     end
+#   end
+
+# end

@@ -4,7 +4,7 @@
   .col-8.offset-2.text-center.mt-3
     p.h3 Upload Pictures From Your Games At Home
   .col-6.offset-3.col-md-4.offset-md-4.mt-3
-    = form_with scope: :drawing , url: out_of_game_card_upload_path do |f|
+    = form_with scope: :drawing , url: out_of_game_card_uploads_path do |f|
       .form-group
         = f.file_field :drawings, multiple: true
           - if flash[:notice]

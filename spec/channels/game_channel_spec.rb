@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe GameChannel, type: :channel do
-  context '#subscribed', :r5_wip do
+  xcontext '#subscribed', :r5_wip do
 
     before :each do
       @game = FactoryBot.create :game, :midgame_with_no_moves

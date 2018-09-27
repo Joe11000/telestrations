@@ -52,7 +52,7 @@ RSpec.describe GamesController, :type => :request do
 
       get game_page_path
       byebug
-      expect(response.body).to include ''
+      expect(response).not_to have_http_status 302
     end
 
     # xcontext 'renders correct variables to page' do

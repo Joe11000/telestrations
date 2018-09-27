@@ -62,7 +62,8 @@ RSpec.describe Game, type: :model do
 
         expect(midgame_with_no_moves.pregame?).to eq false
         expect(midgame_with_no_moves.midgame?).to eq true
-        expect( JSON.parse(midgame_with_no_moves.passing_order) ).to match_array users.pluck(:id)
+        byebug
+        expect( JSON.parse(midgame_with_no_moves.passing_order) ).to match_array(users.pluck(:id))
         expect(midgame_with_no_moves.postgame?).to eq false
         expect(midgame_with_no_moves.valid?).to eq true
         expect(midgame_with_no_moves.join_code).to be_nil
@@ -847,6 +848,7 @@ RSpec.describe Game, type: :model do
           gu3_placeholder = gu3.starting_card.child_card.child_card
 
           expect(game.get_placeholder_card gu1.user_id).to eq gu1_placeholder
+          byebug
           expect(game.get_placeholder_card gu2.user_id).to eq gu2_placeholder
           expect(game.get_placeholder_card gu3.user_id).to eq gu3_placeholder
         end

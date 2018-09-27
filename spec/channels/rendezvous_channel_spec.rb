@@ -160,8 +160,8 @@ RSpec.describe RendezvousChannel, type: :channel do
       expect(JSON.parse(@game.passing_order)).to match_array([@gu1.user_id, @gu2.user_id])
     end
 
-    it 'redirects all users games page url (where expected players will be redirected to the rendezvous choose game path if they were just removed from the game)' do
-      expect { perform :start_game, {join_code: @game.join_code} }.to have_broadcasted_to("rendezvous_#{@game.join_code}").with({start_game_signal: game_page_url})
+    it 'sends redirect url to all users to start the game via the rendezvous channel (where expected players will be redirected to the rendezvous choose game path if they were just removed from the game)' do
+      expect { perform :start_game, {join_code: @game.join_code} }.to have_broadcasted_to("rendezvous_#{@game.join_code}").with({start_game_signal: game_page_path})
     end
   end
 end
