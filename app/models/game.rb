@@ -1,7 +1,7 @@
 class Game < ActiveRecord::Base
-  has_many :games_users, inverse_of: :game, dependent: :destroy
-  has_many :users, through: :games_users
-  has_many :starting_cards, through: :games_users
+  has_many :games_users, ->{ order(id: :asc) }, inverse_of: :game, dependent: :destroy
+  has_many :users, ->{ order(id: :asc) }, through: :games_users
+  has_many :starting_cards, ->{ order(id: :asc) }, through: :games_users
 
   validates :join_code, uniqueness: true, length: { is: 4 }, if: Proc.new { !join_code.blank? }
 
@@ -42,7 +42,7 @@ class Game < ActiveRecord::Base
   end
 
   def unassociated_rendezousing_games_users
-    rendezousing_games_users.where(users_game_name: nil)
+    rendezousing_games_users.where(users_game_name: nil).order(id: :asc)
   end
 
 
@@ -233,9 +233,15 @@ class Game < ActiveRecord::Base
   # r5 tested
   # find the earliest placeholder created for user
   def get_placeholder_card current_user_id
-    Card.find_by(uploader_id: current_user_id, starting_games_user_id: games_users.ids, description_text: nil)
-    # Card.with_attached_drawing.where(uploader_id: current_user_id, starting_games_user_id: games_users.ids).where(medium: 'description', description_text: nil) \
-      # .or(Card.with_attached_drawing.joins(blobs: :attachments).where(medium: 'drawing', blobs: {attachments: { byte_size: 0..INFINITY.new }}))
+    # if description placeholder
+    result = Card.where(uploader_id: current_user_id, starting_games_user_id: games_users.ids).where(medium: 'description', description_text: nil).order(id: :asc).try(:last)
+    return result unless result.blank?
+
+    # if drawing placeholder
+    result = Card.with_attached_drawing.where(uploader_id: current_user_id, starting_games_user_id: games_users.ids).where(medium: :drawing).order(id: :asc).select{|card| !card.drawing.attached?}.try(:last)
+    return result unless result.blank?
+
+    return nil
   end
 
   # r5 tested

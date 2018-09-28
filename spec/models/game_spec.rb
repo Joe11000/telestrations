@@ -841,9 +841,9 @@ RSpec.describe Game, type: :model do
     #   end
     # end
 
-    context '#get_placeholder_card', :r5 do
+    context '#get_placeholder_card' do
       context 'placeholder available' do
-        it 'returns find a placeholder card' do
+        it 'returns find a placeholder card', :r5 do
           game = FactoryBot.create(:midgame, callback_wanted: :midgame)
           random_placeholder1 = FactoryBot.create(:drawing, :placeholder)
           random_placeholder2 = FactoryBot.create(:description, :placeholder)
@@ -861,9 +861,9 @@ RSpec.describe Game, type: :model do
         end
       end
     end
-    context 'no placeholder available', :r5 do
-      it 'returns nil' do
-        game = FactoryBot.create(:pregame, callback_wanted: :pregame)
+    context 'no placeholder available' do
+      it 'returns nil', :r5 do
+        FactoryBot.create(:pregame, callback_wanted: :pregame)
         game = FactoryBot.create(:postgame, callback_wanted: :postgame)
         random_placeholder1 = FactoryBot.create(:drawing, :placeholder)
         random_placeholder2 = FactoryBot.create(:description, :placeholder)
@@ -871,10 +871,9 @@ RSpec.describe Game, type: :model do
         FactoryBot.create(:drawing, :out_of_game_card_upload)
 
         gu1, gu2, gu3 = game.games_users
-
-        expect(game.get_placeholder_card gu1.user_id).to eq nil
-        expect(game.get_placeholder_card gu2.user_id).to eq nil
-        expect(game.get_placeholder_card gu3.user_id).to eq nil
+        expect( game.get_placeholder_card(gu1.user_id) ).to eq nil
+        expect( game.get_placeholder_card(gu2.user_id) ).to eq nil
+        expect( game.get_placeholder_card(gu3.user_id) ).to eq nil
       end
     end
   end

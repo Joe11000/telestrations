@@ -85,7 +85,7 @@ def new_game_associations game
 end
 
 def additional_player_moves game
-  gu1, gu2, gu3 = game.games_users
+  gu1, gu2, gu3 = game.games_users.order(id: :asc)
 
   user1 = gu1.user
   user2 = gu2.user
@@ -104,7 +104,7 @@ end
 
 # this finishes the game that additional_player_moves() started
 def complete_the_game_associations game
-  gu1, gu2, gu3 = game.games_users
+  gu1, gu2, gu3 = game.games_users.order(id: :asc)
   user1 = gu1.user
   user2 = gu2.user
   user3 = gu3.user
@@ -121,6 +121,7 @@ def complete_the_game_associations game
   gu2.starting_card.child_card.child_card = FactoryBot.create(:description, uploader: user1, starting_games_user: gu2)
   gu2.update(set_complete: true)
 
+  byebug
   # user 3 is on their last card
   gu3.starting_card.child_card.child_card.update( description_text: TokenPhrase.generate(' ', numbers: false) )
   gu3.update(set_complete: true)
