@@ -26,7 +26,7 @@ RSpec.describe GamesController, :type => :request do
 
       context 'user should be waiting for their game to start' do
         it 'then user is redirected back to choose game screen' do
-          set_signed_cookies({user_id: FactoryBot.create(:game, :pregame).users.first.id})
+          set_signed_cookies({user_id: FactoryBot.create(:pregame, callback_wanted: :pregame).users.first.id})
 
           expect( get rendezvous_choose_game_type_page_path ).to redirect_to(rendezvous_choose_game_type_page_path)
         end
@@ -34,7 +34,7 @@ RSpec.describe GamesController, :type => :request do
 
       context 'user just finished their game' do
         it 'then user is redirected back to choose game screen' do
-          set_signed_cookies({user_id: FactoryBot.create(:game, :postgame).users.first.id})
+          set_signed_cookies({user_id: FactoryBot.create(:postgame, callback_wanted: :postgame).users.first.id})
 
           expect( get rendezvous_choose_game_type_page_path ).to redirect_to(rendezvous_choose_game_type_page_path)
         end
@@ -46,7 +46,7 @@ RSpec.describe GamesController, :type => :request do
     it_behaves_like "redirect if user shouldn't be playing this game"
 
     it 'user can see', :r5_wip do
-      game = FactoryBot.create(:game, :midgame_with_no_moves)
+      game = FactoryBot.create(:midgame_with_no_moves, callback_wanted: :midgame_with_no_moves)
       current_user = game.users.first
       set_signed_cookies({user_id: current_user.id})
 

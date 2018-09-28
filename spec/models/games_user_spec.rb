@@ -39,7 +39,7 @@ RSpec.describe GamesUser, type: :model do
 
   context '#cards', :r5 do
     before :all do
-      @game = FactoryBot.create(:game, :midgame)
+      @game = FactoryBot.create(:midgame, callback_wanted: :midgame)
       @games_users = @game.games_users
       @games_user1 = @game.games_users[0]
       @games_user2 = @game.games_users[1]

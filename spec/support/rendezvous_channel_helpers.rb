@@ -1,6 +1,6 @@
 # module RendezvousChannel
 #   # 3 players rendezvousing on game and logged in as user_1
-#   def self.rendezvous user: nil, game: FactoryBot.create(:game, :pregame), bnding:
+#   def self.rendezvous user: nil, game: FactoryBot.create(:pregame, callback_wanted: :pregame), bnding:
 #     user = game.users.first
 #
 #     stub_connection( current_user: user )

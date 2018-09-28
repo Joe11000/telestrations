@@ -56,20 +56,16 @@ RSpec.describe User, type: :model do
     # datetime "updated_at", null: false
     # index ["deleted_at"], name: "index_users_on_deleted_at"
   context 'methods' do
-    # before(:all) do
-    #   game = FactoryBot.create(:midgame)
-    #   @user = game.users.first
-    # end
     context '#current_game', :r5 do
       before :all do
-        @pregame = FactoryBot.create :game, :pregame
+        @pregame = FactoryBot.create :pregame, callback_wanted: :pregame
 
-        @pregame_with_gu_update = FactoryBot.create :game, :pregame
+        @pregame_with_gu_update = FactoryBot.create :pregame, callback_wanted: :pregame
         @updated_gu = @pregame_with_gu_update.games_users.first
         @updated_gu.update(users_game_name: 'Yogi')
 
-        @midgame = FactoryBot.create :game, :midgame
-        @postgame = FactoryBot.create :game, :postgame
+        @midgame = FactoryBot.create :midgame, callback_wanted: :midgame
+        @postgame = FactoryBot.create  :postgame, callback_wanted: :postgame
       end
 
       context 'returns a game instance', r5: true do
@@ -105,13 +101,13 @@ RSpec.describe User, type: :model do
 
     context '#current_games_user', :r5 do
       before :all do
-        @game1 = FactoryBot.create :game, :pregame
+        @game1 = FactoryBot.create :pregame, callback_wanted: :pregame
         @user1 = @game1.users.first
 
-        @game2 = FactoryBot.create :game, :midgame
+        @game2 = FactoryBot.create :midgame, callback_wanted: :midgame
         @user2 = @game2.users.first
 
-        @game3 = FactoryBot.create :game, :postgame
+        @game3 = FactoryBot.create  :postgame, callback_wanted: :postgame
         @user3 = @game3.users.first
       end
 
@@ -134,13 +130,13 @@ RSpec.describe User, type: :model do
 
     context '#current_starting_card', :r5 do
       before :all do
-        @game1 = FactoryBot.create :game, :pregame
+        @game1 = FactoryBot.create :pregame, callback_wanted: :pregame
         @user1 = @game1.users.first
 
-        @game2 = FactoryBot.create :game, :midgame
+        @game2 = FactoryBot.create :midgame, callback_wanted: :midgame
         @user2 = @game2.users.first
 
-        @game3 = FactoryBot.create :game, :postgame
+        @game3 = FactoryBot.create  :postgame, callback_wanted: :postgame
         @user3 = @game3.users.first
       end
 
@@ -164,23 +160,23 @@ RSpec.describe User, type: :model do
 
     context '#current_games_user_name', :r5 do
       before :all do
-        @game1 = FactoryBot.create :game, :pregame
+        @game1 = FactoryBot.create :pregame, callback_wanted: :pregame
         @user1 = @game1.users.first
 
-        @game2 = FactoryBot.create :game, :midgame
+        @game2 = FactoryBot.create :midgame, callback_wanted: :midgame
         @user2 = @game2.users.first
 
-        @pregame_with_gu_update = FactoryBot.create :game, :pregame
+        @pregame_with_gu_update = FactoryBot.create :pregame, callback_wanted: :pregame
         @updated_gu = @pregame_with_gu_update.games_users.first
         @updated_gu.update(users_game_name: 'Yogi')
 
-        @midgame_with_gu_update = FactoryBot.create :game, :midgame
+        @midgame_with_gu_update = FactoryBot.create :midgame, callback_wanted: :midgame
         @updated_gu = @midgame_with_gu_update.games_users.first
         @updated_gu.update(users_game_name: 'Yogi')
 
 
 
-        @game3 = FactoryBot.create :game, :postgame
+        @game3 = FactoryBot.create  :postgame, callback_wanted: :postgame
         @user3 = @game3.users.first
       end
 

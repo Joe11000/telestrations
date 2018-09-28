@@ -7,6 +7,7 @@ FactoryBot.define do
 
     transient do
       num_of_players { 3 }
+      callback_wanted { 'none' }
     end
 
     trait :public_game do
@@ -17,45 +18,61 @@ FactoryBot.define do
       game_type { 'private' }
     end
 
-    trait :pregame do
+    factory :pregame do
       after(:create) do |game, evaluator|
-        game.users << FactoryBot.create_list(:user, evaluator.num_of_players)
+        if evaluator.callback_wanted == :pregame
+          byebug
+          game.users << FactoryBot.create_list(:user, evaluator.num_of_players)
+        end
       end
     end
 
-    trait :midgame_with_no_moves do
+    factory :midgame_with_no_moves do
+      transient do
+        callback = 'midgame_with_no_moves'
+      end
       status { 'midgame' }
 
       after(:create) do |game, evaluator|
-        new_game_associations game
+        if evaluator.callback_wanted == :midgame_with_no_moves
 
-        game.update(passing_order: game.user_ids.to_s, join_code: nil)
+          byebug
+          new_game_associations game
+
+          game.update(passing_order: game.user_ids.to_s, join_code: nil)
+        end
       end
     end
 
     # midway through game
-    trait :midgame do
+    factory :midgame do
 
       status { 'midgame' }
 
       after(:create) do |game, evaluator|
-        new_game_associations game
-        additional_player_moves game
+        if evaluator.callback_wanted == :midgame
+          byebug
+          new_game_associations game
+          additional_player_moves game
 
-        game.update(passing_order: game.user_ids.to_s, join_code: nil)
+          game.update(passing_order: game.user_ids.to_s, join_code: nil)
+        end
       end
     end
 
+    factory :postgame do
 
-    trait :postgame do
       status { 'postgame' }
 
       after(:create) do |game, evaluator|
-        new_game_associations game
-        additional_player_moves game
-        complete_the_game_associations game
+        if evaluator.callback_wanted == :postgame
+          byebug
+          new_game_associations game
+          additional_player_moves game
+          complete_the_game_associations game
 
-        game.update(passing_order: game.user_ids.to_s, join_code: nil)
+          game.update(passing_order: game.user_ids.to_s, join_code: nil)
+        end
       end
     end
   end
