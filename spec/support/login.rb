@@ -9,4 +9,15 @@ module LoginHelper
       end
     end
   end
+
+  def set_signed_cookies params={}
+    signed_cookies = ActionDispatch::Request.new(Rails.application.env_config.deep_dup).cookie_jar
+
+    params.each do |key, value|
+      signed_cookies.signed[key.to_sym] = value
+      cookies[key.to_sym] = signed_cookies[key.to_sym]
+    end
+
+    cookies
+  end
 end

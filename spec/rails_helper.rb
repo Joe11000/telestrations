@@ -26,16 +26,6 @@ require 'rspec/rails'
 ActiveRecord::Migration.maintain_test_schema!
 
 
-
-# Capybara
-# require 'capybara/rspec'
-# Capybara.register_driver :selenium do |app|
-#   Capybara::Selenium::Driver.new(app, :browser => :chrome)
-# end
-# Capybara.javascript_driver = :selenium
-# # Capybara.default_driver = :webkit
-
-
 # OmniAuth
 OmniAuth.config.test_mode = true
 Rails.application.env_config["omniauth.auth"] = OmniAuth.config.mock_auth[:twitter]
@@ -57,25 +47,6 @@ OmniAuth.config.mock_auth[:facebook] = OmniAuth::AuthHash.new({
   }
   # etc.
 })
-
-
-# Database cleaner
-# require 'database_cleaner'
-
-# RSpec.configure do |config|
-
-#   config.before(:suite) do
-#     DatabaseCleaner.strategy = :transaction
-#     DatabaseCleaner.clean_with(:truncation)
-#   end
-
-#   config.around(:each) do |example|
-#     DatabaseCleaner.cleaning do
-#       example.run
-#     end
-#   end
-# end
-
 
 
 
@@ -135,10 +106,66 @@ require 'rubygems'
 require 'vcr'
 
 VCR.configure do |config|
+  config.allow_http_connections_when_no_cassette = true
   config.cassette_library_dir = "spec/vcr_cassettes"
   config.hook_into :webmock
   config.ignore_localhost = true
   config.configure_rspec_metadata!
   config.filter_sensitive_data('<twitter_api_key>') { Rails.application.credentials.dig(:twitter, :api_key) }
   config.filter_sensitive_data('<facebook_api_key>') { Rails.application.credentials.dig(:facebook, :api_key) }
+end
+
+
+
+
+# default
+# RSpec.configure do |config|
+#
+#   config.before(:suite) do
+#     DatabaseCleaner.strategy = :transaction
+#     DatabaseCleaner.clean_with(:truncation)
+#   end
+
+#   config.around(:each) do |example|
+#     DatabaseCleaner.cleaning do |a|
+#       example.run
+#     end
+#   end
+
+# end
+RSpec.configure do |config|
+
+  config.before(:suite) do
+    DatabaseCleaner.strategy = :truncation
+    DatabaseCleaner.clean_with(:truncation)
+  end
+
+  config.before(:all) do
+    # Clean before each example group if clean_as_group is set
+    if self.class.metadata[:clean_as_group]
+      DatabaseCleaner.clean
+    end
+  end
+
+  config.after(:all) do
+    # Clean after each example group if clean_as_group is set
+    if self.class.metadata[:clean_as_group]
+      DatabaseCleaner.clean
+    end
+  end
+
+  config.before(:each) do
+    # Clean before each example unless clean_as_group is set
+    unless self.class.metadata[:clean_as_group]
+      DatabaseCleaner.start
+    end
+  end
+
+  config.after(:each) do
+    # Clean before each example unless clean_as_group is set
+    unless self.class.metadata[:clean_as_group]
+      DatabaseCleaner.clean
+    end
+  end
+
 end

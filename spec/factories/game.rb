@@ -7,6 +7,7 @@ FactoryBot.define do
 
     transient do
       num_of_players { 3 }
+      callback_wanted { 'none' }
     end
 
     trait :public_game do
@@ -17,45 +18,52 @@ FactoryBot.define do
       game_type { 'private' }
     end
 
-    trait :pregame do
+    factory :pregame do
       after(:create) do |game, evaluator|
-        game.users << FactoryBot.create_list(:user, evaluator.num_of_players)
+        if evaluator.callback_wanted == :pregame
+          game.users << FactoryBot.create_list(:user, evaluator.num_of_players)
+        end
       end
     end
 
-    trait :midgame_with_no_moves do
+    factory :midgame_with_no_moves do
       status { 'midgame' }
 
       after(:create) do |game, evaluator|
-        new_game_associations game
+        if evaluator.callback_wanted == :midgame_with_no_moves
+          new_game_associations game
 
-        game.update(passing_order: game.user_ids.to_s, join_code: nil)
+          game.update(passing_order: game.user_ids.to_s, join_code: nil)
+        end
       end
     end
 
     # midway through game
-    trait :midgame do
+    factory :midgame do
 
       status { 'midgame' }
 
       after(:create) do |game, evaluator|
-        new_game_associations game
-        additional_player_moves game
+        if evaluator.callback_wanted == :midgame
+          new_game_associations game
+          additional_player_moves game
 
-        game.update(passing_order: game.user_ids.to_s, join_code: nil)
+          game.update(passing_order: game.user_ids.to_s, join_code: nil)
+        end
       end
     end
 
+    factory :postgame do
 
-    trait :postgame do
       status { 'postgame' }
 
       after(:create) do |game, evaluator|
-        new_game_associations game
-        additional_player_moves game
-        complete_the_game_associations game
-
-        game.update(passing_order: game.user_ids.to_s, join_code: nil)
+        if evaluator.callback_wanted == :postgame
+          new_game_associations game
+          additional_player_moves game
+          complete_the_game_associations game
+          game.update(passing_order: game.user_ids.to_s, join_code: nil)
+        end
       end
     end
   end
@@ -77,7 +85,7 @@ def new_game_associations game
 end
 
 def additional_player_moves game
-  gu1, gu2, gu3 = game.games_users
+  gu1, gu2, gu3 = game.games_users.order(id: :asc)
 
   user1 = gu1.user
   user2 = gu2.user
@@ -96,7 +104,7 @@ end
 
 # this finishes the game that additional_player_moves() started
 def complete_the_game_associations game
-  gu1, gu2, gu3 = game.games_users
+  gu1, gu2, gu3 = game.games_users.order(id: :asc)
   user1 = gu1.user
   user2 = gu2.user
   user3 = gu3.user
@@ -113,6 +121,7 @@ def complete_the_game_associations game
   gu2.starting_card.child_card.child_card = FactoryBot.create(:description, uploader: user1, starting_games_user: gu2)
   gu2.update(set_complete: true)
 
+  byebug
   # user 3 is on their last card
   gu3.starting_card.child_card.child_card.update( description_text: TokenPhrase.generate(' ', numbers: false) )
   gu3.update(set_complete: true)

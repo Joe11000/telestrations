@@ -4,17 +4,6 @@ require 'support/login'
 RSpec.describe RendezvousController, type: :request do
   include LoginHelper
 
-  def set_signed_cookies params={}
-    signed_cookies = ActionDispatch::Request.new(Rails.application.env_config.deep_dup).cookie_jar
-
-    params.each do |key, value|
-      signed_cookies.signed[key.to_sym] = value
-      cookies[key.to_sym] = signed_cookies[key.to_sym]
-    end
-
-    cookies
-  end
-
   shared_examples_for "redirect user elsewhere if they shouldn't be on rendezvous page" do
     context 'user NOT logged in' do
       it 'redirects them back to home page' do
@@ -26,7 +15,7 @@ RSpec.describe RendezvousController, type: :request do
 
     context 'user currently midgame' do
       it 'redirect user back to game they are playing' do
-        set_signed_cookies({user_id: FactoryBot.create(:game, :midgame_with_no_moves).users.first.id})
+        set_signed_cookies({user_id: FactoryBot.create(:midgame_with_no_moves, callback_wanted: :midgame_with_no_moves).users.first.id})
 
         expect( get rendezvous_choose_game_type_page_path ).to redirect_to(game_path)
       end
@@ -38,7 +27,7 @@ RSpec.describe RendezvousController, type: :request do
 
     context 'user logged in' do
       before :each do
-        @game = FactoryBot.create(:game, :pregame)
+        @game = FactoryBot.create(:pregame, callback_wanted: :pregame)
         @user = @game.users.first
 
         set_signed_cookies({ user_id: @user.id })
@@ -69,8 +58,8 @@ RSpec.describe RendezvousController, type: :request do
     context 'game/rendezvous/join' do
       context 'One game exists with matching :join_code' do
         it 'user can join a public game'  do
-          FactoryBot.create(:game, :pregame, :public_game)
-          game = FactoryBot.create(:game, :pregame, :public_game)
+          FactoryBot.create(:pregame, :public_game, callback_wanted: :pregame)
+          game = FactoryBot.create(:pregame, :public_game, callback_wanted: :pregame)
           current_user = FactoryBot.create(:user)
           set_signed_cookies({user_id: current_user.id})
 
@@ -83,8 +72,8 @@ RSpec.describe RendezvousController, type: :request do
         end
 
         it 'user can join a private game' do
-          FactoryBot.create(:game, :pregame, :private_game)
-          game = FactoryBot.create(:game, :pregame, :private_game)
+          FactoryBot.create(:pregame, :private_game, callback_wanted: :pregame)
+          game = FactoryBot.create(:pregame, :private_game, callback_wanted: :pregame)
           current_user = FactoryBot.create(:user)
           set_signed_cookies({user_id: current_user.id})
 
@@ -157,7 +146,7 @@ RSpec.describe RendezvousController, type: :request do
         context 'if user wants to leave game and join a different game type and does so by editing the search bar or using browser back arrow' do
           context 'leaving a private pregame to join a public game' do
             it "removes user's games_user association to previous game and displays new private game" do
-              other_game = FactoryBot.create(:game, :pregame, :private_game)
+              other_game = FactoryBot.create(:pregame, :private_game, callback_wanted: :pregame)
               current_user = other_game.users.first
               set_signed_cookies({ user_id: current_user.id })
 
@@ -181,9 +170,9 @@ RSpec.describe RendezvousController, type: :request do
         context 'user refreshes the page on rendezous page' do
           context 'and user has not chosen a game name yet' do
             it 'then user should still see the join code they were looking at before' do
-              FactoryBot.create(:game, :pregame, :public_game)
+              FactoryBot.create(:pregame, :public_game, callback_wanted: :pregame)
 
-              game = FactoryBot.create(:game, :pregame, :public_game)
+              game = FactoryBot.create(:pregame, :public_game, callback_wanted: :pregame)
               current_user = game.users.first
               set_signed_cookies({user_id: current_user.id})
 
@@ -201,10 +190,10 @@ RSpec.describe RendezvousController, type: :request do
 
           context 'user has chosen a game name' do
             it 'then user should still see the join code they were looking at before' do
-                FactoryBot.create(:game, :pregame, :public_game)
-                FactoryBot.create(:game, :pregame, :private_game)
+                FactoryBot.create(:pregame, :public_game, callback_wanted: :pregame)
+                FactoryBot.create(:pregame, :private_game, callback_wanted: :pregame)
 
-                game = FactoryBot.create(:game, :pregame, :public_game)
+                game = FactoryBot.create(:pregame, :public_game, callback_wanted: :pregame)
                 current_user = game.users.first
                 set_signed_cookies({user_id: current_user.id})
 
@@ -262,7 +251,7 @@ RSpec.describe RendezvousController, type: :request do
         context 'if user wants to leave game and join a different game type and does so by editing the search bar or using browser back arrow' do
           context 'leaving a public pregame to join a private game' do
             it "removes user's games_user association to previous game and displays new private game" do
-              other_game = FactoryBot.create(:game, :pregame, :public_game)
+              other_game = FactoryBot.create(:pregame, :public_game, callback_wanted: :pregame)
               current_user = other_game.users.first
               set_signed_cookies({ user_id: current_user.id })
 
@@ -286,9 +275,9 @@ RSpec.describe RendezvousController, type: :request do
         context 'user refreshes the page' do
           context 'and user has not chosen a game name yet' do
             it 'then user should still see the join code they were looking at before' do
-              FactoryBot.create(:game, :pregame, :private_game)
+              FactoryBot.create(:pregame, :private_game, callback_wanted: :pregame)
 
-              game = FactoryBot.create(:game, :pregame, :private_game)
+              game = FactoryBot.create(:pregame, :private_game, callback_wanted: :pregame)
               current_user = game.users.first
               set_signed_cookies({user_id: current_user.id})
 
@@ -306,10 +295,10 @@ RSpec.describe RendezvousController, type: :request do
 
           context 'and user has chosen a game name' do
             it 'then user should still see the join code they were looking at before' do
-                FactoryBot.create(:game, :pregame, :private_game)
-                FactoryBot.create(:game, :pregame, :public_game)
+                FactoryBot.create(:pregame, :private_game, callback_wanted: :pregame)
+                FactoryBot.create(:pregame, :public_game, callback_wanted: :pregame)
 
-                game = FactoryBot.create(:game, :pregame, :private_game)
+                game = FactoryBot.create(:pregame, :private_game, callback_wanted: :pregame)
                 current_user = game.users.first
                 set_signed_cookies({user_id: current_user.id})
 
@@ -329,13 +318,10 @@ RSpec.describe RendezvousController, type: :request do
       context '/rendezvous/quick_start' do
 
         context 'if NOT currently associated with any other games' do
-          before :each do
-            Game.destroy_all
-          end
 
           it 'creates a newly created public game if none exist' do
             current_user = FactoryBot.create(:user)
-            FactoryBot.create :game, :pregame, :private_game
+            FactoryBot.create :pregame, :private_game, callback_wanted: :pregame
             set_signed_cookies({ user_id: current_user.id })
 
             expect{ get rendezvous_page_path('quick_start')}.to change{Game.count}.by(1)
@@ -345,9 +331,9 @@ RSpec.describe RendezvousController, type: :request do
 
           it 'returns a random public pregame if one exists' do
             current_user = FactoryBot.create(:user)
-            FactoryBot.create :game, :pregame, :private_game
-            FactoryBot.create :game, :midgame, :public_game
-            game = FactoryBot.create :game, :pregame, :public_game
+            FactoryBot.create :pregame, :private_game, callback_wanted: :pregame
+            FactoryBot.create :midgame, :public_game, callback_wanted: :midgame
+            game = FactoryBot.create :pregame, :public_game, callback_wanted: :pregame
 
             set_signed_cookies({ user_id: current_user.id })
 
@@ -383,11 +369,12 @@ RSpec.describe RendezvousController, type: :request do
           end
         end
 
-        context 'if currently associated with any other games' do
-          context 'if user wants to leave game and join a different game type and does so by editing the search bar or using browser back arrow' do
+        context 'if currently associated with a game' do
+          context 'if user wants to leave a game and join a different game type and does so by editing the search bar or using browser back arrow' do
             context 'leaving a private pregame to join a quick_start .... which is a public game' do
               it "removes user's games_user association to previous game and displays" do
-                other_game = FactoryBot.create(:game, :pregame, :private_game)
+                # Game.destroy_all
+                other_game = FactoryBot.create(:pregame, :private_game, callback_wanted: :pregame)
                 current_user = other_game.users.first
                 set_signed_cookies({ user_id: current_user.id })
 
@@ -413,9 +400,9 @@ RSpec.describe RendezvousController, type: :request do
               context 'then it should not create another one and view it' do
                 context 'and user has not chosen a game name yet' do
                   it 'then user should still see the join code they were looking at before' do
-                    FactoryBot.create(:game, :midgame, :public_game)
-                    FactoryBot.create(:game, :pregame, :private_game)
-                    game = FactoryBot.create(:game, :pregame, :public_game)
+                    FactoryBot.create(:midgame, :public_game, callback_wanted: :midgame)
+                    FactoryBot.create(:pregame, :private_game, callback_wanted: :pregame)
+                    game = FactoryBot.create(:pregame, :public_game, callback_wanted: :pregame)
 
                     current_user = game.users.first
                     set_signed_cookies({user_id: current_user.id})
@@ -433,9 +420,9 @@ RSpec.describe RendezvousController, type: :request do
 
                 context 'user has chosen a game name' do
                   it 'then user should still see the join code they were looking at before' do
-                    FactoryBot.create(:game, :midgame, :public_game)
-                    FactoryBot.create(:game, :pregame, :private_game)
-                    game = FactoryBot.create(:game, :pregame, :public_game)
+                    FactoryBot.create(:midgame, :public_game, callback_wanted: :midgame)
+                    FactoryBot.create(:pregame, :private_game, callback_wanted: :pregame)
+                    game = FactoryBot.create(:pregame, :public_game, callback_wanted: :pregame)
 
                     current_user = game.users.first
                     set_signed_cookies({user_id: current_user.id})
@@ -460,10 +447,10 @@ RSpec.describe RendezvousController, type: :request do
                 context 'then it should not create another one and view it' do
                   context 'and user has not chosen a game name yet' do
                     it 'then user should still see the join code they were looking at before' do
-                      FactoryBot.create(:game, :midgame, :public_game)
-                      FactoryBot.create(:game, :pregame, :private_game)
-                      game1 = FactoryBot.create(:game, :pregame, :public_game)
-                      game2 = FactoryBot.create(:game, :pregame, :public_game)
+                      FactoryBot.create(:midgame, :public_game, callback_wanted: :midgame)
+                      FactoryBot.create(:pregame, :private_game, callback_wanted: :pregame)
+                      game1 = FactoryBot.create(:pregame, :public_game, callback_wanted: :pregame)
+                      game2 = FactoryBot.create(:pregame, :public_game, callback_wanted: :pregame)
 
                       current_user = game1.users.first
                       set_signed_cookies({user_id: current_user.id})
@@ -481,10 +468,10 @@ RSpec.describe RendezvousController, type: :request do
 
                   context 'user has chosen a game name' do
                     it 'then user should still see the join code they were looking at before' do
-                      FactoryBot.create(:game, :midgame, :public_game)
-                      FactoryBot.create(:game, :pregame, :private_game)
-                      game1 = FactoryBot.create(:game, :pregame, :public_game)
-                      game2 = FactoryBot.create(:game, :pregame, :public_game)
+                      FactoryBot.create(:midgame, :public_game, callback_wanted: :midgame)
+                      FactoryBot.create(:pregame, :private_game, callback_wanted: :pregame)
+                      game1 = FactoryBot.create(:pregame, :public_game, callback_wanted: :pregame)
+                      game2 = FactoryBot.create(:pregame, :public_game, callback_wanted: :pregame)
 
                       current_user = game1.users.first
                       set_signed_cookies({user_id: current_user.id})
@@ -515,8 +502,7 @@ RSpec.describe RendezvousController, type: :request do
 
     context 'user leaving IS the only one attached to the game' do
       it 'removes user from game before redirecting user to choose_game_type_page' do
-        Game.destroy_all
-        game = FactoryBot.create(:game, :pregame, :public_game)
+        game = FactoryBot.create(:pregame, :public_game, callback_wanted: :pregame)
         game_id = game.id
         game.users.limit(game.users.count - 1).destroy_all
         current_user = game.users.first
@@ -531,8 +517,7 @@ RSpec.describe RendezvousController, type: :request do
 
     context 'user leaving IS NOT the only one attached to the game' do
       it 'removes user from game before redirecting user to choose_game_type_page' do
-        Game.destroy_all
-        game = FactoryBot.create(:game, :pregame, :public_game)
+        game = FactoryBot.create(:pregame, :public_game, callback_wanted: :pregame)
         game_id = game.id
         current_user = game.users.first
         remaining_user_ids = game.user_ids - [current_user.id]

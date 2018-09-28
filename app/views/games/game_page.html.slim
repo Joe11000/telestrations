@@ -1,3 +1,4 @@
+/ - byebug
 #game data-id='game-page' data-game-id=@game.id data-prev-card-id=(@prev_card.try(:id) || '') data-user-id=(@current_user.try(:id) || "")
   .form-horizontal
     .drawing.col-xs-12.offset-sm-1.col-sm-10.offset-md-2.col-md-8
@@ -17,7 +18,7 @@
                span drawing here
             #upload-drawing.tab-pane.fade role="tabpanel"
               #file_upload
-                = render partial: 'shared/file_upload', locals: { to_url: upload_card_in_game_url, allow_multiple_file_upload: false }
+                = render partial: 'in_game_card_uploads/file_upload', locals: { to_url: in_game_card_uploads_url, allow_multiple_file_upload: false }
 
 
       #make-description-container data-id='make-description-container' class=(@placeholder_card.try(:description?) ? '' : 'd-none')

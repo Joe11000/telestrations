@@ -1,10 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe GameChannel, type: :channel do
-  context '#subscribed', :r5_wip do
+  xcontext '#subscribed', :r5_wip do
 
     before :each do
-      @game = FactoryBot.create :game, :midgame_with_no_moves
+      @game = FactoryBot.create :midgame_with_no_moves, callback_wanted: :midgame_with_no_moves
       @current_user = @game.users.first
       stub_connection( current_user: @current_user )
 

@@ -2,19 +2,12 @@ require 'rails_helper'
 # require 'support/rendezvous_channel_helpers'
 
 RSpec.describe RendezvousChannel, type: :channel do
-  before(:all) do
-    Game.delete_all
-    User.delete_all
-    GamesUser.delete_all
-    Card.delete_all
-  end
-
   let(:action_cable) { ActionCable.server }
 
   context '#subscribe', :r5 do
     context 'if a user is not subscribed to any other streams' do
       before(:all) do
-        @game = FactoryBot.create :game, :pregame
+        @game = FactoryBot.create(:pregame, callback_wanted: :pregame)
         @new_user = FactoryBot.create :user
       end
 
@@ -37,9 +30,9 @@ RSpec.describe RendezvousChannel, type: :channel do
     context 'if a user is subscribed to another stream' do
       context "and that channel's name uses the join code of another pregame", :r5 do
         before(:all) do
-          @game_1 = FactoryBot.create :game, :pregame
+          @game_1 = FactoryBot.create(:pregame, callback_wanted: :pregame)
           @user = @game_1.users.first
-          @game_2 = FactoryBot.create :game, :pregame
+          @game_2 = FactoryBot.create(:pregame, callback_wanted: :pregame)
 
           stub_connection( current_user: @user )
           subscribe join_code: @game_1.join_code
@@ -64,7 +57,7 @@ RSpec.describe RendezvousChannel, type: :channel do
         let(:action_cable) { ActionCable.server }
 
         it 'short circuits does not allow user to subscribe' do
-          @game_1 = FactoryBot.create :game, :pregame
+          @game_1 = FactoryBot.create(:pregame, callback_wanted: :pregame)
           @game_1_join_code = @game_1.join_code
           @user = FactoryBot.create :user
 
@@ -75,7 +68,7 @@ RSpec.describe RendezvousChannel, type: :channel do
 
           @game_1.start_game
           @game_1.reload
-          @game_2 = FactoryBot.create :game, :pregame
+          @game_2 = FactoryBot.create(:pregame, callback_wanted: :pregame)
 
           expect {
             subscribe join_code: @game_2.join_code
@@ -94,7 +87,7 @@ RSpec.describe RendezvousChannel, type: :channel do
     context 'rendezvousing players join a game by submitting a games_user_name', :r5 do
       before(:all) do
         # 3 players rendezvousing on game and logged in as user_1
-          @game = FactoryBot.create(:game, :pregame)
+          @game = FactoryBot.create(:pregame, callback_wanted: :pregame)
           @user = @game.users.first
           stub_connection( current_user: @user )
           subscribe join_code: @game.join_code
@@ -115,7 +108,7 @@ RSpec.describe RendezvousChannel, type: :channel do
     context 'remove joined player after they commited to the game' do
       before(:all) do
         # 3 players rendezvousing on game and logged in as user_1
-          @game = FactoryBot.create(:game, :pregame)
+          @game = FactoryBot.create(:pregame, callback_wanted: :pregame)
           @num_of_users = @game.users.count
           @user = @game.users.first
           stub_connection( current_user: @user )
@@ -141,7 +134,7 @@ RSpec.describe RendezvousChannel, type: :channel do
 
     before(:each) do
       # 3 players rendezvousing on game and logged in as user_1
-        @game = FactoryBot.create(:game, :pregame)
+        @game = FactoryBot.create(:pregame, callback_wanted: :pregame)
         @user = @game.users.first
         stub_connection( current_user: @user )
         subscribe join_code: @game.join_code
@@ -160,8 +153,8 @@ RSpec.describe RendezvousChannel, type: :channel do
       expect(JSON.parse(@game.passing_order)).to match_array([@gu1.user_id, @gu2.user_id])
     end
 
-    it 'redirects all users games page url (where expected players will be redirected to the rendezvous choose game path if they were just removed from the game)' do
-      expect { perform :start_game, {join_code: @game.join_code} }.to have_broadcasted_to("rendezvous_#{@game.join_code}").with({start_game_signal: game_page_url})
+    it 'sends redirect url to all users to start the game via the rendezvous channel (where expected players will be redirected to the rendezvous choose game path if they were just removed from the game)' do
+      expect { perform :start_game, {join_code: @game.join_code} }.to have_broadcasted_to("rendezvous_#{@game.join_code}").with({start_game_signal: game_page_path})
     end
   end
 end
