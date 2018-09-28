@@ -1,10 +1,12 @@
 class GamesController < ApplicationController
 
   before_action :redirect_if_not_logged_in
-  before_action :redirect_if_can_not_view_game_page, if: :game_page
-  before_action :redirect_if_can_not_view_postgame_page, if: :postgame_page
+  # before_action :redirect_if_can_not_view_game_page
+  # before_action :redirect_if_can_not_view_postgame_page
 
   def game_page
+    redirect_if_can_not_view_game_page
+
     set_game
     # @game from redirect method
     @placeholder_card = @game.get_placeholder_card current_user.id
@@ -12,14 +14,14 @@ class GamesController < ApplicationController
 
     # create a starting placeholder card for this user if game is just beginning
     if( @placeholder_card.blank? && current_user.current_starting_card.blank? )
-      byebug
+      # byebug
       @placeholder_card = @game.create_initial_placeholder_for_user current_user.id
     end
 
 
     #  is the user done or waiting for others to pass him a card
     if( @placeholder_card.blank?)
-      byebug
+      # byebug
 
       # get array
         passing_array = current_user.current_game.parse_passing_order
@@ -33,13 +35,14 @@ class GamesController < ApplicationController
     end
 
 
-    byebug
+    # byebug
     @prev_card = @placeholder_card.try(:parent_card) || Card.none
     @current_user = current_user
     render 'game_page'
   end
 
   def postgame_page
+    redirect_if_can_not_view_postgame_page
     # @game from redirect method
     @current_user = current_user
     @arr_of_postgame_card_sets = [ @game.cards_from_finished_game ]
@@ -55,6 +58,7 @@ class GamesController < ApplicationController
 
   protected
     def redirect_if_can_not_view_game_page
+      # byebug
       set_game
 
       case @game.try(:status)
@@ -66,6 +70,7 @@ class GamesController < ApplicationController
     end
 
     def redirect_if_can_not_view_postgame_page
+      # byebug
       set_game
 
       case @game.try(:status)
