@@ -132,29 +132,125 @@ RSpec.describe RendezvousChannel, type: :channel do
 
   context '#start_game', :r5 do
 
-    before(:each) do
-      # 3 players rendezvousing on game and logged in as user_1
-        @game = FactoryBot.create(:pregame, callback_wanted: :pregame)
-        @user = @game.users.first
-        stub_connection( current_user: @user )
-        subscribe join_code: @game.join_code
-        @gu1, @gu2, @gu3 = @game.games_users
-        # commit 2 users to the game with games user names
-        @gu1.update(users_game_name: Faker::Name.first_name)
-        @gu2.update(users_game_name: Faker::Name.first_name)
+    context 'game DOES have enough players' do
+      before(:each) do
+        # 3 players rendezvousing on game and logged in as user_1
+          @game = FactoryBot.create(:pregame, callback_wanted: :pregame)
+          @user = @game.users.first
+          stub_connection( current_user: @user )
+          subscribe join_code: @game.join_code
+          @gu1, @gu2, @gu3 = @game.games_users
+          # commit 2 users to the game with games user names
+          @gu1.update(users_game_name: Faker::Name.first_name)
+          @gu2.update(users_game_name: Faker::Name.first_name)
+      end
+
+      it 'removes games_user association for any player that did not submit a users_game_name' do
+        perform :start_game, {join_code: @game.join_code}
+
+        @game.reload
+        expect(@game.user_ids).to match_array [@gu1.user_id, @gu2.user_id]
+        expect(@game.midgame?).to eq true
+        expect(JSON.parse(@game.passing_order)).to match_array([@gu1.user_id, @gu2.user_id])
+      end
+
+      it 'sends redirect url to all users to start the game via the rendezvous channel (where expected players will be redirected to the rendezvous choose game path if they were just removed from the game)' do
+        expect { perform :start_game, {join_code: @game.join_code} }.to have_broadcasted_to("rendezvous_#{@game.join_code}").with({start_game_signal: game_page_path})
+      end
     end
 
-    it 'removes games_user association for any player that did not submit a users_game_name' do
-      perform :start_game, {join_code: @game.join_code}
+    context 'game DOES NOT enough players', :r5 do
+      context 'no players have entered a users_game_name' do
+        context 'and has 1 player on page' do
+          it 'changes nothing and doesnt broadcast' do
+            # 3 players rendezvousing on game and logged in as user_1
+            @game = FactoryBot.create(:pregame, callback_wanted: :pregame, num_of_players: 1)
+            @user1 = @game.users[0]
+            stub_connection( current_user: @user1 )
+            subscribe join_code: @game.join_code
+            @gu1 = @game.games_users[0]
+            # commit 2 users to the game with games user names
 
-      @game.reload
-      expect(@game.user_ids).to match_array [@gu1.user_id, @gu2.user_id]
-      expect(@game.midgame?).to eq true
-      expect(JSON.parse(@game.passing_order)).to match_array([@gu1.user_id, @gu2.user_id])
-    end
+            expect(ActionCable.server).not_to receive(:broadcast)
 
-    it 'sends redirect url to all users to start the game via the rendezvous channel (where expected players will be redirected to the rendezvous choose game path if they were just removed from the game)' do
-      expect { perform :start_game, {join_code: @game.join_code} }.to have_broadcasted_to("rendezvous_#{@game.join_code}").with({start_game_signal: game_page_path})
+            perform :start_game, join_code: @game.join_code
+            @game.reload
+            expect(@game.user_ids).to eq [@user1.id]
+            expect(@game.pregame?).to eq true
+            expect(@game.passing_order).to eq ''
+          end
+        end
+
+        context 'and has 2 players on page' do
+          it 'changes nothing and doesnt broadcast' do
+            # 3 players rendezvousing on game and logged in as user_1
+            @game = FactoryBot.create(:pregame, callback_wanted: :pregame, num_of_players: 2)
+            @user1 = @game.users[0]
+            @user2 = @game.users[1]
+            stub_connection( current_user: @user1 )
+            subscribe join_code: @game.join_code
+            @gu1 = @game.games_users[0]
+            @gu2 = @game.games_users[1]
+            # commit 2 users to the game with games user names
+
+            expect(ActionCable.server).not_to receive(:broadcast)
+
+            perform :start_game, join_code: @game.join_code
+            @game.reload
+            expect(@game.user_ids).to eq [@user1.id, @user2.id]
+            expect(@game.pregame?).to eq true
+            expect(@game.passing_order).to eq ''
+          end
+        end
+      end
+
+      context 'only 1 player entered a users_game_name' do
+        context 'and has 1 player on page' do
+          it 'changes nothing and doesnt broadcast' do
+            # 3 players rendezvousing on game and logged in as user_1
+            @game = FactoryBot.create(:pregame, callback_wanted: :pregame, num_of_players: 1)
+            @user1 = @game.users[0]
+            stub_connection( current_user: @user1 )
+            subscribe join_code: @game.join_code
+            @gu1 = @game.games_users[0]
+            @gu1.update(users_game_name: Faker::Name.first_name)
+
+            # commit 2 users to the game with games user names
+
+            expect(ActionCable.server).not_to receive(:broadcast)
+
+            perform :start_game, join_code: @game.join_code
+            @game.reload
+            expect(@game.user_ids).to eq [@user1.id]
+            expect(@game.pregame?).to eq true
+            expect(@game.passing_order).to eq ''
+          end
+        end
+
+        context 'and has 2 players on page' do
+          it 'changes nothing and doesnt broadcast' do
+            # 3 players rendezvousing on game and logged in as user_1
+            @game = FactoryBot.create(:pregame, callback_wanted: :pregame, num_of_players: 2)
+            @user1 = @game.users[0]
+            @user2 = @game.users[1]
+            stub_connection( current_user: @user1 )
+            subscribe join_code: @game.join_code
+            @gu1 = @game.games_users[0]
+            @gu2 = @game.games_users[1]
+            @gu1.update(users_game_name: Faker::Name.first_name)
+
+            # commit 2 users to the game with games user names
+
+            expect(ActionCable.server).not_to receive(:broadcast)
+
+            perform :start_game, join_code: @game.join_code
+            @game.reload
+            expect(@game.user_ids).to eq [@user1.id, @user2.id]
+            expect(@game.pregame?).to eq true
+            expect(@game.passing_order).to eq ''
+          end
+        end
+      end
     end
   end
 end

@@ -16,20 +16,22 @@ class GamesController < ApplicationController
       @placeholder_card = @game.create_initial_placeholder_for_user current_user.id
     end
 
-    byebug
+
     #  is the user done or waiting for others to pass him a card
     if( @placeholder_card.blank?)
       byebug
+
       # get array
         passing_array = current_user.current_game.parse_passing_order
       # find my position before mine in array
-      byebug
+
         prev_user_index_in_passing_order = passing_array.index(current_user.id) - 1
         prev_user_index_in_passing_order = passing_array.last if prev_user_index_in_passing_order < 0
 
       # is gu from completed?
       @player_is_finished = GamesUser.where(user_id: passing_array[prev_user_index_in_passing_order], game: current_user.current_game).order(:id).last.set_complete
     end
+
 
     byebug
     @prev_card = @placeholder_card.try(:parent_card) || Card.none

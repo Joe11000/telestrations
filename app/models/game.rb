@@ -68,8 +68,8 @@ class Game < ActiveRecord::Base
   end
 
   def start_game
-    raise "Game status must be pregame" unless pregame?  # return if game doesn't exist or simultaneous press race condition
-    raise "Must have at least 2 players to start a game" if games_user_ids.length < 2  # return if game doesn't exist or simultaneous press race condition
+    return false unless pregame?  # return if game doesn't exist or simultaneous press race condition
+    return false if games_users.map(&:users_game_name).compact.length < 2  # return if game doesn't exist or simultaneous press race condition
 
     update(status: 'midgame', join_code: nil)
     # remove user games_users association to people that didn't submit a name

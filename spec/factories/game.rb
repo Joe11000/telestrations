@@ -121,7 +121,7 @@ def complete_the_game_associations game
   gu2.starting_card.child_card.child_card = FactoryBot.create(:description, uploader: user1, starting_games_user: gu2)
   gu2.update(set_complete: true)
 
-  byebug
+
   # user 3 is on their last card
   gu3.starting_card.child_card.child_card.update( description_text: TokenPhrase.generate(' ', numbers: false) )
   gu3.update(set_complete: true)

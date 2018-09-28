@@ -1,7 +1,7 @@
 # RSpec.shared_examples 'a valid pregame' do |pregame|
 #   it 'is valid' do
 #     users = pregame.users
-#     byebug
+#
 
 #     expect(pregame.pregame?).to eq true
 #     expect(pregame.midgame?).to eq false
@@ -27,7 +27,7 @@
 #   it 'is valid' do
 #     midgame_with_no_moves = described_class.create(*args)
 #     users = midgame_with_no_moves.users
-#     byebug
+#
 
 #     expect(midgame_with_no_moves.pregame?).to eq false
 #     expect(midgame_with_no_moves.midgame?).to eq true
@@ -55,7 +55,7 @@
 #   it 'is valid' do
 #     users = midgame.users
 #     gus = midgame.games_users
-#     byebug
+#
 
 #     expect( JSON.parse(midgame.passing_order) ).to match_array users.pluck(:id)
 #     expect(midgame.valid?).to eq true
@@ -109,7 +109,7 @@
 # RSpec.shared_examples 'a valid postgame' do |postgame|
 #   it 'is valid' do
 #     gus = postgame.games_users
-#     byebug
+#
 
 #     expect(postgame.valid?).to eq true
 #     expect(postgame.join_code).to be_nil

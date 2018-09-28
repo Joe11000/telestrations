@@ -51,7 +51,7 @@ RSpec.describe GamesController, :type => :request do
       set_signed_cookies({user_id: current_user.id})
 
       get game_page_path
-      byebug
+
       expect(response).not_to have_http_status 302
     end
 
