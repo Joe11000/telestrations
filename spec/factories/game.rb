@@ -21,22 +21,16 @@ FactoryBot.define do
     factory :pregame do
       after(:create) do |game, evaluator|
         if evaluator.callback_wanted == :pregame
-          byebug
           game.users << FactoryBot.create_list(:user, evaluator.num_of_players)
         end
       end
     end
 
     factory :midgame_with_no_moves do
-      transient do
-        callback = 'midgame_with_no_moves'
-      end
       status { 'midgame' }
 
       after(:create) do |game, evaluator|
         if evaluator.callback_wanted == :midgame_with_no_moves
-
-          byebug
           new_game_associations game
 
           game.update(passing_order: game.user_ids.to_s, join_code: nil)
@@ -51,7 +45,6 @@ FactoryBot.define do
 
       after(:create) do |game, evaluator|
         if evaluator.callback_wanted == :midgame
-          byebug
           new_game_associations game
           additional_player_moves game
 
@@ -66,11 +59,9 @@ FactoryBot.define do
 
       after(:create) do |game, evaluator|
         if evaluator.callback_wanted == :postgame
-          byebug
           new_game_associations game
           additional_player_moves game
           complete_the_game_associations game
-
           game.update(passing_order: game.user_ids.to_s, join_code: nil)
         end
       end

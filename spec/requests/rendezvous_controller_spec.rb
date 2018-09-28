@@ -373,6 +373,7 @@ RSpec.describe RendezvousController, type: :request do
           context 'if user wants to leave a game and join a different game type and does so by editing the search bar or using browser back arrow' do
             context 'leaving a private pregame to join a quick_start .... which is a public game' do
               it "removes user's games_user association to previous game and displays" do
+                # Game.destroy_all
                 other_game = FactoryBot.create(:pregame, :private_game, callback_wanted: :pregame)
                 current_user = other_game.users.first
                 set_signed_cookies({ user_id: current_user.id })
