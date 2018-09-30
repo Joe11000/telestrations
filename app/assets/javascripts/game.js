@@ -89,40 +89,40 @@
     });
 
     // file upload via game socket
-    var files = [];
-    $("[data-class='file_upload_form'] input[type=file]").change(function(event) {
-      $.each(event.target.files, function(index, file) {
-        var reader = new FileReader();
-        reader.onload = function(event) {
-          object = {};
-          object.filename = file.name;
-          object.data = event.target.result;
-          files.push(object);
-        };
-        reader.readAsDataURL(file);
-      });
+    // var files = [];
+    // $("[data-class='file_upload_form'] input[type=file]").change(function(event) {
+    //   $.each(event.target.files, function(index, file) {
+    //     var reader = new FileReader();
+    //     reader.onload = function(event) {
+    //       object = {};
+    //       object.filename = file.name;
+    //       object.data = event.target.result;
+    //       files.push(object);
+    //     };
+    //     reader.readAsDataURL(file);
+    //   });
 
-      if (event.target.files.length > 0) {
-        $('[data-id=submitPhoto]').prop('disabled', false);
-      }
-      else {
-        $('[data-id=submitPhoto]').prop('disabled', true);
-      }
-    });
+    //   if (event.target.files.length > 0) {
+    //     $('[data-id=submitPhoto]').prop('disabled', false);
+    //   }
+    //   else {
+    //     $('[data-id=submitPhoto]').prop('disabled', true);
+    //   }
+    // });
 
-    $("[data-class='file_upload_form']").submit(function(event) {
-      event.preventDefault();
-      showLoadingContainer();
-      hideAndClearCardContainers();
+    // $("[data-class='file_upload_form']").submit(function(event) {
+    //   event.preventDefault();
+    //   showLoadingContainer();
+    //   hideAndClearCardContainers();
 
-      $.each(files, function(index, file) {
-        var image_info = {filename: file.filename, data: file.data};
-        App.game.upload_card(image_info);
-      });
+    //   $.each(files, function(index, file) {
+    //     var image_info = {filename: file.filename, data: file.data};
+    //     App.game.upload_card(image_info);
+    //   });
 
-      //  reset form and ready for next time
-      files = [];
-      $("[data-class='file_upload_form'] input[type=file]").val('');
-    });
+    //   //  reset form and ready for next time
+    //   files = [];
+    //   $("[data-class='file_upload_form'] input[type=file]").val('');
+    // });
   }
 })();

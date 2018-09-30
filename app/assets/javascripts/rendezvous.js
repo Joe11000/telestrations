@@ -15,7 +15,7 @@ $(function(){
       // }
 
       users_game_name = $form.find('[data-id=users_game_name]').val();
-
+      debugger
       // user submitted a games_user_name
       if( users_game_name.length > 0)
       {
@@ -36,7 +36,6 @@ $(function(){
   $("[data-id='leave_link']").on('click', function(e){
     e.preventDefault();
     App.rendezvous.unjoin_game();
-    window.location = this.getAttribute('href');
   });
 
   $("[data-id='start_game_button']").closest('form').on('submit', function(e){

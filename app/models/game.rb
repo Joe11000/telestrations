@@ -96,7 +96,7 @@ class Game < ActiveRecord::Base
 
     elsif user_current_game.try(:pregame?)
       # remove other game user that the user wishes to not be associated with any more
-      user.current_games_user.destroy
+      user.current_games_user.try(:destroy)
     end
 
     self.users << user

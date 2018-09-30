@@ -50,7 +50,7 @@ RSpec.describe GamesController, :type => :request do
       current_user = game.users.first
       set_signed_cookies({user_id: current_user.id})
 
-      get game_page_path
+      get games_path
 
       expect(response).not_to have_http_status 302
     end
@@ -62,7 +62,7 @@ RSpec.describe GamesController, :type => :request do
     #     # cookies.signed[:user_id] = current_user.id
 
     #     expect do
-    #       get game_page_path
+    #       get games_path
     #     end.to change{Card.count}.by(1)
 
     #     expect(assigns[:game]).to eq game
@@ -80,7 +80,7 @@ RSpec.describe GamesController, :type => :request do
     #     cookies.signed[:user_id] = current_user.id
 
     #     expect do
-    #       get game_page_path
+    #       get games_path
     #     end.to change{Card.count}.by(0)
 
     #     expect(assigns[:game]).to eq game
@@ -92,11 +92,11 @@ RSpec.describe GamesController, :type => :request do
     # end
   end
 
-  # xdescribe "GET postgame_page", working: true do
+  # xdescribe "GET show", working: true do
 
   #   context 'redirected if' do
   #     it 'user not logged in' do
-  #       get :postgame_page
+  #       get :show
 
   #       expect(response).to redirect_to login_path
   #     end
@@ -106,7 +106,7 @@ RSpec.describe GamesController, :type => :request do
   #       user = FactoryBot.create(:user)
   #       cookies.signed[:user_id] = user.id
 
-  #       get :postgame_page
+  #       get :show
 
   #       expect(response).to redirect_to rendezvous_choose_game_type_page_path
   #     end
@@ -116,7 +116,7 @@ RSpec.describe GamesController, :type => :request do
   #       current_user = game.users.order(:id).first
   #       cookies.signed[:user_id] = current_user.id
 
-  #       get :postgame_page
+  #       get :show
   #       expect(response).to redirect_to rendezvous_choose_game_type_page_path
   #     end
 
@@ -125,8 +125,8 @@ RSpec.describe GamesController, :type => :request do
   #       current_user = game.users.order(:id).first
   #       cookies.signed[:user_id] = current_user.id
 
-  #       get :postgame_page
-  #       expect(response).to redirect_to game_page_path
+  #       get :show
+  #       expect(response).to redirect_to games_path
   #     end
   #   end
 
@@ -137,7 +137,7 @@ RSpec.describe GamesController, :type => :request do
 
   #     expect_any_instance_of(Game).to receive(:cards_from_finished_game).once.and_call_original
 
-  #     get :postgame_page
+  #     get :show
 
   #     expect(assigns[:game]).to eq game
   #     expect(assigns[:arr_of_postgame_card_sets]).to be_an Array
@@ -146,11 +146,11 @@ RSpec.describe GamesController, :type => :request do
   #   end
   # end
 
-  # xdescribe "GET all_postgames_page", working: true do
+  # xdescribe "GET index", working: true do
 
   #   context 'redirected if' do
   #     it 'user not logged in' do
-  #       get :postgame_page
+  #       get :show
 
   #       expect(response).to redirect_to login_path
   #     end
@@ -160,8 +160,8 @@ RSpec.describe GamesController, :type => :request do
   #       current_user = game.users.order(:id).first
   #       cookies.signed[:user_id] = current_user.id
 
-  #       get :postgame_page
-  #       expect(response).to redirect_to game_page_path
+  #       get :show
+  #       expect(response).to redirect_to games_path
   #     end
   #   end
 
@@ -173,7 +173,7 @@ RSpec.describe GamesController, :type => :request do
   #     card_to_find_2 = FactoryBot.create(:description, uploader: current_user, starting_games_user: nil, idea_catalyst_id: nil)
   #     expect_any_instance_of(Game).to receive(:cards_from_finished_game).once.and_call_original
 
-  #     get :all_postgames_page
+  #     get :index
 
   #     expect(assigns[:out_of_game_cards]).to eq [ card_to_find_1, card_to_find_2 ]
   #     expect(assigns[:current_user]).to eq current_user

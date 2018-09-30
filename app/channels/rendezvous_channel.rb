@@ -42,17 +42,28 @@ class RendezvousChannel < ApplicationCable::Channel
   def unjoin_game
     game = Game.find_by(join_code: params[:join_code])
 
-    return false unless game.remove_player(current_user.id)
+    info = {}
+    game.remove_player(current_user.id)
 
-    html = render_user_partial_for_game( params[:join_code] )
-    ActionCable.server.broadcast("rendezvous_#{params[:join_code]}", partial: html)
+    info = {
+             user_leaving: {
+                             user_id: current_user.id.to_s,
+                             url: rendezvous_choose_game_type_page_path
+                           }
+           }
+
+    if game.users.count > 0
+      info[:partial] = render_user_partial_for_game( params[:join_code] )
+    end
+
+    ActionCable.server.broadcast("rendezvous_#{params[:join_code]}", info)
     stop_all_streams
   end
 
   def start_game
     if(Game.start_game params[:join_code])
       # broadcast a message to try and go to the game start page. The before action will allow the commited people through to their game and send the uncommited people back to the game choice page.
-      ActionCable.server.broadcast("rendezvous_#{params[:join_code]}", start_game_signal: game_page_path)
+      ActionCable.server.broadcast("rendezvous_#{params[:join_code]}", start_game_signal: new_game_path)
     end
   end
 
@@ -65,3 +76,4 @@ class RendezvousChannel < ApplicationCable::Channel
       ApplicationController.render(partial: 'rendezvous/currently_joined', locals: { users_not_joined: @users_not_joined, users_joined: @users_joined })
     end
 end
+

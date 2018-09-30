@@ -1,4 +1,4 @@
-if document.querySelectorAll("#rendezvous-page").length > 0
+if document.querySelectorAll("[data-id='rendezvous-page']").length > 0
   debugger
   App.rendezvous = App.cable.subscriptions.create { channel: "RendezvousChannel", join_code: $('[data-id="randezvous-join-code"]').html() },
     connected: ->
@@ -14,11 +14,16 @@ if document.querySelectorAll("#rendezvous-page").length > 0
       @perform 'start_game'
 
     received: (data) ->
-      # debugger;
+      if data.user_leaving != undefined
+        if data.user_leaving.user_id == $("[data-id='leave_link']").attr('data-user')
+          window.location = data.user_leaving.url
+
       if data.partial != undefined
         $("[data-id='currently-joined-partial-wrapper']").replaceWith(data.partial);
-      else if data.start_game_signal
+
+      if data.start_game_signal != undefined
         window.location = data.start_game_signal
 
     disconnected: ->
+      debugger
     # Called when the subscription has been terminated by the server

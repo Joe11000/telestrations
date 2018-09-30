@@ -83,8 +83,8 @@ RSpec.describe RendezvousChannel, type: :channel do
     end
   end
 
-  context '#join_game' do
-    context 'rendezvousing players join a game by submitting a games_user_name', :r5 do
+  context '#join_game', :r5 do
+    context 'rendezvousing players join a game by submitting a games_user_name' do
       before(:all) do
         # 3 players rendezvousing on game and logged in as user_1
           @game = FactoryBot.create(:pregame, callback_wanted: :pregame)
@@ -101,31 +101,90 @@ RSpec.describe RendezvousChannel, type: :channel do
         }
       end
     end
-
   end
 
-  context '#unjoin_game' do
-    context 'remove joined player after they commited to the game' do
-      before(:all) do
+  context '#unjoin_game', :r5 do
+    context 'if they ARE the only user on the page' do
+      before(:each) do
         # 3 players rendezvousing on game and logged in as user_1
-          @game = FactoryBot.create(:pregame, callback_wanted: :pregame)
+          @game = FactoryBot.create(:pregame, callback_wanted: :pregame, num_of_players: 1)
           @num_of_users = @game.users.count
-          @user = @game.users.first
-          stub_connection( current_user: @user )
+          @current_user = @game.users.first
+          stub_connection( current_user: @current_user )
           subscribe join_code: @game.join_code
         # commit current player to game with games user name
           perform :join_game, ({users_game_name: 'Kirmit the Yoda', action: :join_game})
       end
 
-      it do
+
+      # don't konw how to test multiple broadcasts were received and their contents.
+      it 'should only receive broadcast with info about user with given id on html page should leave the page', :r5_wip do
+
         expect { perform :unjoin_game, {join_code: @game.join_code} }.to have_broadcasted_to("rendezvous_#{@game.join_code}").with { |data|
-          expect(data[:partial]).to match(/Users Not Joined \( #{@game.users.count} \)/)
-          expect(data[:partial]).to match(/Users Joined \( 0 \)/)
-          expect(data[:partial]).not_to match(/Kirmit the Yoda/)
+
+        expect(data).to eq ({ 'user_leaving' => {
+                                                  'user_id' => @current_user.id.to_s,
+                                                  'url' => rendezvous_choose_game_type_page_path
+                                                }
+                            })
         }
+      end
+
+      it "removes the rendezvous game from the user's current game" do
+        expect{
+          perform :unjoin_game, {join_code: @game.join_code}
+        }.to change{Game.count}.by(-1)
+
+        expect(@current_user.current_game).to eq nil
+      end
+
+      it 'unsubscribed from rendezvous stream' do
+        perform :unjoin_game, {join_code: @game.join_code}
+
+        expect(streams).to eq []
+      end
+    end
+
+    context 'if they ARE NOT the only user on the page' do
+      before(:each) do
+        # 3 players rendezvousing on game and logged in as user_1
+          @game = FactoryBot.create(:pregame, callback_wanted: :pregame)
+          @num_of_users = @game.users.count
+          @current_user = @game.users.first
+          stub_connection( current_user: @current_user )
+          subscribe join_code: @game.join_code
+        # commit current player to game with games user name
+          perform :join_game, ({users_game_name: 'Kirmit the Yoda', action: :join_game})
+      end
+
+
+      # don't konw how to test multiple broadcasts were received and their contents.
+      it 'should receive broadcast about how user with user id on html page should leave the page and updated partial for everybody else' do
+
+        expect { perform :unjoin_game, {join_code: @game.join_code} }.to have_broadcasted_to("rendezvous_#{@game.join_code}").with { |data|
+
+        expect(data['user_leaving']).to eq ({
+                                              'user_id' => @current_user.id.to_s,
+                                              'url' => rendezvous_choose_game_type_page_path
+                                           })
+
+          expect(data['partial']).to match(/Users Not Joined \( 2 \)/)
+          expect(data['partial']).to match(/Users Joined \( 0 \)/)
+          expect(data['partial']).not_to match(/Kirmit the Yoda/)
+        }
+      end
+
+      it "removes the rendezvous game from the user's current game" do
+        perform :unjoin_game, {join_code: @game.join_code}
 
         expect(@game.reload.users.count).to eq (@num_of_users - 1)
-        expect(@user.current_game).to eq nil
+        expect(@current_user.current_game).to eq nil
+      end
+
+      it 'unsubscribed from rendezvous stream' do
+        perform :unjoin_game, {join_code: @game.join_code}
+
+        expect(streams).to eq []
       end
     end
   end
@@ -155,7 +214,7 @@ RSpec.describe RendezvousChannel, type: :channel do
       end
 
       it 'sends redirect url to all users to start the game via the rendezvous channel (where expected players will be redirected to the rendezvous choose game path if they were just removed from the game)' do
-        expect { perform :start_game, {join_code: @game.join_code} }.to have_broadcasted_to("rendezvous_#{@game.join_code}").with({start_game_signal: game_page_path})
+        expect { perform :start_game, {join_code: @game.join_code} }.to have_broadcasted_to("rendezvous_#{@game.join_code}").with({start_game_signal: games_path})
       end
     end
 

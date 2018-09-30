@@ -65,10 +65,11 @@ class RendezvousController < ApplicationController
     end
   end
 
-  def leave_pregame
-    current_user.current_game.try(:remove_player, current_user.id)
-    redirect_to(rendezvous_choose_game_type_page_url) and return
-  end
+  # def leave_pregame
+  #   byebug
+  #   current_user.current_game.try(:remove_player, current_user.id)
+  #   redirect_to(rendezvous_choose_game_type_page_url) and return
+  # end
 
 protected
   def join_game_params
@@ -80,7 +81,7 @@ protected
   end
 
   def redirect_if_currently_playing_game
-    redirect_to game_page_url if current_user.current_game.try(:status) == 'midgame'
+    redirect_to games_url if current_user.current_game.try(:status) == 'midgame'
   end
 
   def different_game_type_chosen? params_game_type, game__game_type

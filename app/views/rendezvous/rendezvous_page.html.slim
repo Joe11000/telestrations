@@ -3,7 +3,7 @@
     .row
       / back button
       .col-xs-12.col-sm-12.offset-md-2.back-link-col.mt-5
-        a.leave_link data-id='leave_link' href="#{leave_pregame_url(@game.join_code)}"
+        a.leave_link data-id='leave_link' href=rendezvous_choose_game_type_page_path data-user=current_user.id
           p
             i.fa.fa-arrow-circle-left &nbsp;
             | Leave Group
@@ -19,7 +19,7 @@
 
       .col-xs-12.col-sm-12.text-center.mt-5 data-id='rendezvous-start-game-button-container' class=(@user_already_joined ? '' : 'd-none')
         h3.h3.text-center You're In
-        = button_to 'Start The Game', game_page_url, class: 'btn btn-primary', data: {id: :start_game_button}
+        = button_to 'Start The Game', games_url, class: 'btn btn-primary', data: {id: :start_game_button}
 
       .col-xs-12.col-sm-12.text-center.mt-5 data-id="update-rendezvous-group-col" class=(@user_already_joined ? 'd-none' : '')
         h3.h3.text-center Join This #{@game.game_type.capitalize} Game

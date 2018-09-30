@@ -17,7 +17,7 @@ RSpec.describe RendezvousController, type: :request do
       it 'redirect user back to game they are playing' do
         set_signed_cookies({user_id: FactoryBot.create(:midgame_with_no_moves, callback_wanted: :midgame_with_no_moves).users.first.id})
 
-        expect( get rendezvous_choose_game_type_page_path ).to redirect_to(game_path)
+        expect( get rendezvous_choose_game_type_page_path ).to redirect_to(games_path)
       end
     end
   end
@@ -497,37 +497,37 @@ RSpec.describe RendezvousController, type: :request do
     end
   end
 
-  context '#leave_group', :r5 do
-    it_behaves_like "redirect user elsewhere if they shouldn't be on rendezvous page"
+  # context '#leave_group', :r5 do
+  #   it_behaves_like "redirect user elsewhere if they shouldn't be on rendezvous page"
 
-    context 'user leaving IS the only one attached to the game' do
-      it 'removes user from game before redirecting user to choose_game_type_page' do
-        game = FactoryBot.create(:pregame, :public_game, callback_wanted: :pregame)
-        game_id = game.id
-        game.users.limit(game.users.count - 1).destroy_all
-        current_user = game.users.first
-        set_signed_cookies({user_id: current_user.id})
+  #   context 'user leaving IS the only one attached to the game' do
+  #     it 'removes user from game before redirecting user to choose_game_type_page' do
+  #       game = FactoryBot.create(:pregame, :public_game, callback_wanted: :pregame)
+  #       game_id = game.id
+  #       game.users.limit(game.users.count - 1).destroy_all
+  #       current_user = game.users.first
+  #       set_signed_cookies({user_id: current_user.id})
 
-        get leave_pregame_path
+  #       get leave_pregame_path
 
-        expect(Game.find_by(id: game_id)).to eq nil
-        expect(response).to redirect_to(rendezvous_choose_game_type_page_path)
-      end
-    end
+  #       expect(Game.find_by(id: game_id)).to eq nil
+  #       expect(response).to redirect_to(rendezvous_choose_game_type_page_path)
+  #     end
+  #   end
 
-    context 'user leaving IS NOT the only one attached to the game' do
-      it 'removes user from game before redirecting user to choose_game_type_page' do
-        game = FactoryBot.create(:pregame, :public_game, callback_wanted: :pregame)
-        game_id = game.id
-        current_user = game.users.first
-        remaining_user_ids = game.user_ids - [current_user.id]
-        set_signed_cookies({user_id: current_user.id})
+  #   context 'user leaving IS NOT the only one attached to the game' do
+  #     it 'removes user from game before redirecting user to choose_game_type_page' do
+  #       game = FactoryBot.create(:pregame, :public_game, callback_wanted: :pregame)
+  #       game_id = game.id
+  #       current_user = game.users.first
+  #       remaining_user_ids = game.user_ids - [current_user.id]
+  #       set_signed_cookies({user_id: current_user.id})
 
-        get leave_pregame_path
+  #       get leave_pregame_path
 
-        expect(Game.find_by(id: game_id).user_ids).to match_array remaining_user_ids
-        expect(response).to redirect_to(rendezvous_choose_game_type_page_path)
-      end
-    end
-  end
+  #       expect(Game.find_by(id: game_id).user_ids).to match_array remaining_user_ids
+  #       expect(response).to redirect_to(rendezvous_choose_game_type_page_path)
+  #     end
+  #   end
+  # end
 end
