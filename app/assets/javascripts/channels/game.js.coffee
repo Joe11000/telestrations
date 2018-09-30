@@ -1,6 +1,4 @@
 if document.querySelectorAll("#game").length > 0
-  debugger
-
   App.game = App.cable.subscriptions.create { channel: "GameChannel", prev_card: Number.parseInt( $('[data-prev-card-id]').attr('data-prev-card-id') ) || '', game_id: Number.parseInt( $('[data-game-id]').attr('data-game-id') ) || '' },
     connected: ->
       # Called when the subscription is ready for use on the server

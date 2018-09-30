@@ -33,6 +33,7 @@ class RendezvousChannel < ApplicationCable::Channel
   end
 
   def join_game data_hash
+    byebug
     game = current_user.current_game
     game.commit_a_rendezvoused_user( current_user.id, data_hash['users_game_name'].strip )
     html = render_user_partial_for_game( game.join_code )

@@ -4,7 +4,6 @@ Rails.application.routes.draw do
 
   root 'sessions#new'
 
-  resource :game, only: [:new]
 
   scope 'rendezvous' do
     get '/'                         => 'rendezvous#choose_game_type_page', as: :rendezvous_choose_game_type_page
@@ -14,6 +13,7 @@ Rails.application.routes.draw do
   end
 
 
+  # resource :game, only: [:new]
   resources :games, only: [:new, :show, :update, :index]
 
   # get  '/'          => 'games#game_page', as: :game_page

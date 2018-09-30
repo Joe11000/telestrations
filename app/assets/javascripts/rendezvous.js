@@ -5,7 +5,7 @@ $(function(){
   if($("[data-id='rendezvous-page']").length > 0) {
     $("[data-id='update-rendezvous-form']").on('submit', function(e){
       e.preventDefault();
-
+      debugger
       var $form = $(this);
 
       // display_error_name_submission_error = function(element){
@@ -15,7 +15,6 @@ $(function(){
       // }
 
       users_game_name = $form.find('[data-id=users_game_name]').val();
-      debugger
       // user submitted a games_user_name
       if( users_game_name.length > 0)
       {

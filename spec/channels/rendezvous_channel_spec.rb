@@ -214,7 +214,7 @@ RSpec.describe RendezvousChannel, type: :channel do
       end
 
       it 'sends redirect url to all users to start the game via the rendezvous channel (where expected players will be redirected to the rendezvous choose game path if they were just removed from the game)' do
-        expect { perform :start_game, {join_code: @game.join_code} }.to have_broadcasted_to("rendezvous_#{@game.join_code}").with({start_game_signal: games_path})
+        expect { perform :start_game, {join_code: @game.join_code} }.to have_broadcasted_to("rendezvous_#{@game.join_code}").with({start_game_signal: new_game_path})
       end
     end
 

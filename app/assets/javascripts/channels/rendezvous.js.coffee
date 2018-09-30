@@ -1,5 +1,4 @@
 if document.querySelectorAll("[data-id='rendezvous-page']").length > 0
-  debugger
   App.rendezvous = App.cable.subscriptions.create { channel: "RendezvousChannel", join_code: $('[data-id="randezvous-join-code"]').html() },
     connected: ->
       $('.loading-gif').removeClass('invisible');
@@ -25,5 +24,4 @@ if document.querySelectorAll("[data-id='rendezvous-page']").length > 0
         window.location = data.start_game_signal
 
     disconnected: ->
-      debugger
     # Called when the subscription has been terminated by the server

@@ -168,4 +168,9 @@ RSpec.configure do |config|
     end
   end
 
+  config.before(:each, puma: true) do
+   Capybara.server = :puma
+  end
 end
+
+

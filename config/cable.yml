@@ -2,8 +2,8 @@ development:
   adapter: async
 
 test:
-  adapter: async
-
+  adapter: redis
+  url: redis://localhost:6379
 production:
   adapter: redis
   url: <%= Rails.application.credentials.dig(Rails.env.to_sym, :heroku, :redis_url) %>

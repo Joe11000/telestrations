@@ -9,6 +9,7 @@ class RendezvousController < ApplicationController
 
   # joining a game
   def join_game
+    byebug
     @game = Game.find_by(join_code: join_game_params.upcase)
     if @game.blank?
       redirect_to(rendezvous_choose_game_type_page_url, alert: "Group #{join_game_params} doesn't exist.") and return
