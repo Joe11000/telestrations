@@ -31635,9 +31635,9 @@ jQuery(function() {
 
 }).call(this);
 (function() {
-  App.rendezvous = App.cable.subscriptions.create({
-    channel: "RendezvousChannel",
-    join_code: $('[data-id="randezvous-join-code"]').html()
+  App.lobby = App.cable.subscriptions.create({
+    channel: "LobbyChannel",
+    join_code: $('[data-id="lobby-join-code"]').html()
   }, {
     connected: function() {
       return $('.loading-gif').removeClass('invisible');
@@ -31943,8 +31943,8 @@ jQuery(function() {
 // All this logic will automatically be available in application.js.
 
 $(function(){
-  if($("[data-id='rendezvous-page']").length > 0) {
-    $("[data-id='update-rendezvous-form']").on('submit', function(e){
+  if($("[data-id='lobby-page']").length > 0) {
+    $("[data-id='update-lobby-form']").on('submit', function(e){
       e.preventDefault();
 
       var $form = $(this);
@@ -31962,10 +31962,10 @@ $(function(){
       {
         $form.find('button').attr('disabled', 'disabled'); //disable go button
 
-        App.rendezvous.join_game(users_game_name);
+        App.lobby.join_game(users_game_name);
 
-        $('[data-id=update-rendezvous-group-col]').addClass('hidden')
-        $('[data-id=rendezvous-start-game-button-container]').removeClass('hidden')
+        $('[data-id=update-lobby-group-col]').addClass('hidden')
+        $('[data-id=lobby-start-game-button-container]').removeClass('hidden')
       }
       // else
       // {
@@ -31976,13 +31976,13 @@ $(function(){
 
   $("[data-id='leave_link']").on('click', function(e){
     e.preventDefault();
-    App.rendezvous.unjoin_game();
+    App.lobby.unjoin_game();
     window.location = this.getAttribute('href');
   });
 
   $("[data-id='start_game_button']").closest('form').on('submit', function(e){
     e.preventDefault();
-    App.rendezvous.start_game();
+    App.lobby.start_game();
   });
 });
 // This is a manifest file that'll be compiled into application.js, which will include all the files

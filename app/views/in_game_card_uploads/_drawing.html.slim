@@ -1,6 +1,6 @@
-/ #drawing-container
-/   p What is was drawn?
-/   form
-/     input type='text'
-/     button.btn type="button" Done
-/     textarea rows="3"
+#drawing-container
+  = form_with model: Card.new, url: in_game_card_uploads_path do |f|
+      = f.label :drawing, 'Upload your drawing', class: 'file_upload_form', data: {class: 'file_upload_form'}
+      = f.file_field :drawing
+      = f.submit id: 'submitPhoto', class: 'btn btn-primary', disabled: true, data: {id: 'submitPhoto'}
+

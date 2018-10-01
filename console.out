@@ -11,8 +11,8 @@
    "SERVER_SOFTWARE"=>"puma 3.12.0 Llamas in Pajamas",
    "GATEWAY_INTERFACE"=>"CGI/1.2",
    "REQUEST_METHOD"=>"GET",
-   "REQUEST_PATH"=>"/game/rendezvous",
-   "REQUEST_URI"=>"/game/rendezvous",
+   "REQUEST_PATH"=>"/game/lobby",
+   "REQUEST_URI"=>"/game/lobby",
    "HTTP_VERSION"=>"HTTP/1.1",
    "HTTP_HOST"=>"localhost:3000",
    "HTTP_CONNECTION"=>"keep-alive",
@@ -33,7 +33,7 @@
     "_fun_session=Vo4o0XTy4whkYAfucvSoSSKephCd1wpZQoBcLBtIyu%2B83a%2BwjktO73Vx6IV7L%2FrGlg8DMh9ZM07UykZBNPH8zeG%2FWKa5cC8wi6sxC2aNTtFWIOYDns%2F9PGktqfk6s%2BTSb0ZPf%2BiE6T2OvxyuXNs%3D--p6yESlz3JaPTkW9M--yjUkc5eWVQchkY6KLPDZww%3D%3D; _pre_hashrocket_session=WTFOUXhLL3dBM2dCbThFK2R5Y0tGZFlWaTBwamRxUjdrMmsrUGYyM0llSWwycXBEZ2phZVRZbnRNMkQ4MzhMY0toMnhRNGQvRjBVMGVUajBXSU5pL3AzR09pWmRSbkVJdXRHVm1JcW1HN3N6K2dPNWVNYUdvVm94Y0s2dVcvMS9hSDI1U1B5U0dlbVh3L21KdVdTd1NnPT0tLXNoZ3RPSWxOZ0pvTmpwUDFlSmdEd1E9PQ%3D%3D--12a94c8c911bca29779d4076888d7e0ec4f5dd27; _rails520_session=NMRktvLpv%2BWLwVlwKM%2BJY%2B3l2XTgyXWy7ruRpXDS8j0usDIiOxQoBY1FyKAe8Yh5j4w2IwjXSMFRy7v1RrTdplJIlysUnYIWRSABUZkoPGOw7uDjbRlIKcRlXHhgTOzerm4C3MLUqrq%2FnxYOvoklu%2Fm3rcUNugi4mPGC--JoRVBXdZ%2BdaJBo5T--VVaSALC5CkBo66v0jwvvZw%3D%3D; _upgrade_personal_site_session=ZGpUVWl0WldxRUxXWWVWY3dzM1VRUWJIbVJiTk1qb2hWdGdXYzJXdGNjenFna1E0QXgvbm5OSTg4QXY3QXgvZUhQaWR3RFUyNkR4dVZpVEtTN0FMbVYzNjMzUEt4WDdtZXNRb09BR3RCdG9ZSm9NUkpwaE41M052WG5VRE5YaTc4d2drek4xeTBTTDBZVjl5a3IrNGlRPT0tLUVDb0JXVi93NXFTOXVNRHVzSGpDS1E9PQ%3D%3D--95630ce36fd858d2c8dfec68b619bdc5e2cf7cc4; _sith_lineage_session=M0W8yKdI2kWfyzTomuB3bGiHN1T4W77TV3%2FLU%2BmSgw1Gpgoau%2B%2BZwevXH636zplth7UTaOzeuz%2Bz8Df53a7rOpfOsuo3WsrC3VuojJ9bAyyVbrTDUilQ4LIH3KIaRRYcS6aEuPSfVxIuODUtOmY8ZcX5f5ORdnLIm6cRCkCmpkoM%2BdjQloFAZDD65PvDgzAlELmiVQVBLQf7oQFMXHXOXFpGmX6Wionpmfv2Ffz2aA0xx0MAVE2BG1EwOM%2BH--E086VlH4WH93PezT--7FqCbUSKnoO1e0K8bz3pRA%3D%3D; _rails_guides_session=m3mJiMjpmz%2FgqNw9f%2FM8x%2FaIwJzvfb%2B9ZCPjX0V%2BqmRBmxh7lidn08uZuTOml8ShWLhdn0mED7RLTpasRVHvJYip7B3ZAg5KpRheVur9xgE%2BQuIfmPZupaiTa%2B4pRl0irXhkux50Hgrke%2BGBY9fE%2FEJFtVTKCdRd%2BLg%3D--3rtlmJPxYzJiIfCd--TIT3YaEgF6K6W7b%2FuX1qdA%3D%3D; user_id=MTk%3D--11f1324945a12702e87497b6571e37b927838235; _telestrations_session=a202R0pmQ2VVSElLekR5NGFhZVlHUTVrRnRRa3llQkNvN2VQT2psQ2tXM3E0N2gwTGdlMUkzdzNEdC9SWHYxd0hZOHZHVkpVMXovNUdxS001enpFQnE3emNZRW41NU52RGMrRnBHUnJaRllsck1hakJiSzJpNjZjN0hXeVBQVGxtRzhQWVRHM2FCMEtINytSck8rR1J3PT0tLWFmRzl0NXc5SndYU3hMTUVpWTZ6emc9PQ%3D%3D--ec90154f9dc548565240e404219ea6cc3263beaa",
    "SERVER_NAME"=>"localhost",
    "SERVER_PORT"=>"3000",
-   "PATH_INFO"=>"/game/rendezvous",
+   "PATH_INFO"=>"/game/lobby",
    "REMOTE_ADDR"=>"127.0.0.1",
    "puma.socket"=>#<TCPSocket:fd 27, AF_INET, 127.0.0.1, 3000>,
    "rack.hijack?"=>true,
@@ -145,7 +145,7 @@
              "/Users/joe/Dropbox/coding/coding/ruby/rails/wip/rails5/telestrations/app/models/concerns",
              "/Users/joe/Dropbox/coding/coding/ruby/rails/wip/rails5/telestrations/app/workers",
              "/Users/joe/Dropbox/coding/coding/ruby/rails/wip/rails5/telestrations/app/channels/game_channel.rb",
-             "/Users/joe/Dropbox/coding/coding/ruby/rails/wip/rails5/telestrations/app/channels/rendezvous_channel.rb"],
+             "/Users/joe/Dropbox/coding/coding/ruby/rails/wip/rails5/telestrations/app/channels/lobby_channel.rb"],
            @_all_load_paths=
             ["/Users/joe/Dropbox/coding/coding/ruby/rails/wip/rails5/telestrations/lib",
              "/Users/joe/Dropbox/coding/coding/ruby/rails/wip/rails5/telestrations/vendor",
@@ -159,7 +159,7 @@
              "/Users/joe/Dropbox/coding/coding/ruby/rails/wip/rails5/telestrations/app/models/concerns",
              "/Users/joe/Dropbox/coding/coding/ruby/rails/wip/rails5/telestrations/app/workers",
              "/Users/joe/Dropbox/coding/coding/ruby/rails/wip/rails5/telestrations/app/channels/game_channel.rb",
-             "/Users/joe/Dropbox/coding/coding/ruby/rails/wip/rails5/telestrations/app/channels/rendezvous_channel.rb"],
+             "/Users/joe/Dropbox/coding/coding/ruby/rails/wip/rails5/telestrations/app/channels/lobby_channel.rb"],
            @app=
             #<Rack::Sendfile:0x00007fa0f55e0d60
              @app=
@@ -757,7 +757,7 @@
                "/Users/joe/Dropbox/coding/coding/ruby/rails/wip/rails5/telestrations/app/models/concerns",
                "/Users/joe/Dropbox/coding/coding/ruby/rails/wip/rails5/telestrations/app/workers",
                "/Users/joe/Dropbox/coding/coding/ruby/rails/wip/rails5/telestrations/app/channels/game_channel.rb",
-               "/Users/joe/Dropbox/coding/coding/ruby/rails/wip/rails5/telestrations/app/channels/rendezvous_channel.rb"],
+               "/Users/joe/Dropbox/coding/coding/ruby/rails/wip/rails5/telestrations/app/channels/lobby_channel.rb"],
              @enable_dependency_loading=false,
              @encoding=#<Encoding:UTF-8>,
              @exceptions_app=nil,
@@ -9949,7 +9949,7 @@
                  ["rb"],
                 #<Pathname:/Users/joe/Dropbox/coding/coding/ruby/rails/wip/rails5/telestrations/app/channels/game_channel.rb>=>
                  ["rb"],
-                #<Pathname:/Users/joe/Dropbox/coding/coding/ruby/rails/wip/rails5/telestrations/app/channels/rendezvous_channel.rb>=>
+                #<Pathname:/Users/joe/Dropbox/coding/coding/ruby/rails/wip/rails5/telestrations/app/channels/lobby_channel.rb>=>
                  ["rb"],
                 #<Pathname:/Users/joe/.rbenv/versions/2.5.1/lib/ruby/gems/2.5.0/gems/font-awesome-rails-4.7.0.4/app/assets>=>
                  ["rb"],
@@ -10039,7 +10039,7 @@
              "/Users/joe/Dropbox/coding/coding/ruby/rails/wip/rails5/telestrations/app/models/concerns",
              "/Users/joe/Dropbox/coding/coding/ruby/rails/wip/rails5/telestrations/app/workers",
              "/Users/joe/Dropbox/coding/coding/ruby/rails/wip/rails5/telestrations/app/channels/game_channel.rb",
-             "/Users/joe/Dropbox/coding/coding/ruby/rails/wip/rails5/telestrations/app/channels/rendezvous_channel.rb"],
+             "/Users/joe/Dropbox/coding/coding/ruby/rails/wip/rails5/telestrations/app/channels/lobby_channel.rb"],
            @_all_load_paths=
             ["/Users/joe/Dropbox/coding/coding/ruby/rails/wip/rails5/telestrations/lib",
              "/Users/joe/Dropbox/coding/coding/ruby/rails/wip/rails5/telestrations/vendor",
@@ -10053,7 +10053,7 @@
              "/Users/joe/Dropbox/coding/coding/ruby/rails/wip/rails5/telestrations/app/models/concerns",
              "/Users/joe/Dropbox/coding/coding/ruby/rails/wip/rails5/telestrations/app/workers",
              "/Users/joe/Dropbox/coding/coding/ruby/rails/wip/rails5/telestrations/app/channels/game_channel.rb",
-             "/Users/joe/Dropbox/coding/coding/ruby/rails/wip/rails5/telestrations/app/channels/rendezvous_channel.rb"],
+             "/Users/joe/Dropbox/coding/coding/ruby/rails/wip/rails5/telestrations/app/channels/lobby_channel.rb"],
            @app=
             #<Rack::Sendfile:0x00007fa0f55e0d60
              @app=
@@ -10651,7 +10651,7 @@
                "/Users/joe/Dropbox/coding/coding/ruby/rails/wip/rails5/telestrations/app/models/concerns",
                "/Users/joe/Dropbox/coding/coding/ruby/rails/wip/rails5/telestrations/app/workers",
                "/Users/joe/Dropbox/coding/coding/ruby/rails/wip/rails5/telestrations/app/channels/game_channel.rb",
-               "/Users/joe/Dropbox/coding/coding/ruby/rails/wip/rails5/telestrations/app/channels/rendezvous_channel.rb"],
+               "/Users/joe/Dropbox/coding/coding/ruby/rails/wip/rails5/telestrations/app/channels/lobby_channel.rb"],
              @enable_dependency_loading=false,
              @encoding=#<Encoding:UTF-8>,
              @exceptions_app=nil,
@@ -19843,7 +19843,7 @@
                  ["rb"],
                 #<Pathname:/Users/joe/Dropbox/coding/coding/ruby/rails/wip/rails5/telestrations/app/channels/game_channel.rb>=>
                  ["rb"],
-                #<Pathname:/Users/joe/Dropbox/coding/coding/ruby/rails/wip/rails5/telestrations/app/channels/rendezvous_channel.rb>=>
+                #<Pathname:/Users/joe/Dropbox/coding/coding/ruby/rails/wip/rails5/telestrations/app/channels/lobby_channel.rb>=>
                  ["rb"],
                 #<Pathname:/Users/joe/.rbenv/versions/2.5.1/lib/ruby/gems/2.5.0/gems/font-awesome-rails-4.7.0.4/app/assets>=>
                  ["rb"],
@@ -19980,7 +19980,7 @@
    "action_dispatch.routes"=>
     #<ActionDispatch::Routing::RouteSet:0x00007fa0fb13dbb8>,
    "ROUTES_70164691938780_SCRIPT_NAME"=>"",
-   "ORIGINAL_FULLPATH"=>"/game/rendezvous",
+   "ORIGINAL_FULLPATH"=>"/game/lobby",
    "ORIGINAL_SCRIPT_NAME"=>"",
    "action_dispatch.request_id"=>"c37bc653-08e8-4c7b-a2d7-b688e4ea0e58",
    "action_dispatch.remote_ip"=>
@@ -20189,9 +20189,9 @@
     {"session_id"=>"b0a1e78dc654ccf72267f78407a7ef13",
      "_csrf_token"=>"ujnGRUN9oIMcy0nFo2Cibh7Wlq6aDDuRXOG81hdfzIA="},
    "action_dispatch.request.path_parameters"=>
-    {:controller=>"rendezvous", :action=>"choose_game_type_page"},
+    {:controller=>"lobby", :action=>"choose_game_type_page"},
    "action_controller.instance"=>
-    #<RendezvousController:0x00007fa0f88e8730
+    #<lobbyController:0x00007fa0f88e8730
      @_action_has_layout=true,
      @_action_name="choose_game_type_page",
      @_config={},
@@ -20207,7 +20207,7 @@
           [:raw, :erb, :html, :builder, :ruby, :slim, :coffee, :jbuilder]},
        @details_key=
         #<Concurrent::Map:0x007fa0fee4a038 entries=0 default_proc=nil>,
-       @prefixes=["rendezvous", "application"],
+       @prefixes=["lobby", "application"],
        @rendered_format=:html,
        @view_paths=
         #<ActionView::PathSet:0x00007fa0f88e8460
@@ -20264,7 +20264,7 @@
             [:raw, :erb, :html, :builder, :ruby, :slim, :coffee, :jbuilder]},
          @details_key=
           #<Concurrent::Map:0x007fa0fee4a038 entries=0 default_proc=nil>,
-         @prefixes=["rendezvous", "application"],
+         @prefixes=["lobby", "application"],
          @rendered_format=:html,
          @view_paths=
           #<ActionView::PathSet:0x00007fa0f88e8460
@@ -20294,7 +20294,7 @@
    "rack.request.query_hash"=>{},
    "action_dispatch.request.query_parameters"=>{},
    "action_dispatch.request.parameters"=>
-    {"controller"=>"rendezvous", "action"=>"choose_game_type_page"},
+    {"controller"=>"lobby", "action"=>"choose_game_type_page"},
    "action_dispatch.request.formats"=>
     [#<Mime::Type:0x00007fa0f4c37570
       @hash=-913710579419292113,
@@ -20303,9 +20303,9 @@
       @synonyms=["application/xhtml+xml"]>]},
  @filtered_env=nil,
  @filtered_parameters=
-  {"controller"=>"rendezvous", "action"=>"choose_game_type_page"},
+  {"controller"=>"lobby", "action"=>"choose_game_type_page"},
  @filtered_path=nil,
- @fullpath="/game/rendezvous",
+ @fullpath="/game/lobby",
  @headers=
   #<ActionDispatch::Http::Headers:0x00007fa0fee9b320
    @req=#<ActionDispatch::Request:0x00007fa0f88ea828 ...>>,

@@ -2174,16 +2174,16 @@ html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:1
 #all-postgames-page #out-of-game-cards-header {
   text-align: center;
 }
-/* line 4, /Users/user/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/rendezvous.css.scss */
-#rendezvous-page .back-link-col {
+/* line 4, /Users/user/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/lobby.css.scss */
+#lobby-page .back-link-col {
   margin-top: 0;
 }
-/* line 8, /Users/user/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/rendezvous.css.scss */
-#rendezvous-page > [class*='col-'] {
+/* line 8, /Users/user/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/lobby.css.scss */
+#lobby-page > [class*='col-'] {
   margin-bottom: 25px;
 }
-/* line 12, /Users/user/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/rendezvous.css.scss */
-#rendezvous-page .randezvous-join-code {
+/* line 12, /Users/user/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/lobby.css.scss */
+#lobby-page .lobby-join-code {
   color: rebeccapurple;
 }
 /* line 8, /Users/user/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/sessions.css.scss */

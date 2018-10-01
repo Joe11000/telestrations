@@ -10577,32 +10577,32 @@ a.text-dark:hover, a.text-dark:focus {
   text-align: center;
 }
 
-/* line 5, /Users/joe/Dropbox/coding/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/rendezvous.scss */
-#rendezvous-page h3 {
+/* line 5, /Users/joe/Dropbox/coding/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/lobby.scss */
+#lobby-page h3 {
   margin-top: 0;
 }
-/* line 9, /Users/joe/Dropbox/coding/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/rendezvous.scss */
-#rendezvous-page h4, #rendezvous-page p {
+/* line 9, /Users/joe/Dropbox/coding/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/lobby.scss */
+#lobby-page h4, #lobby-page p {
   margin: 0;
 }
-/* line 13, /Users/joe/Dropbox/coding/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/rendezvous.scss */
-#rendezvous-page .row > * {
+/* line 13, /Users/joe/Dropbox/coding/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/lobby.scss */
+#lobby-page .row > * {
   margin: 20px 0;
 }
-/* line 17, /Users/joe/Dropbox/coding/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/rendezvous.scss */
-#rendezvous-page .clearfix {
+/* line 17, /Users/joe/Dropbox/coding/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/lobby.scss */
+#lobby-page .clearfix {
   margin: 0;
 }
-/* line 21, /Users/joe/Dropbox/coding/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/rendezvous.scss */
-#rendezvous-page .back-link-col {
+/* line 21, /Users/joe/Dropbox/coding/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/lobby.scss */
+#lobby-page .back-link-col {
   margin-top: 0;
 }
-/* line 25, /Users/joe/Dropbox/coding/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/rendezvous.scss */
-#rendezvous-page > [class*='col-'] {
+/* line 25, /Users/joe/Dropbox/coding/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/lobby.scss */
+#lobby-page > [class*='col-'] {
   margin-bottom: 25px;
 }
-/* line 29, /Users/joe/Dropbox/coding/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/rendezvous.scss */
-#rendezvous-page .randezvous-join-code {
+/* line 29, /Users/joe/Dropbox/coding/coding/ruby/rails/wip/rails5/telestrations/app/assets/stylesheets/lobby.scss */
+#lobby-page .lobby-join-code {
   color: rebeccapurple;
 }
 

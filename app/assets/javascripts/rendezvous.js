@@ -2,10 +2,10 @@
 // All this logic will automatically be available in application.js.
 
 $(function(){
-  if($("[data-id='rendezvous-page']").length > 0) {
-    $("[data-id='update-rendezvous-form']").on('submit', function(e){
+  if($("[data-id='lobby-page']").length > 0) {
+    $("[data-id='update-lobby-form']").on('submit', function(e){
       e.preventDefault();
-      debugger
+
       var $form = $(this);
 
       // display_error_name_submission_error = function(element){
@@ -20,25 +20,21 @@ $(function(){
       {
         $form.find('button').attr('disabled', 'disabled'); //disable go button
 
-        App.rendezvous.join_game(users_game_name);
+        App.lobby.join_game(users_game_name);
 
-        $('[data-id=update-rendezvous-group-col]').addClass('d-none');
-        $('[data-id=rendezvous-start-game-button-container]').removeClass('d-none');
+        $('[data-id=update-lobby-group-col]').addClass('d-none');
+        $('[data-id=lobby-start-game-button-container]').removeClass('d-none');
       }
-      // else
-      // {
-      //   display_error_name_submission_error($this)
-      // }
     });
   }
 
   $("[data-id='leave_link']").on('click', function(e){
     e.preventDefault();
-    App.rendezvous.unjoin_game();
+    App.lobby.unjoin_game();
   });
 
   $("[data-id='start_game_button']").closest('form').on('submit', function(e){
     e.preventDefault();
-    App.rendezvous.start_game();
+    App.lobby.start_game();
   });
 });

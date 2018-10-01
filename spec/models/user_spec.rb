@@ -71,7 +71,7 @@ RSpec.describe User, type: :model do
       context 'returns a game instance', r5: true do
 
         context 'if a user' do
-          it "is in the lobby(rendezvous page) and hasn't entered a character name" do
+          it "is in the lobby(lobby page) and hasn't entered a character name" do
             user = @pregame.users.first
             expect(user.current_game).to eq @pregame
           end

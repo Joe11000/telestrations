@@ -4,23 +4,13 @@ Rails.application.routes.draw do
 
   root 'sessions#new'
 
-
-  scope 'rendezvous' do
-    get '/'                         => 'rendezvous#choose_game_type_page', as: :rendezvous_choose_game_type_page
-    # get  'leave_pregame'            => 'rendezvous#leave_pregame',         as: :leave_pregame
-    post 'join'                     => 'rendezvous#join_game',             as: :join_game
-    get  ':game_type'               => 'rendezvous#rendezvous_page',       as: :rendezvous_page
+  scope 'lobby' do
+    get '/'                         => 'lobbies#choose_game_type_page', as: :choose_game_type_page
+    post 'join'                     => 'lobbies#join_lobby',          as: :join_lobby
+    get  ':game_type'               => 'lobbies#lobby',               as: :lobby
   end
 
-
-  # resource :game, only: [:new]
   resources :games, only: [:new, :show, :update, :index]
-
-  # get  '/'          => 'games#game_page', as: :game_page
-  # post '/'          => 'games#game',      as: :game
-
-  # get  'postgame'    => 'games#postgame_page',      as: :postgame_page
-  # get  'postgames'   => 'games#all_postgames_page', as: :all_postgames_page
 
   scope 'cards' do
     resources :in_game_card_uploads, only: [:new, :create]

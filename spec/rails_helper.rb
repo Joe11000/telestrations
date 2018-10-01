@@ -131,8 +131,9 @@ end
 #       example.run
 #     end
 #   end
-
 # end
+
+
 RSpec.configure do |config|
 
   config.before(:suite) do
@@ -172,5 +173,3 @@ RSpec.configure do |config|
    Capybara.server = :puma
   end
 end
-
-

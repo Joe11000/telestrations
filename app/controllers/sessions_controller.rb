@@ -1,6 +1,6 @@
 class SessionsController < ApplicationController
   def new
-    redirect_to rendezvous_choose_game_type_page_url if current_user
+    redirect_to choose_game_type_page_url if current_user
   end
 
   def create
@@ -10,7 +10,7 @@ class SessionsController < ApplicationController
       attach_users_avatar_from_provider @user, provider_avatar_url
     end
     cookies.signed[:user_id] = @user.id if @user
-    redirect_to rendezvous_choose_game_type_page_url
+    redirect_to choose_game_type_page_url
   end
 
   def destroy

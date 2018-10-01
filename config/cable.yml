@@ -2,22 +2,9 @@ development:
   adapter: async
 
 test:
-  adapter: redis
-  url: redis://localhost:6379
+  adapter: async
+
 production:
   adapter: redis
   url: <%= Rails.application.credentials.dig(Rails.env.to_sym, :heroku, :redis_url) %>
   channel_prefix: telestrations_production
-
-
-
-
-# local: &local
-#   adapter: redis
-#   url: redis://dev.telestrations.herokuapp.com:6379/1
-#   host: dev.telestrations.herokuapp.com:3000
-# development: *local
-# test: *local
-# production:
-  # url: <%= Rails.application.credentials.dig(Rails.env.to_sym, :heroku, :redis_url) %>
-

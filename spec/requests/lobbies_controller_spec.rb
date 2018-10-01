@@ -1,15 +1,15 @@
 require 'rails_helper'
 require 'support/login'
 
-RSpec.describe RendezvousController, type: :request do
+RSpec.describe LobbiesController, type: :request do
   include LoginHelper
 
-  shared_examples_for "redirect user elsewhere if they shouldn't be on rendezvous page" do
+  shared_examples_for "redirect user elsewhere if they shouldn't be on lobby page" do
     context 'user NOT logged in' do
       it 'redirects them back to home page' do
         set_signed_cookies({user_id: nil})
 
-        expect( get rendezvous_choose_game_type_page_path ).to redirect_to(login_path)
+        expect( get choose_game_type_page_path ).to redirect_to(login_path)
       end
     end
 
@@ -17,13 +17,13 @@ RSpec.describe RendezvousController, type: :request do
       it 'redirect user back to game they are playing' do
         set_signed_cookies({user_id: FactoryBot.create(:midgame_with_no_moves, callback_wanted: :midgame_with_no_moves).users.first.id})
 
-        expect( get rendezvous_choose_game_type_page_path ).to redirect_to(games_path)
+        expect( get choose_game_type_page_path ).to redirect_to(games_path)
       end
     end
   end
 
   context '#choose_game_type_page', :r5 do
-    it_behaves_like "redirect user elsewhere if they shouldn't be on rendezvous page"
+    it_behaves_like "redirect user elsewhere if they shouldn't be on lobby page"
 
     context 'user logged in' do
       before :each do
@@ -32,7 +32,7 @@ RSpec.describe RendezvousController, type: :request do
 
         set_signed_cookies({ user_id: @user.id })
 
-        get rendezvous_choose_game_type_page_path
+        get choose_game_type_page_path
       end
 
       it 'default layout is' do
@@ -53,9 +53,9 @@ RSpec.describe RendezvousController, type: :request do
   end
 
   context '#join_game', :r5 do
-    it_behaves_like "redirect user elsewhere if they shouldn't be on rendezvous page"
+    it_behaves_like "redirect user elsewhere if they shouldn't be on lobby page"
 
-    context 'game/rendezvous/join' do
+    context 'game/lobby/join' do
       context 'One game exists with matching :join_code' do
         it 'user can join a public game'  do
           FactoryBot.create(:pregame, :public_game, callback_wanted: :pregame)
@@ -63,12 +63,12 @@ RSpec.describe RendezvousController, type: :request do
           current_user = FactoryBot.create(:user)
           set_signed_cookies({user_id: current_user.id})
 
-          post join_game_path, params: {join_code: game.join_code}
+          post join_lobby_path, params: {join_code: game.join_code}
 
           game.reload
           current_user.reload
 
-          expect(response).to redirect_to(rendezvous_page_path('public'))
+          expect(response).to redirect_to(lobby_path('public'))
         end
 
         it 'user can join a private game' do
@@ -77,12 +77,12 @@ RSpec.describe RendezvousController, type: :request do
           current_user = FactoryBot.create(:user)
           set_signed_cookies({user_id: current_user.id})
 
-          post join_game_path, params: {join_code: game.join_code}
+          post join_lobby_path, params: {join_code: game.join_code}
 
           game.reload
           current_user.reload
 
-          expect(response).to redirect_to(rendezvous_page_path('private'))
+          expect(response).to redirect_to(lobby_path('private'))
         end
       end
 
@@ -94,26 +94,26 @@ RSpec.describe RendezvousController, type: :request do
           set_signed_cookies({ user_id: current_user.id })
 
 
-          post join_game_path, params: { join_code: invalid_join_code }
+          post join_lobby_path, params: { join_code: invalid_join_code }
 
-          expect(response).to redirect_to(rendezvous_choose_game_type_page_path)
-          expect(flash.alert).to eq "Group #{invalid_join_code} doesn't exist."
+          expect(response).to redirect_to(choose_game_type_page_path)
+          expect(flash.alert).to eq "Join Code #{invalid_join_code} doesn't exist."
         end
       end
     end
   end
 
-  context '#rendezvous_page', :r5 do
-    it_behaves_like "redirect user elsewhere if they shouldn't be on rendezvous page"
+  context '#lobby', :r5 do
+    it_behaves_like "redirect user elsewhere if they shouldn't be on lobby page"
 
     context 'a logged in user can visit' do
-      context '/rendezvous/public' do
+      context '/lobby/public' do
         context 'if NOT currently associated with any other games' do
           it 'creates a newly created public game' do
             current_user = FactoryBot.create(:user)
             set_signed_cookies({ user_id: current_user.id })
 
-            expect{ get rendezvous_page_path('public')}.to change{Game.count}.by(1)
+            expect{ get lobby_path('public')}.to change{Game.count}.by(1)
             expect(Game.last.public_game?).to eq true
           end
 
@@ -121,24 +121,24 @@ RSpec.describe RendezvousController, type: :request do
             current_user = FactoryBot.create(:user)
             set_signed_cookies({ user_id: current_user.id })
 
-            get rendezvous_page_path('public')
+            get lobby_path('public')
 
             expect(response).to have_http_status :ok
           end
 
 
-          it 'sees content expected to be seen on the page, (reminder: the current user until after the rendezvous channel subscribe method creates a games_user join connection)' do
+          it 'sees content expected to be seen on the page, (reminder: the current user until after the lobby channel subscribe method creates a games_user join connection)' do
             current_user = FactoryBot.create(:user)
             set_signed_cookies({ user_id: current_user.id })
 
-            get rendezvous_page_path('public')
+            get lobby_path('public')
 
             expect(response.body).to match(/Leave Group/)
             expect(response.body).to match(/Join Code : .*>#{Game.last.join_code}</)
 
             expect(response.body).to match(/Join This Public Game/)
 
-            expect(response.body).to match(/Users Not Joined \( 0 \)/) # current user not counted in this number until after the rendezvous channel subscribe method establishes a games_user join connection
+            expect(response.body).to match(/Users Not Joined \( 0 \)/) # current user not counted in this number until after the lobby channel subscribe method establishes a games_user join connection
             expect(response.body).to match(/Users Joined \( 0 \)/)
           end
         end
@@ -150,7 +150,7 @@ RSpec.describe RendezvousController, type: :request do
               current_user = other_game.users.first
               set_signed_cookies({ user_id: current_user.id })
 
-              get rendezvous_page_path('public')
+              get lobby_path('public')
 
               current_user.reload
               other_game.reload
@@ -162,7 +162,7 @@ RSpec.describe RendezvousController, type: :request do
               expect(last_game.user_ids).not_to include current_user.id
               expect(last_game.public_game?).to eq true
 
-              expect(current_user.current_game).to eq nil # the user is not associated to the game when they land on the page they are attached to game through the subscribe method on the rendezvous channel
+              expect(current_user.current_game).to eq nil # the user is not associated to the game when they land on the page they are attached to game through the subscribe method on the lobby channel
             end
           end
         end
@@ -176,7 +176,7 @@ RSpec.describe RendezvousController, type: :request do
               current_user = game.users.first
               set_signed_cookies({user_id: current_user.id})
 
-              get rendezvous_page_path('public')
+              get lobby_path('public')
 
               game.reload
               current_user.reload
@@ -197,7 +197,7 @@ RSpec.describe RendezvousController, type: :request do
                 current_user = game.users.first
                 set_signed_cookies({user_id: current_user.id})
 
-                get rendezvous_page_path('public')
+                get lobby_path('public')
 
                 game.reload
                 current_user.reload
@@ -212,13 +212,13 @@ RSpec.describe RendezvousController, type: :request do
         end
       end
 
-      context '/rendezvous/private' do
+      context '/lobby/private' do
         context 'if NOT currently associated with any other games' do
           it 'creates a newly created private game' do
             current_user = FactoryBot.create(:user)
             set_signed_cookies({ user_id: current_user.id })
 
-            expect{ get rendezvous_page_path('private')}.to change{Game.count}.by(1)
+            expect{ get lobby_path('private')}.to change{Game.count}.by(1)
             expect(Game.last.private_game?).to eq true
           end
 
@@ -226,24 +226,24 @@ RSpec.describe RendezvousController, type: :request do
             current_user = FactoryBot.create(:user)
             set_signed_cookies({ user_id: current_user.id })
 
-            get rendezvous_page_path('private')
+            get lobby_path('private')
 
             expect(response).to have_http_status :ok
           end
 
 
-          it 'sees content expected to be seen on the page, (reminder: the current user until after the rendezvous channel subscribe method creates a games_user join connection)' do
+          it 'sees content expected to be seen on the page, (reminder: the current user until after the lobby channel subscribe method creates a games_user join connection)' do
             current_user = FactoryBot.create(:user)
             set_signed_cookies({ user_id: current_user.id })
 
-            get rendezvous_page_path('private')
+            get lobby_path('private')
 
             expect(response.body).to match(/Leave Group/)
             expect(response.body).to match(/Join Code : .*>#{Game.last.join_code}</)
 
             expect(response.body).to match(/Join This Private Game/)
 
-            expect(response.body).to match(/Users Not Joined \( 0 \)/) # current user not counted in this number until after the rendezvous channel subscribe method establishes a games_user join connection
+            expect(response.body).to match(/Users Not Joined \( 0 \)/) # current user not counted in this number until after the lobby channel subscribe method establishes a games_user join connection
             expect(response.body).to match(/Users Joined \( 0 \)/)
           end
         end
@@ -255,7 +255,7 @@ RSpec.describe RendezvousController, type: :request do
               current_user = other_game.users.first
               set_signed_cookies({ user_id: current_user.id })
 
-              get rendezvous_page_path('private')
+              get lobby_path('private')
 
               current_user.reload
               other_game.reload
@@ -267,7 +267,7 @@ RSpec.describe RendezvousController, type: :request do
               expect(last_game.user_ids).not_to include current_user.id
               expect(last_game.private_game?).to eq true
 
-              expect(current_user.current_game).to eq nil # the user is not associated to the game when they land on the page they are attached to game through the subscribe method on the rendezvous channel
+              expect(current_user.current_game).to eq nil # the user is not associated to the game when they land on the page they are attached to game through the subscribe method on the lobby channel
             end
           end
         end
@@ -281,7 +281,7 @@ RSpec.describe RendezvousController, type: :request do
               current_user = game.users.first
               set_signed_cookies({user_id: current_user.id})
 
-              get rendezvous_page_path('private')
+              get lobby_path('private')
 
               game.reload
               current_user.reload
@@ -302,7 +302,7 @@ RSpec.describe RendezvousController, type: :request do
                 current_user = game.users.first
                 set_signed_cookies({user_id: current_user.id})
 
-                get rendezvous_page_path('private')
+                get lobby_path('private')
 
                 game.reload
                 current_user.reload
@@ -315,7 +315,7 @@ RSpec.describe RendezvousController, type: :request do
         end
       end
 
-      context '/rendezvous/quick_start' do
+      context '/lobby/quick_start' do
 
         context 'if NOT currently associated with any other games' do
 
@@ -324,7 +324,7 @@ RSpec.describe RendezvousController, type: :request do
             FactoryBot.create :pregame, :private_game, callback_wanted: :pregame
             set_signed_cookies({ user_id: current_user.id })
 
-            expect{ get rendezvous_page_path('quick_start')}.to change{Game.count}.by(1)
+            expect{ get lobby_path('quick_start')}.to change{Game.count}.by(1)
             expect(Game.last.public_game?).to eq true
             expect(response.body).to match(/Join This Public Game/)
           end
@@ -337,7 +337,7 @@ RSpec.describe RendezvousController, type: :request do
 
             set_signed_cookies({ user_id: current_user.id })
 
-            expect{ get rendezvous_page_path('quick_start')}.to change{Game.count}.by(0)
+            expect{ get lobby_path('quick_start')}.to change{Game.count}.by(0)
             expect(response.body).to match(/Join Code : .*>#{game.join_code}</)
             expect(response.body).to match(/Join This Public Game/)
           end
@@ -346,25 +346,25 @@ RSpec.describe RendezvousController, type: :request do
             current_user = FactoryBot.create(:user)
             set_signed_cookies({ user_id: current_user.id })
 
-            get rendezvous_page_path('quick_start')
+            get lobby_path('quick_start')
 
             expect(response).to have_http_status :ok
           end
 
 
-          it 'sees content expected to be seen on the page, (reminder: the current user until after the rendezvous channel subscribe method creates a games_user join connection)' do
+          it 'sees content expected to be seen on the page, (reminder: the current user until after the lobby channel subscribe method creates a games_user join connection)' do
 
             current_user = FactoryBot.create(:user)
             set_signed_cookies({ user_id: current_user.id })
 
-            get rendezvous_page_path('quick_start')
+            get lobby_path('quick_start')
 
             expect(response.body).to match(/Leave Group/)
             expect(response.body).to match(/Join Code : .*>#{Game.last.join_code}</)
 
             expect(response.body).to match(/Join This Public Game/)
 
-            expect(response.body).to match(/Users Not Joined \( 0 \)/) # current user not counted in this number until after the rendezvous channel subscribe method establishes a games_user join connection
+            expect(response.body).to match(/Users Not Joined \( 0 \)/) # current user not counted in this number until after the lobby channel subscribe method establishes a games_user join connection
             expect(response.body).to match(/Users Joined \( 0 \)/)
           end
         end
@@ -378,7 +378,7 @@ RSpec.describe RendezvousController, type: :request do
                 current_user = other_game.users.first
                 set_signed_cookies({ user_id: current_user.id })
 
-                get rendezvous_page_path('quick_start')
+                get lobby_path('quick_start')
 
                 current_user.reload
                 other_game.reload
@@ -390,7 +390,7 @@ RSpec.describe RendezvousController, type: :request do
                 expect(last_game.user_ids).not_to include current_user.id
                 expect(last_game.public_game?).to eq true
 
-                expect(current_user.current_game).to eq nil # the user is not associated to the game when they land on the page they are attached to game through the subscribe method on the rendezvous channel
+                expect(current_user.current_game).to eq nil # the user is not associated to the game when they land on the page they are attached to game through the subscribe method on the lobby channel
               end
             end
           end
@@ -407,7 +407,7 @@ RSpec.describe RendezvousController, type: :request do
                     current_user = game.users.first
                     set_signed_cookies({user_id: current_user.id})
 
-                    get rendezvous_page_path('quick_start')
+                    get lobby_path('quick_start')
 
                     game.reload
                     current_user.reload
@@ -427,7 +427,7 @@ RSpec.describe RendezvousController, type: :request do
                     current_user = game.users.first
                     set_signed_cookies({user_id: current_user.id})
 
-                    get rendezvous_page_path('quick_start')
+                    get lobby_path('quick_start')
 
                     game.reload
                     current_user.reload
@@ -455,7 +455,7 @@ RSpec.describe RendezvousController, type: :request do
                       current_user = game1.users.first
                       set_signed_cookies({user_id: current_user.id})
 
-                      get rendezvous_page_path('quick_start')
+                      get lobby_path('quick_start')
 
                       game1.reload
                       current_user.reload
@@ -476,7 +476,7 @@ RSpec.describe RendezvousController, type: :request do
                       current_user = game1.users.first
                       set_signed_cookies({user_id: current_user.id})
 
-                      get rendezvous_page_path('quick_start')
+                      get lobby_path('quick_start')
 
                       game1.reload
                       current_user.reload
@@ -498,7 +498,7 @@ RSpec.describe RendezvousController, type: :request do
   end
 
   # context '#leave_group', :r5 do
-  #   it_behaves_like "redirect user elsewhere if they shouldn't be on rendezvous page"
+  #   it_behaves_like "redirect user elsewhere if they shouldn't be on lobby page"
 
   #   context 'user leaving IS the only one attached to the game' do
   #     it 'removes user from game before redirecting user to choose_game_type_page' do
@@ -511,7 +511,7 @@ RSpec.describe RendezvousController, type: :request do
   #       get leave_pregame_path
 
   #       expect(Game.find_by(id: game_id)).to eq nil
-  #       expect(response).to redirect_to(rendezvous_choose_game_type_page_path)
+  #       expect(response).to redirect_to(choose_game_type_page_path)
   #     end
   #   end
 
@@ -526,7 +526,7 @@ RSpec.describe RendezvousController, type: :request do
   #       get leave_pregame_path
 
   #       expect(Game.find_by(id: game_id).user_ids).to match_array remaining_user_ids
-  #       expect(response).to redirect_to(rendezvous_choose_game_type_page_path)
+  #       expect(response).to redirect_to(choose_game_type_page_path)
   #     end
   #   end
   # end

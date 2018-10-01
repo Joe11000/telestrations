@@ -1,15 +1,10 @@
 class GamesController < ApplicationController
-
   before_action :redirect_if_not_logged_in
-  # before_action :redirect_if_can_not_view_game_page
-  # before_action :redirect_if_can_not_view_postgame_page
+  before_action :set_game, only: [:new, :show]
+  before_action :redirect_if_not_playing_game, only: [:new]
+  before_action :redirect_if_can_not_view_postgame_page, only: [:show]
 
   def new
-    byebug
-    redirect_if_not_playing_game
-
-    set_game
-    # @game from redirect method
     @placeholder_card = @game.get_placeholder_card current_user.id
     @player_is_finished = false
 
@@ -23,8 +18,6 @@ class GamesController < ApplicationController
     #  is the user done or waiting for others to pass him a card
     if( @placeholder_card.blank?)
       byebug
-
-      # get array
         passing_array = current_user.current_game.parse_passing_order
       # find my position before mine in array
 
@@ -39,7 +32,6 @@ class GamesController < ApplicationController
     byebug
     @prev_card = @placeholder_card.try(:parent_card) || Card.none
     @current_user = current_user
-    render 'game_page'
   end
 
   def show
@@ -60,24 +52,18 @@ class GamesController < ApplicationController
 
   protected
     def redirect_if_not_playing_game
-      byebug
-      set_game
-
       case @game.try(:status)
       when 'pregame', nil
-        redirect_to rendezvous_choose_game_type_page_url and return
+        redirect_to choose_game_type_page_url and return
       when 'postgame'
         redirect_to postgame_page_url and return
       end
     end
 
     def redirect_if_can_not_view_postgame_page
-      byebug
-      set_game
-
       case @game.try(:status)
       when 'pregame', nil
-        redirect_to rendezvous_choose_game_type_page_url and return
+        redirect_to choose_game_type_page_url and return
       when 'midgame'
         redirect_to new_game_url and return
       end

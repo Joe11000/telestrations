@@ -1,9 +1,9 @@
-#rendezvous-page.form-horizontal data-id='rendezvous-page'
+#lobby-page.form-horizontal data-id='lobby-page'
   .col-xs-12.offset-sm-2.col-sm-7.offset-md-3.col-md-6
     .row
       / back button
       .col-xs-12.col-sm-12.offset-md-2.back-link-col.mt-5
-        a.leave_link data-id='leave_link' href=rendezvous_choose_game_type_page_path data-user=current_user.id
+        a.leave_link data-id='leave_link' href=choose_game_type_page_path data-user=current_user.id
           p
             i.fa.fa-arrow-circle-left &nbsp;
             | Leave Group
@@ -11,21 +11,21 @@
       .col-xs-12.col-sm-12.mt-5
         h4.text-center
           | Join Code :
-          span.h3.randezvous-join-code data-id="randezvous-join-code" data-game-id="#{@game.id}" =< @game.join_code
+          span.h3.lobby-join-code data-id="lobby-join-code" data-game-id="#{@game.id}" =< @game.join_code
 
       .col-xs-12.col-sm-12.mt-5
         .loading-gif.text-center
           = image_tag 'loading_icon.gif', class: 'text-center', width:'80px'
 
-      .col-xs-12.col-sm-12.text-center.mt-5 data-id='rendezvous-start-game-button-container' class=(@user_already_joined ? '' : 'd-none')
+      .col-xs-12.col-sm-12.text-center.mt-5 data-id='lobby-start-game-button-container' class=(@user_already_joined ? '' : 'd-none')
         h3.h3.text-center You're In
         = button_to 'Start The Game', games_url, class: 'btn btn-primary', data: {id: :start_game_button}
 
-      .col-xs-12.col-sm-12.text-center.mt-5 data-id="update-rendezvous-group-col" class=(@user_already_joined ? 'd-none' : '')
+      .col-xs-12.col-sm-12.text-center.mt-5 data-id="update-lobby-group-col" class=(@user_already_joined ? 'd-none' : '')
         h3.h3.text-center Join This #{@game.game_type.capitalize} Game
 
-        = form_tag '#', class: 'col-md-8 offset-md-2', data: {id: 'update-rendezvous-form' }
-          .form-group data-id='update-rendezvous-form-group'
+        = form_tag '#', class: 'col-md-8 offset-md-2', data: {id: 'update-lobby-form' }
+          .form-group data-id='update-lobby-form-group'
             = label_tag 'name', 'Enter a name to join the game', class: 'sr-only'
 
             .input-group.offset-xs-2.col-xs-8.offset-sm-2.col-sm-8

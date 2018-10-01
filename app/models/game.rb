@@ -85,11 +85,11 @@ class Game < ActiveRecord::Base
 #   [ [users_game_name, Card.create], [users_game_name, Card.create], [users_game_name, Card.create] ],
 #   [ [users_game_name, Card.create], [users_game_name, Card.create], [users_game_name, Card.create] ],
 # ]
-  def rendezvous_a_new_user user_id
+  def lobby_a_new_user user_id
     user = User.find_by(id: user_id)
     user_current_game = user.try(:current_game)
     if  user.blank? ||                        # player doesn't exist or
-        user.current_games_user_name ||         # player already created a game name for a game rendezvousing with game
+        user.current_games_user_name ||         # player already created a game name for a game lobbying with game
         user_current_game.try(:midgame?)  # c) player is currently in the middle of a game
 
       return false
@@ -103,13 +103,13 @@ class Game < ActiveRecord::Base
     true
   end
 
-  # test right now
-  def commit_a_rendezvoused_user user_id, users_game_name=''
+  def commit_a_lobbyed_user user_id, users_game_name=''
     gu = GamesUser.find_by(user_id: user_id, game_id: id)
     return false if gu.blank? || status != 'pregame'
     gu.update(users_game_name: users_game_name);
   end
 
+  # r5
   def remove_player user_id
     user = users.find_by(id: user_id)
 
@@ -128,7 +128,7 @@ class Game < ActiveRecord::Base
 
 # midgame public methods
 
-  # working!!!
+  # r5_wip
   # called by games_controller when person first lands on game_page
   # this assigns a placeholder card to the user's games_user
   def create_initial_placeholder_for_user current_user_id
@@ -158,7 +158,6 @@ class Game < ActiveRecord::Base
     end
   end
 
-  # wip
   def set_up_next_players_turn current_card_id
     card = Card.find(current_card_id)
     next_player = next_player_after(card.uploader_id)

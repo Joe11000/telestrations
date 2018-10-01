@@ -1,5 +1,5 @@
 if document.querySelectorAll("#game").length > 0
-  App.game = App.cable.subscriptions.create { channel: "GameChannel", prev_card: Number.parseInt( $('[data-prev-card-id]').attr('data-prev-card-id') ) || '', game_id: Number.parseInt( $('[data-game-id]').attr('data-game-id') ) || '' },
+  App.game = App.cable.subscriptions.create { channel: "GameChannel", prev_card: Number.parseInt( $('[data-prev-card-id]').attr('data-prev-card-id') ) || '' },
     connected: ->
       # Called when the subscription is ready for use on the server
 
@@ -35,5 +35,5 @@ if document.querySelectorAll("#game").length > 0
       else
         console.warn('received ' + data + ', and did not know if it was the intended user and dropped it on the floor')
 
-    upload_card: (card_uri_info) ->
-      @perform 'upload_card',  card_uri_info
+    # upload_card: (card_uri_info) ->
+    #   @perform 'upload_card',  card_uri_info

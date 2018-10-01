@@ -1,7 +1,7 @@
-have a single rendezvous channel during the rendezvous stage.
+have a single lobby channel during the lobby stage.
 
 1) New User comes onto page
-  Automatically add a new viewer of the rendezvous page to the rendezvous channel
+  Automatically add a new viewer of the lobby page to the lobby channel
 
   a) User leaves
     remove user games_users association

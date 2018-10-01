@@ -1,4 +1,4 @@
-class RendezvousController < ApplicationController
+class LobbiesController < ApplicationController
   before_action :redirect_if_not_logged_in
   before_action :redirect_if_currently_playing_game
 
@@ -7,30 +7,32 @@ class RendezvousController < ApplicationController
   def choose_game_type_page
   end
 
-  # joining a game
-  def join_game
-    byebug
-    @game = Game.find_by(join_code: join_game_params.upcase)
+  # joining the lobby of a game
+  def join_lobby
+    @game = Game.find_by(join_code: join_lobby_params.upcase)
     if @game.blank?
-      redirect_to(rendezvous_choose_game_type_page_url, alert: "Group #{join_game_params} doesn't exist.") and return
+      redirect_to(choose_game_type_page_url, alert: "Join Code #{join_lobby_params} doesn't exist.") and return
     else
-      redirect_to rendezvous_page_path(@game.game_type) and return
+      redirect_to lobby_path(@game.game_type) and return
     end
   end
 
-  def rendezvous_page
+  def lobby
     respond_to do |format|
       format.html do
 
         @game = current_user.current_game
 
-        # user associated with another pregame that has a different status and wants to join another game. This will only happen when user uses browser's back button instead of the "Leave Group" button on the rendezvous page
+        byebug
+        # user associated with another pregame that has a different status and wants to join another game. This will only happen when user uses browser's back button instead of the "Leave Group" button on the lobby page
         if @game.try(:pregame?) && different_game_type_chosen?(params[:game_type], @game.game_type)
+        byebug
           @game.remove_player current_user.id
           @game = nil
         end
 
         if @game.blank?
+        byebug
           @user_already_joined = false
 
           case params[:game_type]
@@ -53,12 +55,17 @@ class RendezvousController < ApplicationController
         #   @user_already_joined = false
 
         elsif @game.pregame? && current_user.current_games_user_name  # user already joined this game
+        byebug
+
           @user_already_joined = true
         elsif @game.pregame?
+        byebug
+
           @user_already_joined = false
         else
           raise "shouldn't have gotten here, something is wrong: game_id: #{@game.try(:id)}, current_user_id: #{current_user.id}"
         end
+        byebug
 
         @users_not_joined = @game.unassociated_rendezousing_games_users
         @users_joined = Game.all_users_game_names @game.join_code
@@ -67,13 +74,12 @@ class RendezvousController < ApplicationController
   end
 
   # def leave_pregame
-  #   byebug
   #   current_user.current_game.try(:remove_player, current_user.id)
-  #   redirect_to(rendezvous_choose_game_type_page_url) and return
+  #   redirect_to(choose_game_type_page_url) and return
   # end
 
 protected
-  def join_game_params
+  def join_lobby_params
     params.require(:join_code)
   end
 

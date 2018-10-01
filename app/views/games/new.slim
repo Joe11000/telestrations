@@ -1,7 +1,6 @@
-/ -
 #game data-id='game-page' data-game-id=@game.id data-prev-card-id=(@prev_card.try(:id) || '') data-user-id=(@current_user.try(:id) || "")
   .form-horizontal
-    .drawing.col-xs-12.offset-sm-1.col-sm-10.offset-md-2.col-md-8
+    .drawing.col-12.offset-sm-1.col-sm-10.offset-md-2.col-md-8
       #make-drawing-container data-id='make-drawing-container' class=(@placeholder_card.try(:is_drawing?) ? '' : 'd-none')
         #description-to-draw
           p#text-to-draw.h3.capitalize.text-center data-id='description-text-to-draw' = @prev_card.blank? ? '' : @prev_card.try(:description_text)
@@ -18,23 +17,22 @@
                span drawing here
             #upload-drawing.tab-pane.fade role="tabpanel"
               #file_upload
-                = render partial: 'in_game_card_uploads/file_upload', locals: { to_url: in_game_card_uploads_url, allow_multiple_file_upload: false }
+                = render partial: 'in_game_card_uploads/drawing', locals: { to_url: in_game_card_uploads_url, allow_multiple_file_upload: false }
 
+    #make-description-container data-id='make-description-container' class=(@placeholder_card.try(:description?) ? '' : 'd-none')
+      #drawing-to-describe-container data-id='drawing-to-describe-container'
+        img#drawing-to-describe data-id='drawing-to-describe' src=( @prev_card.blank? ? '' : @prev_card.try(:drawing).try(:url) )
 
-      #make-description-container data-id='make-description-container' class=(@placeholder_card.try(:description?) ? '' : 'd-none')
-        #drawing-to-describe-container data-id='drawing-to-describe-container'
-          img#drawing-to-describe data-id='drawing-to-describe' src=( @prev_card.blank? ? '' : @prev_card.try(:drawing).try(:url) )
+      form.make-description-form data-id='make-description-form'
+        .form-group data-id='make-description-group'
+          .input-group
+            = text_field_tag(:description_text_input_field, nil,  {data: {id: 'description_text_input_field'}, placeholder: 'Enter A Description', class: 'span2 form-control text-capitalize'})
+            .input-group-btn
+              button.btn.btn-primary type='submit' Submit
 
-        form.make-description-form data-id='make-description-form'
-          .form-group data-id='make-description-group'
-            .input-group
-              = text_field_tag(:description_text_input_field, nil,  {data: {id: 'description_text_input_field'}, placeholder: 'Enter A Description', class: 'span2 form-control text-capitalize'})
-              .input-group-btn
-                button.btn.btn-primary type='submit' Submit
+      p.h3#text-to-draw data-id='drawing-to-describe' = @text_to_draw
 
-        p.h3#text-to-draw data-id='drawing-to-describe' = @text_to_draw
-
-      .loading-container.text-center class=(@placeholder_card.blank? ? '' : 'd-none') data-id='loading-container'
-        p.h3 class=(@player_is_finished ? 'd-none' : '' ) data-id='set_not_complete' Waiting for a card to be passed to you.
-        p.h3 class=(@player_is_finished ? '' : 'd-none') data-id='set_complete' You are finished. Waiting for others to finish.
-        = image_tag 'loading_icon.gif', class: 'text-center', width:'80px'
+    .loading-container.text-center class=(@placeholder_card.blank? ? '' : 'd-none') data-id='loading-container'
+      p.h3 class=(@player_is_finished ? 'd-none' : '' ) data-id='set_not_complete' Waiting for a card to be passed to you.
+      p.h3 class=(@player_is_finished ? '' : 'd-none') data-id='set_complete' You are finished. Waiting for others to finish.
+      = image_tag 'loading_icon.gif', class: 'text-center', width:'80px'

@@ -10,7 +10,7 @@ RSpec.describe GamesController, :type => :request do
         it 'redirects them back to home page' do
           set_signed_cookies({user_id: nil})
 
-          expect( get rendezvous_choose_game_type_page_path ).to redirect_to(login_path)
+          expect( get new_game_path ).to redirect_to(login_path)
         end
       end
     end
@@ -20,7 +20,7 @@ RSpec.describe GamesController, :type => :request do
         it 'then is redirected back to choose game screen' do
           set_signed_cookies({user_id: FactoryBot.create(:user).id})
 
-          expect( get rendezvous_choose_game_type_page_path ).to redirect_to(rendezvous_choose_game_type_page_path)
+          expect( get new_game_path ).to redirect_to(choose_game_type_page_path)
         end
       end
 
@@ -28,7 +28,7 @@ RSpec.describe GamesController, :type => :request do
         it 'then user is redirected back to choose game screen' do
           set_signed_cookies({user_id: FactoryBot.create(:pregame, callback_wanted: :pregame).users.first.id})
 
-          expect( get rendezvous_choose_game_type_page_path ).to redirect_to(rendezvous_choose_game_type_page_path)
+          expect( get new_game_path ).to redirect_to(choose_game_type_page_path)
         end
       end
 
@@ -36,27 +36,47 @@ RSpec.describe GamesController, :type => :request do
         it 'then user is redirected back to choose game screen' do
           set_signed_cookies({user_id: FactoryBot.create(:postgame, callback_wanted: :postgame).users.first.id})
 
-          expect( get rendezvous_choose_game_type_page_path ).to redirect_to(rendezvous_choose_game_type_page_path)
+          expect( get new_game_path ).to redirect_to(choose_game_type_page_path)
         end
       end
     end
   end
 
-  describe "GET game_page" do
+  describe "GET :new" do
     it_behaves_like "redirect if user shouldn't be playing this game"
 
-    it 'user can see', :r5_wip do
-      game = FactoryBot.create(:midgame_with_no_moves, callback_wanted: :midgame_with_no_moves)
-      current_user = game.users.first
-      set_signed_cookies({user_id: current_user.id})
+      before :all do
+        game = FactoryBot.create(:midgame_with_no_moves, callback_wanted: :midgame_with_no_moves)
+        @current_user = game.users.first
+        set_signed_cookies({user_id: @current_user.id})
 
-      get games_path
+        get new_game_path
+      end
 
-      expect(response).not_to have_http_status 302
+    context 'user can see' do
+
     end
 
+    context 'cant see but needs to be in the html' do
+      it 'correct http status' do
+        expect(response).to have_http_status :ok
+      end
+
+      it 'keeps track of user so the page knows who the game_channel can find out who the user is on the first ' do
+        expect(response.body).to match /data-user-id=\"#{@current_user.id}\"/
+      end
+      it 'knows who the previous card is ', :r5_wip do
+        expect(response.body).to match /data-prev-card-id=\"\"/
+      end
+    end
+
+    context 'user can see' do
+    end
+
+
+
     # xcontext 'renders correct variables to page' do
-    #   it "person first lands on game_page" do
+    #   it "person first lands on new" do
     #     game = FactoryBot.create(:game, :midgame_with_no_moves)
     #     current_user = game.users.order(:id).first
     #     # cookies.signed[:user_id] = current_user.id
@@ -108,7 +128,7 @@ RSpec.describe GamesController, :type => :request do
 
   #       get :show
 
-  #       expect(response).to redirect_to rendezvous_choose_game_type_page_path
+  #       expect(response).to redirect_to choose_game_type_page_path
   #     end
 
   #     it 'current game.status == pregame' do
@@ -117,7 +137,7 @@ RSpec.describe GamesController, :type => :request do
   #       cookies.signed[:user_id] = current_user.id
 
   #       get :show
-  #       expect(response).to redirect_to rendezvous_choose_game_type_page_path
+  #       expect(response).to redirect_to choose_game_type_page_path
   #     end
 
   #     it 'current game.status == midgame' do

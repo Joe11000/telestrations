@@ -1,5 +1,5 @@
-if document.querySelectorAll("[data-id='rendezvous-page']").length > 0
-  App.rendezvous = App.cable.subscriptions.create { channel: "RendezvousChannel", join_code: $('[data-id="randezvous-join-code"]').html() },
+if document.querySelectorAll("[data-id='lobby-page']").length > 0
+  App.lobby = App.cable.subscriptions.create { channel: "LobbyChannel", join_code: $('[data-id="lobby-join-code"]').html() },
     connected: ->
       $('.loading-gif').removeClass('invisible');
 
