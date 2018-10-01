@@ -133,7 +133,7 @@ RSpec.describe LobbiesController, type: :request do
 
             get lobby_path('public')
 
-            expect(response.body).to match(/Leave Group/)
+            expect(response.body).to match(/Leave Lobby/)
             expect(response.body).to match(/Join Code : .*>#{Game.last.join_code}</)
 
             expect(response.body).to match(/Join This Public Game/)
@@ -238,7 +238,7 @@ RSpec.describe LobbiesController, type: :request do
 
             get lobby_path('private')
 
-            expect(response.body).to match(/Leave Group/)
+            expect(response.body).to match(/Leave Lobby/)
             expect(response.body).to match(/Join Code : .*>#{Game.last.join_code}</)
 
             expect(response.body).to match(/Join This Private Game/)
@@ -359,7 +359,7 @@ RSpec.describe LobbiesController, type: :request do
 
             get lobby_path('quick_start')
 
-            expect(response.body).to match(/Leave Group/)
+            expect(response.body).to match(/Leave Lobby/)
             expect(response.body).to match(/Join Code : .*>#{Game.last.join_code}</)
 
             expect(response.body).to match(/Join This Public Game/)

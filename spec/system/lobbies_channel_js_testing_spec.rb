@@ -76,7 +76,7 @@ RSpec.describe 'LobbyChannelJsTestingSpec', type: :system do
 
         # user 2 bails on the game
         in_browser(:user_2) do
-          click_link 'Leave Group'
+          click_link 'Leave Lobby'
           expect(page.current_path).to eq choose_game_type_page_path
         end
 
@@ -84,7 +84,7 @@ RSpec.describe 'LobbyChannelJsTestingSpec', type: :system do
         in_browser(:user_1) do
           expect(page).to have_content(/Users Not Joined \( 1 \)/) # incase of multiple instances on the page
           expect(page).to have_content(/Users Joined \( 0 \)/) # incase of multiple instances on the page
-          click_link 'Leave Group'
+          click_link 'Leave Lobby'
           expect(page.current_path).to eq choose_game_type_page_path
         end
       end

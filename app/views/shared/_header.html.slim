@@ -2,7 +2,7 @@
   #header
     .row
       .col-3.offset-sm-2.col-sm-2.col-md-2.offset-md-2.h5.d-inline-block.text-left.pt-3
-        - unless controller_name == 'lobby' && action_name == 'choose_game_type_page'
+        - unless controller_name == 'lobbies' && action_name == 'choose_game_type_page'
           = link_to root_url do
             .fa.fa-arrow-circle-left.mr-1
             | Back

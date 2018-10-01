@@ -24,7 +24,7 @@ class LobbiesController < ApplicationController
         @game = current_user.current_game
 
         byebug
-        # user associated with another pregame that has a different status and wants to join another game. This will only happen when user uses browser's back button instead of the "Leave Group" button on the lobby page
+        # user associated with another pregame that has a different status and wants to join another game. This will only happen when user uses browser's back button instead of the "Leave Lobby" button on the lobby page
         if @game.try(:pregame?) && different_game_type_chosen?(params[:game_type], @game.game_type)
         byebug
           @game.remove_player current_user.id
