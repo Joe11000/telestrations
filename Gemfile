@@ -130,3 +130,5 @@ gem 'bullet'
 gem 'token_phrase'
 gem 'mini_magick'
 gem 'rubocop'
+
+gem 'teaspoon-mocha', group: [:development, :test]

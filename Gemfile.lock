@@ -396,6 +396,10 @@ GEM
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
     tcr (0.2.1)
+    teaspoon (1.1.5)
+      railties (>= 3.2.5, < 6)
+    teaspoon-mocha (2.3.3)
+      teaspoon (>= 1.0.0)
     temple (0.8.0)
     terrapin (0.6.0)
       climate_control (>= 0.0.3, < 1.0)
@@ -500,6 +504,7 @@ DEPENDENCIES
   sprockets (>= 3.7.2)
   sprockets-es6
   tcr
+  teaspoon-mocha
   token_phrase
   travis
   turbolinks
