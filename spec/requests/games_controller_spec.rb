@@ -2,7 +2,7 @@ require 'rails_helper'
 require 'support/login'
 
 RSpec.describe GamesController, :type => :request do
-  include LoginHelper
+  include LoginHelper::RequestTests
 
   shared_examples_for "redirect if user shouldn't be playing this game" do
     context 'user NOT logged in' do

@@ -138,25 +138,7 @@ class Game < ActiveRecord::Base
     games_users.find_by(user_id: current_user_id).starting_card = card
   end
 
-  # working!!!
-  # params :  a XOR b
-    # a) upload_card_params: { 'description_text' => "Suicidal Penguin"}
-    # b) upload_card_params: { 'filename' => file.filename,  data: file.data };
-  def upload_info_into_existing_card current_user_id, upload_card_params
-    current_user = users.find_by(id: current_user_id)
-    card = get_placeholder_card current_user_id
 
-
-    return false if current_user.blank? || card.blank?
-    if upload_card_params.keys.include? 'description_text'
-      card.update(description_text: upload_card_params['description_text'])
-      return card
-    else
-      card.drawing.attach upload_card_params
-      # card.parse_and_save_uri_for_drawing upload_card_params
-      return card
-    end
-  end
 
   def set_up_next_players_turn current_card_id
     card = Card.find(current_card_id)
@@ -206,15 +188,6 @@ class Game < ActiveRecord::Base
      return current_player_message_params.blank? ? [ next_player_message_params ] : [ next_player_message_params, current_player_message_params ]
   end
 
-  # called indirectly by games_channel through 'set_up_next_players_turn' for to prepare for the next players turn
-  # working!!!
-  def create_subsequent_placeholder_for_next_player next_player_id, prev_card_id
-    prev_card = Card.find(prev_card_id)
-    card = create_placeholder_card( next_player_id, (prev_card.drawing? ? 'description' : 'drawing') )
-    card.update(starting_games_user: prev_card.starting_games_user)
-
-    return prev_card.child_card = card
-  end
 
 
 
@@ -265,6 +238,19 @@ class Game < ActiveRecord::Base
   end
 
   protected
+
+
+    # called indirectly by games_channel through 'set_up_next_players_turn' for to prepare for the next players turn
+    # working!!!
+    def create_subsequent_placeholder_for_next_player next_player_id, prev_card_id
+      prev_card = Card.find(prev_card_id)
+      card = create_placeholder_card( next_player_id, (prev_card.drawing? ? 'description' : 'drawing') )
+      card.update(starting_games_user: prev_card.starting_games_user)
+
+      return prev_card.child_card = card
+    end
+
+
 
     # working!!!
     def create_placeholder_card uploader_id, medium

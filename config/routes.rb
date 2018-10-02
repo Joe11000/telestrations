@@ -4,10 +4,11 @@ Rails.application.routes.draw do
 
   root 'sessions#new'
 
+  get '/choose_game_type'           => 'lobbies#choose_game_type_page', as: :choose_game_type_page
+
   scope 'lobby' do
-    get '/'                         => 'lobbies#choose_game_type_page', as: :choose_game_type_page
-    post 'join'                     => 'lobbies#join_lobby',          as: :join_lobby
-    get  ':game_type'               => 'lobbies#lobby',               as: :lobby
+    post 'join'                     => 'lobbies#join_lobby',            as: :join_lobby
+    get  ':game_type'               => 'lobbies#lobby',                 as: :lobby
   end
 
   resources :games, only: [:new, :show, :update, :index]

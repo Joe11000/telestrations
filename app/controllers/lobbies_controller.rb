@@ -38,7 +38,6 @@ class LobbiesController < ApplicationController
 
           case params[:game_type]
             when 'private'
-              byebug
               @game = Game.create(game_type: :private)
             when 'public'
               @game = Game.create(game_type: :public)
@@ -61,13 +60,13 @@ class LobbiesController < ApplicationController
 
           @user_already_joined = true
         elsif @game.pregame?
-        # byebug
 
           @user_already_joined = false
         else
           raise "shouldn't have gotten here, something is wrong: game_id: #{@game.try(:id)}, current_user_id: #{current_user.id}"
         end
 
+        byebug
         @users_not_joined = @game.unassociated_rendezousing_games_users
         @users_joined = Game.all_users_game_names @game.join_code
       end

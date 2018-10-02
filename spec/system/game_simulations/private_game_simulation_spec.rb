@@ -1,10 +1,8 @@
 require 'rails_helper'
 require 'support/login'
-require 'support/helpers'
 
 RSpec.describe 'A User can' do
-  include LoginHelper
-  include Helpers
+  include LoginHelper::SystemTests
 
   xit 'logout' do
     in_browser(:facebook_user) do

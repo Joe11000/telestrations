@@ -1,10 +1,8 @@
 require 'rails_helper'
 require 'support/login'
-require 'support/helpers'
 
 RSpec.describe 'A User can' do
-  include LoginHelper
-  include Helpers
+  include LoginHelper::SystemTests
 
   context "I don't ", :r5_overlook do #I don't know if I need these for coverage
     it 'logout' do

@@ -57,7 +57,7 @@ RSpec.describe LobbiesController, type: :request do
     it_behaves_like "redirect user elsewhere if they shouldn't be on lobby page"
 
     context 'lobby/join' do
-      context 'One game exists with matching :join_code', :r5 do
+      context 'One game exists with matching :join_code' do
         context 'if user IS associated with another pregame' do
           it 'user can join a public game and is removed from other pregame'  do
             previous_game = FactoryBot.create(:pregame, :public_game, callback_wanted: :pregame)
@@ -99,7 +99,7 @@ RSpec.describe LobbiesController, type: :request do
           end
 
         end
-        context 'if user IS NOT associated with any other games', :r5 do
+        context 'if user IS NOT associated with any other games' do
           it 'user can join a public game'  do
             FactoryBot.create(:pregame, :public_game, callback_wanted: :pregame)
             game = FactoryBot.create(:pregame, :public_game, callback_wanted: :pregame)
