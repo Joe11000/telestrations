@@ -2,7 +2,8 @@ require 'rails_helper'
 require 'support/login'
 
 RSpec.describe LobbiesController, type: :request do
-  include LoginHelper
+  include LoginHelper::RequestTests
+
 
   shared_examples_for "redirect user elsewhere if they shouldn't be on lobby page" do
     context 'user NOT logged in' do
@@ -55,34 +56,89 @@ RSpec.describe LobbiesController, type: :request do
   context '#join_game', :r5 do
     it_behaves_like "redirect user elsewhere if they shouldn't be on lobby page"
 
-    context 'game/lobby/join' do
-      context 'One game exists with matching :join_code' do
-        it 'user can join a public game'  do
-          FactoryBot.create(:pregame, :public_game, callback_wanted: :pregame)
-          game = FactoryBot.create(:pregame, :public_game, callback_wanted: :pregame)
-          current_user = FactoryBot.create(:user)
-          set_signed_cookies({user_id: current_user.id})
+    context 'lobby/join' do
+      context 'One game exists with matching :join_code', :r5 do
+        context 'if user IS associated with another pregame' do
+          it 'user can join a public game and is removed from other pregame'  do
+            previous_game = FactoryBot.create(:pregame, :public_game, callback_wanted: :pregame)
+            new_game = FactoryBot.create(:pregame, :public_game, callback_wanted: :pregame)
+            current_user = previous_game.users.first
 
-          post join_lobby_path, params: {join_code: game.join_code}
+            set_signed_cookies({user_id: current_user.id})
 
-          game.reload
-          current_user.reload
+            post join_lobby_path, params: {join_code: new_game.join_code}
 
-          expect(response).to redirect_to(lobby_path('public'))
+            previous_game.reload
+            new_game.reload
+            current_user.reload
+
+            expect(current_user.current_game.id).to eq new_game.id
+            expect(response).to redirect_to(lobby_path('public'))
+            follow_redirect!
+            expect(response.body).to include new_game.join_code
+          end
+
+          it 'user can join a private game' do
+            FactoryBot.create(:pregame, :private_game, callback_wanted: :pregame)
+            previous_game = FactoryBot.create(:pregame, :private_game, callback_wanted: :pregame)
+            new_game = FactoryBot.create(:pregame, :private_game, callback_wanted: :pregame)
+            current_user = previous_game.users.first
+
+            set_signed_cookies({user_id: current_user.id})
+
+            post join_lobby_path, params: {join_code: new_game.join_code}
+
+            previous_game.reload
+            new_game.reload
+            current_user.reload
+
+            expect(current_user.current_game.id).to eq new_game.id
+            expect(response).to redirect_to(lobby_path('private'))
+            follow_redirect!
+            expect(response.body).to include new_game.join_code
+          end
+
         end
+        context 'if user IS NOT associated with any other games', :r5 do
+          it 'user can join a public game'  do
+            FactoryBot.create(:pregame, :public_game, callback_wanted: :pregame)
+            game = FactoryBot.create(:pregame, :public_game, callback_wanted: :pregame)
+            current_user = FactoryBot.create(:user)
+            set_signed_cookies({user_id: current_user.id})
 
-        it 'user can join a private game' do
-          FactoryBot.create(:pregame, :private_game, callback_wanted: :pregame)
-          game = FactoryBot.create(:pregame, :private_game, callback_wanted: :pregame)
-          current_user = FactoryBot.create(:user)
-          set_signed_cookies({user_id: current_user.id})
+            post join_lobby_path, params: {join_code: game.join_code}
 
-          post join_lobby_path, params: {join_code: game.join_code}
+            game.reload
+            current_user.reload
 
-          game.reload
-          current_user.reload
+            expect(current_user.current_game.id).to eq game.id
+            expect(response).to redirect_to(lobby_path('public'))
 
-          expect(response).to redirect_to(lobby_path('private'))
+            follow_redirect!
+
+            expect(response.body).to include game.join_code
+          end
+
+          it 'user can join a private game' do
+            FactoryBot.create(:pregame, :private_game, callback_wanted: :pregame)
+            game = FactoryBot.create(:pregame, :private_game, callback_wanted: :pregame)
+            current_user = FactoryBot.create(:user)
+            set_signed_cookies({user_id: current_user.id})
+
+            post join_lobby_path, params: {join_code: game.join_code}
+
+            game.reload
+            current_user.reload
+
+
+            expect(current_user.current_game.id).to eq game.id
+            expect(response).to redirect_to(lobby_path('private'))
+
+            follow_redirect!
+
+            expect(response.body).to include game.join_code
+          end
+
         end
       end
 
