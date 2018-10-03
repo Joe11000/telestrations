@@ -1,43 +1,53 @@
 language: ruby
-rvm: 2.5.1
-
-deploy:
-  provider: heroku
-  api_key: <%= Rails.application.credentials[Rails.env.to_sym][:heroku][:api_key] %>
-  run:
-    - "RAILS_ENV=test rake db:create"
-    - "RAILS_ENV=test rake db:setup"
-    - restart
-    - "rake cleanup"
-
-
-
-
-
-
-
-language: ruby
 rvm:
- - 2.5.1
-
-before_script:
-  - psql -c 'create database travis_ci_test;' -U postgres
-  - bundle exec rake assets:precompile
-  - bundle exec rake db:setup RAILS_ENV=test
-
+  - 1.9.3
+  - 2.1.2
+env:
+  - RAILS_ENV=test
 script:
-  - bundle exec rspec
+  - bundle exec rspec spec
 
-services:
-  - postgresql
 
-cache:
-  - bundler
+# language: ruby
+# rvm: 2.5.1
 
 # deploy:
 #   provider: heroku
-#   api_key:
-#     secure: KEY
-#   app: noonanrailsguides
-#   on:
-#     repo: Joe11000/railsguides_v5.2
+#   api_key: <%= Rails.application.credentials[Rails.env.to_sym][:heroku][:api_key] %>
+#   run:
+#     - "RAILS_ENV=test rake db:create"
+#     - "RAILS_ENV=test rake db:setup"
+#     - restart
+#     - "rake cleanup"
+
+
+
+
+
+
+
+# language: ruby
+# rvm:
+#  - 2.5.1
+
+# before_script:
+#   - psql -c 'create database travis_ci_test;' -U postgres
+#   - bundle exec rake assets:precompile
+#   - bundle exec rake db:setup RAILS_ENV=test
+
+# script:
+#   - bundle exec rspec
+
+# services:
+#   - postgresql
+
+# cache:
+#   - bundler
+
+# # deploy:
+# #   provider: heroku
+# #   api_key:
+# #     secure: KEY
+# #   app: noonanrailsguides
+# #   on:
+# #     repo: Joe11000/railsguides_v5.2
