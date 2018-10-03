@@ -6,10 +6,12 @@ before_script:
 - bundle exec rake db:migrate
 - bundle exec rake assets:precompile
 
+env:
+  Rails.application.credentials.dig('production', 'heroku', 'api_key')
 deploy:
   provider: heroku
   api_key:
-    secure: Rails.application.credentials.dig('production', 'heroku', 'api_key')
+    secure: ENV['HEROKU_API_KEY']
   app: telestrations
   on:
     repo: Joe11000/telestrations
