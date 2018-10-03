@@ -1,25 +1,41 @@
+
 language: ruby
-
-rvm:
-  - 2.5.1
-
-# gemfile:
-#   - gemfiles/activerecord_5.2.gemfile
-#   - gemfiles/activerecord_5.1.gemfile
-#   - gemfiles/activerecord_5.0.gemfile
-#   - gemfiles/activerecord_4.2.gemfile
-
-env:
-  - DB=postgresql
-  - RAILS_ENV=test
-
-before_install:
-  - gem install bundler
-
+cache:
+  - bundler
 before_script:
-  - psql -c 'create database telestrations_test;' -U postgres
   - bundle exec rake db:create
-  - bundle exec rake db:setup RAILS_ENV=test
+  - bundle exec rake db:migrate
+  - bundle exec rake assets:precompile
+
+deploy:
+  provider: heroku
+  api_key:
+    secure: Rails.application.credentials.dig('production', 'heroku', 'api_key')
+  app: telestrations
+  on:
+    repo: joe11000/telestrations
+
+
+
+# language: ruby
+
+# rvm:
+#   - 2.5.1
+
+# cache: bundler
+
+# env:
+#   - DB=postgresql
+#   - RAILS_ENV=test
+
+# before_install:
+#   - gem install bundler
+
+# before_script:
+#   - psql -c 'create database telestrations_test;' -U postgres
+#   - RAILS_ENV=test bundle exec rake db:create
+#   - RAILS_ENV=test bundle exec rake db:setup
+#   - RAILS_ENV=test bundle exec rspec
 
 # - bundle exec rake assets:precompile
 
