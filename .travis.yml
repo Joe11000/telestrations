@@ -10,3 +10,34 @@ deploy:
     - restart
     - "rake cleanup"
 
+
+
+
+
+
+
+language: ruby
+rvm:
+ - 2.5.1
+
+before_script:
+  - psql -c 'create database travis_ci_test;' -U postgres
+  - bundle exec rake assets:precompile
+  - bundle exec rake db:setup RAILS_ENV=test
+
+script:
+  - bundle exec rspec
+
+services:
+  - postgresql
+
+cache:
+  - bundler
+
+# deploy:
+#   provider: heroku
+#   api_key:
+#     secure: KEY
+#   app: noonanrailsguides
+#   on:
+#     repo: Joe11000/railsguides_v5.2
