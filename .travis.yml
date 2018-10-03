@@ -15,7 +15,7 @@ deploy:
   on:
     repo: joe11000/telestrations
 
-script: bundle exec rspec ~does_not_work_on_travis
+script: bundle exec rspec -t ~does_not_work_on_travis
 
 # language: ruby
 
