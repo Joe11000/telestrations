@@ -1,3 +1,26 @@
+=== Players new to the game should read ==
+Play the telestrations game with your friends and the games will be saved for you to see later. Or upload your own pictures from games you have played at home.
+
+
+Things you will need to play:
+1) Paper
+2) Pencil
+3) Smartphone or computer
+
+
+During the drawing phase, you should
+1) Draw your picture by hand with pencil and paper
+2) With your smartphone, take picture with your of the drawing
+3) Find the picture using the file selector
+4) submit picture on form
+
+.
+.
+.
+.
+.
+.
+
 have a single lobby channel during the lobby stage.
 
 1) New User comes onto page
