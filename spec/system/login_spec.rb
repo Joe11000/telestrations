@@ -8,7 +8,7 @@ RSpec.describe "On the Sessions Page,", :type => :system do
 
   include LoginHelper::SystemTests
 
-  context "user can read the game instuctions", :r5 do
+  context "user can read the game instuctions", :r5, :no_travis do
     it do
       visit root_path
 
@@ -20,7 +20,7 @@ RSpec.describe "On the Sessions Page,", :type => :system do
   end
 
 
-  describe "user logs in via", :r5 do
+  describe "user logs in via", :r5, :no_travis do
     context "facebook" do
       it 'sees his facebook username on the next page' do
         login_with 'facebook'

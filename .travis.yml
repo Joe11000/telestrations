@@ -1,43 +1,17 @@
 language: ruby
-rvm: 2.5.1
+cache:
+  - bundler
+before_script:
+- bundle exec rake db:create
+- bundle exec rake db:migrate
+- bundle exec rake assets:precompile
 
 deploy:
   provider: heroku
-  api_key: <%= Rails.application.credentials[Rails.env.to_sym][:heroku][:api_key] %>
-  run:
-    - "RAILS_ENV=test rake db:create"
-    - "RAILS_ENV=test rake db:setup"
-    - restart
-    - "rake cleanup"
+  api_key:
+    secure: Rails.application.credentials.dig('production', 'heroku', 'api_key')
+  app: telestrations
+  on:
+    repo: joe11000/telestrations
 
-
-
-
-
-
-
-language: ruby
-rvm:
- - 2.5.1
-
-before_script:
-  - psql -c 'create database travis_ci_test;' -U postgres
-  - bundle exec rake assets:precompile
-  - bundle exec rake db:setup RAILS_ENV=test
-
-script:
-  - bundle exec rspec
-
-services:
-  - postgresql
-
-cache:
-  - bundler
-
-# deploy:
-#   provider: heroku
-#   api_key:
-#     secure: KEY
-#   app: noonanrailsguides
-#   on:
-#     repo: Joe11000/railsguides_v5.2
+script: bundle exec rspec -t ~no_travis

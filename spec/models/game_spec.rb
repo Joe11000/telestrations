@@ -331,7 +331,7 @@ RSpec.describe Game, type: :model do
 
     context '#remove_player' do
       context 'does nothing and returns false if' do
-        it 'user does not exist' do
+        it 'user does not exist', :no_travis do
           game = FactoryBot.create(:pregame, callback_wanted: :pregame)
           user_ids = game.users.ids
           invalid_id = (User.ids.last + 1)
