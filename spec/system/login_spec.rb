@@ -8,7 +8,7 @@ RSpec.describe "On the Sessions Page,", :type => :system do
 
   include LoginHelper::SystemTests
 
-  context "user can read the game instuctions", :r5 do
+  context "user can read the game instuctions", :r5, :does_not_work_on_travis do
     it do
       visit root_path
 

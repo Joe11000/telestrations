@@ -4,6 +4,11 @@ require 'support/login'
 RSpec.describe 'A User can' do
   include LoginHelper::SystemTests
 
+  before :all do
+    driven_by :selenium, using: :headless_chrome
+    # driven_by(:selenium_chrome_headless)
+  end
+
   xcontext "I don't ", :r5_overlook do #I don't know if I need these for coverage
     it 'logout' do
       login_with 'facebook'
