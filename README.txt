@@ -14,12 +14,13 @@ During the drawing phase, you should
 3) Find the picture using the file selector
 4) submit picture on form
 
-.
-.
-.
-.
-.
-.
+
+
+
+
+
+
+==== Dev Notes ====
 
 have a single lobby channel during the lobby stage.
 
@@ -42,3 +43,7 @@ have a single lobby channel during the lobby stage.
       remove user games_users association to people that didn't submit a name
       broadcast a message to try and go to the game start page. The before action will allow the commited people through to their game and send the uncommited people back to the game choice page.
 
+
+cards uploaded out of game are uploaded via a file_field(local: true) to the out_of_game_card_uploads controller and has flash stat updates.
+
+cards uploaded in game by a file_field submitting ajax to in_game_cards_controller and results are broadcasted via the games_channel to all players subscribed to the stream games_#{game.id}.
