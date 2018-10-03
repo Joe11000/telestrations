@@ -56,11 +56,7 @@ class Game < ActiveRecord::Base
 
   # end scoping methods
 
-  # working!!!
-  def parse_passing_order
-    return [] if passing_order.blank?
-    JSON.parse(passing_order)
-  end
+
 
 
   def self.start_game join_code
@@ -268,5 +264,11 @@ class Game < ActiveRecord::Base
       return User.none if user_index.nil?
       user_id_of_next_user = parse_passing_order[ (user_index + 1) % parse_passing_order.length ]
       return User.find_by( id: user_id_of_next_user )
+    end
+
+      # working!!!
+    def parse_passing_order
+      return [] if passing_order.blank?
+      JSON.parse(passing_order)
     end
 end
