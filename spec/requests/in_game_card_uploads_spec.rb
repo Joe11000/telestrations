@@ -130,7 +130,6 @@ RSpec.describe "InGameCardUploads", type: :request do
           expect(@card_being_updated.idea_catalyst_id).to eq nil
           expect(@card_being_updated.starting_games_user_id).to eq @gu_2.id
           expect(@card_being_updated.uploader_id).to eq @current_user.id
-          expect(@card_being_updated.parent_card_id).to eq @current_user.id
           expect(@card_being_updated.out_of_game_card_upload).to eq false
         end
 
@@ -147,6 +146,7 @@ RSpec.describe "InGameCardUploads", type: :request do
         end
 
         it 'parent is of the correct type and is completed card of opposite type'do
+          expect(@card_being_updated.parent_card_id).to eq @gu_2.starting_card.id
           expect(@card_being_updated.parent_card.drawing.attached?).to eq false
           expect(@card_being_updated.parent_card.description?).to eq true
           expect(@card_being_updated.parent_card.description_text).to be_a String
