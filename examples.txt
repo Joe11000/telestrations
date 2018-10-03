@@ -1,7 +1,6 @@
 example_id                                                          | status  | run_time               |
 ------------------------------------------------------------------- | ------- | ---------------------- |
 ./spec/channels/game_channel_spec.rb[1:1:1]                         | passed  | 1.23 seconds           |
-./spec/channels/game_channel_spec.rb[1:2:1:1:1]                     | failed  | 1 minute 22.12 seconds |
 ./spec/channels/lobbies_channel_spec.rb[1:1:1:1]                    | passed  | 0.17504 seconds        |
 ./spec/channels/lobbies_channel_spec.rb[1:1:2:1:1]                  | passed  | 0.0582 seconds         |
 ./spec/channels/lobbies_channel_spec.rb[1:1:2:2:1]                  | passed  | 0.28161 seconds        |
@@ -166,14 +165,29 @@ example_id                                                          | status  | 
 ./spec/requests/in_game_card_uploads_spec.rb[1:1:2:1:2]             | passed  | 0.27191 seconds        |
 ./spec/requests/in_game_card_uploads_spec.rb[1:1:2:1:3]             | passed  | 0.19297 seconds        |
 ./spec/requests/in_game_card_uploads_spec.rb[1:1:2:1:4]             | pending | 0.00003 seconds        |
+./spec/requests/in_game_card_uploads_spec.rb[1:1:2:1:5]             | unknown |                        |
+./spec/requests/in_game_card_uploads_spec.rb[1:1:3:1:1]             | unknown |                        |
+./spec/requests/in_game_card_uploads_spec.rb[1:1:3:1:2]             | unknown |                        |
+./spec/requests/in_game_card_uploads_spec.rb[1:1:3:1:3]             | unknown |                        |
+./spec/requests/in_game_card_uploads_spec.rb[1:1:3:1:4]             | unknown |                        |
+./spec/requests/in_game_card_uploads_spec.rb[1:1:3:1:5]             | unknown |                        |
+./spec/requests/in_game_card_uploads_spec.rb[1:1:3:1:6]             | unknown |                        |
+./spec/requests/in_game_card_uploads_spec.rb[1:1:4:2:1]             | passed  | 0.22199 seconds        |
+./spec/requests/in_game_card_uploads_spec.rb[1:1:4:2:2]             | passed  | 0.03242 seconds        |
+./spec/requests/in_game_card_uploads_spec.rb[1:1:4:2:3]             | failed  | 1 minute 1.15 seconds  |
+./spec/requests/in_game_card_uploads_spec.rb[1:1:4:2:4]             | passed  | 0.03302 seconds        |
+./spec/requests/in_game_card_uploads_spec.rb[1:1:4:2:5]             | failed  | 0.03598 seconds        |
+./spec/requests/in_game_card_uploads_spec.rb[1:1:4:2:6]             | passed  | 0.03358 seconds        |
 ./spec/requests/lobbies_controller_spec.rb[1:1:1:1:1]               | passed  | 0.28158 seconds        |
 ./spec/requests/lobbies_controller_spec.rb[1:1:1:2:1]               | passed  | 1.2 seconds            |
 ./spec/requests/lobbies_controller_spec.rb[1:1:2:1]                 | passed  | 0.26473 seconds        |
 ./spec/requests/lobbies_controller_spec.rb[1:1:2:2]                 | passed  | 0.25639 seconds        |
 ./spec/requests/lobbies_controller_spec.rb[1:2:1:1:1]               | passed  | 0.03706 seconds        |
 ./spec/requests/lobbies_controller_spec.rb[1:2:1:2:1]               | passed  | 0.21993 seconds        |
-./spec/requests/lobbies_controller_spec.rb[1:2:2:1:1]               | passed  | 11 minutes 31 seconds  |
-./spec/requests/lobbies_controller_spec.rb[1:2:2:1:2]               | passed  | 0.96535 seconds        |
+./spec/requests/lobbies_controller_spec.rb[1:2:2:1:1:1]             | unknown |                        |
+./spec/requests/lobbies_controller_spec.rb[1:2:2:1:1:2]             | unknown |                        |
+./spec/requests/lobbies_controller_spec.rb[1:2:2:1:2:1]             | unknown |                        |
+./spec/requests/lobbies_controller_spec.rb[1:2:2:1:2:2]             | unknown |                        |
 ./spec/requests/lobbies_controller_spec.rb[1:2:2:2:1]               | passed  | 0.50061 seconds        |
 ./spec/requests/lobbies_controller_spec.rb[1:3:1:1:1]               | passed  | 0.03709 seconds        |
 ./spec/requests/lobbies_controller_spec.rb[1:3:1:2:1]               | passed  | 0.21216 seconds        |

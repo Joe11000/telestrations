@@ -8,12 +8,12 @@ class InGameCardUploadsController < ApplicationController
     respond_to do |format|
       format.js do
 
-        # byebug
+        byebug
         if uploaded_card_placeholder.description? && create_params.dig('description_text').present?
           # byebug
           uploaded_card_placeholder.update(description_text: create_params['description_text'])
-        elsif uploaded_card_placeholder.drawing && create_params.dig('drawing').present?
-          # byebug
+        elsif uploaded_card_placeholder.drawing? && create_params.dig('drawing_image').present?
+          byebug
           uploaded_card_placeholder.drawing.attach create_params
         end
 
