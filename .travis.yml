@@ -12,6 +12,6 @@ deploy:
     secure: Rails.application.credentials.dig('production', 'heroku', 'api_key')
   app: telestrations
   on:
-    repo: joe11000/telestrations
+    repo: Joe11000/telestrations
 
 script: bundle exec rspec -t ~no_travis

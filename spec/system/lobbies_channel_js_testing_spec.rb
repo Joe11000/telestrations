@@ -10,7 +10,7 @@ RSpec.describe 'LobbyChannelJsTestingSpec', type: :system do
   end
 
   context '2 can see each other log in and out on the lobby page'  do
-    xcontext 'first player private game, second player joins via join_code' do
+    context 'first player private game, second player joins via join_code', :no_travis do
       # it_behaves_like 'user 1 is on lobby page and sees other player come in, sign in, and then leave'
 
       let(:long_ass_wait) {600000}
