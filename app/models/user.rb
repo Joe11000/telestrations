@@ -2,10 +2,10 @@ class User < ActiveRecord::Base
   acts_as_paranoid
 
   has_one_attached :provider_avatar
-  has_many :games_users, inverse_of: :user
-  has_many :games, through: :games_users #, after_add: Proc.new { || self.current_game =  }
+  has_many :games_users, ->{ order(id: :asc), inverse_of: :user
+  has_many :games, ->{ order(id: :asc), through: :games_users #, after_add: Proc.new { || self.current_game =  }
   has_one  :current_game, through: :games_users, class_name: 'Game'
-  has_many :starting_cards, through: :games_users
+  has_many :starting_cards, ->{ order(id: :asc),  through: :games_users
 
   def current_game
     games.where(status: ['pregame', 'midgame']).order(id: :asc).try(:last) # || Game.none

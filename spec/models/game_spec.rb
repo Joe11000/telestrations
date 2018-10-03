@@ -1,6 +1,5 @@
 require 'spec_helper'
 require 'rails_helper'
-# require 'support/shared_examples'
 
 RSpec.describe Game, type: :model do
 
