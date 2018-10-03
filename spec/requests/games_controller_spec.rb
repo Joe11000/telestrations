@@ -53,11 +53,11 @@ RSpec.describe GamesController, :type => :request do
         get new_game_path
       end
 
-    context 'user can see' do
+    xcontext 'user can see' do
 
     end
 
-    context 'cant see but needs to be in the html' do
+    xcontext 'cant see but needs to be in the html' do
       it 'correct http status' do
         expect(response).to have_http_status :ok
       end
@@ -70,7 +70,7 @@ RSpec.describe GamesController, :type => :request do
       end
     end
 
-    context 'user can see' do
+    xcontext 'user can see' do
     end
 
 

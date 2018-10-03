@@ -10,14 +10,14 @@ class GamesController < ApplicationController
 
     # create a starting placeholder card for this user if game is just beginning
     if( @placeholder_card.blank? && current_user.current_starting_card.blank? )
-      byebug
+      # byebug
       @placeholder_card = @game.create_initial_placeholder_for_user current_user.id
     end
 
 
     #  is the user done or waiting for others to pass him a card
     if( @placeholder_card.blank?)
-      byebug
+      # byebug
         passing_array = current_user.current_game.parse_passing_order
       # find my position before mine in array
 
@@ -29,7 +29,7 @@ class GamesController < ApplicationController
     end
 
 
-    byebug
+    # byebug
     @prev_card = @placeholder_card.try(:parent_card) || Card.none
     @current_user = current_user
   end

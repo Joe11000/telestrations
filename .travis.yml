@@ -1,11 +1,11 @@
 language: ruby
 rvm: 2.5.1
 
-
 deploy:
   provider: heroku
   api_key: <%= Rails.application.credentials[Rails.env.to_sym][:heroku][:api_key] %>
   run:
+    - "RAILS_ENV=test rake db:create"
     - "RAILS_ENV=test rake db:setup"
     - restart
     - "rake cleanup"

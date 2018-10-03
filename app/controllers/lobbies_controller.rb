@@ -9,7 +9,7 @@ class LobbiesController < ApplicationController
 
   # joining the lobby of another game via join_code
   def join_lobby
-    byebug
+    # byebug
     @game = Game.find_by(join_code: join_lobby_params.upcase)
     if @game.blank?
       redirect_to(choose_game_type_page_url, alert: "Join Code #{join_lobby_params} doesn't exist.") and return
@@ -51,7 +51,7 @@ class LobbiesController < ApplicationController
               end
           end
         elsif @game.pregame? && params[:game_type] != @game.game_type # user associated with another pregame that has a different status
-          byebug
+          # byebug
           # @game.remove_player current_user.id
           # @user_already_joined = false
 
@@ -66,7 +66,7 @@ class LobbiesController < ApplicationController
           raise "shouldn't have gotten here, something is wrong: game_id: #{@game.try(:id)}, current_user_id: #{current_user.id}"
         end
 
-        byebug
+        # byebug
         @users_not_joined = @game.unassociated_rendezousing_games_users
         @users_joined = Game.all_users_game_names @game.join_code
       end

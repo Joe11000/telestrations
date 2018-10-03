@@ -3,7 +3,7 @@ class LobbyChannel < ApplicationCable::Channel
   include Rails.application.routes.url_helpers
 
   def subscribed
-    byebug
+    # byebug
     kill_switch = false
 
     kill_switch = true if params[:join_code].blank?

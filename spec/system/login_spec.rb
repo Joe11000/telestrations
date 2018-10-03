@@ -6,7 +6,7 @@ RSpec.describe "On the Sessions Page,", :type => :system do
     driven_by(:selenium_chrome_headless)
   end
 
-  include LoginHelper
+  include LoginHelper::SystemTests
 
   context "user can read the game instuctions", :r5 do
     it do

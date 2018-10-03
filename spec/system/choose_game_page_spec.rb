@@ -4,7 +4,7 @@ require 'support/login'
 RSpec.describe 'A User can' do
   include LoginHelper::SystemTests
 
-  context "I don't ", :r5_overlook do #I don't know if I need these for coverage
+  xcontext "I don't ", :r5_overlook do #I don't know if I need these for coverage
     it 'logout' do
       login_with 'facebook'
       click_button "logout"
