@@ -9,7 +9,7 @@ RSpec.describe 'A User can' do
     # driven_by(:selenium_chrome_headless)
   end
 
-  xcontext "I don't ", :r5_overlook do #I don't know if I need these for coverage
+  context "I don't ", :r5_wip, :no_travis do #I don't know if I need these for coverage
     it 'logout' do
       login_with 'facebook'
       click_button "logout"

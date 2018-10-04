@@ -85,7 +85,7 @@ def new_game_associations game
 end
 
 def additional_player_moves game
-  gu1, gu2, gu3 = game.games_users.order(id: :asc)
+  gu1, gu2, gu3 = game.games_users
 
   user1 = gu1.user
   user2 = gu2.user

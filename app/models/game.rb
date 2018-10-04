@@ -135,8 +135,9 @@ class Game < ActiveRecord::Base
   end
 
 
-
+  #r5_wip
   def set_up_next_players_turn current_card_id
+    byebug
     card = Card.find(current_card_id)
     next_player = next_player_after(card.uploader_id)
     gu = card.starting_games_user
@@ -202,11 +203,11 @@ class Game < ActiveRecord::Base
   # find the earliest placeholder created for user
   def get_placeholder_card current_user_id
     # if description placeholder
-    result = Card.where(uploader_id: current_user_id, starting_games_user_id: games_users.ids).where(medium: 'description', description_text: nil).order(id: :asc).try(:last)
+    result = Card.where(uploader_id: current_user_id, starting_games_user_id: games_users.ids).where(medium: 'description', description_text: nil).order(id: :asc).try(:first)
     return result unless result.blank?
 
     # if drawing placeholder
-    result = Card.with_attached_drawing.where(uploader_id: current_user_id, starting_games_user_id: games_users.ids).where(medium: :drawing).order(id: :asc).select{|card| !card.drawing.attached?}.try(:last)
+    result = Card.with_attached_drawing.where(uploader_id: current_user_id, starting_games_user_id: games_users.ids).where(medium: :drawing).order(id: :asc).select{|card| !card.drawing.attached?}.try(:first)
     return result unless result.blank?
 
     return nil
