@@ -4,7 +4,9 @@ require 'support/login'
 RSpec.describe 'LobbyChannelJsTestingSpec', type: :system do
   include LoginHelper::SystemTests
 
-  before :all { driven_by :selenium, using: :headless_chrome }
+  before :all do
+    driven_by :selenium, using: :headless_chrome
+  end
 
   context '2 can see each other log in and out on the lobby page'  do
     context 'first player private game, second player joins via join_code', :no_travis do

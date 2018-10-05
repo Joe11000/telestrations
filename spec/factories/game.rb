@@ -62,6 +62,7 @@ FactoryBot.define do
           new_game_associations game
           additional_player_moves game
           complete_the_game_associations game
+          byebug
           game.update(passing_order: game.user_ids.to_s, join_code: nil)
         end
       end
@@ -82,24 +83,51 @@ def new_game_associations game
   gu1.starting_card = FactoryBot.create(:description, :placeholder, uploader_id: user1.id, idea_catalyst_id: gu1.id, starting_games_user: gu1)
   gu2.starting_card = FactoryBot.create(:description, :placeholder, uploader_id: user2.id, idea_catalyst_id: gu2.id, starting_games_user: gu2)
   gu3.starting_card = FactoryBot.create(:description, :placeholder, uploader_id: user3.id, idea_catalyst_id: gu3.id, starting_games_user: gu3)
+  game.reload
 end
 
 def additional_player_moves game
+    #                         u1                               Sets of Cards
+    #                       v    ^            gu_1                gu_2                gu_3
+    #                      v      ^           ------------------------------------------------------------
+    #                     v        ^          u1_desc            u2_desc              u3_desc
+    #                    v          ^         u2_draw_placeholdr u3_draw_placeholdr   u1_drawn
+    #                u2  >>>>>>>>>>>>  u3     --                 -                    u2_desc_placeholdr
+    #
+    #
+    #                                                           User Actions (go diagonal top left to bottom right)
+    #                                          User_1                 User_2                   User_3
+    #                                          ----------------------------------------------------------
+    #                                          gu1_c1_desc            gu2_c1_desc              gu3_c1_desc
+    #                                          gu3_c2_draw_placeholdr gu1_c2_draw_placeholdr   gu2_c2_draw_placeholdr
+    #                                          -                      gu3_c3_desc_placeholdr   -
+    #
+    #                                          backloged placeholders
+    #                                          -------------------------
+    #                                          u1 - 0
+    #                                          u2 - 2 (gu1_c2, then gu3_c2)
+    #                                          u3 - 1 (gu2_c2)
   gu1, gu2, gu3 = game.games_users
 
   user1 = gu1.user
   user2 = gu2.user
   user3 = gu3.user
-  # No Moves for user 1...He is still thinking about what to make user2 draw
 
-  # user 2 passed their first card
+  # all users write description
+  gu1.starting_card.update(description_text: TokenPhrase.generate(' ', numbers: false))
   gu2.starting_card.update(description_text: TokenPhrase.generate(' ', numbers: false))
-  gu2.starting_card.child_card  = FactoryBot.create(:drawing, :placeholder, uploader: user3, starting_games_user: gu2)
-
-  # user 3 passed their first card and second card
   gu3.starting_card.update(description_text: TokenPhrase.generate(' ', numbers: false))
-  gu3.starting_card.child_card            = FactoryBot.create(:drawing,     uploader: user1, starting_games_user: gu3)
+
+  # user 2 has gu1 placeholder
+  # user 3 has gu2 placeholder
+  # user 1 has gu3 drawing
+  gu1.starting_card.child_card  = FactoryBot.create(:drawing, :placeholder, uploader: user2, starting_games_user: gu1)
+  gu2.starting_card.child_card  = FactoryBot.create(:drawing, :placeholder, uploader: user3, starting_games_user: gu2)
+  gu3.starting_card.child_card  = FactoryBot.create(:drawing,               uploader: user1, starting_games_user: gu3)
+
+  # user 2 has gu3 placeholder
   gu3.starting_card.child_card.child_card = FactoryBot.create(:description, :placeholder, uploader: user2, starting_games_user: gu3)
+  game.reload
 end
 
 # this finishes the game that additional_player_moves() started
@@ -109,11 +137,11 @@ def complete_the_game_associations game
   user2 = gu2.user
   user3 = gu3.user
 
-  gu1.starting_card.update( description_text: TokenPhrase.generate(' ', numbers: false) )
-  gu1.starting_card.child_card            = FactoryBot.create(:drawing,     uploader: user2, starting_games_user: gu1)
+  gu1.starting_card.child_card.drawing.attach(io: File.open(File.join(Rails.root, 'spec', 'support', 'images', 'thumbnail_selfy.jpg')), \
+                                             content_type: 'image/jpg', \
+                                             filename: 'provider_avatar.jpg') # replace the placeholder card because it was easier than updating it with a new attachment
   gu1.starting_card.child_card.child_card = FactoryBot.create(:description, uploader: user3, starting_games_user: gu1)
   gu1.update(set_complete: true)
-
   # user 2 is on their last card
   gu2.starting_card.child_card.drawing.attach(io: File.open(File.join(Rails.root, 'spec', 'support', 'images', 'thumbnail_selfy.jpg')), \
                                              content_type: 'image/jpg', \
@@ -125,6 +153,8 @@ def complete_the_game_associations game
   # user 3 is on their last card
   gu3.starting_card.child_card.child_card.update( description_text: TokenPhrase.generate(' ', numbers: false) )
   gu3.update(set_complete: true)
+  byebug
+  game.reload
 end
 
 

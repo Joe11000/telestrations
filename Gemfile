@@ -121,7 +121,7 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 
 # Gems for revised project
-gem 'aws-sdk-s3'
+gem 'aws-sdk-s3', require: false
 gem 'rails-erd'
 gem 'bullet'
 
