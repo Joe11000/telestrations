@@ -37,7 +37,6 @@ gem 'puma'
 gem 'sass-rails'
 
 # Use ActiveModel has_secure_password
-gem 'bcrypt'
 gem "font-awesome-rails"
 
 # Use Capistrano for deployment
@@ -57,28 +56,22 @@ group :development do
   gem 'spring'
   gem 'foreman'
   # gem 'guard'
+  # gem 'guard-rspec'
 end
   gem 'guard-rails'
-  # gem 'guard-rspec'
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
-gem 'sass'
 gem 'slim'
 gem 'bootstrap', '~> 4.1.3'
 # gem 'paperclip'
 gem 'omniauth-twitter'
 gem 'omniauth-facebook'
 gem 'redis'
-gem 'em-hiredis'
+# gem 'em-hiredis'
 gem 'sidekiq'
 gem 'sidetiq'
 gem 'paranoia'
-# gem "paperclip-dropbox", ">= 1.3.2"
-
-# react-rails isn't compatible yet with latest Sprockets.
-# https://github.com/reactjs/react-rails/pull/322
-# gem 'react-rails'
 
 # Add support to use es6 based on top of babel, instead of using coffeescript
 gem 'sprockets-es6'
@@ -86,7 +79,6 @@ gem 'sprockets-es6'
 # testing
 group :test do
   # gem 'database_cleaner'
-  gem 'rspec-rails'
   gem 'selenium-webdriver'
   gem 'webmock'
   gem 'shoulda-matchers'
@@ -94,11 +86,10 @@ group :test do
   gem 'capybara'
   # gem 'poltergeist'
   gem 'rack-test'
-  gem 'rails-controller-testing'
+  # gem 'rails-controller-testing'
   gem 'chromedriver-helper'
   gem 'vcr', '< 4.0'
   gem 'tcr'
-  gem 'webmock'
   gem 'action-cable-testing'
   gem 'database_cleaner'
 end
@@ -106,10 +97,12 @@ end
 
 group :development do
   # Access an IRB console on exception pages or by using <%= console %> anywhere in the code.
-  gem 'listen'
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring-watcher-listen'
   gem 'travis'
+  gem 'foreman'
+  gem 'bullet'
+  gem 'rails-erd'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
@@ -122,13 +115,12 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 # Gems for revised project
 gem 'aws-sdk-s3', require: false
-gem 'rails-erd'
-gem 'bullet'
 
 # generate random words for user if they give up
 # ie TokenPhrase.generate(' ', numbers: false)
 gem 'token_phrase'
 gem 'mini_magick'
 gem 'rubocop'
-
-gem 'teaspoon-mocha', group: [:development, :test]
+gem 'webpacker'
+gem 'rspec-rails'
+# gem 'teaspoon-mocha', group: [:development, :test]
