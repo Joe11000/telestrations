@@ -153,4 +153,67 @@ RSpec.describe Card, type: :model do
   # end
 
 
+    context '#get_placeholder_card', :r5_wip do
+      context '> 1 placeholder available' do
+        it 'returns earliest a placeholder card queued'  do
+          game = FactoryBot.create(:midgame, callback_wanted: :midgame)
+          random_placeholder1 = FactoryBot.create(:drawing, :placeholder)
+          random_placeholder2 = FactoryBot.create(:description, :placeholder)
+          random_placeholder3 = FactoryBot.create(:description, :placeholder)
+          FactoryBot.create(:drawing, :out_of_game_card_upload)
+
+          gu1, gu2, gu3 = game.games_users
+          user_1, user_2, user_3 = gu1.user, gu2.user, gu3.user
+          # gu1_placeholder = gu1.starting_card
+          # gu2_placeholder = gu2.starting_card.child_card
+          # gu3_placeholder = gu3.starting_card.child_card.child_card
+
+          gu1_placeholder = gu1.starting_card.child_card
+          gu2_placeholder = gu2.starting_card.child_card
+          gu3_placeholder = gu3.starting_card.child_card.child_card
+
+
+
+          expect(game.get_placeholder_card user_1.id).to eq nil
+          expect(game.get_placeholder_card user_2.id).to eq gu1_placeholder
+          gu1_placeholder.
+          expect(game.get_placeholder_card user_3.id).to eq gu3_placeholder
+        end
+      end
+
+      context '1 placeholder available' do
+        it 'returns find a placeholder card' do
+          game = FactoryBot.create(:midgame_with_no_moves, callback_wanted: :midgame_with_no_moves)
+          random_placeholder1 = FactoryBot.create(:drawing, :placeholder)
+          random_placeholder2 = FactoryBot.create(:description, :placeholder)
+          random_placeholder3 = FactoryBot.create(:description, :placeholder)
+          FactoryBot.create(:drawing, :out_of_game_card_upload)
+
+          gu1, gu2, gu3 = game.games_users
+          gu1_placeholder = gu1.starting_card
+          gu2_placeholder = gu2.starting_card.child_card
+          gu3_placeholder = gu3.starting_card.child_card.child_card
+
+          expect(game.get_placeholder_card gu1.user_id).to eq gu1_placeholder
+          expect(game.get_placeholder_card gu2.user_id).to eq gu2_placeholder
+          expect(game.get_placeholder_card gu3.user_id).to eq gu3_placeholder
+        end
+      end
+      context 'no placeholder available' do
+        it 'returns nil', :r5 do
+          FactoryBot.create(:pregame, callback_wanted: :pregame)
+          game = FactoryBot.create(:postgame, callback_wanted: :postgame)
+          random_placeholder1 = FactoryBot.create(:drawing, :placeholder)
+          random_placeholder2 = FactoryBot.create(:description, :placeholder)
+          random_placeholder3 = FactoryBot.create(:description, :placeholder)
+          FactoryBot.create(:drawing, :out_of_game_card_upload)
+
+          gu1, gu2, gu3 = game.games_users
+          expect( game.get_placeholder_card(gu1.user_id) ).to eq nil
+          expect( game.get_placeholder_card(gu2.user_id) ).to eq nil
+          expect( game.get_placeholder_card(gu3.user_id) ).to eq nil
+        end
+      end
+    end
+
 end

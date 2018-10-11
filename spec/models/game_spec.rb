@@ -854,22 +854,29 @@ RSpec.describe Game, type: :model do
           random_placeholder3 = FactoryBot.create(:description, :placeholder)
           FactoryBot.create(:drawing, :out_of_game_card_upload)
 
-          gu1, gu2, gu3 = game.games_users
+          gu1, gu2, gu3 = game.games_users # each of the decks
           user_1, user_2, user_3 = gu1.user, gu2.user, gu3.user
-          # gu1_placeholder = gu1.starting_card
-          # gu2_placeholder = gu2.starting_card.child_card
-          # gu3_placeholder = gu3.starting_card.child_card.child_card
 
+          # placeholder for each one the decks
           gu1_placeholder = gu1.starting_card.child_card
           gu2_placeholder = gu2.starting_card.child_card
           gu3_placeholder = gu3.starting_card.child_card.child_card
 
 
-
+          byebug
           expect(game.get_placeholder_card user_1.id).to eq nil
-          expect(game.get_placeholder_card user_2.id).to eq gu1_placeholder
-          gu1_placeholder.
-          expect(game.get_placeholder_card user_3.id).to eq gu3_placeholder
+
+          # start user 2 has 2 placeholders, so test for both
+            expect(game.get_placeholder_card user_2.id).to eq gu1_placeholder
+            gu1_placeholder.drawing.attach(io: File.open(File.join(Rails.root, 'spec', 'support', 'images', 'thumbnail_selfy.jpg')), \
+                                           content_type: 'image/jpg', \
+                                           filename: 'provider_avatar.jpg')
+            expect(game.get_placeholder_card user_2.id).to eq gu3_placeholder
+          # end user 2 has 2 placeholders, so test for both
+
+
+
+          expect(game.get_placeholder_card user_3.id).to eq gu2_placeholder
         end
       end
 

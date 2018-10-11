@@ -4,9 +4,11 @@ html
     meta name="viewport" content="width=device-width, initial-scale=1"
     title Telestrations
     = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true
+    = favicon_link_tag 'telestrations.ico'
+
     = csrf_meta_tags
     = action_cable_meta_tag
-    = favicon_link_tag 'telestrations.ico'
+    = javascript_pack_tag 'application'
 
   body
     = render partial: 'shared/notifications'
