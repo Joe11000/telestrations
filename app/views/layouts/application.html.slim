@@ -8,7 +8,7 @@ html
 
     = csrf_meta_tags
     = action_cable_meta_tag
-    = javascript_pack_tag 'application'
+    = yield :react_components
 
   body
     = render partial: 'shared/notifications'
