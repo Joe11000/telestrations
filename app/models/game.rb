@@ -124,16 +124,19 @@ class Game < ActiveRecord::Base
   # r5 tested
   # find the earliest placeholder created for user
   def get_placeholder_card current_user_id
-    # if description placeholder
+    result = Card.where(placeholder: true, uploader_id: current_user_id, starting_games_user_id: games_users.ids).order(id: :asc).try(:first)
     byebug
-    result = Card.where(uploader_id: current_user_id, starting_games_user_id: games_users.ids).where(medium: 'description', description_text: nil).order(id: :asc).try(:first)
-    return result if result.present?
+    return result || nil
+    # if description placeholder
+    # byebug
+    # result = Card.where(uploader_id: current_user_id, starting_games_user_id: games_users.ids).where(medium: 'description', description_text: nil).order(id: :asc).try(:first)
+    # return result if result.present?
 
-    # if drawing placeholder
-    result = Card.with_attached_drawing.where(uploader_id: current_user_id, starting_games_user_id: games_users.ids).where(medium: :drawing).order(id: :asc).select{|card| !card.drawing.attached?}.try(:first)
-    return result if result.present?
+    # # if drawing placeholder
+    # result = Card.with_attached_drawing.where(uploader_id: current_user_id, starting_games_user_id: games_users.ids).where(medium: :drawing).order(id: :asc).select{|card| !card.drawing.attached?}.try(:first)
+    # return result if result.present?
 
-    return nil
+    # return nil
   end
 
 

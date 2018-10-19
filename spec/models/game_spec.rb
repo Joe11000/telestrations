@@ -98,6 +98,9 @@ RSpec.describe Game, type: :model do
             expect(starting_card.description_text).to eq nil
             expect(starting_card.description?).to eq true
             expect(starting_card.child_card).to eq nil
+            byebug
+            expect(starting_card.placeholder).to eq true
+
           end
 
           expect(users.length).to eq 3
@@ -147,11 +150,14 @@ RSpec.describe Game, type: :model do
           gu1_starting_card = gu1.starting_card
           expect(gu1_starting_card.description_text).to be_a String
           expect(gu1_starting_card.description?).to eq true
-          expect(gu1_starting_card.child_card).to be_a Card
+          expect(gu1_starting_card.placeholder).to eq false
 
+          expect(gu1_starting_card.child_card).to be_a Card
           expect(gu1_starting_card.child_card.description_text).to eq nil
           expect(gu1_starting_card.child_card.drawing?).to eq true
           expect(gu1_starting_card.child_card.drawing.attached?).to eq false
+          expect(gu1_starting_card.child_card.placeholder).to eq true
+
           expect(gu1_starting_card.child_card.child_card).to eq nil
 
           # Deck From user_2 has submitted a starting description and has one drawing placeholder
@@ -159,11 +165,14 @@ RSpec.describe Game, type: :model do
           gu2_starting_card = gu2.starting_card
           expect(gu2_starting_card.description_text).to be_a String
           expect(gu2_starting_card.description?).to eq true
-          expect(gu2_starting_card.child_card).to be_a Card
+          expect(gu2_starting_card.placeholder).to eq false
 
+          expect(gu2_starting_card.child_card).to be_a Card
           expect(gu2_starting_card.child_card.description_text).to eq nil
           expect(gu2_starting_card.child_card.drawing?).to eq true
           expect(gu2_starting_card.child_card.drawing.attached?).to eq false
+          expect(gu2_starting_card.child_card.placeholder).to eq true
+
           expect(gu2_starting_card.child_card.child_card).to eq nil
 
           # Deck from user_3 has 3 cards, 1 submitted description(user_3), 1 submitted drawing(user_1), 1 description placeholder(user_2)
@@ -171,16 +180,19 @@ RSpec.describe Game, type: :model do
           gu3_starting_card = gu3.starting_card
           expect(gu3_starting_card.description_text).to be_a String
           expect(gu3_starting_card.description?).to eq true
-          expect(gu3_starting_card.child_card).to be_a Card
+          expect(gu3_starting_card.placeholder).to eq false
 
+          expect(gu3_starting_card.child_card).to be_a Card
           expect(gu3_starting_card.child_card.description_text).to eq nil
           expect(gu3_starting_card.child_card.drawing?).to eq true
           expect(gu3_starting_card.child_card.drawing.attached?).to eq true
-          expect(gu3_starting_card.child_card.child_card).to be_a Card
+          expect(gu3_starting_card.child_card.placeholder).to eq false
 
+          expect(gu3_starting_card.child_card.child_card).to be_a Card
           expect(gu3_starting_card.child_card.child_card.description_text).to eq nil
           expect(gu3_starting_card.child_card.child_card.description?).to eq true
           expect(gu3_starting_card.child_card.child_card.child_card).to eq nil
+          expect(gu3_starting_card.child_card.child_card.placeholder).to eq true
 
           expect(users.length).to eq 3
           expect(users.map(&:current_games_user_name)).to all(be_a String)
@@ -228,17 +240,20 @@ RSpec.describe Game, type: :model do
             expect(starting_card.description_text).to be_a String
             expect(starting_card.description?).to eq true
             expect(starting_card.child_card).to be_a Card
+            expect(starting_card.placeholder).to eq false
 
             expect(starting_card.child_card.description_text).to eq nil
             expect(starting_card.child_card.drawing?).to eq true
             expect(starting_card.child_card.drawing.attached?).to eq true
             expect(starting_card.child_card.child_card).to be_a Card
+            expect(starting_card.child_card.placeholder).to eq false
 
             expect(starting_card.child_card.child_card.description_text).to be_a String
             expect(starting_card.child_card.child_card.description?).to eq true
             expect(starting_card.child_card.child_card.child_card).to eq nil
-
+            expect(starting_card.child_card.child_card.placeholder).to eq false
           end
+
           users = postgame.users
           expect( JSON.parse(postgame.passing_order) ).to match_array users.pluck(:id)
           expect(postgame.users.length).to eq 3
@@ -848,13 +863,14 @@ RSpec.describe Game, type: :model do
     context '#get_placeholder_card', :r5_wip do
       context '> 1 placeholder available' do
         it 'returns earliest a placeholder card queued'  do
-          game = FactoryBot.create(:midgame, callback_wanted: :midgame)
-          random_placeholder1 = FactoryBot.create(:drawing, :placeholder)
-          random_placeholder2 = FactoryBot.create(:description, :placeholder)
-          random_placeholder3 = FactoryBot.create(:description, :placeholder)
-          FactoryBot.create(:drawing, :out_of_game_card_upload)
 
-          gu1, gu2, gu3 = game.games_users # each of the decks
+          game = FactoryBot.create(:midgame, callback_wanted: :midgame)
+          # random_placeholder1 = FactoryBot.create(:drawing, :placeholder)
+          # random_placeholder2 = FactoryBot.create(:description, :placeholder)
+          # random_placeholder3 = FactoryBot.create(:description, :placeholder)
+          # FactoryBot.create(:drawing, :out_of_game_card_upload)
+
+          gu1, gu2, gu3 = game.games_users.order(id: :asc) # simulates each of the stacks of paper being passed
           user_1, user_2, user_3 = gu1.user, gu2.user, gu3.user
 
           # placeholder for each one the decks
@@ -863,7 +879,6 @@ RSpec.describe Game, type: :model do
           gu3_placeholder = gu3.starting_card.child_card.child_card
 
 
-          byebug
           expect(game.get_placeholder_card user_1.id).to eq nil
 
           # start user 2 has 2 placeholders, so test for both
@@ -871,6 +886,8 @@ RSpec.describe Game, type: :model do
             gu1_placeholder.drawing.attach(io: File.open(File.join(Rails.root, 'spec', 'support', 'images', 'thumbnail_selfy.jpg')), \
                                            content_type: 'image/jpg', \
                                            filename: 'provider_avatar.jpg')
+            gu1_placeholder.update(placeholder: false)
+            byebug
             expect(game.get_placeholder_card user_2.id).to eq gu3_placeholder
           # end user 2 has 2 placeholders, so test for both
 
@@ -900,9 +917,23 @@ RSpec.describe Game, type: :model do
       end
     end
     context 'no placeholder available' do
-      it 'returns nil', :r5 do
+      it 'returns nil' do
         FactoryBot.create(:pregame, callback_wanted: :pregame)
         game = FactoryBot.create(:postgame, callback_wanted: :postgame)
+        random_placeholder1 = FactoryBot.create(:drawing, :placeholder)
+        random_placeholder2 = FactoryBot.create(:description, :placeholder)
+        random_placeholder3 = FactoryBot.create(:description, :placeholder)
+        FactoryBot.create(:drawing, :out_of_game_card_upload)
+
+        gu1, gu2, gu3 = game.games_users
+        expect( game.get_placeholder_card(gu1.user_id) ).to eq nil
+        expect( game.get_placeholder_card(gu2.user_id) ).to eq nil
+        expect( game.get_placeholder_card(gu3.user_id) ).to eq nil
+      end
+
+      it 'pregame everyone shouldn\'t have a placeholder' do
+        FactoryBot.create(:pregame, callback_wanted: :pregame)
+        game = FactoryBot.create(:pregame, callback_wanted: :pregame)
         random_placeholder1 = FactoryBot.create(:drawing, :placeholder)
         random_placeholder2 = FactoryBot.create(:description, :placeholder)
         random_placeholder3 = FactoryBot.create(:description, :placeholder)

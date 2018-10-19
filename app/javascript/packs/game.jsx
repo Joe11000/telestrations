@@ -3,40 +3,63 @@ import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types'
 import DrawingSection from './drawing_section'
 import DescriptionSection from './drawing_section'
+// import update from ‘immutability-helper’
 
 class Game extends React.Component {
-  defaultProps() {
-    return { name: 'David' }
-  }
+  constructor(props){
+    super(props);
 
-  propTypes()  {
-    return { name: PropTypes.string }
+    this.state = {
+      game_id:         props.data['game_id'],
+      pre_card_id:     props.data['prev_card_id'],
+      current_user_id: props.data['current_user_id']
+      // ,delete_me: {one: {two: {three: {four: '5'}}}}
+    };
   }
 
   render() {
     return (
-      <div>
-        <h1>Game Component</h1>
-        <DrawingSection />
-        <DescriptionSection />
+      <div data-id='game-component'>
+          <div className='form-horizontal'>
+            <h1>Game Component</h1>
+
+            <div className='drawing col-12 offset-sm-1 col-sm-10 offset-md-2 col-md-8'>
+              <p>game_id {this.state.game_id}</p>
+              <p>pre_card_id {this.state.pre_card_id}</p>
+              <p>current_user_id {this.state.current_user_id}</p>
+              {/*<DrawingSection />*/}
+              {/*<DescriptionSection />*/}
+              {/*<LoadingContainer />*/}
+            </div>
+          </div>
       </div>
     )
   }
-
 }
 
+Game.propTypes =  {
+                    game_id:          PropTypes.oneOfType([ PropTypes.number, PropTypes.string ]),
+                    pre_card_id:      PropTypes.oneOfType([ PropTypes.number, PropTypes.string ]),
+                    current_user_id:  PropTypes.oneOfType([ PropTypes.number, PropTypes.string ])
+                  }
 
 
 document.addEventListener('DOMContentLoaded', () => {
+  const node = document.querySelector("[data-id='game-page-data']")
+  const data = JSON.parse(node.getAttribute('data'))
+
   ReactDOM.render(
-    <Game />,
-    document.querySelector("[data-id='game-page']")
+    <Game data={data}/>,
+    document.querySelector("[data-id='game-page-data']")
   )
 });
 
 
 
 
+
+
+// Original Version before seperating
 
 
 // #game data-id='game-page' data-game-id=@game.id data-prev-card-id=(@prev_card.try(:id) || '') data-user-id=(@current_user.try(:id) || "")

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_09_15_194459) do
+ActiveRecord::Schema.define(version: 2018_10_18_185913) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -47,6 +47,7 @@ ActiveRecord::Schema.define(version: 2018_09_15_194459) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "out_of_game_card_upload", default: false, null: false
+    t.boolean "placeholder", default: false
     t.index ["deleted_at"], name: "index_cards_on_deleted_at"
     t.index ["idea_catalyst_id"], name: "index_cards_on_idea_catalyst_id"
     t.index ["parent_card_id"], name: "index_cards_on_parent_card_id"

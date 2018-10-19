@@ -1,5 +1,9 @@
-- content_for :react_components do
-  = javascript_pack_tag 'game'
+/ - content_for :react_components do
 
-#game data-id='game-page' data-game-id=@game.id data-prev-card-id=(@prev_card.try(:id) || '') data-user-id=(@current_user.try(:id) || "")
+#game-page data-id='game-page-data' data=({ game_id: @game.id,
+                                            pre_card_id: @prev_card.try(:id) || '',
+                                            current_user_id:  @current_user.try(:id) || ''  }.to_json)
 
+
+
+= javascript_pack_tag 'game'

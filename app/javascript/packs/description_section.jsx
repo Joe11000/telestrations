@@ -1,36 +1,41 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-
 export default class DescriptionSection extends React.Component {
-  constructor(props){
-    this.state = {
-
-    }
-  }
-  // defaultProps() {
-  //   return { name: 'David' }
-  // }
-
-  // propTypes()  {
+  // static propTypes()  {
   //   return { name: PropTypes.string }
   // }
 
-  getInitialState(){
-
-  }
   render() {
     return (
-      <h2>Description Section Component</h2>
+      <div className='make-description-container'>
+        <p>Make Description Container</p>
+{/*       #make-description-container data-id='make-description-container' class=(@placeholder_card.try(:description?) ? '' : 'd-none')
+         #drawing-to-describe-container.mt-2.text-center data-id='drawing-to-describe-container'
+           img#drawing-to-describe data-id='drawing-to-describe' src=( @prev_card.blank? ? '' : @prev_card.try(:drawing).try(:url) )
+
+         form.make-description-form.mt-2 data-id='make-description-form'
+           .form-group data-id='make-description-group'
+             .input-group
+               = text_field_tag(:description_text_input_field, nil,  {data: {id: 'description_text_input_field'}, placeholder: 'Enter A Description', class: 'span2 form-control text-capitalize'})
+               .input-group-btn
+                 button.btn.btn-primary type='submit' Submit
+
+         p.h3#text-to-draw data-id='drawing-to-describe' = @text_to_draw*/}
+      </div>
     )
   }
-
 }
 
 
 
 
 
+
+
+
+
+// Original Version before seperating
 
 
 // #game data-id='game-page' data-game-id=@game.id data-prev-card-id=(@prev_card.try(:id) || '') data-user-id=(@current_user.try(:id) || "")

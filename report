@@ -1,0 +1,149 @@
+Run options: include {:r5=>true}
+.....**...........F.F..F.F.F.FFFF
+
+Pending: (Failures listed here are expected and do not affect your suite's status)
+
+  1) Game enums enums 
+     # Temporarily skipped with xcontext
+     # ./spec/models/game_spec.rb:18
+
+  2) Game enums enums 
+     # Temporarily skipped with xcontext
+     # ./spec/models/game_spec.rb:19
+
+Failures:
+
+  1) Game FactoryBot factory.create(:midgame_with_no_moves) a public midgame_with_no_moves is valid
+     Failure/Error: expect(starting_card.placeholder).to eq true
+
+       expected: true
+            got: false
+
+       (compared using ==)
+     Shared Example Group: "a midgame_with_no_moves" called from ./spec/models/game_spec.rb:112
+     # ./spec/models/game_spec.rb:101:in `block (6 levels) in <top (required)>'
+     # ./spec/models/game_spec.rb:97:in `each'
+     # ./spec/models/game_spec.rb:97:in `block (5 levels) in <top (required)>'
+
+  2) Game FactoryBot factory.create(:midgame_with_no_moves) a private midgame_with_no_moves is valid
+     Failure/Error: expect(starting_card.placeholder).to eq true
+
+       expected: true
+            got: false
+
+       (compared using ==)
+     Shared Example Group: "a midgame_with_no_moves" called from ./spec/models/game_spec.rb:122
+     # ./spec/models/game_spec.rb:101:in `block (6 levels) in <top (required)>'
+     # ./spec/models/game_spec.rb:97:in `each'
+     # ./spec/models/game_spec.rb:97:in `block (5 levels) in <top (required)>'
+
+  3) Game FactoryBot factory.create(:midgame) a public midgame behaves like a midgame is valid
+     Failure/Error: card.update_all(placeholder: true)
+
+     NoMethodError:
+       undefined method `update_all' for #<Card:0x00007fd6d59ff4f8>
+       Did you mean?  updated_at
+                      updated_at?
+                      updated_at=
+     Shared Example Group: "a midgame" called from ./spec/models/game_spec.rb:201
+     # ./spec/factories/card.rb:45:in `block (5 levels) in <top (required)>'
+     # ./spec/factories/game.rb:127:in `additional_player_moves'
+     # ./spec/factories/game.rb:49:in `block (4 levels) in <top (required)>'
+     # ./spec/models/game_spec.rb:134:in `block (5 levels) in <top (required)>'
+
+  4) Game FactoryBot factory.create(:midgame) a private midgame behaves like a midgame is valid
+     Failure/Error: card.update_all(placeholder: true)
+
+     NoMethodError:
+       undefined method `update_all' for #<Card:0x00007fd6d33b4258>
+       Did you mean?  updated_at
+                      updated_at?
+                      updated_at=
+     Shared Example Group: "a midgame" called from ./spec/models/game_spec.rb:210
+     # ./spec/factories/card.rb:45:in `block (5 levels) in <top (required)>'
+     # ./spec/factories/game.rb:127:in `additional_player_moves'
+     # ./spec/factories/game.rb:49:in `block (4 levels) in <top (required)>'
+     # ./spec/models/game_spec.rb:134:in `block (5 levels) in <top (required)>'
+
+  5) Game FactoryBot postgame a public postgame behaves like a postgame is a valid postgame
+     Failure/Error: card.update_all(placeholder: true)
+
+     NoMethodError:
+       undefined method `update_all' for #<Card:0x00007fd6cbd181a8>
+       Did you mean?  updated_at
+                      updated_at?
+                      updated_at=
+     Shared Example Group: "a postgame" called from ./spec/models/game_spec.rb:262
+     # ./spec/factories/card.rb:45:in `block (5 levels) in <top (required)>'
+     # ./spec/factories/game.rb:127:in `additional_player_moves'
+     # ./spec/factories/game.rb:63:in `block (4 levels) in <top (required)>'
+     # ./spec/models/game_spec.rb:222:in `block (5 levels) in <top (required)>'
+
+  6) Game FactoryBot postgame a private postgame behaves like a postgame is a valid postgame
+     Failure/Error: card.update_all(placeholder: true)
+
+     NoMethodError:
+       undefined method `update_all' for #<Card:0x00007fd6cd267270>
+       Did you mean?  updated_at
+                      updated_at?
+                      updated_at=
+     Shared Example Group: "a postgame" called from ./spec/models/game_spec.rb:272
+     # ./spec/factories/card.rb:45:in `block (5 levels) in <top (required)>'
+     # ./spec/factories/game.rb:127:in `additional_player_moves'
+     # ./spec/factories/game.rb:63:in `block (4 levels) in <top (required)>'
+     # ./spec/models/game_spec.rb:222:in `block (5 levels) in <top (required)>'
+
+  7) Game methods .random_public_game
+     Failure/Error: card.update_all(placeholder: true)
+
+     NoMethodError:
+       undefined method `update_all' for #<Card:0x00007fd6d53f3640>
+       Did you mean?  updated_at
+                      updated_at?
+                      updated_at=
+     # ./spec/factories/card.rb:45:in `block (5 levels) in <top (required)>'
+     # ./spec/factories/game.rb:127:in `additional_player_moves'
+     # ./spec/factories/game.rb:49:in `block (4 levels) in <top (required)>'
+     # ./spec/models/game_spec.rb:298:in `block (3 levels) in <top (required)>'
+
+  8) Game methods #cards
+     Failure/Error: card.update_all(placeholder: true)
+
+     NoMethodError:
+       undefined method `update_all' for #<Card:0x00007fd6cbb30390>
+       Did you mean?  updated_at
+                      updated_at?
+                      updated_at=
+     # ./spec/factories/card.rb:45:in `block (5 levels) in <top (required)>'
+     # ./spec/factories/game.rb:127:in `additional_player_moves'
+     # ./spec/factories/game.rb:49:in `block (4 levels) in <top (required)>'
+     # ./spec/models/game_spec.rb:305:in `block (3 levels) in <top (required)>'
+
+  9) Game methods #cards_from_finished_game returns correct ordering of cards
+     Failure/Error: card.update_all(placeholder: true)
+
+     NoMethodError:
+       undefined method `update_all' for #<Card:0x00007fd6ccf991b0>
+       Did you mean?  updated_at
+                      updated_at?
+                      updated_at=
+     # ./spec/factories/card.rb:45:in `block (5 levels) in <top (required)>'
+     # ./spec/factories/game.rb:127:in `additional_player_moves'
+     # ./spec/factories/game.rb:63:in `block (4 levels) in <top (required)>'
+     # ./spec/models/game_spec.rb:317:in `block (4 levels) in <top (required)>'
+
+Finished in 4.18 seconds (files took 5.71 seconds to load)
+33 examples, 9 failures, 2 pending
+
+Failed examples:
+
+rspec ./spec/models/game_spec.rb[1:4:2:1:1] # Game FactoryBot factory.create(:midgame_with_no_moves) a public midgame_with_no_moves is valid
+rspec ./spec/models/game_spec.rb[1:4:2:2:1] # Game FactoryBot factory.create(:midgame_with_no_moves) a private midgame_with_no_moves is valid
+rspec ./spec/models/game_spec.rb[1:4:3:1:1:1] # Game FactoryBot factory.create(:midgame) a public midgame behaves like a midgame is valid
+rspec ./spec/models/game_spec.rb[1:4:3:2:1:1] # Game FactoryBot factory.create(:midgame) a private midgame behaves like a midgame is valid
+rspec ./spec/models/game_spec.rb[1:4:4:1:1:1] # Game FactoryBot postgame a public postgame behaves like a postgame is a valid postgame
+rspec ./spec/models/game_spec.rb[1:4:4:2:1:1] # Game FactoryBot postgame a private postgame behaves like a postgame is a valid postgame
+rspec ./spec/models/game_spec.rb:295 # Game methods .random_public_game
+rspec ./spec/models/game_spec.rb:304 # Game methods #cards
+rspec ./spec/models/game_spec.rb:326 # Game methods #cards_from_finished_game returns correct ordering of cards
+

@@ -62,7 +62,6 @@ FactoryBot.define do
           new_game_associations game
           additional_player_moves game
           complete_the_game_associations game
-          byebug
           game.update(passing_order: game.user_ids.to_s, join_code: nil)
         end
       end
@@ -84,9 +83,14 @@ def new_game_associations game
   gu2.starting_card = FactoryBot.create(:description, :placeholder, uploader_id: user2.id, idea_catalyst_id: gu2.id, starting_games_user: gu2)
   gu3.starting_card = FactoryBot.create(:description, :placeholder, uploader_id: user3.id, idea_catalyst_id: gu3.id, starting_games_user: gu3)
   game.reload
+
+  [gu1.starting_card, gu2.starting_card, gu3.starting_card].map(&:placeholder)
 end
 
 def additional_player_moves game
+    # User 1 is waiting,
+    # User 2 has 2 placeholder cards. His current one he is drawing, his second one he has to describe
+    # User 3 has 1 placeholder card he is drawing
     #                         u1                               Sets of Cards
     #                       v    ^            gu_1                gu_2                gu_3
     #                      v      ^           ------------------------------------------------------------
@@ -107,20 +111,21 @@ def additional_player_moves game
     #                                          u1 - 0
     #                                          u2 - 2 (gu1_c2, then gu3_c2)
     #                                          u3 - 1 (gu2_c2)
-  gu1, gu2, gu3 = game.games_users
+  gu1, gu2, gu3 = game.games_users.order(id: :asc)
 
   user1 = gu1.user
   user2 = gu2.user
   user3 = gu3.user
 
   # all users write description
-  gu1.starting_card.update(description_text: TokenPhrase.generate(' ', numbers: false))
-  gu2.starting_card.update(description_text: TokenPhrase.generate(' ', numbers: false))
-  gu3.starting_card.update(description_text: TokenPhrase.generate(' ', numbers: false))
+  gu1.starting_card.update(description_text: TokenPhrase.generate(' ', numbers: false), placeholder: false)
+  gu2.starting_card.update(description_text: TokenPhrase.generate(' ', numbers: false), placeholder: false)
+  gu3.starting_card.update(description_text: TokenPhrase.generate(' ', numbers: false), placeholder: false)
 
   # user 2 has gu1 placeholder
   # user 3 has gu2 placeholder
   # user 1 has gu3 drawing
+
   gu1.starting_card.child_card  = FactoryBot.create(:drawing, :placeholder, uploader: user2, starting_games_user: gu1)
   gu2.starting_card.child_card  = FactoryBot.create(:drawing, :placeholder, uploader: user3, starting_games_user: gu2)
   gu3.starting_card.child_card  = FactoryBot.create(:drawing,               uploader: user1, starting_games_user: gu3)
@@ -140,20 +145,22 @@ def complete_the_game_associations game
   gu1.starting_card.child_card.drawing.attach(io: File.open(File.join(Rails.root, 'spec', 'support', 'images', 'thumbnail_selfy.jpg')), \
                                              content_type: 'image/jpg', \
                                              filename: 'provider_avatar.jpg') # replace the placeholder card because it was easier than updating it with a new attachment
+  gu1.starting_card.child_card.update(placeholder: false);
+
   gu1.starting_card.child_card.child_card = FactoryBot.create(:description, uploader: user3, starting_games_user: gu1)
   gu1.update(set_complete: true)
   # user 2 is on their last card
   gu2.starting_card.child_card.drawing.attach(io: File.open(File.join(Rails.root, 'spec', 'support', 'images', 'thumbnail_selfy.jpg')), \
                                              content_type: 'image/jpg', \
                                              filename: 'provider_avatar.jpg') # replace the placeholder card because it was easier than updating it with a new attachment
+  gu2.starting_card.child_card.update(placeholder: false);
   gu2.starting_card.child_card.child_card = FactoryBot.create(:description, uploader: user1, starting_games_user: gu2)
   gu2.update(set_complete: true)
 
 
   # user 3 is on their last card
-  gu3.starting_card.child_card.child_card.update( description_text: TokenPhrase.generate(' ', numbers: false) )
+  gu3.starting_card.child_card.child_card.update( description_text: TokenPhrase.generate(' ', numbers: false), placeholder: false )
   gu3.update(set_complete: true)
-  byebug
   game.reload
 end
 
