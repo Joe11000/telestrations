@@ -125,10 +125,9 @@ class Game < ActiveRecord::Base
   # find the earliest placeholder created for user
   def get_placeholder_card current_user_id
     result = Card.where(placeholder: true, uploader_id: current_user_id, starting_games_user_id: games_users.ids).order(id: :asc).try(:first)
-    byebug
+
     return result || nil
     # if description placeholder
-    # byebug
     # result = Card.where(uploader_id: current_user_id, starting_games_user_id: games_users.ids).where(medium: 'description', description_text: nil).order(id: :asc).try(:first)
     # return result if result.present?
 
@@ -259,9 +258,9 @@ class Game < ActiveRecord::Base
     def create_placeholder_card uploader_id, medium
       if medium == 'description'
         return Card.create( medium: "description",
-                            uploader_id: uploader_id)
+                            uploader_id: uploader_id, placeholder: true)
       else
-        return Card.create( medium: "drawing", uploader_id: uploader_id)
+        return Card.create( medium: "drawing", uploader_id: uploader_id, placeholder: true)
       end
     end
 
