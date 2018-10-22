@@ -7,9 +7,9 @@ class GamesController < ApplicationController
   before_action :redirect_if_can_not_view_postgame_page, only: [:show]
 
   def new
-    # game.create_initial_placeholder_if_one_does_not_exist current_user.id
+    @game.create_initial_placeholder_if_one_does_not_exist current_user.id
 
-    # @data_to_pass_components = game.get_status_for_user current_user
+    @data_to_pass_components = @game.get_status_for_user current_user
   end
 
 

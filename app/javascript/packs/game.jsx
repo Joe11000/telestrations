@@ -3,44 +3,106 @@ import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types'
 import DrawingSection from './drawing_section'
 import DescriptionSection from './drawing_section'
+// import update from ImmutableHelper from 'immutability-helper'
 // import update from ‘immutability-helper’
 
+
+  // 'user drawing a picture' =
+  // props = {
+  //           'attention_users' => [user_2.id],
+  //           'current_user_id' => user_2.id,
+  //           'game_over' => false,
+  //           'previous_card' => {
+  //                                'medium' => 'description',
+  //                                'description_text' => 'text_here'
+  //                              },
+  //           'user_status' => 'working_on_card'
+  //         }
+
+
+  // when 'user writing a description' and 'no previous card'  =
+  // props = {
+  //           'attention_users' => [current_user.id],
+  //           'current_user_id' => current_user.id,
+  //           'game_over' => false,
+  //           'user_status' => 'working_on_card'
+  //         }
+
+  // when 'user writing a description' and 'yes, previous card'  =
+    // props = {
+    //           'attention_users' => [current_user.id],
+    //           'current_user_id' => current_user.id,
+    //           'game_over' => false,
+    //           'user_status' => 'working_on_card',
+    //           'previous_card' => {
+    //              'medium' => 'drawing',
+    //              'drawing_url' => drawing_url
+    //            }
+    //         }
+
+  // 'after uploading a card a user has to wait for card to be passed to them', :r5 do
+    // props = { 'attention_users' => [current_user.id],
+    //           'current_user_id' => current_user.id,
+    //           'game_over' => false,
+    //           'user_status' => 'waiting'
+    //         }
+
+  // 'user has finished all uploads, but other players have not', :r5 do
+    // props = { 'attention_users' => [current_user.id],
+    //           'current_user_id' => current_user.id,
+    //           'game_over' => false,
+    //           'user_status' => 'finished'
+    //         }
+
+
+  // 'after the final player uploads the final card', :r5 do
+    // props = { 'attention_users' => [user_1.id, user_2.id, user_3.id],
+    //           'current_user_id' => user_1.id,
+    //           'game_over' => true,
+    //           'url_redirect' => game_path(game.id)
+    //         } # last player finishes
+
+
 class Game extends React.Component {
-  constructor(props){
+  constructor(props) {
     super(props);
 
-    // ie { previous_card: { medium: 'drawing', info: 'http://img.com'},
-         // current_user_id: 2,
-         // player_status: {},
-         // game_status: {}}
-    // ie { previous_card: { medium: 'description', info: 'textie text},
-         // current_user_id: 2,
-         // player_status: {},
-        //  game_status: {}}
     this.state = {
       previous_card:   this.props.data['previous_card'],
-      player_status:   this.props.data['player_status'],
+      user_status:     this.props.data['user_status'],
       game_status:     this.props.data['game_status'],
       current_user_id: this.props.data['current_user_id']
+      // this.props.attention_users
+      // this.props.game_over
     };
   }
 
+  renderSection(status){
+    switch(status) {
+      case 'working_on_card':
+      debugger
+        if(this.state.previous_card && this.state.previous_card.medium == 'drawing') {
+        debugger
+          return(<DrawingSection previous_card={this.props.previous_card} />)
+        }
+        else{
+          debugger
+          return(<DescriptionSection previous_card={this.props.previous_card} />)
+        }
+        break;
+      case 'waiting':
+      case 'finished':
+        return(<LoadingContainer user_status={this.props.user_status}/>);
+    }
+  }
   render() {
     return (
       <div data-id='game-component'>
         <div className='form-horizontal'>
           <h1>Game Component</h1>
 
-          <div className='drawing col-12 offset-sm-1 col-sm-10 offset-md-2 col-md-8'>
-            {/*<p>game_id {this.state.game_id}</p>*/}
-            <p>previous_card_medium{this.state.previous_card && this.state.previous_card.medium}</p>
-            <p>previous_card_info{this.state.previous_card && this.state.previous_card.info}</p>
-            <p>current_user_id {this.state.current_user_id}</p>
-            <p>game_status {this.state.game_status && this.state.game_status.text}</p>
-            {/*{this.state.previous_card.medium == }*/}
-            {/*<DrawingSection />*/}
-            {/*<DescriptionSection />*/}
-            {/*<LoadingContainer />*/}
+          <div className='col-12 offset-sm-1 col-sm-10 offset-md-2 col-md-8'>
+            { this.renderSection(this.state.user_status) }
           </div>
         </div>
       </div>

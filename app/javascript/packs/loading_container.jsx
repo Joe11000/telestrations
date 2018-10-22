@@ -2,22 +2,11 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 
-export default class DescriptionSection extends React.Component {
-  // defaultProps() {
-  //   return { name: 'David' }
-  // }
-
-  // propTypes()  {
-  //   return { name: PropTypes.string }
-  // }
-
-  getInitialState(){
-
-  }
+export default class LoadingContainer extends React.Component {
   render() {
     return (
-      <div className='make-description-container'>
-        <p>Make Description Container</p>
+      <div className='loading-container'>
+        <p>Loading Container</p>
       </div>
     )
   }

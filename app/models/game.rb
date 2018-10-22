@@ -148,21 +148,13 @@ class Game < ActiveRecord::Base
     if( placeholder_card.present?)
       data_to_pass_components[:user_status] = 'working_on_card'
     else
-        passing_array = user.current_game.parse_passing_order
-      # find my position before mine in array
+      passing_array = user.current_game.parse_passing_order
+      prev_user_index_in_passing_order = passing_array.index(user.id) - 1
+      prev_user_index_in_passing_order = (passing_array.length - 1)  if prev_user_index_in_passing_order < 0
 
-        prev_user_index_in_passing_order = passing_array.index(user.id) - 1
-        prev_user_index_in_passing_order = (passing_array.length - 1)  if prev_user_index_in_passing_order < 0
-
-      # is gu from completed?
       player_is_finished = GamesUser.where(user_id: passing_array[prev_user_index_in_passing_order], game: user.current_game).order(:id).last.set_complete
       data_to_pass_components[:user_status] = player_is_finished ? 'finished' : 'waiting'
     end
-
-    #  a) broadcast_params: [ { game_over: true } ]
-    #  b) broadcast_params: [ { game_over: false, set_complete: true,  attention_users: current_user_id } ]
-    #  c) broadcast_params: [ { game_over: false, set_complete: false, attention_users: next_user_id, prev_card: {id: card_id, description_text: description_text} } }, { optional_message_to_self_about_waiting_placeholder_card } ]
-    #  d) broadcast_params: [ { game_over: false, set_complete: false, attention_users: next_user_id, prev_card: {id: card_id, drawing_url: url} } }, { optional_message_to_self_about_waiting_placeholder_card } ]
 
     previous_card = placeholder_card.try(:parent_card)
 

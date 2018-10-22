@@ -1,11 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-export default class DescriptionSection extends React.Component {
-  // static propTypes()  {
-  //   return { name: PropTypes.string }
-  // }
+!!!! Turn Description and Drawing section into Bootstrap 4 cards with inverse top and bottom sections
 
+
+// props = { previous_card:  { medium: 'drawing', drawing_url: 'https://somewhere.com/something.jpg' } }
+// XOR
+// props = { previous_card: undefined }
+export default class DescriptionSection extends React.Component {
   render() {
     return (
       <div className='make-description-container'>
@@ -16,6 +18,49 @@ export default class DescriptionSection extends React.Component {
           <img id='drawing-to-describe'  data-id='drawing-to-describe' src=( @prev_card.blank? ? '' : @prev_card.try(:drawing).try(:url)>
         </div>
       </div>*/}
+
+      <div className='card'>
+        <img data-id="describe-the-drawing"
+             id="drawing-to-describe"
+             src={this.props.previous_card && this.props.previous_card.drawing_url}
+             className='card-img-top'
+             alt='Describe the drawing'
+             />
+        <div className='card-body'>
+          <h5 class="card-title">Describe The Drawing</h5>
+          <form className="make-description-form mt-2" data-id="make-description-form">
+            <input type="text" name="description_text_input_field"
+                   id="description_text_input_field"
+                   data-id="description_text_input_field"
+                   placeholder="Enter A Description" className="span2 card-text text-capitalize" />
+
+            <button className="btn btn-primary" type="submit">Submit</button>
+          </form>
+        </div>
+
+
+
+      {/*original html*/}
+{/*      <div data-id="make-description-container" id="make-description-container" className='card text-center'>
+        <div className="mt-2 text-center" data-id="drawing-to-describe-container" id="drawing-to-describe-container">
+          <img data-id="drawing-to-describe" id="drawing-to-describe" src={this.props.previous_card && this.props.previous_card.drawing_url}>
+        </div>
+        <form className="make-description-form mt-2" data-id="make-description-form">
+          <div className="form-group" data-id="make-description-group">
+            <div className="input-group">
+              <input type="text" name="description_text_input_field"
+                                 id="description_text_input_field"
+                                 data-id="description_text_input_field"
+                                 placeholder="Enter A Description" className="span2 form-control text-capitalize">
+              <div className="input-group-btn">
+                <button className="btn btn-primary" type="submit">Submit</button>
+              </div>
+            </div>
+          </div>
+        </form>*/}
+        {/*<p className="h3" data-id="drawing-to-describe" id="text-to-draw">text_to_draw</p>*/}
+      </div>
+
 
 {/*       #make-description-container data-id='make-description-container' class=(@placeholder_card.try(:description?) ? '' : 'd-none')
          #drawing-to-describe-container.mt-2.text-center data-id='drawing-to-describe-container'
@@ -30,6 +75,7 @@ export default class DescriptionSection extends React.Component {
 
          p.h3#text-to-draw data-id='drawing-to-describe' = @text_to_draw*/}
       </div>
+
     )
   }
 }

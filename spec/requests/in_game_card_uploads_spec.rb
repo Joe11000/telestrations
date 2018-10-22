@@ -103,7 +103,7 @@ RSpec.describe "InGameCardUploads", type: :request do
     end
 
     context 'user uploads a non final card' do
-      context 'drawing card', :r5 do
+      context 'drawing card' do
         before do
           @game = FactoryBot.create :midgame, callback_wanted: :midgame
           @gu_2 = @game.games_users[1]
@@ -124,7 +124,7 @@ RSpec.describe "InGameCardUploads", type: :request do
           @card_being_updated.reload
         end
 
-        it 'which updates the placeholder card that was created at the start of the game' do
+        it 'which updates the placeholder card that was created at the start of the game', :r5_wip  do
           expect(@card_being_updated.drawing?).to eq true
           expect(@card_being_updated.description_text).to eq nil
           expect(@card_being_updated.idea_catalyst_id).to eq nil
@@ -133,7 +133,7 @@ RSpec.describe "InGameCardUploads", type: :request do
           expect(@card_being_updated.out_of_game_card_upload).to eq false
         end
 
-        it 'has set up the placeholder for the next player in the passing order' do
+        it 'has set up the placeholder for the next player in the passing order', :r5_wip  do
           card_being_updateds_child_card = @card_being_updated.child_card
           expect(card_being_updateds_child_card).to be_a Card
           expect(@card_being_updated.drawing.attached?).to eq false
@@ -187,7 +187,7 @@ RSpec.describe "InGameCardUploads", type: :request do
           @card_being_updated.reload
         end
 
-        it 'which updates the placeholder card that was created at the start of the game' do
+        it 'which updates the placeholder card that was created at the start of the game', :r5_wip do
           expect(@card_being_updated.description_text).to eq @description_text
           expect(@card_being_updated.drawing.attached?).to eq false
 

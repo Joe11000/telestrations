@@ -1,20 +1,38 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-
+// props = { previous_card: {medium: 'description', descripion_text: 'https://somewhere.com/stuff/jpg' }
+// XOR
+// props: { previous_card: undefined }
 export default class DrawingSection extends React.Component {
-  // defaultProps() {
-  //   return { name: 'David' }
-  // }
-
-  // propTypes()  {
-  //   return { name: PropTypes.string }
-  // }
+  constructor(props){
+    super(props);
+  }
 
   render() {
     return (
       <div className='drawing-section-component'>
         <p>Make Drawing Container</p>
+
+
+{/*        <div data-id="make-drawing-container" id="make-drawing-container">
+          <div class="mb-3" id="description-to-draw">
+            <p class="h3 capitalize text-center" data-id="description-text-to-draw" id="text-to-draw">
+              description_text
+            </p>
+            </div>
+            <div data-id="drawing-tab" id="drawing-tab">
+              <ul class="nav nav-tabs nav-justified" role="tablist">
+                <li class="active" role="presentation">
+                  <a data-toggle="tab" href="#upload-drawing">Upload</a>
+                </li>
+                <li role="presentation">
+                  <a href="#create-drawing">Create</a>
+                </li>
+              </ul>
+            </div>
+          </div>*/}
+
 {/*
      #make-drawing-container data-id='make-drawing-container' class=(@placeholder_card.try(:is_drawing?) ? '' : 'd-none')
           #description-to-draw.mb-3
