@@ -37,34 +37,25 @@ RSpec.describe GamesUser, type: :model do
     it { is_expected.to have_db_column(:set_complete).of_type(:boolean).with_options(default: false) }
   end
 
-  context '#cards', :r5 do
+  context '#cards', :r5_wip do
     before :all do
       @game = FactoryBot.create(:midgame, callback_wanted: :midgame)
-      @games_users = @game.games_users
-      @games_user1 = @game.games_users[0]
-      @games_user2 = @game.games_users[1]
-      @games_user3 = @game.games_users[2]
+      @gus = @game.games_users
+      @gu_1 = @game.games_users[0]
+      @gu_2 = @game.games_users[1]
+      @gu_3 = @game.games_users[2]
     end
 
     it 'assuming there are exactly 3 people playing the game' do
-      expect(@games_users.count).to eq 3
+      expect(@gus.count).to eq 3
     end
 
     it 'games_user with 1 placeholder starting card' do
-      expect(@games_user1.cards).to match_array [ @games_user1.starting_card ]
+      expect(@gu_1.cards).to match_array [ @gu_1.starting_card, @gu_1.starting_card.child_card ]
     end
 
-    it 'games_user with 1 cards and 1 placeholder card returns 2 cards' do
-      expect(@games_user2.cards).to match_array [ @games_user2.starting_card, @games_user2.starting_card.child_card ]
+    it 'games_user with 2 cards and 1 placeholder card returns 3 cards' do
+      expect(@gu_3.cards).to match_array [ @gu_3.starting_card, @gu_3.starting_card.child_card, @gu_3.starting_card.child_card.child_card]
     end
-
-    it 'games_user with one card nested inside another card returns 2 cards' do
-      expect(@games_user3.cards).to match_array [
-                                                   @games_user3.starting_card,
-                                                   @games_user3.starting_card.child_card,
-                                                   @games_user3.starting_card.child_card.child_card
-                                                 ]
-    end
-
   end
 end

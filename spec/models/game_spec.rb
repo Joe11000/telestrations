@@ -488,7 +488,6 @@ RSpec.describe Game, type: :model do
             it 'user has finished all uploads, but other players have not', :r5 do
               game = FactoryBot.create(:postgame, callback_wanted: :postgame)
               gu_1, gu_2, gu_3 = game.games_users.order(id: :asc)
-              byebug
 
                # undo the 3rd user's final card
                 game.midgame!
@@ -507,7 +506,6 @@ RSpec.describe Game, type: :model do
             it 'after the final player uploads the final card', :r5 do
               game = FactoryBot.create(:postgame, callback_wanted: :postgame)
               gu_1, gu_2, gu_3 = game.games_users.order(id: :asc)
-              byebug
 
                # undo the 3rd user's final card
               game.midgame!

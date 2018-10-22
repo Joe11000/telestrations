@@ -43,7 +43,7 @@ RSpec.describe GamesController, :type => :request do
     end
   end
 
-  describe "GET :new" do
+  describe "GET :new", :r5_wip do
     # 4 stages
     # context user drawing card
     # context user creating description
