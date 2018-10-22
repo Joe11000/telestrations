@@ -37,7 +37,7 @@ RSpec.describe GamesUser, type: :model do
     it { is_expected.to have_db_column(:set_complete).of_type(:boolean).with_options(default: false) }
   end
 
-  context '#cards', :r5_wip do
+  context '#cards', :r5 do
     before :all do
       @game = FactoryBot.create(:midgame, callback_wanted: :midgame)
       @gus = @game.games_users
