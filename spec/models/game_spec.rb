@@ -1,5 +1,7 @@
 require 'spec_helper'
 require 'rails_helper'
+require 'json'
+include Rails.application.routes.url_helpers
 
 RSpec.describe Game, type: :model do
 
@@ -279,17 +281,17 @@ RSpec.describe Game, type: :model do
     end
   end
 
-# def rendezousing_games_users
-# def unassociated_rendezousing_games_users
-# def users_game_names
-# def self.all_users_game_names join_code
-# def parse_passing_order
-# def self.start_game join_code
-# def start_game
-# def lobby_a_new_user user_id
-# def commit_a_lobbyed_user user_id, users_game_name=''
-# def remove_player user_id
-# cards_from_finished_game
+  # def rendezousing_games_users
+  # def unassociated_rendezousing_games_users
+  # def users_game_names
+  # def self.all_users_game_names join_code
+  # def parse_passing_order
+  # def self.start_game join_code
+  # def start_game
+  # def lobby_a_new_user user_id
+  # def commit_a_lobbyed_user user_id, users_game_name=''
+  # def remove_player user_id
+  # cards_from_finished_game
 
   context 'methods'  do
     it '.random_public_game', :r5 do
@@ -397,12 +399,149 @@ RSpec.describe Game, type: :model do
       end
     end
 
-    context '#rendezousing_games_users' do
+        # 4 stages
+    context '#get_status_for_user', :r5 do
+      context 'returns successful message for a player midgame' do
+        context 'returns correct user for message if' do
+          context 'user has placeholder for a drawing card' do
+            context 'user should be drawing a picture', :r5 do
+              it do
+                game = FactoryBot.create(:midgame, callback_wanted: :midgame)
+                user_1, user_2, user_3 = game.users.order(id: :asc)
+                current_user = user_2
+
+                expected_response = {
+                                      'attention_users' => [user_2.id],
+                                      'current_user_id' => user_2.id,
+                                      'game_over' => false,
+                                      'previous_card' => {
+                                                           'medium' => 'description',
+                                                           'description_text' => game.get_placeholder_card(user_2.id).parent_card.description_text
+                                                         },
+                                      'user_status' => 'working_on_card'
+                                    }
+
+                expect( JSON.parse(game.get_status_for_user(current_user)) ).to eq expected_response
+              end
+            end
+
+            context 'user should be writing a description', :r5 do
+              it 'no previous card' do
+                game = FactoryBot.create(:midgame_with_no_moves, callback_wanted: :midgame_with_no_moves)
+                current_user = game.users.first
+
+                expected_response = {
+                                      'attention_users' => [current_user.id],
+                                      'current_user_id' => current_user.id,
+                                      'game_over' => false,
+                                      'user_status' => 'working_on_card'
+                                    }
+
+                expect( JSON.parse(game.get_status_for_user(current_user)) ).to eq expected_response
+              end
+
+              it 'yes, previous card', :r5 do
+                game = FactoryBot.create(:midgame, callback_wanted: :midgame)
+                user_1, user_2, user_3 = game.users.order(id: :asc)
+                gu_1, gu_2, gu_3 = game.games_users.order(id: :asc)
+                current_user = user_2
+
+                # user 2 has a drawing card at the moment, and needs to be on their next card for this test
+                  gu_1.starting_card.child_card.drawing.attach(io: File.open(File.join(Rails.root, 'spec', 'support', 'images', 'thumbnail_selfy.jpg')), \
+                                                             content_type: 'image/jpg', \
+                                                             filename: 'provider_avatar.jpg') # replace the placeholder card because it was easier than updating it with a new attachment
+                  gu_1.starting_card.child_card.update(placeholder: false);
+
+
+
+                current_user_placeholder_description = game.get_placeholder_card(current_user.id)
+                previous_card = gu_3.starting_card.child_card
+
+                drawing_url = rails_blob_path( previous_card.drawing, disposition: 'attachment')
+
+                expected_response = {
+                                      'attention_users' => [current_user.id],
+                                      'current_user_id' => current_user.id,
+                                      'game_over' => false,
+                                      'user_status' => 'working_on_card',
+                                      'previous_card' => {
+                                         'medium' => 'drawing',
+                                         'drawing_url' => drawing_url
+                                       }
+                                    }
+
+
+                expect( JSON.parse(game.get_status_for_user(current_user)) ).to eq expected_response
+              end
+            end
+
+            it 'after uploading a card a user has to wait for card to be passed to them', :r5 do
+              game = FactoryBot.create(:midgame, callback_wanted: :midgame)
+              user_1, user_2, user_3 = game.users.order(id: :asc)
+              current_user = user_1
+
+              expected_response = { 'attention_users' => [current_user.id], 'current_user_id' => current_user.id, 'game_over' => false, 'user_status' => 'waiting' }
+
+              expect( JSON.parse(game.get_status_for_user(current_user)) ).to eq expected_response
+            end
+
+            it 'user has finished all uploads, but other players have not', :r5 do
+              game = FactoryBot.create(:postgame, callback_wanted: :postgame)
+              gu_1, gu_2, gu_3 = game.games_users.order(id: :asc)
+              byebug
+
+               # undo the 3rd user's final card
+                game.midgame!
+                gu_2.update(set_complete: false)
+                final_card = gu_2.starting_card.child_card.child_card
+                final_card.update(placeholder: true)
+
+              user_1, user_2, user_3 = game.users.order(id: :asc)
+              current_user = user_1
+
+              # user 3 finishes his last card
+              expected_response = { 'attention_users' => [current_user.id], 'current_user_id' => current_user.id, 'game_over' => false, 'user_status' => 'finished' }
+            end
+
+
+            it 'after the final player uploads the final card', :r5 do
+              game = FactoryBot.create(:postgame, callback_wanted: :postgame)
+              gu_1, gu_2, gu_3 = game.games_users.order(id: :asc)
+              byebug
+
+               # undo the 3rd user's final card
+              game.midgame!
+
+              user_1, user_2, user_3 = game.users.order(id: :asc)
+              current_user = user_1
+
+              # user 3 finishes his last card
+              expected_response = { 'attention_users' => [user_1.id, user_2.id, user_3.id], 'current_user_id' => user_1.id, 'game_over' => true, 'url_redirect' => game_path(game.id) } # last player finishes
+            end
+          end
+        end
+      end
+      context 'returns unsuccessfully for a player not in midgame', :r5 do
+        it 'game is a pregame' do
+          game = FactoryBot.create(:pregame, callback_wanted: :pregame)
+          current_user = game.users.first
+
+          expect( game.get_status_for_user(current_user) ).to eq false
+        end
+
+        it 'game is a postgame' do
+          game = FactoryBot.create(:postgame, callback_wanted: :postgame)
+          current_user = game.users.first
+
+          expect( game.get_status_for_user(current_user) ).to eq false
+        end
+      end
+    end
+
+    xcontext '#rendezousing_games_users' do
       it do
         gu = FactoryBot.create(:games_user)
         FactoryBot.create(:games_user)
-
-
       end
     end
 
@@ -714,7 +853,7 @@ RSpec.describe Game, type: :model do
           game = FactoryBot.create(:midgame_with_no_moves, description_first: false, callback_wanted: :midgame_with_no_moves)
           gu = game.games_users.order(:id).first
           current_user = gu.user
-          card_to_update = game.create_initial_placeholder_for_user current_user.id
+          card_to_update = game.create_initial_placeholder_if_one_does_not_exist current_user.id
           fake_file_data = "data:image/png;base64,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"
           fake_file_name = 'file_name'
 
@@ -733,7 +872,7 @@ RSpec.describe Game, type: :model do
 
           gu = game.games_users.order(:id).first
           current_user = gu.user
-          card_to_update = game.create_initial_placeholder_for_user current_user.id
+          card_to_update = game.create_initial_placeholder_if_one_does_not_exist current_user.id
           sample_description_text = "Suicidal Penguin"
 
           card_returned = game.upload_info_into_placeholder_card( current_user.id, { 'description_text' => sample_description_text } )
@@ -748,13 +887,13 @@ RSpec.describe Game, type: :model do
       end
     end
 
-    context '#create_initial_placeholder_for_user', :r5_wip do
+    context '#create_initial_placeholder_if_one_does_not_exist', :r5_wip do
       context 'starts game for a user by creating their initial' do
         it 'description placeholder card' do
           gu = FactoryBot.create :games_user
           game = gu.game
           user = gu.user
-          card = gu.game.create_initial_placeholder_for_user gu.user_id
+          card = gu.game.create_initial_placeholder_if_one_does_not_exist gu.user_id
 
           expect(card.medium).to eq 'description'
           expect(card.description_text).to eq nil
@@ -774,7 +913,7 @@ RSpec.describe Game, type: :model do
         # xit 'drawing placeholder card' do
         #   game = FactoryBot.create(:midgame_with_no_moves, description_first: false, callback_wanted: :midgame_with_no_moves)
         #   user = game.users.last
-        #   card = game.create_initial_placeholder_for_user user.id
+        #   card = game.create_initial_placeholder_if_one_does_not_exist user.id
         #   gu = card.starting_games_user
 
         #   expect(card.medium).to eq 'drawing'
@@ -940,6 +1079,14 @@ RSpec.describe Game, type: :model do
           expect( game.get_placeholder_card(gu2.user_id) ).to eq nil
           expect( game.get_placeholder_card(gu3.user_id) ).to eq nil
         end
+      end
+    end
+
+    context 'PRIVATE #parse_passing_order', :r5 do
+      it 'parses passing order' do
+        game = FactoryBot.create(:midgame, callback_wanted: :midgame)
+
+        expect(game.send(:parse_passing_order)).to match_array game.users.ids
       end
     end
   end

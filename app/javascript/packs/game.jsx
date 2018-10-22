@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types'
 import DrawingSection from './drawing_section'
@@ -9,29 +9,40 @@ class Game extends React.Component {
   constructor(props){
     super(props);
 
+    // ie { previous_card: { medium: 'drawing', info: 'http://img.com'},
+         // current_user_id: 2,
+         // player_status: {},
+         // game_status: {}}
+    // ie { previous_card: { medium: 'description', info: 'textie text},
+         // current_user_id: 2,
+         // player_status: {},
+        //  game_status: {}}
     this.state = {
-      game_id:         props.data['game_id'],
-      pre_card_id:     props.data['prev_card_id'],
-      current_user_id: props.data['current_user_id']
-      // ,delete_me: {one: {two: {three: {four: '5'}}}}
+      previous_card:   this.props.data['previous_card'],
+      player_status:   this.props.data['player_status'],
+      game_status:     this.props.data['game_status'],
+      current_user_id: this.props.data['current_user_id']
     };
   }
 
   render() {
     return (
       <div data-id='game-component'>
-          <div className='form-horizontal'>
-            <h1>Game Component</h1>
+        <div className='form-horizontal'>
+          <h1>Game Component</h1>
 
-            <div className='drawing col-12 offset-sm-1 col-sm-10 offset-md-2 col-md-8'>
-              <p>game_id {this.state.game_id}</p>
-              <p>pre_card_id {this.state.pre_card_id}</p>
-              <p>current_user_id {this.state.current_user_id}</p>
-              {/*<DrawingSection />*/}
-              {/*<DescriptionSection />*/}
-              {/*<LoadingContainer />*/}
-            </div>
+          <div className='drawing col-12 offset-sm-1 col-sm-10 offset-md-2 col-md-8'>
+            {/*<p>game_id {this.state.game_id}</p>*/}
+            <p>previous_card_medium{this.state.previous_card && this.state.previous_card.medium}</p>
+            <p>previous_card_info{this.state.previous_card && this.state.previous_card.info}</p>
+            <p>current_user_id {this.state.current_user_id}</p>
+            <p>game_status {this.state.game_status && this.state.game_status.text}</p>
+            {/*{this.state.previous_card.medium == }*/}
+            {/*<DrawingSection />*/}
+            {/*<DescriptionSection />*/}
+            {/*<LoadingContainer />*/}
           </div>
+        </div>
       </div>
     )
   }
@@ -39,7 +50,7 @@ class Game extends React.Component {
 
 Game.propTypes =  {
                     game_id:          PropTypes.oneOfType([ PropTypes.number, PropTypes.string ]),
-                    pre_card_id:      PropTypes.oneOfType([ PropTypes.number, PropTypes.string ]),
+                    previous_card_id: PropTypes.oneOfType([ PropTypes.number, PropTypes.string ]),
                     current_user_id:  PropTypes.oneOfType([ PropTypes.number, PropTypes.string ])
                   }
 

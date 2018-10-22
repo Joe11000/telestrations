@@ -1,5 +1,6 @@
 require 'rails_helper'
 require 'support/login'
+require 'json'
 
 RSpec.describe GamesController, :type => :request do
   include LoginHelper::RequestTests
@@ -43,6 +44,13 @@ RSpec.describe GamesController, :type => :request do
   end
 
   describe "GET :new" do
+    # 4 stages
+    # context user drawing card
+    # context user creating description
+    # context user waiting for card
+    # context user done and waiting for friends to finish
+
+
     it_behaves_like "redirect if user shouldn't be playing this game"
 
       before :all do
@@ -53,12 +61,22 @@ RSpec.describe GamesController, :type => :request do
         get new_game_path
       end
 
+
+
+
+
     xcontext 'user can see' do
 
     end
 
-    xcontext 'cant see but needs to be in the html' do
+    context 'cant see but needs to be in the html' do
       it 'correct http status' do
+        game = FactoryBot.create(:midgame_with_no_moves, callback_wanted: :midgame_with_no_moves)
+        @current_user = game.users.first
+        set_signed_cookies({user_id: @current_user.id})
+
+        get new_game_path
+
         expect(response).to have_http_status :ok
       end
 

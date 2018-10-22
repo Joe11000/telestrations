@@ -127,34 +127,74 @@ class Game < ActiveRecord::Base
     result = Card.where(placeholder: true, uploader_id: current_user_id, starting_games_user_id: games_users.ids).order(id: :asc).try(:first)
 
     return result || nil
-    # if description placeholder
-    # result = Card.where(uploader_id: current_user_id, starting_games_user_id: games_users.ids).where(medium: 'description', description_text: nil).order(id: :asc).try(:first)
-    # return result if result.present?
-
-    # # if drawing placeholder
-    # result = Card.with_attached_drawing.where(uploader_id: current_user_id, starting_games_user_id: games_users.ids).where(medium: :drawing).order(id: :asc).select{|card| !card.drawing.attached?}.try(:first)
-    # return result if result.present?
-
-    # return nil
   end
 
 
 # midgame public methods
 
+
+  # 4 stages
+  # context user drawing card
+  # context user creating description
+  # context user waiting for card
+  # context user done and waiting for friends to finish
+  def get_status_for_user user
+    return false unless midgame?
+
+    placeholder_card = get_placeholder_card(user.id)
+
+    data_to_pass_components = { current_user_id: user.id, attention_users: [user.id], game_over: false}
+    #  if the user is done or waiting for others to pass him a card
+    if( placeholder_card.present?)
+      data_to_pass_components[:user_status] = 'working_on_card'
+    else
+        passing_array = user.current_game.parse_passing_order
+      # find my position before mine in array
+
+        prev_user_index_in_passing_order = passing_array.index(user.id) - 1
+        prev_user_index_in_passing_order = (passing_array.length - 1)  if prev_user_index_in_passing_order < 0
+
+      # is gu from completed?
+      player_is_finished = GamesUser.where(user_id: passing_array[prev_user_index_in_passing_order], game: user.current_game).order(:id).last.set_complete
+      data_to_pass_components[:user_status] = player_is_finished ? 'finished' : 'waiting'
+    end
+
+    #  a) broadcast_params: [ { game_over: true } ]
+    #  b) broadcast_params: [ { game_over: false, set_complete: true,  attention_users: current_user_id } ]
+    #  c) broadcast_params: [ { game_over: false, set_complete: false, attention_users: next_user_id, prev_card: {id: card_id, description_text: description_text} } }, { optional_message_to_self_about_waiting_placeholder_card } ]
+    #  d) broadcast_params: [ { game_over: false, set_complete: false, attention_users: next_user_id, prev_card: {id: card_id, drawing_url: url} } }, { optional_message_to_self_about_waiting_placeholder_card } ]
+
+    previous_card = placeholder_card.try(:parent_card)
+
+    if previous_card.present?
+      if previous_card.description?
+        data_to_pass_components[:previous_card] = { medium: previous_card.medium, description_text: previous_card.description_text }
+      else
+        previous_card_drawing_url = rails_blob_path(previous_card.drawing, disposition: 'attachment')
+        data_to_pass_components[:previous_card] = { medium: previous_card.medium, drawing_url: previous_card_drawing_url }
+      end
+    end
+
+    return data_to_pass_components.to_json
+  end
+
+
   # r5_wip
   # called by games_controller when person first lands on game_page
   # this assigns a placeholder card to the user's games_user
-  def create_initial_placeholder_for_user current_user_id
-    card = create_placeholder_card( current_user_id, (description_first ? 'description' : 'drawing') )
-    gu = games_users.find_by(user_id: current_user_id)
-    card.update(starting_games_user: gu)
-    games_users.find_by(user_id: current_user_id).starting_card = card
+  def create_initial_placeholder_if_one_does_not_exist current_user_id
+    if get_placeholder_card(current_user_id).blank? && User.find(current_user_id).current_starting_card.blank?
+
+      card = create_placeholder_card( current_user_id, (description_first ? 'description' : 'drawing') )
+      gu = games_users.find_by(user_id: current_user_id)
+      card.update(starting_games_user: gu)
+      games_users.find_by(user_id: current_user_id).starting_card = card
+    end
   end
 
 
   #r5_wip
   def set_up_next_players_turn current_card_id
-    byebug
     card = Card.find(current_card_id)
     next_player = next_player_after(card.uploader_id)
     gu = card.starting_games_user
