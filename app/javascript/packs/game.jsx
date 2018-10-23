@@ -70,23 +70,25 @@ import DescriptionSection from './DescriptionSection'
 
 
 class Game extends React.Component {
-  componentWillReceiveProps(nextProps) {
-    debugger
-    if(nextProps.game_over == true) {
-      debugger
-      window.location = this.props.url_redirect
-    }
+  static propTypes() {
+
   }
+  // componentWillReceiveProps(nextProps) {
+  //   debugger
+  //   if(nextProps.game_over == true) {
+  //     debugger
+  //     window.location = this.props.url_redirect
+  //   }
+  // }
 
   constructor(props) {
     super(props);
-    debugger
-
     this.state = {
-      previous_card:   this.props.data['previous_card'],
-      user_status:     this.props.data['user_status'],
-      game_status:     this.props.data['game_status'],
-      current_user_id: this.props.data['current_user_id']
+      previous_card:            this.props.data.previous_card,
+      user_status:              this.props.data.user_status,
+      game_status:              this.props.data.game_status,
+      current_user_id:          this.props.data.current_user_id,
+      form_authenticity_token: this.props.data.form_authenticity_token
       // this.props.attention_users
       // this.props.game_over
     };
@@ -96,15 +98,21 @@ class Game extends React.Component {
     switch(status) {
       case 'working_on_card':
         if(this.state.previous_card && this.state.previous_card.medium == 'drawing') {
-          return(<DrawingSection previous_card={this.props.previous_card} form_authenticity_token={this.props.form_authenticity_token}/>)
+          debugger
+          return(<DrawingSection previous_card={this.state.previous_card}
+                                 form_authenticity_token={this.props.data.form_authenticity_token}/>
+                )
         }
         else{
-          return(<DescriptionSection previous_card={this.props.previous_card} form_authenticity_token={this.props.form_authenticity_token} />)
+          debugger
+          return(<DescriptionSection back_up_starting_description={this.props.data.back_up_starting_description}
+                                     form_authenticity_token={this.state.form_authenticity_token}
+                                     previous_card={this.state.previous_card}/>
+                )
         }
-        break;
       case 'waiting':
       case 'finished':
-        return(<LoadingContainer user_status={this.props.user_status}/>);
+        return(<LoadingContainer user_status={this.props.data.user_status}/>);
     }
   }
   render() {

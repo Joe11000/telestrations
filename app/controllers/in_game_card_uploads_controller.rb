@@ -5,6 +5,7 @@ class InGameCardUploadsController < ApplicationController
   before_action :uploaded_card_placeholder
 
   def create
+    byebug
     respond_to do |format|
       format.js do
 

@@ -5,7 +5,60 @@ import PropTypes from 'prop-types'
 // XOR
 // props = { previous_card: undefined }
 export default class DescriptionSection extends React.Component {
+  // componentDidCatch(error, info){
+  //   debugger
+  // }
+constructor(props){
+  super(props)
+  debugger
+}
+// - static getDerivedStateFromProps()
+// render()
+// componentDidMount()
+
+
+//  - static getDerivedStateFromProps()
+//  - shouldComponentUpdate()
+// render()
+//  - getSnapshotBeforeUpdate()
+// componentDidUpdate()
+
+
+// Other APIs
+// Each component also provides some other APIs:
+//   setState()
+//   forceUpdate()
+
+
   render() {
+    var topText = '';
+    var topImage = '';
+
+    if(this.props.previous_card && this.props.previous_card.drawing_url) {
+      <h5 className="card-title">Describe The Drawing</h5>
+    }
+    else{
+      <h5 className="card-title">Think up an idea for the next person to draw</h5>
+    }
+
+    var back_up_starting_description_form_button = '';
+    if( !(this.props.previous_card && this.props.previous_card.drawing_url) ) {
+      back_up_starting_description_form_button = <form>
+                                                  <input type="hidden" name="authenticity_token" value={this.props.authenticity_token} />
+                                                  <input type="hidden" name="description_text_input_field" id="hidden_description_text_input_field" data-id="hidden_description_text_input_field" value={this.props.back_up_starting_description} />
+                                                  <button className='btn-info' type='submit'>Random Answer</button>
+                                                </form>
+
+      topImage =  <img data-id="describe-the-drawing"
+                    id="drawing-to-describe"
+                    src={this.props.previous_card && this.props.previous_card.drawing_url}
+                    className='card-img-top'
+                    alt='Describe the drawing'
+                   />
+    }
+
+    this.props.back_up_starting_description
+
     return (
       <div className='make-description-container'>
         <p>Make Description Container</p>
@@ -17,14 +70,9 @@ export default class DescriptionSection extends React.Component {
       </div>*/}
 
       <div className='card'>
-        <img data-id="describe-the-drawing"
-             id="drawing-to-describe"
-             src={this.props.previous_card && this.props.previous_card.drawing_url}
-             className='card-img-top'
-             alt='Describe the drawing'
-             />
+        {topImage}
         <div className='card-body'>
-          <h5 class="card-title">Describe The Drawing</h5>
+          {topText}
           <form className="make-description-form mt-2" data-id="make-description-form">
             <input type="text" name="description_text_input_field"
                    id="description_text_input_field"
@@ -33,6 +81,7 @@ export default class DescriptionSection extends React.Component {
 
             <button className="btn btn-primary" type="submit">Submit</button>
           </form>
+          {back_up_starting_description_form_button}
         </div>
 
 
