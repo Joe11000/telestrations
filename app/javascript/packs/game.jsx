@@ -80,6 +80,7 @@ class Game extends React.Component {
 
   constructor(props) {
     super(props);
+    debugger
 
     this.state = {
       previous_card:   this.props.data['previous_card'],
@@ -94,13 +95,10 @@ class Game extends React.Component {
   renderSection(status){
     switch(status) {
       case 'working_on_card':
-      debugger
         if(this.state.previous_card && this.state.previous_card.medium == 'drawing') {
-        debugger
           return(<DrawingSection previous_card={this.props.previous_card} form_authenticity_token={this.props.form_authenticity_token}/>)
         }
         else{
-          debugger
           return(<DescriptionSection previous_card={this.props.previous_card} form_authenticity_token={this.props.form_authenticity_token} />)
         }
         break;

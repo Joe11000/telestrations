@@ -14,6 +14,7 @@ class GamesController < ApplicationController
     @data_to_pass_components = @game.get_status_for_user current_user
     @data_to_pass_components[:form_authenticity_token] = form_authenticity_token
     @data_to_pass_components = @data_to_pass_components.to_json
+    byebug
   end
 
 
