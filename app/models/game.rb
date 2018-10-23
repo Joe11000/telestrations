@@ -144,9 +144,16 @@ class Game < ActiveRecord::Base
     placeholder_card = get_placeholder_card(user.id)
 
     data_to_pass_components = { current_user_id: user.id, attention_users: [user.id], game_over: false}
+
     #  if the user is done or waiting for others to pass him a card
     if( placeholder_card.present?)
       data_to_pass_components[:user_status] = 'working_on_card'
+    elsif games_users.pluck(:set_complete).all?
+      return data_to_pass_components.merge({attention_users: games_user_ids,
+                                            game_over:       true,
+                                            url_redirect:    game_path(id)
+                                           }) # last player finishes
+
     else
       passing_array = user.current_game.parse_passing_order
       prev_user_index_in_passing_order = passing_array.index(user.id) - 1
@@ -167,7 +174,7 @@ class Game < ActiveRecord::Base
       end
     end
 
-    return data_to_pass_components.to_json
+    return data_to_pass_components
   end
 
 

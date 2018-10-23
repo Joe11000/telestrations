@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types'
-import DrawingSection from './drawing_section'
-import DescriptionSection from './drawing_section'
+import DrawingSection from './DrawingSection'
+import DescriptionSection from './DescriptionSection'
 // import update from ImmutableHelper from 'immutability-helper'
 // import update from ‘immutability-helper’
 
@@ -10,6 +10,7 @@ import DescriptionSection from './drawing_section'
   // 'user drawing a picture' =
   // props = {
   //           'attention_users' => [user_2.id],
+  //           'form_authenticity_token' => 'afheahshlfahflawhiulef',
   //           'current_user_id' => user_2.id,
   //           'game_over' => false,
   //           'previous_card' => {
@@ -23,6 +24,7 @@ import DescriptionSection from './drawing_section'
   // when 'user writing a description' and 'no previous card'  =
   // props = {
   //           'attention_users' => [current_user.id],
+  //           'form_authenticity_token' => 'afheahshlfahflawhiulef',
   //           'current_user_id' => current_user.id,
   //           'game_over' => false,
   //           'user_status' => 'working_on_card'
@@ -31,6 +33,7 @@ import DescriptionSection from './drawing_section'
   // when 'user writing a description' and 'yes, previous card'  =
     // props = {
     //           'attention_users' => [current_user.id],
+    //           'form_authenticity_token' => 'afheahshlfahflawhiulef',
     //           'current_user_id' => current_user.id,
     //           'game_over' => false,
     //           'user_status' => 'working_on_card',
@@ -42,6 +45,7 @@ import DescriptionSection from './drawing_section'
 
   // 'after uploading a card a user has to wait for card to be passed to them', :r5 do
     // props = { 'attention_users' => [current_user.id],
+    //           'form_authenticity_token' => 'afheahshlfahflawhiulef',
     //           'current_user_id' => current_user.id,
     //           'game_over' => false,
     //           'user_status' => 'waiting'
@@ -49,6 +53,7 @@ import DescriptionSection from './drawing_section'
 
   // 'user has finished all uploads, but other players have not', :r5 do
     // props = { 'attention_users' => [current_user.id],
+    //           'form_authenticity_token' => 'afheahshlfahflawhiulef',
     //           'current_user_id' => current_user.id,
     //           'game_over' => false,
     //           'user_status' => 'finished'
@@ -57,6 +62,7 @@ import DescriptionSection from './drawing_section'
 
   // 'after the final player uploads the final card', :r5 do
     // props = { 'attention_users' => [user_1.id, user_2.id, user_3.id],
+    //           'form_authenticity_token' => 'afheahshlfahflawhiulef',
     //           'current_user_id' => user_1.id,
     //           'game_over' => true,
     //           'url_redirect' => game_path(game.id)
@@ -64,6 +70,14 @@ import DescriptionSection from './drawing_section'
 
 
 class Game extends React.Component {
+  componentWillReceiveProps(nextProps) {
+    debugger
+    if(nextProps.game_over == true) {
+      debugger
+      window.location = this.props.url_redirect
+    }
+  }
+
   constructor(props) {
     super(props);
 
@@ -83,11 +97,11 @@ class Game extends React.Component {
       debugger
         if(this.state.previous_card && this.state.previous_card.medium == 'drawing') {
         debugger
-          return(<DrawingSection previous_card={this.props.previous_card} />)
+          return(<DrawingSection previous_card={this.props.previous_card} form_authenticity_token={this.props.form_authenticity_token}/>)
         }
         else{
           debugger
-          return(<DescriptionSection previous_card={this.props.previous_card} />)
+          return(<DescriptionSection previous_card={this.props.previous_card} form_authenticity_token={this.props.form_authenticity_token} />)
         }
         break;
       case 'waiting':

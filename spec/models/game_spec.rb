@@ -404,40 +404,38 @@ RSpec.describe Game, type: :model do
       context 'returns successful message for a player midgame' do
         context 'returns correct user for message if' do
           context 'user has placeholder for a drawing card' do
-            context 'user should be drawing a picture', :r5 do
-              it do
+            it 'user should be drawing a picture' do
                 game = FactoryBot.create(:midgame, callback_wanted: :midgame)
                 user_1, user_2, user_3 = game.users.order(id: :asc)
                 current_user = user_2
 
                 expected_response = {
-                                      'attention_users' => [user_2.id],
-                                      'current_user_id' => user_2.id,
-                                      'game_over' => false,
-                                      'previous_card' => {
-                                                           'medium' => 'description',
-                                                           'description_text' => game.get_placeholder_card(user_2.id).parent_card.description_text
-                                                         },
-                                      'user_status' => 'working_on_card'
+                                      attention_users: [user_2.id],
+                                      current_user_id: user_2.id,
+                                      game_over: false,
+                                      previous_card: {
+                                                        medium: 'description',
+                                                        description_text: game.get_placeholder_card(user_2.id).parent_card.description_text
+                                                      },
+                                      user_status: 'working_on_card'
                                     }
 
-                expect( JSON.parse(game.get_status_for_user(current_user)) ).to eq expected_response
-              end
+                expect( game.get_status_for_user(current_user) ).to eq expected_response
             end
 
-            context 'user should be writing a description', :r5 do
+            context 'user should be writing a description' do
               it 'no previous card' do
                 game = FactoryBot.create(:midgame_with_no_moves, callback_wanted: :midgame_with_no_moves)
                 current_user = game.users.first
 
                 expected_response = {
-                                      'attention_users' => [current_user.id],
-                                      'current_user_id' => current_user.id,
-                                      'game_over' => false,
-                                      'user_status' => 'working_on_card'
+                                      attention_users: [current_user.id],
+                                      current_user_id: current_user.id,
+                                      game_over: false,
+                                      user_status: 'working_on_card'
                                     }
 
-                expect( JSON.parse(game.get_status_for_user(current_user)) ).to eq expected_response
+                expect( game.get_status_for_user(current_user) ).to eq expected_response
               end
 
               it 'yes, previous card', :r5 do
@@ -460,66 +458,78 @@ RSpec.describe Game, type: :model do
                 drawing_url = rails_blob_path( previous_card.drawing, disposition: 'attachment')
 
                 expected_response = {
-                                      'attention_users' => [current_user.id],
-                                      'current_user_id' => current_user.id,
-                                      'game_over' => false,
-                                      'user_status' => 'working_on_card',
-                                      'previous_card' => {
-                                         'medium' => 'drawing',
-                                         'drawing_url' => drawing_url
+                                      attention_users: [current_user.id],
+                                      current_user_id: current_user.id,
+                                      game_over: false,
+                                      user_status: 'working_on_card',
+                                      previous_card: {
+                                         medium: 'drawing',
+                                         drawing_url: drawing_url
                                        }
                                     }
 
 
-                expect( JSON.parse(game.get_status_for_user(current_user)) ).to eq expected_response
+                expect( game.get_status_for_user(current_user) ).to eq expected_response
               end
             end
 
-            it 'after uploading a card a user has to wait for card to be passed to them', :r5 do
+            it 'after uploading a card a user has to wait for card to be passed to them' do
               game = FactoryBot.create(:midgame, callback_wanted: :midgame)
               user_1, user_2, user_3 = game.users.order(id: :asc)
               current_user = user_1
 
-              expected_response = { 'attention_users' => [current_user.id], 'current_user_id' => current_user.id, 'game_over' => false, 'user_status' => 'waiting' }
+              expected_response = { attention_users: [current_user.id],
+                                    current_user_id: current_user.id,
+                                    game_over: false,
+                                    user_status: 'waiting' }
 
-              expect( JSON.parse(game.get_status_for_user(current_user)) ).to eq expected_response
+              expect( game.get_status_for_user(current_user) ).to eq expected_response
             end
 
-            it 'user has finished all uploads, but other players have not', :r5 do
+            it 'user_1 is finished, but user 3 has not' do
+              # user 1 has the finished message while they wait for user 3 to finish
               game = FactoryBot.create(:postgame, callback_wanted: :postgame)
               gu_1, gu_2, gu_3 = game.games_users.order(id: :asc)
 
                # undo the 3rd user's final card
                 game.midgame!
-                gu_2.update(set_complete: false)
-                final_card = gu_2.starting_card.child_card.child_card
+                gu_1.update(set_complete: false)
+                final_card = gu_1.starting_card.child_card.child_card
                 final_card.update(placeholder: true)
 
               user_1, user_2, user_3 = game.users.order(id: :asc)
               current_user = user_1
 
-              # user 3 finishes his last card
-              expected_response = { 'attention_users' => [current_user.id], 'current_user_id' => current_user.id, 'game_over' => false, 'user_status' => 'finished' }
+              # user 1 should see a message that he is done
+              expected_response = { attention_users: [current_user.id],
+                                    current_user_id: current_user.id,
+                                    game_over: false,
+                                    user_status: 'finished' }
+                byebug
+              expect( game.get_status_for_user(current_user) ).to eq expected_response
             end
 
 
-            it 'after the final player uploads the final card', :r5 do
+            it 'game_over when all players are finished' do
               game = FactoryBot.create(:postgame, callback_wanted: :postgame)
               gu_1, gu_2, gu_3 = game.games_users.order(id: :asc)
 
-               # undo the 3rd user's final card
               game.midgame!
 
-              user_1, user_2, user_3 = game.users.order(id: :asc)
-              current_user = user_1
+              user_1_id, user_2_id, user_3_id = gu_1.user_id, gu_2.user_id, gu_3.user_id
+              current_user = gu_1.user
 
-              # user 3 finishes his last card
-              expected_response = { 'attention_users' => [user_1.id, user_2.id, user_3.id], 'current_user_id' => user_1.id, 'game_over' => true, 'url_redirect' => game_path(game.id) } # last player finishes
+              expected_response = { attention_users: [user_1_id, user_2_id, user_3_id],
+                                    current_user_id: user_1_id,
+                                    game_over: true,
+                                    url_redirect: game_path(game.id) } # last player finishes
+
+              expect( game.get_status_for_user(current_user) ).to eq expected_response
             end
           end
         end
       end
-      context 'returns unsuccessfully for a player not in midgame', :r5 do
+      context 'returns unsuccessfully for a player not in midgame' do
         it 'game is a pregame' do
           game = FactoryBot.create(:pregame, callback_wanted: :pregame)
           current_user = game.users.first

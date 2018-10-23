@@ -1,6 +1,8 @@
 require 'json'
 
 class GamesController < ApplicationController
+  include ActionController::RequestForgeryProtection
+
   before_action :redirect_if_not_logged_in
   before_action :set_game, only: [:new, :show]
   before_action :redirect_if_not_playing_game, only: [:new]
@@ -10,6 +12,8 @@ class GamesController < ApplicationController
     @game.create_initial_placeholder_if_one_does_not_exist current_user.id
 
     @data_to_pass_components = @game.get_status_for_user current_user
+    @data_to_pass_components[:form_authenticity_token] = form_authenticity_token
+    @data_to_pass_components = @data_to_pass_components.to_json
   end
 
 

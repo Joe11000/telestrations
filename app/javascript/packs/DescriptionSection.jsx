@@ -1,9 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-!!!! Turn Description and Drawing section into Bootstrap 4 cards with inverse top and bottom sections
-
-
 // props = { previous_card:  { medium: 'drawing', drawing_url: 'https://somewhere.com/something.jpg' } }
 // XOR
 // props = { previous_card: undefined }
