@@ -74,9 +74,7 @@ class Game extends React.Component {
 
   }
   // componentWillReceiveProps(nextProps) {
-  //   debugger
   //   if(nextProps.game_over == true) {
-  //     debugger
   //     window.location = this.props.url_redirect
   //   }
   // }
@@ -98,16 +96,14 @@ class Game extends React.Component {
     switch(status) {
       case 'working_on_card':
         if(this.state.previous_card && this.state.previous_card.medium == 'drawing') {
-          debugger
           return(<DrawingSection previous_card={this.state.previous_card}
-                                 form_authenticity_token={this.props.data.form_authenticity_token}/>
+                                 form_authenticity_token={this.props.data.form_authenticity_token} />
                 )
         }
         else{
-          debugger
           return(<DescriptionSection back_up_starting_description={this.props.data.back_up_starting_description}
                                      form_authenticity_token={this.state.form_authenticity_token}
-                                     previous_card={this.state.previous_card}/>
+                                     previous_card={this.state.previous_card} />
                 )
         }
       case 'waiting':
@@ -119,8 +115,6 @@ class Game extends React.Component {
     return (
       <div data-id='game-component'>
         <div className='form-horizontal'>
-          <h1>Game Component</h1>
-
           <div className='col-12 offset-sm-1 col-sm-10 offset-md-2 col-md-8'>
             { this.renderSection(this.state.user_status) }
           </div>

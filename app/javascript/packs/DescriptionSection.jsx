@@ -5,13 +5,74 @@ import PropTypes from 'prop-types'
 // XOR
 // props = { previous_card: undefined }
 export default class DescriptionSection extends React.Component {
-  // componentDidCatch(error, info){
-  //   debugger
-  // }
-constructor(props){
-  super(props)
-  debugger
+  constructor(props){
+    super(props)
+    this.random_description_text = React.createRef();
+    this.custom_description_text = React.createRef();
+  }
+
+  disableButtons(event){
+    this.random_description_text.current.disabled =  true
+    this.custom_description_text.current.disabled =  true
+
+
+  }
+
+  render() {
+    var topText = '';
+    var topImage = '';
+
+    if(this.props.previous_card && this.props.previous_card.drawing_url) {
+      topText = <h5 className="card-title text-dark">Describe The Drawing</h5>
+    }
+    else{
+      topText = <h5 className="card-title text-dark">Think up an idea for the next person to draw</h5>
+    }
+
+    var back_up_starting_description_form_button = '';
+    if( !(this.props.previous_card && this.props.previous_card.drawing_url) ) {
+      back_up_starting_description_form_button = <form action='/cards/in_game_card_uploads' method='post' data-remote='true' onSubmit={(e) => this.disableButtons(e)} className='d-inline-block' >
+                                                  <input type="hidden" name="authenticity_token" value={this.props.authenticity_token} />
+                                                  <input type="hidden" name="card[description_text]" id="hidden_description_text_input_field" data-id="hidden_description_text_input_field" value={this.props.back_up_starting_description} />
+                                                  <button ref={this.custom_description_text} className='btn btn-info ml-3' type='submit'>Submit Random Answer</button>
+                                                </form>
+    }
+    else {
+      topImage =  <img src={this.props.previous_card && this.props.previous_card.drawing_url}
+                       className='card-img-top'
+                       alt='Describe the drawing'
+                  />
+    }
+
+    return (
+      <div className='make-description-container'>
+        <div className='card'>
+          {topImage}
+          <div className='card-body'>
+            {topText}
+
+            <form className="make-description-form mt-2" action='/cards/in_game_card_uploads' method='post' data-remote='true' onSubmit={(e) => this.disableButtons(e)} data-id="make-description-form" id='make-description-form'>
+              <input type="hidden" name="authenticity_token" value={this.props.authenticity_token} />
+
+              <input type="text" name="card[description_text]"
+                     className="span2 card-text text-capitalize form-control" pattern='\w{1,}' title="Can't be blank" />
+
+              <br className='d-inline-block'/>
+            </form>
+              <button className="btn btn-primary d-inline-block" form='make-description-form' ref={this.random_description_text} type="submit">Submit Text</button>
+              {back_up_starting_description_form_button}
+          </div>
+
+        </div>
+      </div>
+    )
+  }
 }
+
+
+
+
+
 // - static getDerivedStateFromProps()
 // render()
 // componentDidMount()
@@ -28,183 +89,6 @@ constructor(props){
 // Each component also provides some other APIs:
 //   setState()
 //   forceUpdate()
-
-
-  render() {
-    var topText = '';
-    var topImage = '';
-
-    if(this.props.previous_card && this.props.previous_card.drawing_url) {
-      <h5 className="card-title">Describe The Drawing</h5>
-    }
-    else{
-      <h5 className="card-title">Think up an idea for the next person to draw</h5>
-    }
-
-    var back_up_starting_description_form_button = '';
-    if( !(this.props.previous_card && this.props.previous_card.drawing_url) ) {
-      back_up_starting_description_form_button = <form>
-                                                  <input type="hidden" name="authenticity_token" value={this.props.authenticity_token} />
-                                                  <input type="hidden" name="description_text_input_field" id="hidden_description_text_input_field" data-id="hidden_description_text_input_field" value={this.props.back_up_starting_description} />
-                                                  <button className='btn-info' type='submit'>Random Answer</button>
-                                                </form>
-
-      topImage =  <img data-id="describe-the-drawing"
-                    id="drawing-to-describe"
-                    src={this.props.previous_card && this.props.previous_card.drawing_url}
-                    className='card-img-top'
-                    alt='Describe the drawing'
-                   />
-    }
-
-    this.props.back_up_starting_description
-
-    return (
-      <div className='make-description-container'>
-        <p>Make Description Container</p>
-
-{/*      <div id='make-description-container' data-id='make-description-container' className={(this.props.medium == 'description') ? '' : 'd-none'}>
-        <div id='drawing-to-describe-container' data-id='drawing-to-describe-container' className='mt-2 text-center'>
-          <img id='drawing-to-describe'  data-id='drawing-to-describe' src=( @prev_card.blank? ? '' : @prev_card.try(:drawing).try(:url)>
-        </div>
-      </div>*/}
-
-      <div className='card'>
-        {topImage}
-        <div className='card-body'>
-          {topText}
-          <form className="make-description-form mt-2" data-id="make-description-form">
-            <input type="text" name="description_text_input_field"
-                   id="description_text_input_field"
-                   data-id="description_text_input_field"
-                   placeholder="Enter A Description" className="span2 card-text text-capitalize" />
-
-            <button className="btn btn-primary" type="submit">Submit</button>
-          </form>
-          {back_up_starting_description_form_button}
-        </div>
-
-
-
-      {/*original html*/}
-{/*      <div data-id="make-description-container" id="make-description-container" className='card text-center'>
-        <div className="mt-2 text-center" data-id="drawing-to-describe-container" id="drawing-to-describe-container">
-          <img data-id="drawing-to-describe" id="drawing-to-describe" src={this.props.previous_card && this.props.previous_card.drawing_url}>
-        </div>
-        <form className="make-description-form mt-2" data-id="make-description-form">
-          <div className="form-group" data-id="make-description-group">
-            <div className="input-group">
-              <input type="text" name="description_text_input_field"
-                                 id="description_text_input_field"
-                                 data-id="description_text_input_field"
-                                 placeholder="Enter A Description" className="span2 form-control text-capitalize">
-              <div className="input-group-btn">
-                <button className="btn btn-primary" type="submit">Submit</button>
-              </div>
-            </div>
-          </div>
-        </form>*/}
-        {/*<p className="h3" data-id="drawing-to-describe" id="text-to-draw">text_to_draw</p>*/}
-      </div>
-
-
-{/*       #make-description-container data-id='make-description-container' class=(@placeholder_card.try(:description?) ? '' : 'd-none')
-         #drawing-to-describe-container.mt-2.text-center data-id='drawing-to-describe-container'
-           img#drawing-to-describe data-id='drawing-to-describe' src=( @prev_card.blank? ? '' : @prev_card.try(:drawing).try(:url) )
-
-         form.make-description-form.mt-2 data-id='make-description-form'
-           .form-group data-id='make-description-group'
-             .input-group
-               = text_field_tag(:description_text_input_field, nil,  {data: {id: 'description_text_input_field'}, placeholder: 'Enter A Description', class: 'span2 form-control text-capitalize'})
-               .input-group-btn
-                 button.btn.btn-primary type='submit' Submit
-
-         p.h3#text-to-draw data-id='drawing-to-describe' = @text_to_draw*/}
-      </div>
-
-    )
-  }
-}
-
-
-
-
-
-
-
-
-
-// Original HTML version before seperating
-// #game data-id='game-page' data-game-id=@game.id data-prev-card-id=(@prev_card.try(:id) || '') data-user-id=(@current_user.try(:id) || "")
-//   .form-horizontal
-//     .drawing.col-12.offset-sm-1.col-sm-10.offset-md-2.col-md-8
-//       #make-drawing-container data-id='make-drawing-container' class=(@placeholder_card.try(:is_drawing?) ? '' : 'd-none')
-//         #description-to-draw.mb-3
-//           p#text-to-draw.h3.capitalize.text-center data-id='description-text-to-draw' = @prev_card.blank? ? '' : @prev_card.try(:description_text)
-//         #drawing-tab data-id='drawing-tab'
-//           ul.nav.nav-tabs.nav-justified role='tablist'
-//             li.active role="presentation"
-//               a href="#upload-drawing"  data-toggle='tab' Upload
-//             li role="presentation"
-//               a href="#create-drawing" Create
-
-
-//           .tab-content
-//             #create-drawing.tab-pane.fade.in.active role="tabpanel"
-//               div
-//                span drawing here
-//             #upload-drawing.tab-pane.fade.pt-5 role="tabpanel"
-//               #file_upload
-
-//               / bootstrap instructions on how to fix tab
-//               / <ul class="nav nav-tabs" id="myTab" role="tablist">
-//               /   <li class="nav-item">
-//               /     <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Home</a>
-//               /   </li>
-//               /   <li class="nav-item">
-//               /     <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Profile</a>
-//               /   </li>
-//               /   <li class="nav-item">
-//               /     <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">Contact</a>
-//               /   </li>
-//               / </ul>
-//               / <div class="tab-content" id="myTabContent">
-//               /   <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">...</div>
-//               /   <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">...</div>
-//               /   <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">...</div>
-//               / </div>
-
-
-
-//     #make-description-container data-id='make-description-container' class=(@placeholder_card.try(:description?) ? '' : 'd-none')
-//       #drawing-to-describe-container.mt-2.text-center data-id='drawing-to-describe-container'
-//         img#drawing-to-describe data-id='drawing-to-describe' src=( @prev_card.blank? ? '' : @prev_card.try(:drawing).try(:url) )
-
-//       form.make-description-form.mt-2 data-id='make-description-form'
-//         .form-group data-id='make-description-group'
-//           .input-group
-//             = text_field_tag(:description_text_input_field, nil,  {data: {id: 'description_text_input_field'}, placeholder: 'Enter A Description', class: 'span2 form-control text-capitalize'})
-//             .input-group-btn
-//               button.btn.btn-primary type='submit' Submit
-
-//       p.h3#text-to-draw data-id='drawing-to-describe' = @text_to_draw
-
-//     .loading-container.text-center. class=(@placeholder_card.blank? ? '' : 'd-none') data-id='loading-container'
-//       p.h3 class=(@player_is_finished ? 'd-none' : '' ) data-id='set_not_complete' Waiting for a card to be passed to you.
-//       p.h3 class=(@player_is_finished ? '' : 'd-none') data-id='set_complete' You are finished. Waiting for others to finish.
-//       = image_tag 'loading_icon.gif', class: 'text-center mt-2', width:'80px'
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

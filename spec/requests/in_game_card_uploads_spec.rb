@@ -57,6 +57,7 @@ RSpec.describe "InGameCardUploads", type: :request do
           set_signed_cookies({user_id: @current_user.id})
 
           post in_game_card_uploads_path, params: { card: { description_text: @description_text } ,  format: :js}
+
           @gu_1.reload
           @current_user.reload
           @card_being_updated.reload
@@ -64,9 +65,10 @@ RSpec.describe "InGameCardUploads", type: :request do
 
         it 'which updates the placeholder card that was created at the start of the game' do
           expect(@card_being_updated.description_text).to eq @description_text
-          expect(@card_being_updated.drawing.attached?).to eq false
-
           expect(@card_being_updated.description?).to eq true
+
+          expect(@card_being_updated.drawing.attached?).to eq false
+          expect(@card_being_updated.placeholder).to eq false
           expect(@card_being_updated.idea_catalyst_id).to eq @gu_1.id
           expect(@card_being_updated.starting_games_user_id).to eq @gu_1.id
           expect(@card_being_updated.uploader_id).to eq @current_user.id
@@ -76,9 +78,12 @@ RSpec.describe "InGameCardUploads", type: :request do
         end
 
         it 'has set up the placeholder for the next player in the passing order' do
-          expect(@card_being_updated.child_card).to be_a Card
-          expect(@card_being_updated.child_card.drawing?).to eq true
-          expect(@card_being_updated.child_card.drawing.attached?).to eq false
+          card_being_updated_child_card = @card_being_updated.child_card
+
+          expect(@card_being_updated_child_card).to be_a Card
+          expect(@card_being_updated_child_card.drawing?).to eq true
+          expect(@card_being_updated_child_card.placeholder).to eq false
+          expect(@card_being_updated_child_card.drawing.attached?).to eq false
 
           game_passing_order = JSON.parse(@game.passing_order)
           current_user_index = game_passing_order.index(@current_user.id)
@@ -95,7 +100,18 @@ RSpec.describe "InGameCardUploads", type: :request do
         end
 
         it 'broadcasts the correct message to other users' do
+          expect(ActionCable.server).to receive(:broadcast).with()
 
+
+          @game = FactoryBot.create :midgame_with_no_moves, callback_wanted: :midgame_with_no_moves
+          @gu_1 = @game.games_users.first
+          @current_user = @gu_1.user
+          @card_being_updated = @gu_1.starting_card
+          @description_text = 'user uploads first card description text'
+
+          set_signed_cookies({user_id: @current_user.id})
+
+          post in_game_card_uploads_path, params: { card: { description_text: @description_text } ,  format: :js}
         end
       end
 
@@ -106,13 +122,15 @@ RSpec.describe "InGameCardUploads", type: :request do
       context 'drawing card' do
         before do
           @game = FactoryBot.create :midgame, callback_wanted: :midgame
-          @gu_2 = @game.games_users[1]
+          @gu_1, @gu_2 = @game.games_users
           @current_user = @gu_2.user
-          @card_being_updated = @gu_2.starting_card.child_card
+          @card_being_updated = @gu_1.starting_card.child_card
 
           set_signed_cookies({user_id: @current_user.id})
+
           @file_name = 'Ace_of_Diamonds.jpg'
           @drawn_image = Rack::Test::UploadedFile.new(File.join(Rails.root, 'spec' ,'support', 'images', @file_name ), "image/jpg")
+
           post in_game_card_uploads_path, params: {
                                                     card: {
                                                             drawing_image: @drawn_image
@@ -124,19 +142,22 @@ RSpec.describe "InGameCardUploads", type: :request do
           @card_being_updated.reload
         end
 
-        it 'which updates the placeholder card that was created at the start of the game', :r5_wip  do
+        it 'which updates the placeholder card that was created at the start of the game', :r5 do
+          byebug
           expect(@card_being_updated.drawing?).to eq true
           expect(@card_being_updated.description_text).to eq nil
           expect(@card_being_updated.idea_catalyst_id).to eq nil
-          expect(@card_being_updated.starting_games_user_id).to eq @gu_2.id
+          expect(@card_being_updated.starting_games_user_id).to eq @gu_1.id
           expect(@card_being_updated.uploader_id).to eq @current_user.id
+          expect(@card_being_updated.placeholder).to eq false
           expect(@card_being_updated.out_of_game_card_upload).to eq false
+          expect(@card_being_updated.drawing.attached?).to eq true
         end
 
-        it 'has set up the placeholder for the next player in the passing order', :r5_wip  do
+        it 'has set up the placeholder for the next player in the passing order', :r5 do
           card_being_updateds_child_card = @card_being_updated.child_card
           expect(card_being_updateds_child_card).to be_a Card
-          expect(@card_being_updated.drawing.attached?).to eq false
+          expect(card_being_updateds_child_card.drawing.attached?).to eq false
 
           game_passing_order = JSON.parse(@game.passing_order)
           current_user_index = game_passing_order.index(@current_user.id)
@@ -146,17 +167,20 @@ RSpec.describe "InGameCardUploads", type: :request do
         end
 
         it 'parent is of the correct type and is completed card of opposite type'do
-          expect(@card_being_updated.parent_card_id).to eq @gu_2.starting_card.id
-          expect(@card_being_updated.parent_card.drawing.attached?).to eq false
-          expect(@card_being_updated.parent_card.description?).to eq true
-          expect(@card_being_updated.parent_card.description_text).to be_a String
+          card_being_updated_parent_card = card_being_updated.parent_card
+
+          expect(@card_being_updated_parent_card.id).to eq @gu_2.starting_card.id
+          expect(@card_being_updated_parent_card.drawing.attached?).to eq false
+          expect(@card_being_updated_parent_card.description?).to eq true
+          expect(@card_being_updated_parent_card.description_text).to be_a String
+          expect(@card_being_updated_parent_card.placeholder).to be_a false
         end
 
-        it 'doesnt have a completed games_user set' do
+        it 'doesnt have a completed games_user set', :r5_wip do
           expect(@gu_2.set_complete).to eq false
         end
 
-        it 'returned correct status code' do
+        it 'returned correct status code', :r5_wip do
           expect(response).to have_http_status :ok
         end
 
@@ -187,7 +211,7 @@ RSpec.describe "InGameCardUploads", type: :request do
           @card_being_updated.reload
         end
 
-        it 'which updates the placeholder card that was created at the start of the game', :r5_wip do
+        it 'which updates the placeholder card that was created at the start of the game' do
           expect(@card_being_updated.description_text).to eq @description_text
           expect(@card_being_updated.drawing.attached?).to eq false
 

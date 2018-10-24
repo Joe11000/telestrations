@@ -5,31 +5,25 @@ class InGameCardUploadsController < ApplicationController
   before_action :uploaded_card_placeholder
 
   def create
-    byebug
     respond_to do |format|
       format.js do
 
-        # byebug
+        byebug
         if uploaded_card_placeholder.description? && create_params.dig('description_text').present?
           # byebug
-          uploaded_card_placeholder.update(description_text: create_params['description_text'])
+          uploaded_card_placeholder.update(description_text: create_params['description_text'], placeholder: false)
         elsif uploaded_card_placeholder.drawing? && create_params.dig('drawing_image').present?
           # byebug
-          uploaded_card_placeholder.drawing.attach create_params
+          uploaded_card_placeholder.drawing.attach create_params[:drawing_image]
+          uploaded_card_placeholder.update(placeholder: false)
+        else
+          head status: "#{uploaded_card_placeholder.medium} card was expected but received #{create_params.keys.first}"  and return
         end
 
-        if !uploaded_card_placeholder.valid? || uploaded_card_placeholder.changed? # updated card should be valid and all changes persisted, otherwise something is weird and this should bail
-          # byebug
-          head status: 'updated card should be valid and all changes persisted at this point. Something is weird and bailing'  and return
-        end
-
-        # byebug
         # set up the placeholder for the next players turn and get params that should be broadcasted to notify users of a card being finished
         broadcast_params = @game.set_up_next_players_turn uploaded_card_placeholder.id
 
         @game.send_out_broadcasts_to_players_after_card_upload broadcast_params
-
-        ActionCable.server.broadcast("game_#{@game.id}", partial: 'some partial or js needs to be passed to each user')
 
         head :ok  and return
       end
