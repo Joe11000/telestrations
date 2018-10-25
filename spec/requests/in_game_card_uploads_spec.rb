@@ -290,7 +290,7 @@ RSpec.describe "InGameCardUploads", type: :request do
         end
 
         it 'which updates the placeholder card that was created at the start of the game', :r5 do
-          byebug
+          # byebug
           expect(@card_being_updated.drawing?).to eq true
           expect(@card_being_updated.description_text).to eq nil
           expect(@card_being_updated.idea_catalyst_id).to eq nil
@@ -301,7 +301,7 @@ RSpec.describe "InGameCardUploads", type: :request do
           expect(@card_being_updated.drawing.attached?).to eq true
         end
 
-        it 'has set up the placeholder for the next player in the passing order', :r5 do
+        it 'has set up the placeholder for the next player in the passing order', :r5_wip do
           card_being_updateds_child_card = @card_being_updated.child_card
           expect(card_being_updateds_child_card).to be_a Card
           expect(card_being_updateds_child_card.drawing.attached?).to eq false

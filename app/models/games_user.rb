@@ -9,7 +9,6 @@ class GamesUser < ActiveRecord::Base
 
   # working !!!
   def cards
-      byebug
     Card.where(starting_games_user_id: id).order(:id)
   end
 end

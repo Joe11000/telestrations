@@ -109,4 +109,39 @@ RSpec.describe Card, type: :model do
       expect(card.uploader_id).to eq user.id
     end
   end
+
+
+    context '.cards_from_finished_game', :r5 do
+      before(:all) do
+        @game = FactoryBot.create(:postgame, callback_wanted: :postgame)
+        FactoryBot.create(:drawing, :out_of_game_card_upload)
+        FactoryBot.create(:midgame, callback_wanted: :midgame)
+        FactoryBot.create(:midgame, :public_game, callback_wanted: :midgame)
+        FactoryBot.create(:postgame, :public_game, callback_wanted: :postgame)
+
+        @cards = Card.cards_from_finished_game @game.id
+      end
+
+      it 'returns correct ordering of cards', :r5 do
+        gu1, gu2, gu3 = @game.games_users
+        starting_card1, starting_card2, starting_card3 = @game.games_users.map(&:starting_card)
+
+        expect(@cards).to match_array [
+                                        [
+                                          [starting_card1.uploader.games_users.last.users_game_name, starting_card1 ],
+                                          [starting_card1.child_card.uploader.games_users.last.users_game_name, starting_card1.child_card ],
+                                          [starting_card1.child_card.child_card.uploader.games_users.last.users_game_name, starting_card1.child_card.child_card ]
+                                        ],
+                                        [
+                                          [starting_card2.uploader.games_users.last.users_game_name, starting_card2 ],
+                                          [starting_card2.child_card.uploader.games_users.last.users_game_name, starting_card2.child_card ],
+                                          [starting_card2.child_card.child_card.uploader.games_users.last.users_game_name, starting_card2.child_card.child_card ]
+                                        ],                                        [
+                                          [starting_card3.uploader.games_users.last.users_game_name, starting_card3 ],
+                                          [starting_card3.child_card.uploader.games_users.last.users_game_name, starting_card3.child_card ],
+                                          [starting_card3.child_card.child_card.uploader.games_users.last.users_game_name, starting_card3.child_card.child_card ]
+                                        ]
+                                      ]
+      end
+    end
 end

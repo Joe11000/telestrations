@@ -133,7 +133,7 @@ class Game < ActiveRecord::Base
   # this assigns a placeholder card to the user's games_user
   def create_initial_placeholder_if_one_does_not_exist current_user_id
     if get_placeholder_card(current_user_id).blank? && User.find(current_user_id).current_starting_card.blank?
-      card = initialize_placeholder_card( current_user_id, (description_first ? 'description' : 'drawing') )
+      card = Card.initialize_placeholder_card( current_user_id, (description_first ? 'description' : 'drawing') )
       gu = games_users.find_by(user_id: current_user_id)
       card.starting_games_user = gu
       card.save
@@ -159,7 +159,7 @@ class Game < ActiveRecord::Base
     if( placeholder_card.present?)
       data_to_pass_components[:user_status] = 'working_on_card'
     elsif games_users.pluck(:set_complete).all?
-      return data_to_pass_components.merge({attention_users: games_user_ids,
+      return data_to_pass_components.merge({attention_users: users.ids,
                                             game_over:       true,
                                             url_redirect:    game_path(id)
                                            }) # last player finishes
@@ -250,26 +250,6 @@ class Game < ActiveRecord::Base
 
 
 
-  # r5 tested
-  # postgame public methods
-  def cards_from_finished_game
-    return [] unless status == 'postgame'
-
-    result = []
-    games_users.each do |gu|
-      gu_set = []
-      card = gu.starting_card
-
-      until card.blank? do
-        gu_set << [ GamesUser.find_by(game_id: id, user_id: card.uploader).users_game_name, card ]
-        card = card.child_card
-      end
-
-       result << gu_set
-    end
-
-    result
-  end
 
   protected
 
@@ -277,15 +257,11 @@ class Game < ActiveRecord::Base
     # called indirectly by games_channel through 'set_up_next_players_turn' for to prepare for the next players turn
     # working!!!
     def create_subsequent_placeholder_for_next_player next_player_id, prev_card_id
-      card = initialize_placeholder_card( next_player_id, (prev_card.drawing? ? 'description' : 'drawing'), prev_card_id )
+      card = Card.initialize_placeholder_card( next_player_id, (prev_card.drawing? ? 'description' : 'drawing'), prev_card_id )
       card.starting_games_user = prev_card.starting_games_user
 
       return card.save
     end
-
-
-
-
 
     # working!!!
     def next_player_after user_id
