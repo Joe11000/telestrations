@@ -14,6 +14,21 @@ class Card < ActiveRecord::Base
   scope :all_starting_cards, -> { where.not(cards: { idea_catalyst_id: nil}) }
 
 
+
+  def self.initialize_placeholder_card uploader_id, medium, parent_card_id=nil
+    if medium == 'description'
+      return Card.new( medium: "description",
+                       uploader_id: uploader_id,
+                       parent_card_id: parent_card_id,
+                       placeholder: true)
+    else
+      return Card.new( medium: "drawing",
+                       uploader_id: uploader_id,
+                       parent_card_id: parent_card_id,
+                       placeholder: true)
+    end
+  end
+
   # # r5 tested
   # # find the earliest placeholder created for user
   # def get_placeholder_card current_user_id

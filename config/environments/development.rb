@@ -82,7 +82,6 @@ end
 
 
 
-Rails.application.routes.default_url_options[:host] = Rails.application.credentials.dig(Rails.env.to_sym, :domain)
 
 Rails.application.configure do
   # Verifies that versions and hashed value of the package contents in the project's package.json

@@ -122,6 +122,21 @@ class Game extends React.Component {
       </div>
     )
   }
+
+
+
+render() {
+  const propState = this
+  App.comments = App.cable.subscriptions.create({
+    channel: ‘CommentsChannel’,
+    discussion: `${this.props.threadId}`
+  }, {
+    received: function(data) {
+    propState.updateCommentState(data)
+  }
+});
+
+
 }
 
 Game.propTypes =  {
@@ -140,6 +155,8 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelector("[data-id='game-page-data']")
   )
 });
+
+
 
 
 

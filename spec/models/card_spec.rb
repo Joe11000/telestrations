@@ -72,4 +72,41 @@ RSpec.describe Card, type: :model do
     it { is_expected.to have_db_index(:starting_games_user_id) }
     it { is_expected.to have_db_index(:uploader_id) }
   end
+
+
+  context '#initialize_placeholder_card', :r5 do
+    it "creates a drawing card if params passed a user_id and type = 'description'", :r5 do
+      parent_card = FactoryBot.create(:drawing)
+      user = FactoryBot.create :user
+
+      card = Card.initialize_placeholder_card(user.id, 'description', parent_card.id)
+      expect(card.persisted?).to eq false
+
+      card.save
+
+      expect(card.parent_card).to eq parent_card
+      expect(card.child_card).to eq nil
+      expect(card.drawing.attached?).to eq false
+      expect(card.description_text).to eq nil
+      expect(card.medium).to eq 'description'
+      expect(card.uploader_id).to eq user.id
+    end
+
+    it "initializes a drawing card if params passed a user_id and medium = 'drawing'", :r5 do
+      parent_card = FactoryBot.create(:description)
+      user = FactoryBot.create :user
+
+      card = Card.initialize_placeholder_card(user.id, 'drawing', parent_card.id)
+      expect(card.persisted?).to eq false
+
+      card.save
+
+      expect(card.parent_card).to eq parent_card
+      expect(card.child_card).to eq nil
+      expect(card.drawing.attached?).to eq false
+      expect(card.description_text).to eq nil
+      expect(card.medium).to eq 'drawing'
+      expect(card.uploader_id).to eq user.id
+    end
+  end
 end

@@ -676,33 +676,6 @@ RSpec.describe Game, type: :model do
       end
     end
 
-    xcontext '#create_placeholder_card', working: true do
-      it "creates a drawing card if params passed a user_id and type = 'drawing'" do
-        game = FactoryBot.create(:midgame_with_no_moves, description_first: false, callback_wanted: :midgame_with_no_moves)
-        user_id = game.users.first.id
-
-        card = game.send(:create_placeholder_card, user_id, 'drawing')
-
-        expect(card.drawing.blank?).to eq true
-        expect(card.description_text).to eq nil
-        expect(card.medium).to eq 'drawing'
-        expect(card.uploader_id).to eq user_id
-      end
-
-      it "creates a drawing card if params passed a user_id and type = 'description'" do
-        game = FactoryBot.create(:midgame_with_no_moves, callback_wanted: :midgame_with_no_moves)
-        user_id = game.users.first.id
-
-        card = game.send(:create_placeholder_card, user_id, 'description')
-
-        expect(card.drawing.blank?).to eq true
-        expect(card.description_text).to eq nil
-        expect(card.description?).to eq true
-        expect(card.uploader_id).to eq user_id
-      end
-    end
-
-
     xcontext '#set_up_next_players_turn' do
 
       context 'can set up a normal next drawing' do

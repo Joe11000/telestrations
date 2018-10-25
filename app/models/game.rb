@@ -55,10 +55,6 @@ class Game < ActiveRecord::Base
 
 
   # end scoping methods
-
-
-
-
   def self.start_game join_code
     Game.find_by(join_code: join_code).try(:start_game)
   end
@@ -132,6 +128,20 @@ class Game < ActiveRecord::Base
 
 # midgame public methods
 
+  # r5_wip
+  # called by games_controller when person first lands on game_page
+  # this assigns a placeholder card to the user's games_user
+  def create_initial_placeholder_if_one_does_not_exist current_user_id
+    if get_placeholder_card(current_user_id).blank? && User.find(current_user_id).current_starting_card.blank?
+      card = initialize_placeholder_card( current_user_id, (description_first ? 'description' : 'drawing') )
+      gu = games_users.find_by(user_id: current_user_id)
+      card.starting_games_user = gu
+      card.save
+
+      games_users.find_by(user_id: current_user_id).starting_card = card.save
+    end
+  end
+
 
   # 4 stages
   # context user drawing card
@@ -178,19 +188,6 @@ class Game < ActiveRecord::Base
   end
 
 
-  # r5_wip
-  # called by games_controller when person first lands on game_page
-  # this assigns a placeholder card to the user's games_user
-  def create_initial_placeholder_if_one_does_not_exist current_user_id
-    if get_placeholder_card(current_user_id).blank? && User.find(current_user_id).current_starting_card.blank?
-
-      card = create_placeholder_card( current_user_id, (description_first ? 'description' : 'drawing') )
-      gu = games_users.find_by(user_id: current_user_id)
-      card.update(starting_games_user: gu)
-      games_users.find_by(user_id: current_user_id).starting_card = card
-    end
-  end
-
 
   #r5_wip
   def set_up_next_players_turn current_card_id
@@ -211,7 +208,6 @@ class Game < ActiveRecord::Base
         # game is not done. games_user set is done
           return [ { game_over: false, attention_users: card.uploader_id, set_complete: true } ]
       end
-
     else
       create_subsequent_placeholder_for_next_player next_player.id, card.id
       next_player_message_params = { game_over: false, set_complete: false, attention_users: next_player.id }
@@ -240,9 +236,6 @@ class Game < ActiveRecord::Base
 
      return current_player_message_params.blank? ? [ next_player_message_params ] : [ next_player_message_params, current_player_message_params ]
   end
-
-
-
 
   # params a XOR b XOR c XOR d
   #  a) broadcast_params: [ { game_over: true } ]
@@ -284,24 +277,15 @@ class Game < ActiveRecord::Base
     # called indirectly by games_channel through 'set_up_next_players_turn' for to prepare for the next players turn
     # working!!!
     def create_subsequent_placeholder_for_next_player next_player_id, prev_card_id
-      prev_card = Card.find(prev_card_id)
-      card = create_placeholder_card( next_player_id, (prev_card.drawing? ? 'description' : 'drawing') )
-      card.update(starting_games_user: prev_card.starting_games_user)
+      card = initialize_placeholder_card( next_player_id, (prev_card.drawing? ? 'description' : 'drawing'), prev_card_id )
+      card.starting_games_user = prev_card.starting_games_user
 
-      return prev_card.child_card = card
+      return card.save
     end
 
 
 
-    # working!!!
-    def create_placeholder_card uploader_id, medium
-      if medium == 'description'
-        return Card.create( medium: "description",
-                            uploader_id: uploader_id, placeholder: true)
-      else
-        return Card.create( medium: "drawing", uploader_id: uploader_id, placeholder: true)
-      end
-    end
+
 
     # working!!!
     def next_player_after user_id
