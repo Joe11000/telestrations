@@ -82,10 +82,10 @@ class Game extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      previous_card:            this.props.data.previous_card,
-      user_status:              this.props.data.user_status,
-      game_status:              this.props.data.game_status,
-      current_user_id:          this.props.data.current_user_id,
+      previous_card:           this.props.data.previous_card,
+      user_status:             this.props.data.user_status,
+      game_status:             this.props.data.game_status,
+      current_user_id:         this.props.data.current_user_id,
       form_authenticity_token: this.props.data.form_authenticity_token
       // this.props.attention_users
       // this.props.game_over
@@ -111,7 +111,32 @@ class Game extends React.Component {
         return(<LoadingContainer user_status={this.props.data.user_status}/>);
     }
   }
+  // updateCommentState(comment) {
+  //   let comments = [...this.state.comments]
+  //   let commentCopy = comments.slice()
+  //   let commentIndex = commentCopy.findIndex((element, index, array) => element.id == comment.id)
+
+  //   if (commentIndex == -1) {
+  //     commentCopy.push(comment)
+  //   } else {
+  //     commentCopy[commentIndex] = comment
+  //   }
+  //   this.setState( {comments: commentCopy} )
+  // }
+
+
+
   render() {
+    const propState = this
+      App.game = App.cable.subscriptions.create({
+        channel: 'GamesChannel'
+      }, {
+        received: function(data) {
+        debugger
+        this.setState = data
+      }
+    });
+
     return (
       <div data-id='game-component'>
         <div className='form-horizontal'>
@@ -122,21 +147,6 @@ class Game extends React.Component {
       </div>
     )
   }
-
-
-
-render() {
-  const propState = this
-  App.comments = App.cable.subscriptions.create({
-    channel: ‘CommentsChannel’,
-    discussion: `${this.props.threadId}`
-  }, {
-    received: function(data) {
-    propState.updateCommentState(data)
-  }
-});
-
-
 }
 
 Game.propTypes =  {
@@ -155,6 +165,25 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelector("[data-id='game-page-data']")
   )
 });
+
+
+
+
+ //  # params a XOR b XOR c XOR d
+ //  #   a) broadcasted_params: { game_over: true,                       attention_users: [game.users.ids], url_redirect: show_games_path }
+ //  #   b) broadcasted_params: { game_over: false, set_complete: true,  attention_users: current_user_id }
+ //  #   c) broadcasted_params: { game_over: false, set_complete: false, attention_users: next_user_id, prev_card: {id: card_id, description_text: description_text} } }
+ //  #   d) broadcasted_params: { game_over: false, set_complete: false, attention_users: next_user_id, prev_card: {id: card_id, drawing_url: url} } }
+
+
+
+
+
+
+
+
+
+
 
 
 

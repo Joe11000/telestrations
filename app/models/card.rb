@@ -13,8 +13,6 @@ class Card < ActiveRecord::Base
 
   scope :all_starting_cards, -> { where.not(cards: { idea_catalyst_id: nil}) }
 
-
-
   def self.initialize_placeholder_card uploader_id, medium, parent_card_id=nil
     if medium == 'description'
       return Card.new( medium: "description",

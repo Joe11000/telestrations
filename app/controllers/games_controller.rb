@@ -18,7 +18,7 @@ class GamesController < ApplicationController
       @data_to_pass_components[:back_up_starting_description] = TokenPhrase.generate(' ', numbers: false)
     end
 
-      @data_to_pass_components = @data_to_pass_components.to_json
+    @data_to_pass_components = @data_to_pass_components.to_json
   end
 
 

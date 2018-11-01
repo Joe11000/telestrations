@@ -4,16 +4,16 @@ class InGameCardUploadsController < ApplicationController
   before_action :redirect_if_not_playing_game
   before_action :uploaded_card_placeholder
 
+  # r5_wip ->  game#set_up_next_players_turn
   def create
+    byebug
     respond_to do |format|
       format.js do
-
-        # byebug
         if uploaded_card_placeholder.description? && create_params.dig('description_text').present?
-          # byebug
+          byebug
           uploaded_card_placeholder.update(description_text: create_params['description_text'], placeholder: false)
         elsif uploaded_card_placeholder.drawing? && create_params.dig('drawing_image').present?
-          # byebug
+          byebug
           uploaded_card_placeholder.drawing.attach create_params[:drawing_image]
           uploaded_card_placeholder.update(placeholder: false)
         else
@@ -21,9 +21,13 @@ class InGameCardUploadsController < ApplicationController
         end
 
         # set up the placeholder for the next players turn and get params that should be broadcasted to notify users of a card being finished
-        broadcast_params = @game.set_up_next_players_turn uploaded_card_placeholder.id
+        byebug
+        @game.set_up_next_players_turn uploaded_card_placeholder
 
-        @game.send_out_broadcasts_to_players_after_card_upload broadcast_params
+        broadcast_statuses = @game.get_status_for_users [current_user, uploaded_card_placeholder.child_card.uploader ]
+
+        byebug
+        ActionCable.server.broadcast("game_#{id}", broadcast_statuses.to_json )
 
         head :ok  and return
       end
@@ -32,7 +36,7 @@ class InGameCardUploadsController < ApplicationController
   rescue => e
     ActionCable.server.broadcast("game_#{@game.id}", alert: "Upload Unsuccessful. #{e.full_message}")
 
-    render json: {alert: 'error'}  and return
+    render json: { alert: 'error' }  and return
   end
 
   protected

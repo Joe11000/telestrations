@@ -246,8 +246,9 @@ RSpec.describe "InGameCardUploads", type: :request do
           expect(@gu_1.set_complete).to eq false
         end
 
-        it 'broadcasts the correct message to other users' do
-          expect(ActionCable.server).to receive(:broadcast).with()
+        it 'broadcasts the correct message to other users', :r5_wip do
+          expected_result = {}
+          expect(ActionCable.server).to receive(:broadcast).with(expected_result)
 
 
           @game = FactoryBot.create :midgame_with_no_moves, callback_wanted: :midgame_with_no_moves
