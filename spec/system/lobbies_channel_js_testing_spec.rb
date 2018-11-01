@@ -28,7 +28,6 @@ RSpec.describe 'LobbyChannelJsTestingSpec', type: :system do
 
           # expect(page).to have_content(/Users Not Joined \( 0 \)/) # incase of multiple instances on the page
           # expect(page).to have_content(/Users Not Joined/, count: 1) # incase of multiple instances on the page
-          # byebug
           # expect(page).to have_content(/Users Joined \( 0 \)/) # incase of multiple instances on the page
           # expect(page).to have_content(/Users Joined/, count: 1) # incase of multiple instances on the page
         end
@@ -40,11 +39,9 @@ RSpec.describe 'LobbyChannelJsTestingSpec', type: :system do
             fill_in 'join_code', with: @join_code
 
             within "[data-id='join-code-submit-group']" do
-              byebug
               find('button').click
             end
 
-          byebug
           visit lobby_path('private')
 
           # expect(page.current_path).to eq lobby_path('private')

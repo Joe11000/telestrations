@@ -8,10 +8,6 @@ class Game < ActiveRecord::Base
   enum status: %w( pregame midgame postgame )
   enum game_type: %w( public private ), _suffix: :game
 
-  after_find do
-    # self.touch # remember activity for deleting if inactive later
-  end
-
   # this may get problematic if the number of groups playing gets a certain percentage close enough to 456976....not likely
   before_validation(on: :create) do
     active_codes = Game.where(status: ['pregame', 'midgame']).pluck(:join_code)
@@ -26,6 +22,10 @@ class Game < ActiveRecord::Base
         break
       end
     end
+  end
+
+  def game_over?
+    games_users.pluck(:set_complete).all?(true)
   end
 
   def cards
@@ -55,10 +55,6 @@ class Game < ActiveRecord::Base
 
 
   # end scoping methods
-
-
-
-
   def self.start_game join_code
     Game.find_by(join_code: join_code).try(:start_game)
   end
@@ -132,124 +128,91 @@ class Game < ActiveRecord::Base
 
 # midgame public methods
 
-
-  # 4 stages
-  # context user drawing card
-  # context user creating description
-  # context user waiting for card
-  # context user done and waiting for friends to finish
-  def get_status_for_user user
-    return false unless midgame?
-
-    placeholder_card = get_placeholder_card(user.id)
-
-    data_to_pass_components = { current_user_id: user.id, attention_users: [user.id], game_over: false}
-    #  if the user is done or waiting for others to pass him a card
-    if( placeholder_card.present?)
-      data_to_pass_components[:user_status] = 'working_on_card'
-    else
-        passing_array = user.current_game.parse_passing_order
-      # find my position before mine in array
-
-        prev_user_index_in_passing_order = passing_array.index(user.id) - 1
-        prev_user_index_in_passing_order = (passing_array.length - 1)  if prev_user_index_in_passing_order < 0
-
-      # is gu from completed?
-      player_is_finished = GamesUser.where(user_id: passing_array[prev_user_index_in_passing_order], game: user.current_game).order(:id).last.set_complete
-      data_to_pass_components[:user_status] = player_is_finished ? 'finished' : 'waiting'
-    end
-
-    #  a) broadcast_params: [ { game_over: true } ]
-    #  b) broadcast_params: [ { game_over: false, set_complete: true,  attention_users: current_user_id } ]
-    #  c) broadcast_params: [ { game_over: false, set_complete: false, attention_users: next_user_id, prev_card: {id: card_id, description_text: description_text} } }, { optional_message_to_self_about_waiting_placeholder_card } ]
-    #  d) broadcast_params: [ { game_over: false, set_complete: false, attention_users: next_user_id, prev_card: {id: card_id, drawing_url: url} } }, { optional_message_to_self_about_waiting_placeholder_card } ]
-
-    previous_card = placeholder_card.try(:parent_card)
-
-    if previous_card.present?
-      if previous_card.description?
-        data_to_pass_components[:previous_card] = { medium: previous_card.medium, description_text: previous_card.description_text }
-      else
-        previous_card_drawing_url = rails_blob_path(previous_card.drawing, disposition: 'attachment')
-        data_to_pass_components[:previous_card] = { medium: previous_card.medium, drawing_url: previous_card_drawing_url }
-      end
-    end
-
-    return data_to_pass_components.to_json
-  end
-
-
   # r5_wip
   # called by games_controller when person first lands on game_page
   # this assigns a placeholder card to the user's games_user
   def create_initial_placeholder_if_one_does_not_exist current_user_id
     if get_placeholder_card(current_user_id).blank? && User.find(current_user_id).current_starting_card.blank?
-
-      card = create_placeholder_card( current_user_id, (description_first ? 'description' : 'drawing') )
+      card = Card.initialize_placeholder_card( current_user_id, (description_first ? 'description' : 'drawing') )
       gu = games_users.find_by(user_id: current_user_id)
-      card.update(starting_games_user: gu)
-      games_users.find_by(user_id: current_user_id).starting_card = card
+      card.starting_games_user = gu
+      card.save
+
+      games_users.find_by(user_id: current_user_id).starting_card = card.save
+      return card
     end
   end
 
 
-  #r5_wip
-  def set_up_next_players_turn current_card_id
-    card = Card.find(current_card_id)
+  # 6 statuses possible
+    # user drawing card
+      # 1) with no placeholder waiting - uploading user gets waiting status, next user gets new card status if they want choose to use it
+      # 2) with a placeholder waiting - uploading user gets new card, next user gets new card status if they want choose to use it
+    # user creating description
+      # 3) with no placeholder waiting - uploading user gets waiting status, next user gets new card status if they want choose to use it
+      # 4) with a placeholder waiting - uploading user gets new card, next user gets new card status if they want choose to use it
+    # user passing is now done and
+    # 5) is waiting for friends to finish - aka status: finished
+    # 6) all other players are already finished - aka gameover
+  def get_status_for_users users_arr
+    return false if pregame?
+
+    broadcast_params = { statuses: [] }
+    if postgame? || game_over?
+      return ( broadcast_params = {statuses:
+                                            [{attention_users: users.ids,
+                                              game_over:       true,
+                                              url_redirect:    game_path(id)
+                                            }] # last player finishes
+                                  }
+             )
+    end
+
+    users_arr.each_with_index do |user, index|
+
+      placeholder_card = get_placeholder_card(user.id)
+
+      _user_status_in_game = { current_user_id: user.id, attention_users: [user.id], game_over: false}
+
+      #  if the user is done or waiting for others to pass him a card
+      if( placeholder_card.present?)
+        _user_status_in_game[:user_status] = 'working_on_card'
+      else
+        player_is_finished = GamesUser.find_by(user_id: next_player_after(user.id), game_id: id).set_complete
+        _user_status_in_game[:user_status] = player_is_finished ? 'finished' : 'waiting'
+      end
+
+      previous_card = placeholder_card.try(:parent_card)
+
+      if previous_card.present?
+        if previous_card.description?
+          _user_status_in_game[:previous_card] = { medium: previous_card.medium, description_text: previous_card.description_text }
+        else
+          previous_card_drawing_url = rails_blob_path(previous_card.drawing, disposition: 'attachment')
+          _user_status_in_game[:previous_card] = { medium: previous_card.medium, drawing_url: previous_card_drawing_url }
+        end
+      end
+      broadcast_params[:statuses] << _user_status_in_game
+    end
+
+    return broadcast_params
+  end
+
+  def set_up_next_players_turn current_card
     next_player = next_player_after(card.uploader_id)
-    gu = card.starting_games_user
-    current_user_id = card.uploader_id
+    gu = current_card.starting_games_user
+    current_user_id = current_card.uploader_id
     next_player_message_params = []
 
     if next_player.id == gu.user_id
       gu.update(set_complete: true)
 
-      if gu.game.games_users.pluck(:set_complete).all? # are any sets not completed?
-        # game is done
-          update(status: 'postgame')
-          return [ { game_over: true } ]
-      else
-        # game is not done. games_user set is done
-          return [ { game_over: false, attention_users: card.uploader_id, set_complete: true } ]
-      end
-
+      update(status: 'postgame') if game_over? # are any sets not completed?
     else
-      create_subsequent_placeholder_for_next_player next_player.id, card.id
-      next_player_message_params = { game_over: false, set_complete: false, attention_users: next_player.id }
-
-      if card.description?
-        next_player_message_params.merge!({ prev_card: {id: card.id, description_text: card.description_text} })
-      else
-        next_player_message_params.merge!({ prev_card: {id: card.id, drawing_url: card.drawing.url} })
-      end
+      create_subsequent_placeholder_for_next_player next_player.id, current_card.id
     end
-
-
-      current_player_message_params = {}
-      # check if user that just submitted a card has one waiting for him
-      existing_placeholder_for_uploading_user = get_placeholder_card current_user_id
-
-      unless existing_placeholder_for_uploading_user.blank?
-        current_player_message_params = { game_over: false, set_complete: false, attention_users: current_user_id }
-
-        if card.description?
-          current_player_message_params.merge!({ prev_card: {id: existing_placeholder_for_uploading_user.parent_card.id, description_text: existing_placeholder_for_uploading_user.parent_card.description_text} })
-        else
-          current_player_message_params.merge!({ prev_card: {id: existing_placeholder_for_uploading_user.parent_card.id, drawing_url: existing_placeholder_for_uploading_user.parent_card.drawing.url} })
-        end
-      end
-
-     return current_player_message_params.blank? ? [ next_player_message_params ] : [ next_player_message_params, current_player_message_params ]
   end
 
-
-
-
-  # params a XOR b XOR c XOR d
-  #  a) broadcast_params: [ { game_over: true } ]
-  #  b) broadcast_params: [ { game_over: false, set_complete: true,  attention_users: current_user_id } ]
-  #  c) broadcast_params: [ { game_over: false, set_complete: false, attention_users: next_user_id, prev_card: {id: card_id, description_text: description_text} } }, { optional_message_to_self_about_waiting_placeholder_card } ]
-  #  d) broadcast_params: [ { game_over: false, set_complete: false, attention_users: next_user_id, prev_card: {id: card_id, drawing_url: url} } }, { optional_message_to_self_about_waiting_placeholder_card } ]
   def send_out_broadcasts_to_players_after_card_upload broadcast_params_array
     broadcast_params_array.each do |broadcast_params|
       ActionCable.server.broadcast("game_#{id}", broadcast_params )
@@ -258,26 +221,6 @@ class Game < ActiveRecord::Base
 
 
 
-  # r5 tested
-  # postgame public methods
-  def cards_from_finished_game
-    return [] unless status == 'postgame'
-
-    result = []
-    games_users.each do |gu|
-      gu_set = []
-      card = gu.starting_card
-
-      until card.blank? do
-        gu_set << [ GamesUser.find_by(game_id: id, user_id: card.uploader).users_game_name, card ]
-        card = card.child_card
-      end
-
-       result << gu_set
-    end
-
-    result
-  end
 
   protected
 
@@ -286,22 +229,11 @@ class Game < ActiveRecord::Base
     # working!!!
     def create_subsequent_placeholder_for_next_player next_player_id, prev_card_id
       prev_card = Card.find(prev_card_id)
-      card = create_placeholder_card( next_player_id, (prev_card.drawing? ? 'description' : 'drawing') )
-      card.update(starting_games_user: prev_card.starting_games_user)
+      card = Card.initialize_placeholder_card( next_player_id, (prev_card.drawing? ? 'description' : 'drawing'), prev_card_id )
 
-      return prev_card.child_card = card
-    end
+      card.starting_games_user = prev_card.starting_games_user
 
-
-
-    # working!!!
-    def create_placeholder_card uploader_id, medium
-      if medium == 'description'
-        return Card.create( medium: "description",
-                            uploader_id: uploader_id, placeholder: true)
-      else
-        return Card.create( medium: "drawing", uploader_id: uploader_id, placeholder: true)
-      end
+      return card.save
     end
 
     # working!!!

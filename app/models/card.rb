@@ -13,6 +13,42 @@ class Card < ActiveRecord::Base
 
   scope :all_starting_cards, -> { where.not(cards: { idea_catalyst_id: nil}) }
 
+  def self.initialize_placeholder_card uploader_id, medium, parent_card_id=nil
+    if medium == 'description'
+      return Card.new( medium: "description",
+                       uploader_id: uploader_id,
+                       parent_card_id: parent_card_id,
+                       placeholder: true)
+    else
+      return Card.new( medium: "drawing",
+                       uploader_id: uploader_id,
+                       parent_card_id: parent_card_id,
+                       placeholder: true)
+    end
+  end
+
+    # r5 tested
+  # postgame public methods
+  def self.cards_from_finished_game game_id
+    game = Game.find(game_id)
+    result = []
+    return result unless game.postgame?
+
+    game.games_users.each do |gu|
+      gu_set = []
+      card = gu.starting_card
+
+      until card.blank? do
+        gu_set << [ GamesUser.find_by(game_id: game_id, user_id: card.uploader).users_game_name, card ]
+        card = card.child_card
+      end
+
+       result << gu_set
+    end
+
+    result
+  end
+
 
   # # r5 tested
   # # find the earliest placeholder created for user

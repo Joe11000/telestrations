@@ -72,4 +72,76 @@ RSpec.describe Card, type: :model do
     it { is_expected.to have_db_index(:starting_games_user_id) }
     it { is_expected.to have_db_index(:uploader_id) }
   end
+
+
+  context '#initialize_placeholder_card', :r5 do
+    it "creates a drawing card if params passed a user_id and type = 'description'", :r5 do
+      parent_card = FactoryBot.create(:drawing)
+      user = FactoryBot.create :user
+
+      card = Card.initialize_placeholder_card(user.id, 'description', parent_card.id)
+      expect(card.persisted?).to eq false
+
+      card.save
+
+      expect(card.parent_card).to eq parent_card
+      expect(card.child_card).to eq nil
+      expect(card.drawing.attached?).to eq false
+      expect(card.description_text).to eq nil
+      expect(card.medium).to eq 'description'
+      expect(card.uploader_id).to eq user.id
+    end
+
+    it "initializes a drawing card if params passed a user_id and medium = 'drawing'", :r5 do
+      parent_card = FactoryBot.create(:description)
+      user = FactoryBot.create :user
+
+      card = Card.initialize_placeholder_card(user.id, 'drawing', parent_card.id)
+      expect(card.persisted?).to eq false
+
+      card.save
+
+      expect(card.parent_card).to eq parent_card
+      expect(card.child_card).to eq nil
+      expect(card.drawing.attached?).to eq false
+      expect(card.description_text).to eq nil
+      expect(card.medium).to eq 'drawing'
+      expect(card.uploader_id).to eq user.id
+    end
+  end
+
+
+    context '.cards_from_finished_game', :r5 do
+      before(:all) do
+        @game = FactoryBot.create(:postgame, callback_wanted: :postgame)
+        FactoryBot.create(:drawing, :out_of_game_card_upload)
+        FactoryBot.create(:midgame, callback_wanted: :midgame)
+        FactoryBot.create(:midgame, :public_game, callback_wanted: :midgame)
+        FactoryBot.create(:postgame, :public_game, callback_wanted: :postgame)
+
+        @cards = Card.cards_from_finished_game @game.id
+      end
+
+      it 'returns correct ordering of cards', :r5 do
+        gu1, gu2, gu3 = @game.games_users
+        starting_card1, starting_card2, starting_card3 = @game.games_users.map(&:starting_card)
+
+        expect(@cards).to match_array [
+                                        [
+                                          [starting_card1.uploader.games_users.last.users_game_name, starting_card1 ],
+                                          [starting_card1.child_card.uploader.games_users.last.users_game_name, starting_card1.child_card ],
+                                          [starting_card1.child_card.child_card.uploader.games_users.last.users_game_name, starting_card1.child_card.child_card ]
+                                        ],
+                                        [
+                                          [starting_card2.uploader.games_users.last.users_game_name, starting_card2 ],
+                                          [starting_card2.child_card.uploader.games_users.last.users_game_name, starting_card2.child_card ],
+                                          [starting_card2.child_card.child_card.uploader.games_users.last.users_game_name, starting_card2.child_card.child_card ]
+                                        ],                                        [
+                                          [starting_card3.uploader.games_users.last.users_game_name, starting_card3 ],
+                                          [starting_card3.child_card.uploader.games_users.last.users_game_name, starting_card3.child_card ],
+                                          [starting_card3.child_card.child_card.uploader.games_users.last.users_game_name, starting_card3.child_card.child_card ]
+                                        ]
+                                      ]
+      end
+    end
 end
