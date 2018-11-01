@@ -213,14 +213,6 @@ class Game < ActiveRecord::Base
     end
   end
 
-  def send_out_broadcasts_to_players_after_card_upload broadcast_params_array
-    broadcast_params_array.each do |broadcast_params|
-      ActionCable.server.broadcast("game_#{id}", broadcast_params )
-    end
-  end
-
-
-
 
   protected
 

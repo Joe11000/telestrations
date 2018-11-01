@@ -1333,16 +1333,6 @@ RSpec.describe Game, type: :model do
       end
     end
 
-    xcontext '#send_out_broadcasts_to_players_after_card_upload', working: true do
-      it 'broadcasts params to game channel ' do
-        game = FactoryBot.create(:midgame_with_no_moves, callback_wanted: :midgame_with_no_moves)
-        sample_broadcast = [ { game_over: true }  ]
-        allow(ActionCable).to receive_message_chain('server.broadcast').with("game_#{game.id}", sample_broadcast[0])
-
-        game.send_out_broadcasts_to_players_after_card_upload sample_broadcast
-      end
-    end
-
     context '#get_placeholder_card', :r5 do
       context '> 1 placeholder available' do
         it 'returns earliest a placeholder card queued'  do
