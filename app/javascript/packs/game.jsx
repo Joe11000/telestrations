@@ -3,99 +3,97 @@ import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types'
 import DrawingSection from './DrawingSection'
 import DescriptionSection from './DescriptionSection'
+import LoadingContainer from './LoadingContainer'
 // import update from ImmutableHelper from 'immutability-helper'
 // import update from ‘immutability-helper’
 
 
   // 'user drawing a picture' =
-  // props = {
-  //           'attention_users' => [user_2.id],
-  //           'form_authenticity_token' => 'afheahshlfahflawhiulef',
-  //           'current_user_id' => user_2.id,
-  //           'game_over' => false,
-  //           'previous_card' => {
-  //                                'medium' => 'description',
-  //                                'description_text' => 'text_here'
-  //                              },
-  //           'user_status' => 'working_on_card'
-  //         }
+  // props = { statuses:
+              //.          'attention_users' => [user_2.id],
+              //           'form_authenticity_token' => 'afheahshlfahflawhiulef',
+              //           'previous_card' => {
+              //                                'medium' => 'description',
+              //                                'description_text' => 'text_here'
+              //                              },
+              //           'user_status' => 'working_on_card'
+              //         }
 
 
   // when 'user writing a description' and 'no previous card'  =
-  // props = {
-  //           'attention_users' => [current_user.id],
-  //           'form_authenticity_token' => 'afheahshlfahflawhiulef',
-  //           'current_user_id' => current_user.id,
-  //           'game_over' => false,
-  //           'user_status' => 'working_on_card'
-  //         }
+  // props = { statuses:
+              //           'attention_users' => [current_user.id],
+              //           'form_authenticity_token' => 'afheahshlfahflawhiulef',
+              //           'user_status' => 'working_on_card'
+              //         }
 
   // when 'user writing a description' and 'yes, previous card'  =
-    // props = {
-    //           'attention_users' => [current_user.id],
-    //           'form_authenticity_token' => 'afheahshlfahflawhiulef',
-    //           'current_user_id' => current_user.id,
-    //           'game_over' => false,
-    //           'user_status' => 'working_on_card',
-    //           'previous_card' => {
-    //              'medium' => 'drawing',
-    //              'drawing_url' => drawing_url
-    //            }
-    //         }
+    // props = { statuses:
+                //           'attention_users' => [current_user.id],
+                //           'form_authenticity_token' => 'afheahshlfahflawhiulef',
+                //           'previous_card' => {
+                //              'medium' => 'drawing',
+                //              'drawing_url' => drawing_url
+                //            },
+                //           'user_status' => 'working_on_card'
+                //         }
 
   // 'after uploading a card a user has to wait for card to be passed to them', :r5 do
-    // props = { 'attention_users' => [current_user.id],
-    //           'form_authenticity_token' => 'afheahshlfahflawhiulef',
-    //           'current_user_id' => current_user.id,
-    //           'game_over' => false,
-    //           'user_status' => 'waiting'
-    //         }
+    // props = { statuses: {
+                //           'attention_users' => [current_user.id],
+                //           'form_authenticity_token' => 'afheahshlfahflawhiulef',
+                //           'user_status' => 'waiting'
+                //         }
 
   // 'user has finished all uploads, but other players have not', :r5 do
-    // props = { 'attention_users' => [current_user.id],
-    //           'form_authenticity_token' => 'afheahshlfahflawhiulef',
-    //           'current_user_id' => current_user.id,
-    //           'game_over' => false,
-    //           'user_status' => 'finished'
-    //         }
+    // props = { statuses: {
+                //           'attention_users' => [current_user.id],
+                //           'form_authenticity_token' => 'afheahshlfahflawhiulef',
+                //           'user_status' => 'finished'
+                //         }
 
 
   // 'after the final player uploads the final card', :r5 do
-    // props = { 'attention_users' => [user_1.id, user_2.id, user_3.id],
-    //           'form_authenticity_token' => 'afheahshlfahflawhiulef',
-    //           'current_user_id' => user_1.id,
-    //           'game_over' => true,
-    //           'url_redirect' => game_path(game.id)
-    //         } # last player finishes
+    // props = { game_over: { redirect_url: show_games_path } } # last player finishes
 
 
 class Game extends React.Component {
-  static propTypes() {
-
-  }
-  // componentWillReceiveProps(nextProps) {
-  //   if(nextProps.game_over == true) {
-  //     window.location = this.props.url_redirect
-  //   }
-  // }
 
   constructor(props) {
     super(props);
     this.state = {
-      previous_card:           this.props.data.previous_card,
-      user_status:             this.props.data.user_status,
-      game_status:             this.props.data.game_status,
-      current_user_id:         this.props.data.current_user_id,
-      form_authenticity_token: this.props.data.form_authenticity_token
-      // this.props.attention_users
-      // this.props.game_over
+      // current_user_id:         this.props.data.current_user_id,
+      previous_card:           this.props.data.statuses[0].previous_card,
+      user_status:             this.props.data.statuses[0].user_status,
+      form_authenticity_token: this.props.data.statuses[0].form_authenticity_token
     };
   }
 
-  renderSection(status){
+  // input: json from updates broadcasted from in_game_card_uploads_controller#create
+  decipherData(channelData) {
+    if(typeof(channelData.game_over) == 'object' ){
+      window.location = channelData.statuses.url_redirect
+      return;
+    }
+
+    // if state is meant for user, then save data to state
+    var _statuses = channelData.statuses
+    for(var i in _statuses) {
+      if(_statuses[i].attention_users.includes(this.props.data.current_user_id)) {
+        this.setState = {
+                          previous_card: _statuses[i].previous_card,
+                          user_status: _statuses[i].user_status,
+                          form_authenticity_token: _statuses[i].form_authenticity_token
+                        }
+      }
+    }
+  }
+
+  renderSection(status) {
     switch(status) {
       case 'working_on_card':
-        if(this.state.previous_card && this.state.previous_card.medium == 'drawing') {
+        debugger
+        if(this.state.previous_card && this.state.previous_card.medium == 'description') {
           return(<DrawingSection previous_card={this.state.previous_card}
                                  form_authenticity_token={this.props.data.form_authenticity_token} />
                 )
@@ -111,29 +109,14 @@ class Game extends React.Component {
         return(<LoadingContainer user_status={this.props.data.user_status}/>);
     }
   }
-  // updateCommentState(comment) {
-  //   let comments = [...this.state.comments]
-  //   let commentCopy = comments.slice()
-  //   let commentIndex = commentCopy.findIndex((element, index, array) => element.id == comment.id)
-
-  //   if (commentIndex == -1) {
-  //     commentCopy.push(comment)
-  //   } else {
-  //     commentCopy[commentIndex] = comment
-  //   }
-  //   this.setState( {comments: commentCopy} )
-  // }
-
-
 
   render() {
     const propState = this
       App.game = App.cable.subscriptions.create({
-        channel: 'GamesChannel'
+        channel: 'GameChannel'
       }, {
         received: function(data) {
-        debugger
-        this.setState = data
+          propState.decipherData( JSON.parse(data) )
       }
     });
 

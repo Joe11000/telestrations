@@ -149,20 +149,14 @@ class Game < ActiveRecord::Base
 
     broadcast_params = { statuses: [] }
     if postgame? || game_over?
-      return ( broadcast_params = {statuses:
-                                            [{attention_users: users.ids,
-                                              game_over:       true,
-                                              url_redirect:    game_path(id)
-                                            }] # last player finishes
-                                  }
-             )
+      return ( { game_over: { redirect_url: game_path(id) } } )
     end
 
     users_arr.each_with_index do |user, index|
 
       placeholder_card = Card.get_placeholder_card(user.id, self)
 
-      _user_status_in_game = { current_user_id: user.id, attention_users: [user.id], game_over: false}
+      _user_status_in_game = { attention_users: [user.id] }
 
       #  if the user is done or waiting for others to pass him a card
       if( placeholder_card.present?)

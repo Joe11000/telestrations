@@ -11,8 +11,14 @@ class GamesController < ApplicationController
   def new
     @game.create_initial_placeholder_if_one_does_not_exist current_user.id
 
-    @data_to_pass_components = @game.get_status_for_user current_user
-    @data_to_pass_components[:form_authenticity_token] = form_authenticity_token
+    @data_to_pass_components = @game.get_status_for_users [current_user]
+
+    # update each status with a form_authenticity_token for each form
+    @data_to_pass_components[:statuses].map! do |status|
+      status.merge!({ form_authenticity_token: form_authenticity_token})
+    end
+
+    @data_to_pass_components[:current_user_id] = current_user.id
 
     if set_game.cards.count <= 3
       @data_to_pass_components[:back_up_starting_description] = TokenPhrase.generate(' ', numbers: false)
@@ -34,7 +40,7 @@ class GamesController < ApplicationController
     # want to pass down who the player was in each game so that i can highlight their games_user_name in the (postgame_page + all_postgames_page)
     @current_user = current_user
     @out_of_game_cards = Card.where(out_of_game_card_upload: true, user: current_user)
-    @arr_of_postgame_card_sets = current_user.games.map(&:cards_from_finished_game)
+    @arr_of_postgame_card_sets = current_user.games.postgame.map(&:cards_from_finished_game)
   end
 
 

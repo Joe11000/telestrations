@@ -9,24 +9,26 @@ class InGameCardUploadsController < ApplicationController
     respond_to do |format|
       format.js do
         if uploaded_card_placeholder.description? && create_params.dig('description_text').present?
-          byebug
           uploaded_card_placeholder.update(description_text: create_params['description_text'], placeholder: false)
         elsif uploaded_card_placeholder.drawing? && create_params.dig('drawing_image').present?
-          byebug
           uploaded_card_placeholder.drawing.attach create_params[:drawing_image]
           uploaded_card_placeholder.update(placeholder: false)
         else
+          byebug
           head status: "#{uploaded_card_placeholder.medium} card was expected but received #{create_params.keys.first}"  and return
         end
 
         # set up the placeholder for the next players turn and get params that should be broadcasted to notify users of a card being finished
-        byebug
         @game.set_up_next_players_turn uploaded_card_placeholder
 
         broadcast_statuses = @game.get_status_for_users [current_user, uploaded_card_placeholder.child_card.uploader ]
 
-        byebug
-        ActionCable.server.broadcast("game_#{id}", broadcast_statuses.to_json )
+        # update each status with a form_authenticity_token for each form
+        broadcast_statuses[:statuses].map! do |status|
+          status.merge!({ form_authenticity_token: form_authenticity_token})
+        end
+
+        ActionCable.server.broadcast("game_#{@game.id}", broadcast_statuses.to_json )
 
         head :ok  and return
       end
