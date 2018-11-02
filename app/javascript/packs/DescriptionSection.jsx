@@ -14,8 +14,6 @@ export default class DescriptionSection extends React.Component {
   disableButtons(event){
     this.random_description_text.current.disabled =  true
     this.custom_description_text.current.disabled =  true
-
-
   }
 
   render() {
@@ -23,7 +21,7 @@ export default class DescriptionSection extends React.Component {
     var topImage = '';
 
     if(this.props.previous_card && this.props.previous_card.drawing_url) {
-      topText = <h5 className="card-title text-dark">Describe The Drawing</h5>
+      topText = <h5 className="card-title text-dark">Describe The drawing</h5>
     }
     else{
       topText = <h5 className="card-title text-dark">Think up an idea for the next person to draw</h5>
@@ -55,7 +53,7 @@ export default class DescriptionSection extends React.Component {
               <input type="hidden" name="authenticity_token" value={this.props.authenticity_token} />
 
               <input type="text" name="card[description_text]"
-                     className="span2 card-text text-capitalize form-control" pattern='\w{1,}' title="Can't be blank" />
+                     className="span2 card-text text-capitalize form-control" title="Can't be blank" />
 
               <br className='d-inline-block'/>
             </form>

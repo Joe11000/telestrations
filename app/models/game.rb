@@ -187,7 +187,7 @@ class Game < ActiveRecord::Base
     gu = current_card.starting_games_user
     current_user_id = current_card.uploader_id
     next_player_message_params = []
-
+    byebug
     if next_player.id == gu.user_id
       gu.update(set_complete: true)
 

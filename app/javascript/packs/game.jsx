@@ -80,11 +80,11 @@ class Game extends React.Component {
     var _statuses = channelData.statuses
     for(var i in _statuses) {
       if(_statuses[i].attention_users.includes(this.props.data.current_user_id)) {
-        this.setState = {
-                          previous_card: _statuses[i].previous_card,
-                          user_status: _statuses[i].user_status,
-                          form_authenticity_token: _statuses[i].form_authenticity_token
-                        }
+        this.setState({
+                        previous_card: _statuses[i].previous_card,
+                        user_status: _statuses[i].user_status,
+                        form_authenticity_token: _statuses[i].form_authenticity_token
+                      })
       }
     }
   }
@@ -92,7 +92,6 @@ class Game extends React.Component {
   renderSection(status) {
     switch(status) {
       case 'working_on_card':
-        debugger
         if(this.state.previous_card && this.state.previous_card.medium == 'description') {
           return(<DrawingSection previous_card={this.state.previous_card}
                                  form_authenticity_token={this.props.data.form_authenticity_token} />

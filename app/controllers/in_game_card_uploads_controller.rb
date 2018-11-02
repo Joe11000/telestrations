@@ -7,12 +7,14 @@ class InGameCardUploadsController < ApplicationController
   # r5_wip ->  game#set_up_next_players_turn
   def create
     respond_to do |format|
+      byebug
       format.js do
         if uploaded_card_placeholder.description? && create_params.dig('description_text').present?
           uploaded_card_placeholder.update(description_text: create_params['description_text'], placeholder: false)
-        elsif uploaded_card_placeholder.drawing? && create_params.dig('drawing_image').present?
-          uploaded_card_placeholder.drawing.attach create_params[:drawing_image]
+        elsif uploaded_card_placeholder.drawing? && create_params.dig('drawing').present?
+          byebug
           uploaded_card_placeholder.update(placeholder: false)
+          uploaded_card_placeholder.drawing.attach create_params['drawing']
         else
           byebug
           head status: "#{uploaded_card_placeholder.medium} card was expected but received #{create_params.keys.first}"  and return
@@ -28,6 +30,7 @@ class InGameCardUploadsController < ApplicationController
           status.merge!({ form_authenticity_token: form_authenticity_token})
         end
 
+        byebug
         ActionCable.server.broadcast("game_#{@game.id}", broadcast_statuses.to_json )
 
         head :ok  and return
@@ -42,7 +45,7 @@ class InGameCardUploadsController < ApplicationController
 
   protected
     def create_params
-      params.require(:card).permit(:description_text, :drawing_image)
+      params.require(:card).permit(:description_text, :drawing)
     end
 
     def uploaded_card_placeholder
