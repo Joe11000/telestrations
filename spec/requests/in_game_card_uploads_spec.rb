@@ -58,7 +58,7 @@ RSpec.describe "InGameCardUploads", type: :request do
     #                                   game_over: false,
     #                                   previous_card: {
     #                                                     medium: 'description',
-    #                                                     description_text: game.get_placeholder_card(user_2.id).parent_card.description_text
+    #                                                     description_text: Card.get_placeholder_card(user_2.id, game).parent_card.description_text
     #                                                   },
     #                                   user_status: 'working_on_card'
     #                                 }
@@ -95,7 +95,7 @@ RSpec.describe "InGameCardUploads", type: :request do
 
 
 
-    #             current_user_placeholder_description = game.get_placeholder_card(current_user.id)
+    #             current_user_placeholder_description = Card.get_placeholder_card(current_user.id, game)
     #             previous_card = gu_3.starting_card.child_card
 
     #             drawing_url = rails_blob_path( previous_card.drawing, disposition: 'attachment')

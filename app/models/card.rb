@@ -14,17 +14,10 @@ class Card < ActiveRecord::Base
   scope :all_starting_cards, -> { where.not(cards: { idea_catalyst_id: nil}) }
 
   def self.initialize_placeholder_card uploader_id, medium, parent_card_id=nil
-    if medium == 'description'
-      return Card.new( medium: "description",
-                       uploader_id: uploader_id,
-                       parent_card_id: parent_card_id,
-                       placeholder: true)
-    else
-      return Card.new( medium: "drawing",
-                       uploader_id: uploader_id,
-                       parent_card_id: parent_card_id,
-                       placeholder: true)
-    end
+    return Card.new( medium: medium,
+                     uploader_id: uploader_id,
+                     parent_card_id: parent_card_id,
+                     placeholder: true)
   end
 
     # r5 tested
@@ -50,17 +43,12 @@ class Card < ActiveRecord::Base
   end
 
 
-  # # r5 tested
-  # # find the earliest placeholder created for user
-  # def get_placeholder_card current_user_id
-  #   # if description placeholder
-  #   result = Card.where(uploader_id: current_user_id, starting_games_user_id: games_users.ids).where(medium: 'description', description_text: nil).order(id: :asc).try(:first)
-  #   return result unless result.blank?
 
-  #   # if drawing placeholder
-  #   result = Card.with_attached_drawing.where(uploader_id: current_user_id, starting_games_user_id: games_users.ids).where(medium: :drawing).order(id: :asc).select{|card| !card.drawing.attached?}.try(:first)
-  #   return result unless result.blank?
+  # r5 tested
+  # find the earliest placeholder created for user
+  def self.get_placeholder_card current_user_id, game
+    result = Card.where(placeholder: true, uploader_id: current_user_id, starting_games_user_id: game.games_users.ids).order(id: :asc).try(:first)
 
-  #   return nil
-  # end
+    return result || nil
+  end
 end

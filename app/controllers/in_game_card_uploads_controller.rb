@@ -6,7 +6,6 @@ class InGameCardUploadsController < ApplicationController
 
   # r5_wip ->  game#set_up_next_players_turn
   def create
-    byebug
     respond_to do |format|
       format.js do
         if uploaded_card_placeholder.description? && create_params.dig('description_text').present?
@@ -45,7 +44,7 @@ class InGameCardUploadsController < ApplicationController
     end
 
     def uploaded_card_placeholder
-      @uploaded_card_placeholder ||= @game.get_placeholder_card current_user.id
+      @uploaded_card_placeholder ||= Card.get_placeholder_card(current_user.id, @game)
     end
 
     def redirect_if_not_playing_game
