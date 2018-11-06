@@ -20,10 +20,20 @@ class Card < ActiveRecord::Base
                      placeholder: true)
   end
 
+
+
+  def self.cards_from_finished_games game_ids
+    result = []
+    game_ids.each do |game_id|
+      result << self.cards_from_finished_game(game_id)
+    end
+    result
+  end
+
     # r5 tested
   # postgame public methods
   def self.cards_from_finished_game game_id
-    game = Game.find(game_id)
+    game = Game.includes(games_users: {starting_card: {child_card: :child_card  } }).find(game_id)
     result = []
     return result unless game.postgame?
 
@@ -32,7 +42,7 @@ class Card < ActiveRecord::Base
       card = gu.starting_card
 
       until card.blank? do
-        gu_set << [ GamesUser.find_by(game_id: game_id, user_id: card.uploader).users_game_name, card ]
+        gu_set << [ GamesUser.find_by(game_id: game_id, user_id: card.uploader_id).users_game_name, card ]
         card = card.child_card
       end
 

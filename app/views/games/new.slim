@@ -1,7 +1,10 @@
 / - content_for :react_components do
 
-= form_with model: User.new, url: '#' do |form|
-  = form.file_field :avatar
+/ = form_with model: User.new, url: '#' do |form|
+/   = form.file_field :avatar
+
+/ = form_with model: User.new, url: '#', local: true do |form|
+/   = form.file_field :avatar
 
 #game-page data-id='game-page-data' data=@data_to_pass_components
 

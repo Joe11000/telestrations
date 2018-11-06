@@ -144,8 +144,13 @@ class Game < ActiveRecord::Base
     # user passing is now done and
     # 5) is waiting for friends to finish - aka status: finished
     # 6) all other players are already finished - aka gameover
+
+
+
+
   def get_status_for_users users_arr
     return false if pregame?
+
 
     broadcast_params = { statuses: [] }
     if postgame? || game_over?
@@ -167,7 +172,6 @@ class Game < ActiveRecord::Base
       end
 
       previous_card = placeholder_card.try(:parent_card)
-
       if previous_card.present?
         if previous_card.description?
           _user_status_in_game[:previous_card] = { medium: previous_card.medium, description_text: previous_card.description_text }
@@ -186,8 +190,7 @@ class Game < ActiveRecord::Base
     next_player = next_player_after(current_card.uploader_id)
     gu = current_card.starting_games_user
     current_user_id = current_card.uploader_id
-    next_player_message_params = []
-    byebug
+
     if next_player.id == gu.user_id
       gu.update(set_complete: true)
 

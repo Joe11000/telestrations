@@ -62,13 +62,51 @@ class Game extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      // current_user_id:         this.props.data.current_user_id,
       previous_card:           this.props.data.statuses[0].previous_card,
       user_status:             this.props.data.statuses[0].user_status,
       form_authenticity_token: this.props.data.statuses[0].form_authenticity_token
     };
+
+    const propState = this
+      App.game = App.cable.subscriptions.create({
+        channel: 'GameChannel'
+      }, {
+        received: function(data) {
+          propState.decipherData( JSON.parse(data) )
+      }
+    });
   }
 
+
+  // input channelData options
+    // channelData = { game_over: { redirect_url: game_path(id) } }
+
+    //  channelData =
+    //  {
+    //   form_authenticity_token: 'fdhahflase-fhilw3fdsab',
+    //   (optional) back_up_starting_description: 'backup'
+
+    //   statuses: [ (a combination of hashes like )
+    //               {
+    //                 attention_users: [user_1.id],
+    //                 user_status: 'waiting'
+    //               },
+    //               {
+    //                 attention_users: [user_2.id],
+    //                 user_status: 'working_on_card',
+
+    //                 (optional) previous_card: {
+    //                                             medium: 'description',
+    //                                             description_text: Card.get_placeholder_card(user_2.id, game).parent_card.description_text
+    //                                           },
+    //               },
+
+    //               {
+    //                 attention_users: [user_3.id],
+    //                 user_status: 'finished'
+    //               }
+    //             ]
+    // }
   // input: json from updates broadcasted from in_game_card_uploads_controller#create
   decipherData(channelData) {
     if(typeof(channelData.game_over) == 'object' ){
@@ -80,10 +118,10 @@ class Game extends React.Component {
     var _statuses = channelData.statuses
     for(var i in _statuses) {
       if(_statuses[i].attention_users.includes(this.props.data.current_user_id)) {
+        debugger
         this.setState({
                         previous_card: _statuses[i].previous_card,
-                        user_status: _statuses[i].user_status,
-                        form_authenticity_token: _statuses[i].form_authenticity_token
+                        user_status: _statuses[i].user_status
                       })
       }
     }
@@ -94,12 +132,12 @@ class Game extends React.Component {
       case 'working_on_card':
         if(this.state.previous_card && this.state.previous_card.medium == 'description') {
           return(<DrawingSection previous_card={this.state.previous_card}
-                                 form_authenticity_token={this.props.data.form_authenticity_token} />
+                                 form_authenticity_token={this.props.data.statuses[0].form_authenticity_token} />
                 )
         }
         else{
           return(<DescriptionSection back_up_starting_description={this.props.data.back_up_starting_description}
-                                     form_authenticity_token={this.state.form_authenticity_token}
+                                     form_authenticity_token={this.props.data.statuses[0].form_authenticity_token}
                                      previous_card={this.state.previous_card} />
                 )
         }
@@ -110,15 +148,6 @@ class Game extends React.Component {
   }
 
   render() {
-    const propState = this
-      App.game = App.cable.subscriptions.create({
-        channel: 'GameChannel'
-      }, {
-        received: function(data) {
-          propState.decipherData( JSON.parse(data) )
-      }
-    });
-
     return (
       <div data-id='game-component'>
         <div className='form-horizontal'>
@@ -132,9 +161,10 @@ class Game extends React.Component {
 }
 
 Game.propTypes =  {
-                    game_id:          PropTypes.oneOfType([ PropTypes.number, PropTypes.string ]),
-                    previous_card_id: PropTypes.oneOfType([ PropTypes.number, PropTypes.string ]),
-                    current_user_id:  PropTypes.oneOfType([ PropTypes.number, PropTypes.string ])
+                    game_id:                 PropTypes.oneOfType([ PropTypes.number, PropTypes.string ]),
+                    previous_card_id:        PropTypes.oneOfType([ PropTypes.number, PropTypes.string ]),
+                    current_user_id:         PropTypes.oneOfType([ PropTypes.number, PropTypes.string ]),
+                    form_authenticity_token: PropTypes.string
                   }
 
 
@@ -147,17 +177,6 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelector("[data-id='game-page-data']")
   )
 });
-
-
-
-
- //  # params a XOR b XOR c XOR d
- //  #   a) broadcasted_params: { game_over: true,                       attention_users: [game.users.ids], url_redirect: show_games_path }
- //  #   b) broadcasted_params: { game_over: false, set_complete: true,  attention_users: current_user_id }
- //  #   c) broadcasted_params: { game_over: false, set_complete: false, attention_users: next_user_id, prev_card: {id: card_id, description_text: description_text} } }
- //  #   d) broadcasted_params: { game_over: false, set_complete: false, attention_users: next_user_id, prev_card: {id: card_id, drawing_url: url} } }
-
-
 
 
 

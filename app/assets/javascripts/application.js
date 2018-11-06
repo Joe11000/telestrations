@@ -25,5 +25,3 @@
 //= requre channels
 //= require_tree .
 //
-
-

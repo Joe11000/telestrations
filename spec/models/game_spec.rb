@@ -1,7 +1,10 @@
 require 'spec_helper'
 require 'rails_helper'
 require 'json'
-include Rails.application.routes.url_helpers
+
+RSpec.configure do |c|
+  c.include CardHelper
+end
 
 RSpec.describe Game, type: :model do
 
@@ -373,19 +376,14 @@ RSpec.describe Game, type: :model do
 
 
 
-    context '#get_status_for_users' do
-      def get_drawing_url card
-        rails_blob_path(card.drawing, disposition: 'attachment')
-      end
-
-
+    context '#get_status_for_users', :r5 do
      # 4 statuses possible
       # user drawing card
       # user creating description
       # user passing is now done and
       # *) is waiting for friends to finish - aka status: finished
       # *) all other players are already finished - aka gameover
-      context 'successful; A midgame.', :r5 do
+      context 'successful; A midgame.' do
         it 'midgame_with_no_moves' do
           game = FactoryBot.create(:midgame_with_no_moves, callback_wanted: :midgame_with_no_moves)
           user_1, user_2, user_3 = game.users.order(id: :asc)

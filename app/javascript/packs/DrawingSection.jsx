@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import axios from 'axios'
 
 // props = { previous_card: {medium: 'description', descripion_text: 'https://somewhere.com/stuff/jpg' }
 //           form_authenticity_token: 'fashlashleasf-32fsdfag4srfds'
@@ -9,10 +10,24 @@ export default class DrawingSection extends React.Component {
     super(props);
 
     this.submit_button = React.createRef();
+    this.uploadInput = React.createRef();
+
+    this.handlefileUpload = this.handlefileUpload.bind(this)
   }
 
-  disableButton(event){
+  disableButton(){
     this.submit_button.current.disabled = true
+  }
+
+  handlefileUpload(e) {
+    e.preventDefault();
+    this.disableButton();
+
+    var data = new FormData(e.target)
+
+    let req = new XMLHttpRequest()
+    req.open('POST', '/cards/in_game_card_uploads', true);
+    req.send(data)
   }
 
   render() {
@@ -27,13 +42,12 @@ export default class DrawingSection extends React.Component {
             <form className="make-drawing-form mt-2"
                   action='/cards/in_game_card_uploads'
                   method='post'
-                  data-remote='true'
-                  enctype="multipart/form-data"
-                  accept-charset="UTF-8"
-                  onSubmit={(e) => this.disableButton(e)}
-                  data-id="make-drawing-form"
+                  data_remote='true'
+                  encType="multipart/form-data"
+                  acceptCharset="UTF-8"
+                  onSubmit={this.handlefileUpload}
                   id='make-drawing-form'>
-              <input type="hidden" name="authenticity_token" value={this.props.authenticity_token} />
+              <input type="hidden" name="authenticity_token" value={this.props.form_authenticity_token} />
               {/*<input name="utf8" type="hidden" value="✓">*/}
 
               <div className='form-group'>
@@ -42,11 +56,12 @@ export default class DrawingSection extends React.Component {
                        className="form-control-file border-transparent"
                        title="Can't be blank"
                        id='card-drawing'
+                       ref={this.uploadInput}
                        accept="image/png,image/gif,image/jpeg,image/jpg"/>
               </div>
               <br className='d-inline-block'/>
 
-              <button className="btn btn-primary d-inline-block" ref={this.submit_button} type="submit">Submit Text</button>
+              <button className="btn btn-primary d-inline-block" ref={this.submit_button} type="submit">Submit Drawing</button>
             </form>
           </div>
 
