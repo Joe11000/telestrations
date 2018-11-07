@@ -9,21 +9,25 @@ class GamesController < ApplicationController
   def new
     @game.create_initial_placeholder_if_one_does_not_exist current_user.id
 
-    @data_to_pass_components = @game.get_status_for_users [current_user]
+    @game_component_params = @game.get_status_for_users [current_user]
 
-    # update each status with a form_authenticity_token for each form
-    @data_to_pass_components[:statuses].map! do |status|
-      status.merge!({ form_authenticity_token: form_authenticity_token})
+    unless @game.game_over?
+      # update each status with a form_authenticity_token for each form
+      if game.is_player_finished? current_user.id
+        @game_component_params[:statuses].map! do |status|
+          status.merge!({ form_authenticity_token: form_authenticity_token})
+        end
+
+        # _starting_card = current_user.current_games_user.starting_card
+        # if _starting_card.try(:description?) && _starting_card.try(:placeholder)
+        #   @game_component_params[:back_up_starting_description] = TokenPhrase.generate(' ', numbers: false)
+        # end
+      end
+
+      @game_component_params[:current_user_id] = current_user.id
     end
 
-    @data_to_pass_components[:current_user_id] = current_user.id
-    _starting_card = current_user.current_games_user.starting_card
-
-    if _starting_card.try(:description?) && _starting_card.try(:placeholder)
-      @data_to_pass_components[:back_up_starting_description] = TokenPhrase.generate(' ', numbers: false)
-    end
-
-    @data_to_pass_components = @data_to_pass_components.to_json
+    @game_component_params = @game_component_params.to_json
   end
 
 
@@ -56,4 +60,7 @@ class GamesController < ApplicationController
     def set_game_for_action_new_method
       @game ||= current_user.current_game
     end
+
+
+
 end

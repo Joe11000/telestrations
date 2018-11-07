@@ -1,4 +1,6 @@
 class Game < ActiveRecord::Base
+  include Rails.application.routes.url_helpers
+
   has_many :games_users, ->{ order(id: :asc) }, inverse_of: :game, dependent: :destroy
   has_many :users, ->{ order(id: :asc) }, through: :games_users
   has_many :starting_cards, ->{ order(id: :asc) }, through: :games_users
@@ -23,6 +25,18 @@ class Game < ActiveRecord::Base
       end
     end
   end
+
+  def is_player_finished? user_id
+    raise 'Game must be midgame' unless midgame?
+    next_player = next_player_after(user_id)
+    byebug
+    return next_player.current_games_user.set_complete
+  end
+
+          # _starting_card = current_user.current_games_user.starting_card
+        # if _starting_card.try(:description?) && _starting_card.try(:placeholder)
+        #   @game_component_params[:back_up_starting_description] = TokenPhrase.generate(' ', numbers: false)
+        # end
 
   def game_over?
     games_users.pluck(:set_complete).all?(true)
@@ -221,6 +235,14 @@ class Game < ActiveRecord::Base
       user_id_of_next_user = parse_passing_order[ (user_index + 1) % parse_passing_order.length ]
       return User.find_by( id: user_id_of_next_user )
     end
+
+    #     # working!!!
+    # def prev_player_before user_id
+    #   user_index = parse_passing_order.index(user_id)
+    #   return User.none if user_index.nil?
+    #   user_id_of_next_user = parse_passing_order[ (user_index - 1) % parse_passing_order.length ]
+    #   return User.find_by( id: user_id_of_next_user )
+    # end
 
       # working!!!
     def parse_passing_order

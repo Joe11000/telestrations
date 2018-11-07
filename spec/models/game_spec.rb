@@ -306,6 +306,61 @@ RSpec.describe Game, type: :model do
       3.times { expect(Game.random_public_game).to be_in [g1, g2] }
     end
 
+    context '#is_player_finished?' do
+
+      context 'returns a valid response if', :r5 do
+        it 'in 1st round of game with a waiting player' do
+          game = FactoryBot.create :midgame, callback_wanted: :midgame, round: 1, move: 1
+          user_1, user_2, user_3 = game.users.order(id: :asc)
+
+
+          expect(game.is_player_finished? user_1.id).to eq false
+          expect(game.is_player_finished? user_2.id).to eq false
+          expect(game.is_player_finished? user_3.id).to eq false
+        end
+
+        it 'in 2nd round of game with a waiting player' do
+          game = FactoryBot.create :midgame, callback_wanted: :midgame, round: 2, move: 1
+          user_1, user_2, user_3 = game.users.order(id: :asc)
+
+          expect(game.is_player_finished? user_1.id).to eq false
+          expect(game.is_player_finished? user_2.id).to eq false
+          expect(game.is_player_finished? user_3.id).to eq false
+        end
+
+        it 'in last round of game with a finished player', :r5 do
+          game = FactoryBot.create :midgame, callback_wanted: :midgame, round: 3, move: 1
+          user_1, user_2, user_3 = game.users.order(id: :asc)
+
+
+          expect(game.is_player_finished? user_1.id).to eq true
+          expect(game.is_player_finished? user_2.id).to eq false
+          expect(game.is_player_finished? user_3.id).to eq false
+
+        end
+      end
+
+      context 'raises a custom error if', :r5 do
+        let(:postgame){ FactoryBot.create :postgame, callback_wanted: :postgame}
+
+        it 'game is pregame' do
+          pregame = FactoryBot.create :pregame, callback_wanted: :pregame
+
+          pregame.users.each do |user|
+            expect{pregame.is_player_finished? user.id}.to raise_error.with_message('Game must be midgame')
+          end
+        end
+
+        it 'game is postgame' do
+          postgame = FactoryBot.create :postgame, callback_wanted: :postgame
+
+          postgame.users.each do |user|
+            expect{postgame.is_player_finished? user.id}.to raise_error.with_message('Game must be midgame')
+          end
+        end
+      end
+    end
+
     it '#cards', :r5  do
       game = FactoryBot.create(:midgame, callback_wanted: :midgame)
 
@@ -685,14 +740,14 @@ RSpec.describe Game, type: :model do
           game = FactoryBot.create(:pregame, callback_wanted: :pregame)
           current_user = game.users.first
 
-          expect( game.get_status_for_user(current_user) ).to eq false
+          expect( game.get_status_for_users([current_user]) ).to eq false
         end
 
         it 'game is a postgame' do
           game = FactoryBot.create(:postgame, callback_wanted: :postgame)
           current_user = game.users.first
 
-          expect( game.get_status_for_user(current_user) ).to eq false
+          expect( game.get_status_for_users([current_user]) ).to eq false
         end
       end
     end
