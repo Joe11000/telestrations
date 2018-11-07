@@ -1,5 +1,3 @@
-require 'json'
-
 class GamesController < ApplicationController
   include ActionController::RequestForgeryProtection
 
@@ -9,27 +7,10 @@ class GamesController < ApplicationController
   def new
     @game.create_initial_placeholder_if_one_does_not_exist current_user.id
 
-    @game_component_params = @game.get_status_for_users [current_user]
-
-    unless @game.game_over?
-      # update each status with a form_authenticity_token for each form
-      if game.is_player_finished? current_user.id
-        @game_component_params[:statuses].map! do |status|
-          status.merge!({ form_authenticity_token: form_authenticity_token})
-        end
-
-        # _starting_card = current_user.current_games_user.starting_card
-        # if _starting_card.try(:description?) && _starting_card.try(:placeholder)
-        #   @game_component_params[:back_up_starting_description] = TokenPhrase.generate(' ', numbers: false)
-        # end
-      end
-
-      @game_component_params[:current_user_id] = current_user.id
-    end
-
-    @game_component_params = @game_component_params.to_json
+    @game_component_params = AssembleGamesComponentParams.new({current_user: current_user,
+                                                               form_authenticity_token: form_authenticity_token,
+                                                               game: @game}).result_to_json
   end
-
 
   def show
     # @game from redirect method

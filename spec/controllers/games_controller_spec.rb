@@ -534,7 +534,7 @@ RSpec.describe GamesController, type: :controller do
               get :new
 
               expect(response).to have_http_status :ok
-              expect(JSON.parse(assigns['game_component_params'])).to eq expected_response
+              expect(JSON.parse(assigns['game_component_params'])).to include_json expected_response
               expect(assigns['game_component_params']['back_up_starting_description']).to eq nil # actively call out this is not in expected_response
             end
 

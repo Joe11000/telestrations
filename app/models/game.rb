@@ -29,14 +29,9 @@ class Game < ActiveRecord::Base
   def is_player_finished? user_id
     raise 'Game must be midgame' unless midgame?
     next_player = next_player_after(user_id)
-    byebug
+
     return next_player.current_games_user.set_complete
   end
-
-          # _starting_card = current_user.current_games_user.starting_card
-        # if _starting_card.try(:description?) && _starting_card.try(:placeholder)
-        #   @game_component_params[:back_up_starting_description] = TokenPhrase.generate(' ', numbers: false)
-        # end
 
   def game_over?
     games_users.pluck(:set_complete).all?(true)
