@@ -747,7 +747,9 @@ RSpec.describe Game, type: :model do
           game = FactoryBot.create(:postgame, callback_wanted: :postgame)
           current_user = game.users.first
 
-          expect( game.get_status_for_users([current_user]) ).to eq false
+          expected_response = {'game_over': {'redirect_url': game_path(game)}}
+
+          expect( game.get_status_for_users([current_user]) ).to eq expected_response
         end
       end
     end

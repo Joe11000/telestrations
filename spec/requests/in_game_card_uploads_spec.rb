@@ -281,7 +281,7 @@ RSpec.describe "InGameCardUploads", type: :request do
 
           post in_game_card_uploads_path, params: {
                                                     card: {
-                                                            drawing_image: @drawn_image
+                                                            drawing: @drawn_image
                                                           },
                                                     format: :js
                                                   }
@@ -292,11 +292,13 @@ RSpec.describe "InGameCardUploads", type: :request do
 
         it 'which updates the placeholder card that was created at the start of the game', :r5 do
           # byebug
+          @card_being_updated.reload
           expect(@card_being_updated.drawing?).to eq true
           expect(@card_being_updated.description_text).to eq nil
           expect(@card_being_updated.idea_catalyst_id).to eq nil
           expect(@card_being_updated.starting_games_user_id).to eq @gu_1.id
           expect(@card_being_updated.uploader_id).to eq @current_user.id
+          byebug
           expect(@card_being_updated.placeholder).to eq false
           expect(@card_being_updated.out_of_game_card_upload).to eq false
           expect(@card_being_updated.drawing.attached?).to eq true
@@ -315,13 +317,13 @@ RSpec.describe "InGameCardUploads", type: :request do
         end
 
         it 'parent is of the correct type and is completed card of opposite type'do
-          card_being_updated_parent_card = card_being_updated.parent_card
+          card_being_updated_parent_card = @card_being_updated.parent_card
 
-          expect(@card_being_updated_parent_card.id).to eq @gu_2.starting_card.id
-          expect(@card_being_updated_parent_card.drawing.attached?).to eq false
-          expect(@card_being_updated_parent_card.description?).to eq true
-          expect(@card_being_updated_parent_card.description_text).to be_a String
-          expect(@card_being_updated_parent_card.placeholder).to be_a false
+          expect(card_being_updated_parent_card.id).to eq @gu_2.starting_card.id
+          expect(card_being_updated_parent_card.drawing.attached?).to eq false
+          expect(card_being_updated_parent_card.description?).to eq true
+          expect(card_being_updated_parent_card.description_text).to be_a String
+          expect(card_being_updated_parent_card.placeholder).to be_a false
         end
 
         it 'doesnt have a completed games_user set', :r5_wip do

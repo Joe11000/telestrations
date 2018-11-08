@@ -14,7 +14,7 @@ class InGameCardUploadsController < ApplicationController
           uploaded_card_placeholder.update(placeholder: false)
           uploaded_card_placeholder.drawing.attach create_params['drawing']
         else
-          head status: "#{uploaded_card_placeholder.medium} card was expected but received #{create_params.keys.first}"  and return
+          head status: "#{uploaded_card_placeholder.medium} card was expected but received #{create_params.keys.first}" and return
         end
 
         # set up the placeholder for the next players turn and get params that should be broadcasted to notify users of a card being finished
