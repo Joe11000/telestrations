@@ -18,7 +18,7 @@ RSpec.describe LobbiesController, type: :request do
       it 'redirect user back to game they are playing' do
         set_signed_cookies({user_id: FactoryBot.create(:midgame_with_no_moves, callback_wanted: :midgame_with_no_moves).users.first.id})
 
-        expect( get choose_game_type_page_path ).to redirect_to(games_path)
+        expect( get choose_game_type_page_path ).to redirect_to(new_game_path)
       end
     end
   end

@@ -1,4 +1,6 @@
 class Game < ActiveRecord::Base
+  include Rails.application.routes.url_helpers
+
   has_many :games_users, ->{ order(id: :asc) }, inverse_of: :game, dependent: :destroy
   has_many :users, ->{ order(id: :asc) }, through: :games_users
   has_many :starting_cards, ->{ order(id: :asc) }, through: :games_users
@@ -22,6 +24,13 @@ class Game < ActiveRecord::Base
         break
       end
     end
+  end
+
+  def is_player_finished? user_id
+    raise 'Game must be midgame' unless midgame?
+    next_player = next_player_after(user_id)
+
+    return next_player.current_games_user.set_complete
   end
 
   def game_over?
@@ -116,29 +125,19 @@ class Game < ActiveRecord::Base
     true
   end
 
-
-  # r5 tested
-  # find the earliest placeholder created for user
-  def get_placeholder_card current_user_id
-    result = Card.where(placeholder: true, uploader_id: current_user_id, starting_games_user_id: games_users.ids).order(id: :asc).try(:first)
-
-    return result || nil
-  end
-
-
 # midgame public methods
 
   # r5_wip
   # called by games_controller when person first lands on game_page
   # this assigns a placeholder card to the user's games_user
   def create_initial_placeholder_if_one_does_not_exist current_user_id
-    if get_placeholder_card(current_user_id).blank? && User.find(current_user_id).current_starting_card.blank?
+    if Card.get_placeholder_card(current_user_id, self).blank? && User.find(current_user_id).current_starting_card.blank?
       card = Card.initialize_placeholder_card( current_user_id, (description_first ? 'description' : 'drawing') )
       gu = games_users.find_by(user_id: current_user_id)
       card.starting_games_user = gu
       card.save
 
-      games_users.find_by(user_id: current_user_id).starting_card = card.save
+      games_users.find_by(user_id: current_user_id).starting_card = card
       return card
     end
   end
@@ -154,25 +153,24 @@ class Game < ActiveRecord::Base
     # user passing is now done and
     # 5) is waiting for friends to finish - aka status: finished
     # 6) all other players are already finished - aka gameover
+
+
+
+
   def get_status_for_users users_arr
     return false if pregame?
 
+
     broadcast_params = { statuses: [] }
     if postgame? || game_over?
-      return ( broadcast_params = {statuses:
-                                            [{attention_users: users.ids,
-                                              game_over:       true,
-                                              url_redirect:    game_path(id)
-                                            }] # last player finishes
-                                  }
-             )
+      return ( { game_over: { redirect_url: game_path(id) } } )
     end
 
     users_arr.each_with_index do |user, index|
 
-      placeholder_card = get_placeholder_card(user.id)
+      placeholder_card = Card.get_placeholder_card(user.id, self)
 
-      _user_status_in_game = { current_user_id: user.id, attention_users: [user.id], game_over: false}
+      _user_status_in_game = { attention_users: [user.id] }
 
       #  if the user is done or waiting for others to pass him a card
       if( placeholder_card.present?)
@@ -183,7 +181,6 @@ class Game < ActiveRecord::Base
       end
 
       previous_card = placeholder_card.try(:parent_card)
-
       if previous_card.present?
         if previous_card.description?
           _user_status_in_game[:previous_card] = { medium: previous_card.medium, description_text: previous_card.description_text }
@@ -199,10 +196,9 @@ class Game < ActiveRecord::Base
   end
 
   def set_up_next_players_turn current_card
-    next_player = next_player_after(card.uploader_id)
+    next_player = next_player_after(current_card.uploader_id)
     gu = current_card.starting_games_user
     current_user_id = current_card.uploader_id
-    next_player_message_params = []
 
     if next_player.id == gu.user_id
       gu.update(set_complete: true)
@@ -211,14 +207,13 @@ class Game < ActiveRecord::Base
     else
       create_subsequent_placeholder_for_next_player next_player.id, current_card.id
     end
-  end
 
+    true
+  end
 
   protected
 
-
     # called indirectly by games_channel through 'set_up_next_players_turn' for to prepare for the next players turn
-    # working!!!
     def create_subsequent_placeholder_for_next_player next_player_id, prev_card_id
       prev_card = Card.find(prev_card_id)
       card = Card.initialize_placeholder_card( next_player_id, (prev_card.drawing? ? 'description' : 'drawing'), prev_card_id )
@@ -235,6 +230,14 @@ class Game < ActiveRecord::Base
       user_id_of_next_user = parse_passing_order[ (user_index + 1) % parse_passing_order.length ]
       return User.find_by( id: user_id_of_next_user )
     end
+
+    #     # working!!!
+    # def prev_player_before user_id
+    #   user_index = parse_passing_order.index(user_id)
+    #   return User.none if user_index.nil?
+    #   user_id_of_next_user = parse_passing_order[ (user_index - 1) % parse_passing_order.length ]
+    #   return User.find_by( id: user_id_of_next_user )
+    # end
 
       # working!!!
     def parse_passing_order

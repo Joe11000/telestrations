@@ -6,28 +6,23 @@ class InGameCardUploadsController < ApplicationController
 
   # r5_wip ->  game#set_up_next_players_turn
   def create
-    byebug
     respond_to do |format|
       format.js do
         if uploaded_card_placeholder.description? && create_params.dig('description_text').present?
-          byebug
           uploaded_card_placeholder.update(description_text: create_params['description_text'], placeholder: false)
-        elsif uploaded_card_placeholder.drawing? && create_params.dig('drawing_image').present?
-          byebug
-          uploaded_card_placeholder.drawing.attach create_params[:drawing_image]
+        elsif uploaded_card_placeholder.drawing? && create_params.dig('drawing').present?
           uploaded_card_placeholder.update(placeholder: false)
+          uploaded_card_placeholder.drawing.attach create_params['drawing']
         else
-          head status: "#{uploaded_card_placeholder.medium} card was expected but received #{create_params.keys.first}"  and return
+          head status: "#{uploaded_card_placeholder.medium} card was expected but received #{create_params.keys.first}" and return
         end
 
         # set up the placeholder for the next players turn and get params that should be broadcasted to notify users of a card being finished
-        byebug
         @game.set_up_next_players_turn uploaded_card_placeholder
 
-        broadcast_statuses = @game.get_status_for_users [current_user, uploaded_card_placeholder.child_card.uploader ]
+        broadcast_statuses = @game.get_status_for_users([current_user, uploaded_card_placeholder.uploader ])
 
-        byebug
-        ActionCable.server.broadcast("game_#{id}", broadcast_statuses.to_json )
+        ActionCable.server.broadcast("game_#{@game.id}", broadcast_statuses.to_json )
 
         head :ok  and return
       end
@@ -41,11 +36,11 @@ class InGameCardUploadsController < ApplicationController
 
   protected
     def create_params
-      params.require(:card).permit(:description_text, :drawing_image)
+      params.require(:card).permit(:description_text, :drawing)
     end
 
     def uploaded_card_placeholder
-      @uploaded_card_placeholder ||= @game.get_placeholder_card current_user.id
+      @uploaded_card_placeholder ||= Card.get_placeholder_card(current_user.id, @game)
     end
 
     def redirect_if_not_playing_game

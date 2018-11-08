@@ -144,4 +144,89 @@ RSpec.describe Card, type: :model do
                                       ]
       end
     end
+
+  context '.get_placeholder_card', :r5 do
+    context '> 1 placeholder available' do
+      it 'returns earliest a placeholder card queued'  do
+        game = FactoryBot.create(:midgame, callback_wanted: :midgame)
+        random_placeholder1 = FactoryBot.create(:drawing, :placeholder)
+        random_placeholder2 = FactoryBot.create(:description, :placeholder)
+        random_placeholder3 = FactoryBot.create(:description, :placeholder)
+        FactoryBot.create(:drawing, :out_of_game_card_upload)
+
+        gu1, gu2, gu3 = game.games_users.order(id: :asc) # simulates each of the stacks of paper being passed
+        user_1, user_2, user_3 = gu1.user, gu2.user, gu3.user
+
+        # placeholder for each one the decks
+        gu1_placeholder = gu1.starting_card.child_card
+        gu2_placeholder = gu2.starting_card.child_card
+        gu3_placeholder = gu3.starting_card.child_card.child_card
+
+
+        expect(Card.get_placeholder_card(user_1.id, game)).to eq nil
+
+        # start user 2 has 2 placeholders, so test for both
+          expect(Card.get_placeholder_card(user_2.id, game)).to eq gu1_placeholder
+          gu1_placeholder.drawing.attach(io: File.open(File.join(Rails.root, 'spec', 'support', 'images', 'thumbnail_selfy.jpg')), \
+                                         content_type: 'image/jpg', \
+                                         filename: 'provider_avatar.jpg')
+          gu1_placeholder.update(placeholder: false)
+          expect(Card.get_placeholder_card(user_2.id, game)).to eq gu3_placeholder
+        # end user 2 has 2 placeholders, so test for both
+
+        expect(Card.get_placeholder_card(user_3.id, game)).to eq gu2_placeholder
+      end
+    end
+
+    context '1 placeholder available' do
+      it 'returns find a placeholder card' do
+        game = FactoryBot.create(:midgame_with_no_moves, callback_wanted: :midgame_with_no_moves)
+        random_placeholder1 = FactoryBot.create(:drawing, :placeholder)
+        random_placeholder2 = FactoryBot.create(:description, :placeholder)
+        random_placeholder3 = FactoryBot.create(:description, :placeholder)
+        FactoryBot.create(:drawing, :out_of_game_card_upload)
+
+        gu1, gu2, gu3 = game.games_users.order(id: :asc)
+
+        gu1_placeholder = gu1.starting_card
+        gu2_placeholder = gu2.starting_card
+        gu3_placeholder = gu3.starting_card
+
+        expect(Card.get_placeholder_card( gu1.user_id, game)).to eq gu1_placeholder
+        expect(Card.get_placeholder_card( gu2.user_id, game)).to eq gu2_placeholder
+        expect(Card.get_placeholder_card( gu3.user_id, game)).to eq gu3_placeholder
+      end
+    end
+
+    context 'no placeholder available' do
+      it 'for pregames' do
+        FactoryBot.create(:pregame, callback_wanted: :pregame)
+        game = FactoryBot.create(:pregame, callback_wanted: :pregame)
+        random_placeholder1 = FactoryBot.create(:drawing, :placeholder)
+        random_placeholder2 = FactoryBot.create(:description, :placeholder)
+        random_placeholder3 = FactoryBot.create(:description, :placeholder)
+        FactoryBot.create(:drawing, :out_of_game_card_upload)
+
+        gu1, gu2, gu3 = game.games_users
+        expect( Card.get_placeholder_card(gu1.user_id, game) ).to eq nil
+        expect( Card.get_placeholder_card(gu2.user_id, game) ).to eq nil
+        expect( Card.get_placeholder_card(gu3.user_id, game) ).to eq nil
+      end
+
+      it 'for postgames' do
+        FactoryBot.create(:pregame, callback_wanted: :pregame)
+        game = FactoryBot.create(:postgame, callback_wanted: :postgame)
+        random_placeholder1 = FactoryBot.create(:drawing, :placeholder)
+        random_placeholder2 = FactoryBot.create(:description, :placeholder)
+        random_placeholder3 = FactoryBot.create(:description, :placeholder)
+        FactoryBot.create(:drawing, :out_of_game_card_upload)
+
+        gu1, gu2, gu3 = game.games_users
+        expect( Card.get_placeholder_card(gu1.user_id, game) ).to eq nil
+        expect( Card.get_placeholder_card(gu2.user_id, game) ).to eq nil
+        expect( Card.get_placeholder_card(gu3.user_id, game) ).to eq nil
+      end
+    end
+  end
+
 end

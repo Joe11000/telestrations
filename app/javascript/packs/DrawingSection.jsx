@@ -1,21 +1,77 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import axios from 'axios'
 
 // props = { previous_card: {medium: 'description', descripion_text: 'https://somewhere.com/stuff/jpg' }
-// XOR
-// props: { previous_card: undefined }
+//           form_authenticity_token: 'fashlashleasf-32fsdfag4srfds'
+//         }
 export default class DrawingSection extends React.Component {
-  constructor(props){
+  constructor(props) {
     super(props);
+
+    this.submit_button = React.createRef();
+    this.uploadInput = React.createRef();
+
+    this.handlefileUpload = this.handlefileUpload.bind(this)
+  }
+
+  disableButton(){
+    this.submit_button.current.disabled = true
+  }
+
+  handlefileUpload(e) {
+    e.preventDefault();
+    this.disableButton();
+
+    var data = new FormData(e.target)
+
+    let req = new XMLHttpRequest()
+    req.open('POST', '/cards/in_game_card_uploads', true);
+    req.send(data)
   }
 
   render() {
     return (
-      <div className='drawing-section-component'>
-        <p>Make Drawing Container</p>
 
 
-{/*        <div data-id="make-drawing-container" id="make-drawing-container">
+      <div className='make-drawing-container'>
+        <div className='card'>
+          <div className='card-body'>
+          <h5 className="card-title text-dark">Upload Drawing of the description</h5>
+
+            <form className="make-drawing-form mt-2"
+                  action='/cards/in_game_card_uploads'
+                  method='post'
+                  data_remote='true'
+                  encType="multipart/form-data"
+                  acceptCharset="UTF-8"
+                  onSubmit={this.handlefileUpload}
+                  id='make-drawing-form'>
+              <input type="hidden" name="authenticity_token" value={this.props.form_authenticity_token} />
+              {/*<input name="utf8" type="hidden" value="✓">*/}
+
+              <div className='form-group'>
+                <label htmlFor='card-drawing' className='text-primary'>{this.props.previous_card.description_text}</label>
+                <input type="file" name="card[drawing]"
+                       className="form-control-file border-transparent"
+                       title="Can't be blank"
+                       id='card-drawing'
+                       ref={this.uploadInput}
+                       accept="image/png,image/gif,image/jpeg,image/jpg"/>
+              </div>
+              <br className='d-inline-block'/>
+
+              <button className="btn btn-primary d-inline-block" ref={this.submit_button} type="submit">Submit Drawing</button>
+            </form>
+          </div>
+
+        </div>
+      </div>
+
+
+
+
+/*        <div data-id="make-drawing-container" id="make-drawing-container">
           <div class="mb-3" id="description-to-draw">
             <p class="h3 capitalize text-center" data-id="description-text-to-draw" id="text-to-draw">
               description_text
@@ -31,9 +87,9 @@ export default class DrawingSection extends React.Component {
                 </li>
               </ul>
             </div>
-          </div>*/}
+          </div>*/
 
-{/*
+/*
      #make-drawing-container data-id='make-drawing-container' class=(@placeholder_card.try(:is_drawing?) ? '' : 'd-none')
           #description-to-draw.mb-3
             p#text-to-draw.h3.capitalize.text-center data-id='description-text-to-draw' = @prev_card.blank? ? '' : @prev_card.try(:description_text)
@@ -69,11 +125,10 @@ export default class DrawingSection extends React.Component {
                 /   <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">...</div>
                 /   <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">...</div>
                 / </div>
-*/}
-      </div>
+*/
+      // </div>
     )
   }
-
 }
 
 
@@ -134,7 +189,7 @@ export default class DrawingSection extends React.Component {
 //           .input-group
 //             = text_field_tag(:description_text_input_field, nil,  {data: {id: 'description_text_input_field'}, placeholder: 'Enter A Description', class: 'span2 form-control text-capitalize'})
 //             .input-group-btn
-//               button.btn.btn-primary type='submit' Submit
+//               button.btn.btn-primary type='Submit Text' Submit
 
 //       p.h3#text-to-draw data-id='drawing-to-describe' = @text_to_draw
 

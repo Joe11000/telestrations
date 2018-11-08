@@ -136,21 +136,18 @@ class Round_1
     # User 1 adding a description to Deck 1
     @gu_1.starting_card.update(description_text: TokenPhrase.generate(' ', numbers: false), placeholder: false)
     @gu_1.starting_card.child_card  = FactoryBot.create(:drawing, :placeholder, uploader: @gu_2.user, starting_games_user: @gu_1)
-    @gu_1.reload
   end
 
   def move_2!
     # User 2 adding a description to Deck 2
     @gu_2.starting_card.update(description_text: TokenPhrase.generate(' ', numbers: false), placeholder: false)
     @gu_2.starting_card.child_card  = FactoryBot.create(:drawing, :placeholder, uploader: @gu_3.user, starting_games_user: @gu_2)
-    @gu_2.reload
   end
 
   def move_3!
     # User 3 adding a description to Deck 3
     @gu_3.starting_card.update(description_text: TokenPhrase.generate(' ', numbers: false), placeholder: false)
     @gu_3.starting_card.child_card  = FactoryBot.create(:drawing, :placeholder,  uploader: @gu_1.user, starting_games_user: @gu_3)
-    @gu_3.reload
   end
 
   def move_all!
@@ -174,7 +171,6 @@ class Round_2
 
     # create placeholder for next user
     @gu_3.starting_card.child_card.child_card = FactoryBot.create(:description, :placeholder, uploader: @gu_2.user, starting_games_user: @gu_3)
-    @gu_3.reload
   end
 
   # User 2 adding a drawing to Deck 1, then pass to User 3
@@ -186,7 +182,6 @@ class Round_2
 
     # create placeholder for next user
     @gu_1.starting_card.child_card.child_card = FactoryBot.create(:description, :placeholder, uploader: @gu_3.user, starting_games_user: @gu_1)
-    @gu_1.reload
   end
 
   # User 3 adding a drawing to Deck 2
@@ -198,7 +193,6 @@ class Round_2
 
     # create placeholder for next user
     @gu_2.starting_card.child_card.child_card = FactoryBot.create(:description, :placeholder, uploader: @gu_1.user, starting_games_user: @gu_2)
-    @gu_2.reload
   end
 
   def move_all!
@@ -217,21 +211,18 @@ class Round_3
   def move_1!
     @gu_2.starting_card.child_card.child_card.update( description_text: TokenPhrase.generate(' ', numbers: false), placeholder: false )
     @gu_2.update(set_complete: true)
-    @gu_2.reload
   end
 
   # User 1 adding a description to Deck 2, then passing to User 2. User 1 is finished.
   def move_2!
     @gu_3.starting_card.child_card.child_card.update( description_text: TokenPhrase.generate(' ', numbers: false), placeholder: false )
     @gu_3.update(set_complete: true)
-    @gu_3.reload
   end
 
   # User 3 adding a description to Deck 1, then passing to User 1. User 3 is finished. Game is over.
   def move_3!
     @gu_1.starting_card.child_card.child_card.update( description_text: TokenPhrase.generate(' ', numbers: false), placeholder: false )
     @gu_1.update(set_complete: true)
-    @gu_1.reload
   end
 
   def move_all!

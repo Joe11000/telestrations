@@ -92,6 +92,8 @@ group :test do
   gem 'tcr'
   gem 'action-cable-testing'
   gem 'database_cleaner'
+  gem 'rails-controller-testing' # for testing games_controller
+  gem 'rspec-json_expectations'
 end
 
 

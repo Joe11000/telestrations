@@ -88,7 +88,7 @@ protected
   end
 
   def redirect_if_currently_playing_game
-    redirect_to games_url if current_user.current_game.try(:status) == 'midgame'
+    redirect_to new_game_url if current_user.current_game.try(:status) == 'midgame'
   end
 
   def different_game_type_chosen? params_game_type, game__game_type

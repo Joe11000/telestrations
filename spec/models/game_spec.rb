@@ -1,7 +1,10 @@
 require 'spec_helper'
 require 'rails_helper'
 require 'json'
-include Rails.application.routes.url_helpers
+
+RSpec.configure do |c|
+  c.include CardHelper
+end
 
 RSpec.describe Game, type: :model do
 
@@ -303,6 +306,61 @@ RSpec.describe Game, type: :model do
       3.times { expect(Game.random_public_game).to be_in [g1, g2] }
     end
 
+    context '#is_player_finished?' do
+
+      context 'returns a valid response if', :r5 do
+        it 'in 1st round of game with a waiting player' do
+          game = FactoryBot.create :midgame, callback_wanted: :midgame, round: 1, move: 1
+          user_1, user_2, user_3 = game.users.order(id: :asc)
+
+
+          expect(game.is_player_finished? user_1.id).to eq false
+          expect(game.is_player_finished? user_2.id).to eq false
+          expect(game.is_player_finished? user_3.id).to eq false
+        end
+
+        it 'in 2nd round of game with a waiting player' do
+          game = FactoryBot.create :midgame, callback_wanted: :midgame, round: 2, move: 1
+          user_1, user_2, user_3 = game.users.order(id: :asc)
+
+          expect(game.is_player_finished? user_1.id).to eq false
+          expect(game.is_player_finished? user_2.id).to eq false
+          expect(game.is_player_finished? user_3.id).to eq false
+        end
+
+        it 'in last round of game with a finished player', :r5 do
+          game = FactoryBot.create :midgame, callback_wanted: :midgame, round: 3, move: 1
+          user_1, user_2, user_3 = game.users.order(id: :asc)
+
+
+          expect(game.is_player_finished? user_1.id).to eq true
+          expect(game.is_player_finished? user_2.id).to eq false
+          expect(game.is_player_finished? user_3.id).to eq false
+
+        end
+      end
+
+      context 'raises a custom error if', :r5 do
+        let(:postgame){ FactoryBot.create :postgame, callback_wanted: :postgame}
+
+        it 'game is pregame' do
+          pregame = FactoryBot.create :pregame, callback_wanted: :pregame
+
+          pregame.users.each do |user|
+            expect{pregame.is_player_finished? user.id}.to raise_error.with_message('Game must be midgame')
+          end
+        end
+
+        it 'game is postgame' do
+          postgame = FactoryBot.create :postgame, callback_wanted: :postgame
+
+          postgame.users.each do |user|
+            expect{postgame.is_player_finished? user.id}.to raise_error.with_message('Game must be midgame')
+          end
+        end
+      end
+    end
+
     it '#cards', :r5  do
       game = FactoryBot.create(:midgame, callback_wanted: :midgame)
 
@@ -373,40 +431,29 @@ RSpec.describe Game, type: :model do
 
 
 
-    context '#get_status_for_users' do
-      def get_drawing_url card
-        rails_blob_path(card.drawing, disposition: 'attachment')
-      end
-
-
+    context '#get_status_for_users', :r5 do
      # 4 statuses possible
       # user drawing card
       # user creating description
       # user passing is now done and
       # *) is waiting for friends to finish - aka status: finished
       # *) all other players are already finished - aka gameover
-      context 'successful; A midgame.', :r5 do
+      context 'successful; A midgame.' do
         it 'midgame_with_no_moves' do
           game = FactoryBot.create(:midgame_with_no_moves, callback_wanted: :midgame_with_no_moves)
           user_1, user_2, user_3 = game.users.order(id: :asc)
 
           expected_response = { statuses: [ {
                                               attention_users: [user_1.id],
-                                              current_user_id: user_1.id,
-                                              game_over: false,
                                               user_status: 'working_on_card'
                                             },
                                             {
                                               attention_users: [user_2.id],
-                                              current_user_id: user_2.id,
-                                              game_over: false,
                                               user_status: 'working_on_card'
                                             },
 
                                             {
                                               attention_users: [user_3.id],
-                                              current_user_id: user_3.id,
-                                              game_over: false,
                                               user_status: 'working_on_card'
                                             }
                                 ]
@@ -423,21 +470,15 @@ RSpec.describe Game, type: :model do
 
             expected_response = { statuses: [ {
                                                 attention_users: [user_1.id],
-                                                current_user_id: user_1.id,
-                                                game_over: false,
                                                 user_status: 'waiting'
                                               },
                                               {
                                                 attention_users: [user_2.id],
-                                                current_user_id: user_2.id,
-                                                game_over: false,
                                                 user_status: 'working_on_card'
                                               },
 
                                               {
                                                 attention_users: [user_3.id],
-                                                current_user_id: user_3.id,
-                                                game_over: false,
                                                 user_status: 'working_on_card'
                                               }
                                   ]
@@ -453,25 +494,19 @@ RSpec.describe Game, type: :model do
 
             expected_response = { statuses: [ {
                                                 attention_users: [user_1.id],
-                                                current_user_id: user_1.id,
-                                                game_over: false,
                                                 user_status: 'waiting'
                                               },
                                               {
                                                 attention_users: [user_2.id],
-                                                current_user_id: user_2.id,
-                                                game_over: false,
                                                 previous_card: {
                                                                   medium: 'description',
-                                                                  description_text: game.get_placeholder_card(user_2.id).parent_card.description_text
+                                                                  description_text: Card.get_placeholder_card(user_2.id, game).parent_card.description_text
                                                                 },
                                                 user_status: 'working_on_card'
                                               },
 
                                               {
                                                 attention_users: [user_3.id],
-                                                current_user_id: user_3.id,
-                                                game_over: false,
                                                 user_status: 'working_on_card'
                                               }
                                   ]
@@ -487,32 +522,26 @@ RSpec.describe Game, type: :model do
 
             expected_response = { statuses: [ {
                                                 attention_users: [user_1.id],
-                                                current_user_id: user_1.id,
-                                                game_over: false,
                                                 previous_card: {
                                                                   medium: 'description',
-                                                                  description_text: game.get_placeholder_card(user_1.id).parent_card.description_text
+                                                                  description_text: Card.get_placeholder_card(user_1.id, game).parent_card.description_text
                                                                 },
                                                 user_status: 'working_on_card'
                                               },
                                               {
                                                 attention_users: [user_2.id],
-                                                current_user_id: user_2.id,
-                                                game_over: false,
                                                 previous_card: {
                                                                   medium: 'description',
-                                                                  description_text: game.get_placeholder_card(user_2.id).parent_card.description_text
+                                                                  description_text: Card.get_placeholder_card(user_2.id, game).parent_card.description_text
                                                                 },
                                                 user_status: 'working_on_card'
                                               },
 
                                               {
                                                 attention_users: [user_3.id],
-                                                current_user_id: user_3.id,
-                                                game_over: false,
                                                 previous_card: {
                                                                   medium: 'description',
-                                                                  description_text: game.get_placeholder_card(user_3.id).parent_card.description_text
+                                                                  description_text: Card.get_placeholder_card(user_3.id, game).parent_card.description_text
                                                                 },
                                                 user_status: 'working_on_card'
                                               },
@@ -531,28 +560,22 @@ RSpec.describe Game, type: :model do
 
             expected_response = { statuses: [ {
                                                 attention_users: [user_1.id],
-                                                current_user_id: user_1.id,
-                                                game_over: false,
                                                 user_status: 'waiting'
                                               },
                                               {
                                                 attention_users: [user_2.id],
-                                                current_user_id: user_2.id,
-                                                game_over: false,
                                                 previous_card: {
                                                                   medium: 'description',
-                                                                  description_text: game.get_placeholder_card(user_2.id).parent_card.description_text
+                                                                  description_text: Card.get_placeholder_card(user_2.id, game).parent_card.description_text
                                                                 },
                                                 user_status: 'working_on_card'
                                               },
 
                                               {
                                                 attention_users: [user_3.id],
-                                                current_user_id: user_3.id,
-                                                game_over: false,
                                                 previous_card: {
                                                                   medium: 'description',
-                                                                  description_text: game.get_placeholder_card(user_3.id).parent_card.description_text
+                                                                  description_text: Card.get_placeholder_card(user_3.id, game).parent_card.description_text
                                                                 },
                                                 user_status: 'working_on_card'
                                               }
@@ -569,27 +592,21 @@ RSpec.describe Game, type: :model do
 
             expected_response = { statuses: [ {
                                                 attention_users: [user_1.id],
-                                                current_user_id: user_1.id,
-                                                game_over: false,
                                                 user_status: 'waiting'
                                               },
                                               {
                                                 attention_users: [user_2.id],
-                                                current_user_id: user_2.id,
-                                                game_over: false,
                                                 previous_card: {
                                                                   medium: 'drawing',
-                                                                  drawing_url: get_drawing_url( game.get_placeholder_card(user_2.id).parent_card )
+                                                                  drawing_url: get_drawing_url( Card.get_placeholder_card(user_2.id, game).parent_card )
                                                                 },
                                                 user_status: 'working_on_card'
                                               },
                                               {
                                                 attention_users: [user_3.id],
-                                                current_user_id: user_3.id,
-                                                game_over: false,
                                                 previous_card: {
                                                                   medium: 'description',
-                                                                  description_text: game.get_placeholder_card(user_3.id).parent_card.description_text
+                                                                  description_text: Card.get_placeholder_card(user_3.id, game).parent_card.description_text
                                                                 },
                                                 user_status: 'working_on_card'
                                               }
@@ -606,31 +623,25 @@ RSpec.describe Game, type: :model do
 
             expected_response = { statuses: [ {
                                                 attention_users: [user_1.id],
-                                                current_user_id: user_1.id,
-                                                game_over: false,
                                                 previous_card: {
                                                                   medium: 'drawing',
-                                                                  drawing_url: get_drawing_url( game.get_placeholder_card(user_1.id).parent_card )
+                                                                  drawing_url: get_drawing_url( Card.get_placeholder_card(user_1.id, game).parent_card )
                                                                 },
                                                 user_status: 'working_on_card'
                                               },
                                               {
                                                 attention_users: [user_2.id],
-                                                current_user_id: user_2.id,
-                                                game_over: false,
                                                 previous_card: {
                                                                   medium: 'drawing',
-                                                                  drawing_url: get_drawing_url( game.get_placeholder_card(user_2.id).parent_card )
+                                                                  drawing_url: get_drawing_url( Card.get_placeholder_card(user_2.id, game).parent_card )
                                                                 },
                                                 user_status: 'working_on_card'
                                               },
                                               {
                                                 attention_users: [user_3.id],
-                                                current_user_id: user_3.id,
-                                                game_over: false,
                                                 previous_card: {
                                                                   medium: 'drawing',
-                                                                  drawing_url: get_drawing_url( game.get_placeholder_card(user_3.id).parent_card )
+                                                                  drawing_url: get_drawing_url( Card.get_placeholder_card(user_3.id, game).parent_card )
                                                                 },
                                                 user_status: 'working_on_card'
                                               }
@@ -648,27 +659,21 @@ RSpec.describe Game, type: :model do
             user_1, user_2, user_3 = gu_1.user, gu_2.user, gu_3.user
             expected_response = { statuses: [ {
                                                 attention_users: [user_1.id],
-                                                current_user_id: user_1.id,
-                                                game_over: false,
                                                 user_status: 'finished'
                                               },
                                               {
                                                 attention_users: [user_2.id],
-                                                current_user_id: user_2.id,
-                                                game_over: false,
                                                 previous_card: {
                                                                   medium: 'drawing',
-                                                                  drawing_url: get_drawing_url( game.get_placeholder_card(user_2.id).parent_card )
+                                                                  drawing_url: get_drawing_url( Card.get_placeholder_card(user_2.id, game).parent_card )
                                                                 },
                                                 user_status: 'working_on_card'
                                               },
                                               {
                                                 attention_users: [user_3.id],
-                                                current_user_id: user_3.id,
-                                                game_over: false,
                                                 previous_card: {
                                                                   medium: 'drawing',
-                                                                  drawing_url: get_drawing_url( game.get_placeholder_card(user_3.id).parent_card )
+                                                                  drawing_url: get_drawing_url( Card.get_placeholder_card(user_3.id, game).parent_card )
                                                                 },
                                                 user_status: 'working_on_card'
                                               }
@@ -685,23 +690,17 @@ RSpec.describe Game, type: :model do
 
             expected_response = { statuses: [ {
                                                 attention_users: [user_1.id],
-                                                current_user_id: user_1.id,
-                                                game_over: false,
                                                 user_status: 'finished'
                                               },
                                               {
                                                 attention_users: [user_2.id],
-                                                current_user_id: user_2.id,
-                                                game_over: false,
                                                 user_status: 'finished'
                                               },
                                               {
                                                 attention_users: [user_3.id],
-                                                current_user_id: user_3.id,
-                                                game_over: false,
                                                 previous_card: {
                                                                   medium: 'drawing',
-                                                                  drawing_url: get_drawing_url( game.get_placeholder_card(user_3.id).parent_card )
+                                                                  drawing_url: get_drawing_url( Card.get_placeholder_card(user_3.id, game).parent_card )
                                                                 },
                                                 user_status: 'working_on_card'
                                               }
@@ -716,14 +715,7 @@ RSpec.describe Game, type: :model do
             gu_1, gu_2, gu_3 = game.games_users.order(id: :asc)
             user_1, user_2, user_3 = gu_1.user, gu_2.user, gu_3.user
 
-            expected_response = { statuses: [
-                                              {
-                                                attention_users: game.users.ids,
-                                                game_over:       true,
-                                                url_redirect:    game_path(game.id)
-                                              }
-                                            ]
-                                }
+            expected_response = { game_over: { redirect_url: game_path(game.id) } }
 
             expect( game.get_status_for_users([user_1, user_2, user_3]) ).to eq expected_response
             expect( game.get_status_for_users([user_1, user_2]) ).to eq expected_response
@@ -735,14 +727,7 @@ RSpec.describe Game, type: :model do
           gu_1, gu_2, gu_3 = game.games_users.order(id: :asc)
           user_1, user_2, user_3 = gu_1.user, gu_2.user, gu_3.user
 
-          expected_response = { statuses: [
-                                            {
-                                              attention_users: game.users.ids,
-                                              game_over:       true,
-                                              url_redirect:    game_path(game.id)
-                                            }
-                                          ]
-                              }
+          expected_response = { game_over: { redirect_url: game_path(game.id) } }
 
           expect( game.get_status_for_users([user_1, user_2, user_3]) ).to eq expected_response
           expect( game.get_status_for_users([user_1, user_2]) ).to eq expected_response
@@ -750,172 +735,21 @@ RSpec.describe Game, type: :model do
         end
       end
 
-
-
-
-
-
-
-      # context 'successful; A midgame.' do
-      #   context 'This returns set of messages for requested players' do
-      #     xcontext 'user has placeholder for a drawing card' do
-      #       context 'Yes; with a placeholder_card waiting for user passing card' do
-      #         it 'user should be drawing a picture' do
-      #             game = FactoryBot.create(:midgame, callback_wanted: :midgame)
-      #             user_1, user_2, user_3 = game.users.order(id: :asc)
-      #             current_user = user_2
-
-      #             expected_response = { statuses: [ {
-      #                                                 attention_users: [user_2.id],
-      #                                                 current_user_id: user_2.id,
-      #                                                 game_over: false,
-      #                                                 previous_card: {
-      #                                                                   medium: 'drawing',
-      #                                                                   description_text: game.get_placeholder_card(user_2.id).parent_card.description_text
-      #                                                                 },
-      #                                                 user_status: 'working_on_card'
-      #                                               },
-
-      #                                               {
-      #                                                 attention_users: [user_3.id],
-      #                                                 current_user_id: user_3.id,
-      #                                                 game_over: false,
-      #                                                 previous_card: {
-      #                                                                   medium: 'description',
-      #                                                                   description_text: game.get_placeholder_card(user_2.id).parent_card.description_text
-      #                                                                 },
-      #                                                 user_status: 'working_on_card'
-      #                                               }
-      #                                   ]
-      #                                 }
-
-      #             expect( game.get_status_for_user([user_2, user_3 ]) ).to eq expected_response
-      #         end
-      #       end
-      #       context 'NO; with no placeholder_card waiting for user passing card' do
-      #       end
-
-      #       context 'user should be writing a description' do
-      #         it 'no previous card' do
-      #           game = FactoryBot.create(:midgame_with_no_moves, callback_wanted: :midgame_with_no_moves)
-      #           current_user = game.users.first
-
-      #           expected_response = {
-      #                                 attention_users: [current_user.id],
-      #                                 current_user_id: current_user.id,
-      #                                 game_over: false,
-      #                                 user_status: 'working_on_card'
-      #                               }
-
-      #           expect( game.get_status_for_user(current_user) ).to eq expected_response
-      #         end
-
-      #         it 'yes, previous card', :r5 do
-      #           game = FactoryBot.create(:midgame, callback_wanted: :midgame)
-      #           user_1, user_2, user_3 = game.users.order(id: :asc)
-      #           gu_1, gu_2, gu_3 = game.games_users.order(id: :asc)
-      #           current_user = user_2
-
-      #           # user 2 has a drawing card at the moment, and needs to be on their next card for this test
-      #             gu_1.starting_card.child_card.drawing.attach(io: File.open(File.join(Rails.root, 'spec', 'support', 'images', 'thumbnail_selfy.jpg')), \
-      #                                                        content_type: 'image/jpg', \
-      #                                                        filename: 'provider_avatar.jpg') # replace the placeholder card because it was easier than updating it with a new attachment
-      #             gu_1.starting_card.child_card.update(placeholder: false);
-
-
-
-      #           current_user_placeholder_description = game.get_placeholder_card(current_user.id)
-      #           previous_card = gu_3.starting_card.child_card
-
-      #           drawing_url = rails_blob_path( previous_card.drawing, disposition: 'attachment')
-
-      #           expected_response = {
-      #                                 attention_users: [current_user.id],
-      #                                 current_user_id: current_user.id,
-      #                                 game_over: false,
-      #                                 user_status: 'working_on_card',
-      #                                 previous_card: {
-      #                                    medium: 'drawing',
-      #                                    drawing_url: drawing_url
-      #                                  }
-      #                               }
-
-
-      #           expect( game.get_status_for_user(current_user) ).to eq expected_response
-      #         end
-      #       end
-
-      #       it 'after uploading a card a user has to wait for card to be passed to them' do
-      #         game = FactoryBot.create(:midgame, callback_wanted: :midgame)
-      #         user_1, user_2, user_3 = game.users.order(id: :asc)
-      #         current_user = user_1
-
-      #         expected_response = { attention_users: [current_user.id],
-      #                               current_user_id: current_user.id,
-      #                               game_over: false,
-      #                               user_status: 'waiting' }
-
-      #         expect( game.get_status_for_user(current_user) ).to eq expected_response
-      #       end
-
-      #       it 'user_1 is finished, but user 3 has not' do
-      #         # user 1 has the finished message while they wait for user 3 to finish
-      #         game = FactoryBot.create(:postgame, callback_wanted: :postgame)
-      #         gu_1, gu_2, gu_3 = game.games_users.order(id: :asc)
-
-      #          # undo the 3rd user's final card
-      #           game.midgame!
-      #           gu_1.update(set_complete: false)
-      #           final_card = gu_1.starting_card.child_card.child_card
-      #           final_card.update(placeholder: true)
-
-      #         user_1, user_2, user_3 = game.users.order(id: :asc)
-      #         current_user = user_1
-
-      #         # user 1 should see a message that he is done
-      #         expected_response = { attention_users: [current_user.id],
-      #                               current_user_id: current_user.id,
-      #                               game_over: false,
-      #                               user_status: 'finished' }
-
-      #         expect( game.get_status_for_user(current_user) ).to eq expected_response
-      #       end
-
-      #       it 'game_over when all players are finished' do
-      #         Game.destroy_all
-      #         game = FactoryBot.create(:postgame, callback_wanted: :postgame)
-      #         gu_1, gu_2, gu_3 = game.games_users.order(id: :asc)
-
-      #         game.midgame!
-
-      #         user_1_id, user_2_id, user_3_id = gu_1.user_id, gu_2.user_id, gu_3.user_id
-      #         current_user = gu_1.user
-
-      #         expected_response = { attention_users: [user_1_id, user_2_id, user_3_id],
-      #                               current_user_id: user_1_id,
-      #                               game_over: true,
-      #                               url_redirect: game_path(game.id) } # last player finishes
-
-      #         expect( game.get_status_for_user(current_user) ).to eq expected_response
-      #       end
-      #     end
-
-      #   end
-      # end
-
       context 'unsuccessful; NOT a midgame' do
         it 'game is a pregame' do
           game = FactoryBot.create(:pregame, callback_wanted: :pregame)
           current_user = game.users.first
 
-          expect( game.get_status_for_user(current_user) ).to eq false
+          expect( game.get_status_for_users([current_user]) ).to eq false
         end
 
         it 'game is a postgame' do
           game = FactoryBot.create(:postgame, callback_wanted: :postgame)
           current_user = game.users.first
 
-          expect( game.get_status_for_user(current_user) ).to eq false
+          expected_response = {'game_over': {'redirect_url': game_path(game)}}
+
+          expect( game.get_status_for_users([current_user]) ).to eq expected_response
         end
       end
     end
@@ -1050,146 +884,154 @@ RSpec.describe Game, type: :model do
       end
     end
 
-    context '#set_up_next_players_turn' do
+    context '#set_up_next_players_turn', :r5 do
 
       context 'can set up a normal next drawing' do
 
-        it 'with NO placeholder waiting for current user', :r5_wip do
+        it 'with NO placeholder waiting for current user' do
+
           game = FactoryBot.create(:midgame_with_no_moves, callback_wanted: :midgame_with_no_moves)
-          gu = game.games_users.order(:id).first
+
+          gu_1 = game.games_users.order(id: :asc).first
           users = game.users.order(:id)
-          card = FactoryBot.create(:description, uploader: users.first, idea_catalyst: gu, starting_games_user: gu) # description placeholder card
-          gu.starting_card = card
 
-          broadcast_params = game.set_up_next_players_turn gu.starting_card
+          # simulate user upload... round: 1, move: 1 without the next placeholder
+            gu_1.starting_card.update(description_text: TokenPhrase.generate(' ', numbers: false), placeholder: false)
 
-          gu.reload
+          expect{game.set_up_next_players_turn gu_1.starting_card}.to change{gu_1.cards.length}.from(1).to(2)
+          placeholder_created = gu_1.starting_card.child_card
+
+          gu_1.reload
           game.reload
-          expect(broadcast_params).to eq([ { game_over: false, set_complete: false, attention_users: users.second.id, prev_card: {id: card.id, description_text: card.description_text }} ])
-          expect(gu.set_complete).to eq false
-
-          expect( game.get_placeholder_card card.child_card.uploader_id ).to eq card.child_card # see if there is a valid placeholder for the next person
-          expect(game.status).to eq 'midgame'
+          expect(gu_1.set_complete).to eq false
+          expect(placeholder_created.uploader).to eq users[1]# see if there is a valid placeholder for the next person
+          expect(placeholder_created.drawing?).to eq true
+          expect(placeholder_created.placeholder).to eq true
+          expect(placeholder_created.drawing.attached?).to eq false
+          expect(game.midgame?).to eq true
         end
 
-        it 'with >= 1 placeholders waiting for current user' do
-          game = FactoryBot.create(:midgame_with_no_moves, callback_wanted: :midgame_with_no_moves)
+        it 'with 1 placeholder waiting for current user' do
+          game = FactoryBot.create(:midgame, callback_wanted: :midgame, round: 1, move: 1)
           users = game.users.order(:id)
           games_users = game.games_users.order(:id)
+          gu_2 = games_users[1]
+          user_2 = gu_2.user
 
-          # create a placeholder waiting for the current user
-            prev_gu = games_users.first
-            prev_card_of_waiting_placeholder = FactoryBot.create(:description, uploader: users.first, idea_catalyst: prev_gu, starting_games_user: prev_gu) # description placeholder card
-            prev_gu.starting_card = prev_card_of_waiting_placeholder
-            placeholder_waiting_for_current_user = FactoryBot.create(:drawing, uploader: users.second, drawing: nil, starting_games_user: prev_gu) # drawing placeholder card
-            prev_gu.starting_card.child_card = placeholder_waiting_for_current_user
+          # simulate user upload ... round:1 move:2 without the new placeholder
+            gu_2.starting_card.update(description_text: TokenPhrase.generate(' ', numbers: false), placeholder: false)
 
-          current_gu = games_users.second
-          current_gu.starting_card = FactoryBot.create(:description, uploader: users.second, idea_catalyst: current_gu, starting_games_user: current_gu) # description placeholder card
 
-          expect do
-            @broadcast_params = game.set_up_next_players_turn current_gu.starting_card
-          end.to change{Card.count}.by(1)
+          expect{game.set_up_next_players_turn gu_2.starting_card}.to change{gu_2.cards.length}.from(1).to(2)
+          placeholder_created = gu_2.starting_card.child_card
 
+          gu_2.reload
           game.reload
-          current_gu.reload
-          prev_gu.reload
-          expect(@broadcast_params).to eq([
-                                           { game_over: false, set_complete: false, attention_users: users.third.id, prev_card: {id: current_gu.starting_card.id, description_text: current_gu.starting_card.description_text }}, #  message for next player with broadcast params containing placeholder
-                                           { game_over: false, set_complete: false, attention_users: users.second.id, prev_card: {id: prev_card_of_waiting_placeholder.id, description_text: prev_card_of_waiting_placeholder.description_text }} # message to self for new card
-                                         ])
-          expect(games_users.map(&:set_complete).any?).to eq false
-
-          expect( game.get_placeholder_card users.third.id ).to eq current_gu.starting_card.child_card # make sure there is a valid placeholder for the next person
-          expect(game.status).to eq 'midgame'
+          expect(gu_2.set_complete).to eq false
+          expect(placeholder_created.uploader).to eq users[2]# see if there is a valid placeholder for the next person
+          expect(placeholder_created.drawing?).to eq true
+          expect(placeholder_created.placeholder).to eq true
+          expect(placeholder_created.drawing.attached?).to eq false
+          expect(game.midgame?).to eq true
         end
       end
 
-      context 'can set up a normal next description', working: true do
+      context 'can set up a normal next description' do
         it 'with NO placeholder waiting for current user' do
-          game = FactoryBot.create(:midgame_with_no_moves, description_first: false, callback_wanted: :midgame_with_no_moves)
-          gu = game.games_users.order(:id).first
+
+          game = FactoryBot.create(:midgame, callback_wanted: :midgame, round: 1, move: 3)
+
+          gu_3 = game.games_users.order(id: :asc)[2]
           users = game.users.order(:id)
-          card = FactoryBot.create(:drawing, uploader: users.first, idea_catalyst: gu, starting_games_user: gu) # drawing placeholder card
-          gu.starting_card = card
+          current_user = users.first
 
-          broadcast_params = game.set_up_next_players_turn gu.starting_card
+          # simulate user upload... round: 2, move: 1 without the next placeholder
+            gu_3.starting_card.child_card.drawing.attach(io: File.open(File.join(Rails.root, 'spec', 'support', 'images', 'thumbnail_selfy.jpg')), \
+                                                     content_type: 'image/jpg', \
+                                                     filename: 'provider_avatar.jpg') # replace the placeholder card because it was easier than updating it with a new attachment
+            gu_3.starting_card.child_card.update(placeholder: false);
 
-          gu.reload
+          expect{game.set_up_next_players_turn gu_3.starting_card.child_card}.to change{gu_3.cards.length}.from(2).to(3)
+          placeholder_created = gu_3.starting_card.child_card.child_card
+
+          gu_3.reload
           game.reload
-          expect(broadcast_params).to eq([ { game_over: false, set_complete: false, attention_users: users.second.id, prev_card: {id: card.id, drawing_url: card.drawing.url }}])
-          expect(gu.set_complete).to eq false
-
-          expect( game.get_placeholder_card card.child_card.uploader_id ).to eq card.child_card # see if there is a valid placeholder for the next person
-          expect(game.status).to eq 'midgame'
+          expect(gu_3.set_complete).to eq false
+          expect(placeholder_created.uploader).to eq users[1]# see if there is a valid placeholder for the next person
+          expect(placeholder_created.description?).to eq true
+          expect(placeholder_created.description_text).to be_nil
+          expect(placeholder_created.placeholder).to eq true
+          expect(placeholder_created.drawing.attached?).to eq false
+          expect(game.midgame?).to eq true
         end
 
-        it 'with >= 1 placeholders waiting for current user' do
-          game = FactoryBot.create(:midgame_with_no_moves, description_first: false, callback_wanted: :midgame_with_no_moves)
+        it 'with 1 placeholder waiting for current user' do
+          game = FactoryBot.create(:midgame, callback_wanted: :midgame, round: 2, move: 1)
           users = game.users.order(:id)
           games_users = game.games_users.order(:id)
+          gu_1 = games_users[0]
+          user_2 = users[1]
 
-          # create a placeholder waiting for the current user
-            prev_gu = games_users.first
-            prev_card_of_waiting_placeholder = FactoryBot.create(:drawing, uploader: users.first, idea_catalyst: prev_gu, starting_games_user: prev_gu) # description placeholder card
-            prev_gu.starting_card = prev_card_of_waiting_placeholder
-            placeholder_waiting_for_current_user = FactoryBot.create(:drawing, uploader: users.second, drawing: nil, starting_games_user: prev_gu) # drawing placeholder card
-            prev_gu.starting_card.child_card = placeholder_waiting_for_current_user
+          # simulate user upload ... round:2 move:2 without the new placeholder
+            gu_1.starting_card.child_card.drawing.attach(io: File.open(File.join(Rails.root, 'spec', 'support', 'images', 'thumbnail_selfy.jpg')), \
+                                                     content_type: 'image/jpg', \
+                                                     filename: 'provider_avatar.jpg') # replace the placeholder card because it was easier than updating it with a new attachment
+            gu_1.starting_card.child_card.update(placeholder: false);
 
-          current_gu = games_users.second
-          current_gu.starting_card = FactoryBot.create(:drawing, uploader: users.second, idea_catalyst: current_gu, starting_games_user: current_gu) # description placeholder card
 
-          expect do
-            @broadcast_params = game.set_up_next_players_turn current_gu.starting_card
-          end.to change{Card.count}.by(1)
+          expect{game.set_up_next_players_turn gu_1.starting_card.child_card}.to change{gu_1.cards.length}.from(2).to(3)
+          placeholder_created = gu_1.starting_card.child_card.child_card
 
+          gu_1.reload
           game.reload
-          current_gu.reload
-          prev_gu.reload
-          expect(@broadcast_params).to eq([
-                                           { game_over: false, set_complete: false, attention_users: users.third.id, prev_card: {id: current_gu.starting_card.id, drawing_url: current_gu.starting_card.drawing.url }}, #  message for next player with broadcast params containing placeholder
-                                           { game_over: false, set_complete: false, attention_users: users.second.id, prev_card: {id: prev_card_of_waiting_placeholder.id, drawing_url: prev_card_of_waiting_placeholder.drawing.url }} # message to self for new card
-                                         ])
-          expect(games_users.map(&:set_complete).any?).to eq false
-
-          expect( game.get_placeholder_card users.third.id ).to eq current_gu.starting_card.child_card # make sure there is a valid placeholder for the next person
-          expect(game.status).to eq 'midgame'
+          expect(gu_1.set_complete).to eq false
+          expect(placeholder_created.uploader).to eq users[2]# see if there is a valid placeholder for the next person
+          expect(placeholder_created.description?).to eq true
+          expect(placeholder_created.description_text).to be_nil
+          expect(placeholder_created.placeholder).to eq true
+          expect(placeholder_created.drawing.attached?).to eq false
+          expect(game.midgame?).to eq true
         end
       end
 
       it 'current card finished the set, but other sets are not finished. Not Game Over' do
-        game = FactoryBot.create(:midgame_with_no_moves, callback_wanted: :midgame_with_no_moves)
-        gu = game.games_users.order(:id).first
+        game = FactoryBot.create(:midgame, callback_wanted: :midgame, round: 2, move: 3)
+        games_users = game.games_users.order(:id)
+        gu_2 = games_users[1]
         users = game.users.order(:id)
-        gu.starting_card = FactoryBot.create(:description, uploader: users.first, starting_games_user: gu, idea_catalyst: gu) # description placeholder card
-        gu.starting_card.child_card = FactoryBot.create(:drawing, uploader: users.second, starting_games_user: gu) # description placeholder card
-        gu.starting_card.child_card.child_card = FactoryBot.create(:description, uploader: users.third,  starting_games_user: gu) # description placeholder card
-        last_card = gu.starting_card.child_card.child_card
 
-        broadcast_params = game.set_up_next_players_turn last_card.id
+        # simulate user upload ... round:3 move:1 without the new placeholder
+          gu_2.starting_card.child_card.child_card.update( description_text: TokenPhrase.generate(' ', numbers: false), placeholder: false )
 
-        #tests
-        gu.reload
+        last_uploaded_card = gu_2.starting_card.child_card.child_card
+        expect{game.set_up_next_players_turn last_uploaded_card }.not_to change{gu_2.cards.length}
+
+        gu_2.reload
         game.reload
-        expect(broadcast_params).to eq([{ game_over: false, attention_users: users.third.id, set_complete: true }])
-        expect(gu.set_complete).to eq true
-        expect(game.status).to eq 'midgame'
+        expect(gu_2.set_complete).to eq true
+        expect(gu_2.cards.pluck(:placeholder).any?).to eq false
+        expect(game.midgame?).to eq true
       end
 
       it 'current card finished the last set and finished the game. Game Over' do
-        game = FactoryBot.create(:postgame, status: 'midgame')
-        gu = game.games_users.order(:id).first
-        gu.update(set_complete: false)
+        game = FactoryBot.create(:midgame, callback_wanted: :midgame, round: 3, move: 2)
+        games_users = game.games_users.order(:id)
+        gu_1 = games_users[0]
         users = game.users.order(:id)
-        last_card = gu.starting_card.child_card.child_card
 
-        broadcast_params = game.set_up_next_players_turn last_card.id
+        # simulate user upload ... round:3 move:1 without the new placeholder
+        gu_1.starting_card.child_card.child_card.update( description_text: TokenPhrase.generate(' ', numbers: false), placeholder: false )
 
-        gu.reload
+        last_uploaded_card = gu_1.starting_card.child_card.child_card
+        expect{game.set_up_next_players_turn last_uploaded_card }.not_to change{gu_1.cards.length}
+
+        gu_1.reload
         game.reload
-        expect(broadcast_params).to eq([{ game_over: true }])
-        expect(gu.set_complete).to eq true
-        expect(game.status).to eq 'postgame'
+        expect(gu_1.set_complete).to eq true
+        expect(gu_1.cards.pluck(:placeholder).any?).to eq false
+        expect(game.postgame?).to eq true
+
+        expect(games_users.pluck(:set_complete).all?).to eq true
       end
     end
 
@@ -1248,7 +1090,7 @@ RSpec.describe Game, type: :model do
           gu = FactoryBot.create :games_user
           game = gu.game
           user = gu.user
-          card = gu.game.create_initial_placeholder_if_one_does_not_exist gu.user_id
+          card = gu.game.create_initial_placeholder_if_one_does_not_exist user.id
 
           expect(card.medium).to eq 'description'
           expect(card.description_text).to eq nil
@@ -1266,7 +1108,7 @@ RSpec.describe Game, type: :model do
         end
       end
 
-      context 'description placeholder card exists already', :r5 do
+      context 'description placeholder card exists already' do
         it 'should not do anything' do
           game = FactoryBot.create :midgame_with_no_moves, callback_wanted: :midgame_with_no_moves
           gu = game.games_users.first
@@ -1333,89 +1175,6 @@ RSpec.describe Game, type: :model do
       end
     end
 
-    context '#get_placeholder_card', :r5 do
-      context '> 1 placeholder available' do
-        it 'returns earliest a placeholder card queued'  do
-          game = FactoryBot.create(:midgame, callback_wanted: :midgame)
-          random_placeholder1 = FactoryBot.create(:drawing, :placeholder)
-          random_placeholder2 = FactoryBot.create(:description, :placeholder)
-          random_placeholder3 = FactoryBot.create(:description, :placeholder)
-          FactoryBot.create(:drawing, :out_of_game_card_upload)
-
-          gu1, gu2, gu3 = game.games_users.order(id: :asc) # simulates each of the stacks of paper being passed
-          user_1, user_2, user_3 = gu1.user, gu2.user, gu3.user
-
-          # placeholder for each one the decks
-          gu1_placeholder = gu1.starting_card.child_card
-          gu2_placeholder = gu2.starting_card.child_card
-          gu3_placeholder = gu3.starting_card.child_card.child_card
-
-
-          expect(game.get_placeholder_card user_1.id).to eq nil
-
-          # start user 2 has 2 placeholders, so test for both
-            expect(game.get_placeholder_card user_2.id).to eq gu1_placeholder
-            gu1_placeholder.drawing.attach(io: File.open(File.join(Rails.root, 'spec', 'support', 'images', 'thumbnail_selfy.jpg')), \
-                                           content_type: 'image/jpg', \
-                                           filename: 'provider_avatar.jpg')
-            gu1_placeholder.update(placeholder: false)
-            expect(game.get_placeholder_card user_2.id).to eq gu3_placeholder
-          # end user 2 has 2 placeholders, so test for both
-
-          expect(game.get_placeholder_card user_3.id).to eq gu2_placeholder
-        end
-      end
-
-      context '1 placeholder available' do
-        it 'returns find a placeholder card' do
-          game = FactoryBot.create(:midgame_with_no_moves, callback_wanted: :midgame_with_no_moves)
-          random_placeholder1 = FactoryBot.create(:drawing, :placeholder)
-          random_placeholder2 = FactoryBot.create(:description, :placeholder)
-          random_placeholder3 = FactoryBot.create(:description, :placeholder)
-          FactoryBot.create(:drawing, :out_of_game_card_upload)
-
-          gu1, gu2, gu3 = game.games_users.order(id: :asc)
-
-          gu1_placeholder = gu1.starting_card
-          gu2_placeholder = gu2.starting_card
-          gu3_placeholder = gu3.starting_card
-
-          expect(game.get_placeholder_card gu1.user_id).to eq gu1_placeholder
-          expect(game.get_placeholder_card gu2.user_id).to eq gu2_placeholder
-          expect(game.get_placeholder_card gu3.user_id).to eq gu3_placeholder
-        end
-      end
-
-      context 'no placeholder available' do
-        it 'for pregames' do
-          FactoryBot.create(:pregame, callback_wanted: :pregame)
-          game = FactoryBot.create(:pregame, callback_wanted: :pregame)
-          random_placeholder1 = FactoryBot.create(:drawing, :placeholder)
-          random_placeholder2 = FactoryBot.create(:description, :placeholder)
-          random_placeholder3 = FactoryBot.create(:description, :placeholder)
-          FactoryBot.create(:drawing, :out_of_game_card_upload)
-
-          gu1, gu2, gu3 = game.games_users
-          expect( game.get_placeholder_card(gu1.user_id) ).to eq nil
-          expect( game.get_placeholder_card(gu2.user_id) ).to eq nil
-          expect( game.get_placeholder_card(gu3.user_id) ).to eq nil
-        end
-
-        it 'for postgames' do
-          FactoryBot.create(:pregame, callback_wanted: :pregame)
-          game = FactoryBot.create(:postgame, callback_wanted: :postgame)
-          random_placeholder1 = FactoryBot.create(:drawing, :placeholder)
-          random_placeholder2 = FactoryBot.create(:description, :placeholder)
-          random_placeholder3 = FactoryBot.create(:description, :placeholder)
-          FactoryBot.create(:drawing, :out_of_game_card_upload)
-
-          gu1, gu2, gu3 = game.games_users
-          expect( game.get_placeholder_card(gu1.user_id) ).to eq nil
-          expect( game.get_placeholder_card(gu2.user_id) ).to eq nil
-          expect( game.get_placeholder_card(gu3.user_id) ).to eq nil
-        end
-      end
-    end
 
     context 'PRIVATE #parse_passing_order', :r5 do
       it 'parses passing order' do
