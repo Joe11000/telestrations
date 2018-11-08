@@ -15,7 +15,7 @@ RSpec.describe GamesController, type: :controller do
       # user passing is now done and
       # *) is waiting for friends to finish - aka status: finished
       # *) all other players are already finished - aka gameover
-      context 'successful; A midgame.' do
+      context 'successful; A midgame.', :r5 do
         it 'midgame_with_no_moves' do
           game = FactoryBot.create(:midgame_with_no_moves, callback_wanted: :midgame_with_no_moves)
           user_1, user_2, user_3 = game.users.order(id: :asc)
@@ -480,37 +480,10 @@ RSpec.describe GamesController, type: :controller do
               expect(response).to have_http_status :ok
               expect(JSON.parse(assigns['game_component_params'])).to include_json expected_response
             end
-
-            # expected_response = { statuses: [ {
-            #                                     attention_users: [user_1.id],
-            #                                     previous_card: {
-            #                                                       medium: 'drawing',
-            #                                                       drawing_url: get_drawing_url( Card.get_placeholder_card(user_1.id, game).parent_card )
-            #                                                     },
-            #                                     user_status: 'working_on_card'
-            #                                   },
-            #                                   {
-            #                                     attention_users: [user_2.id],
-            #                                     previous_card: {
-            #                                                       medium: 'drawing',
-            #                                                       drawing_url: get_drawing_url( Card.get_placeholder_card(user_2.id, game).parent_card )
-            #                                                     },
-            #                                     user_status: 'working_on_card'
-            #                                   },
-            #                                   {
-            #                                     attention_users: [user_3.id],
-            #                                     previous_card: {
-            #                                                       medium: 'drawing',
-            #                                                       drawing_url: get_drawing_url( Card.get_placeholder_card(user_3.id, game).parent_card )
-            #                                                     },
-            #                                     user_status: 'working_on_card'
-            #                                   }
-            #                       ]
-            #                     }
           end
         end
 
-        context 'Round 3' do
+        context 'Round 3', :r5 do
           context 'Move 1 statuses for everyone' do
 
             before :all do
@@ -519,7 +492,7 @@ RSpec.describe GamesController, type: :controller do
               @user_1, @user_2, @user_3 = @gu_1.user, @gu_2.user, @gu_3.user
             end
 
-            it 'user_1', :r5 do
+            it 'user_1' do
               cookies.signed[:user_id] = @user_1.id
 
               expected_response = { 'current_user_id': @user_1.id,
@@ -538,7 +511,7 @@ RSpec.describe GamesController, type: :controller do
               expect(assigns['game_component_params']['back_up_starting_description']).to eq nil # actively call out this is not in expected_response
             end
 
-            it 'user_2', :r5 do
+            it 'user_2' do
               cookies.signed[:user_id] = @user_2.id
               expected_response = {
                                     'current_user_id': @user_2.id,
@@ -560,7 +533,7 @@ RSpec.describe GamesController, type: :controller do
               expect(JSON.parse(assigns['game_component_params'])).to include_json expected_response
             end
 
-            it 'user_3', :r5 do
+            it 'user_3' do
               cookies.signed[:user_id] = @user_3.id
 
               expected_response = {
@@ -708,19 +681,27 @@ RSpec.describe GamesController, type: :controller do
         end
       end
 
-      xcontext 'unsuccessful; NOT a midgame' do
+      context 'unsuccessful; NOT a midgame', :r5 do
         it 'game is a pregame' do
           game = FactoryBot.create(:pregame, callback_wanted: :pregame)
           current_user = game.users.first
 
-          expect( game.get_status_for_user(current_user) ).to eq false
+          cookies.signed[:user_id] = current_user.id
+
+          get :new
+
+          expect(response).to redirect_to(choose_game_type_page_path)
         end
 
         it 'game is a postgame' do
           game = FactoryBot.create(:postgame, callback_wanted: :postgame)
           current_user = game.users.first
 
-          expect( game.get_status_for_user(current_user) ).to eq false
+          cookies.signed[:user_id] = current_user.id
+
+          get :new
+
+          expect(response).to redirect_to( choose_game_type_page_path )
         end
       end
     end
