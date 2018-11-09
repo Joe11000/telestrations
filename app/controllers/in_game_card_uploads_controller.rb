@@ -9,7 +9,6 @@ class InGameCardUploadsController < ApplicationController
     respond_to do |format|
       format.js do
         begin
-          byebug
           if uploaded_card_placeholder.description? && create_params.dig('description_text').present?
             uploaded_card_placeholder.update(description_text: create_params['description_text'], placeholder: false)
           elsif uploaded_card_placeholder.drawing? && create_params.dig('drawing').present?
@@ -28,7 +27,6 @@ class InGameCardUploadsController < ApplicationController
         @game.set_up_next_players_turn uploaded_card_placeholder
 
         users_to_send_statuses_to = [current_user, @game.next_player_after(current_user.id) ].compact
-
         # @broadcast_statuses must stay a instance variable in order to test correctly. setting an expect_to_receive in rspec is difficult because string version pushed into
         @broadcast_statuses = @game.get_status_for_users(users_to_send_statuses_to)
         @broadcast_statuses = @broadcast_statuses.to_json
@@ -54,8 +52,6 @@ class InGameCardUploadsController < ApplicationController
       case @game.try(:status)
       when 'pregame', nil
         redirect_to choose_game_type_page_url and return
-      when 'postgame'
-        redirect_to postgame_page_url and return
       end
     end
 
@@ -63,21 +59,3 @@ class InGameCardUploadsController < ApplicationController
       @game ||= current_user.try(:current_game)
     end
 end
-
-
-
-  # def new
-  # end
-
-  # def create
-  #   begin
-  #     create_params[:drawings].each do |drawing|
-  #       Card.create(uploader_id: current_user.id, medium: 'drawing', drawing: drawing, out_of_game_card_upload: true)
-  #     end
-  #     # flash[:notice] = %(Successfully Uploaded #{create_params[:drawings].length} #{'Image'.pluralize(create_params[:drawings].length)}. <a href=#{all_postgames_page_path}>View Uploaded Drawings</a> )
-  #     # redirect_to(action: :new) and return
-  #   rescue => e
-  #     flash[:alert] = "Upload Unsuccessful. #{e.full_message}"
-  #     redirect_to(action: :new) and return
-  #   end
-  # end

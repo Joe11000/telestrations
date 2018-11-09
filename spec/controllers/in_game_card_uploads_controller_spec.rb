@@ -4,9 +4,8 @@ RSpec.configure do |c|
   c.include CardHelper
 end
 
-
 RSpec.describe InGameCardUploadsController, type: :controller do
-    describe "GET #new" do
+  describe "GET #new", :r5 do
 
     # 3rd time testing this because it should be the same results from game#get_status_for_users and not the same as games_controller#new.
     # The in_game_card_upload_broadcast broadcast shouldn't have attributes only visible in games#new
@@ -14,7 +13,7 @@ RSpec.describe InGameCardUploadsController, type: :controller do
       #  * expected_response[statuses: {form_authenticity_token:} ]
       #  * expected_response[:current_user_id]
     context 'successful; A midgame.' do
-      context 'Round 1', :r5 do
+      context 'Round 1' do
         context 'Move 1 statuses for people involved' do
           before :all do
             @game = FactoryBot.create(:midgame_with_no_moves, callback_wanted: :midgame_with_no_moves)
@@ -24,7 +23,7 @@ RSpec.describe InGameCardUploadsController, type: :controller do
 
           end
 
-          it 'user_1 and user_2', :r5 do
+          it 'user_1 and user_2' do
             cookies.signed[:user_id] = @user_1.id
             expected_response = {
                                   'statuses': [
@@ -41,15 +40,17 @@ RSpec.describe InGameCardUploadsController, type: :controller do
 
 
 
-            expect(ActionCable.server).to receive(:broadcast).with( "game_#{@game.id}", expected_response.to_json )
 
-            post :create, params: { card: {description_text: expected_description_text }, format: :js}
+            expect(ActionCable.server).to receive(:broadcast).with( "game_#{@game.id}", kind_of(String) )
 
+            post :create, params: { card: {description_text: @expected_description_text }, format: :js}
+
+            expect(JSON.parse(assigns['broadcast_statuses'])).to include_json expected_response
             expect(response).to have_http_status :ok
           end
         end
 
-        context 'Move 2 statuses for everyone', :r5_wtf do
+        context 'Move 2 statuses for those involved in the transaction' do
           before :all do
             @game = FactoryBot.create(:midgame, callback_wanted: :midgame, round: 1, move: 1)
             @gu_1, @gu_2, @gu_3 = @game.games_users.order(id: :asc)
@@ -65,7 +66,7 @@ RSpec.describe InGameCardUploadsController, type: :controller do
                                    'statuses': [ {
                                       'attention_users': [@user_2.id],
                                       'previous_card': {
-                                                        'description_text': expected_description_text,
+                                                        'description_text': @gu_1.starting_card.description_text,
                                                         'medium': 'description'
                                                        },
                                       'user_status': 'working_on_card'
@@ -77,16 +78,16 @@ RSpec.describe InGameCardUploadsController, type: :controller do
                                   ]
                                 }
 
-            expect(ActionCable.server).to receive(:broadcast).with( "game_#{@game.id}", expected_response.to_json )
+            expect(ActionCable.server).to receive(:broadcast).with( "game_#{@game.id}", kind_of(String) )
 
             post :create, params: { card: {description_text: @expected_description_text }, format: :js}
 
+            expect(JSON.parse(assigns['broadcast_statuses'])).to include_json expected_response
             expect(response).to have_http_status :ok
-            expect(JSON.parse(assigns['game_component_params'])).to eq expected_response
           end
         end
 
-        context 'Move 3 statuses for everyone', :r5_wtf do
+        context 'Move 3 statuses for those involved in the transaction' do
           before :all do
             @game = FactoryBot.create(:midgame, callback_wanted: :midgame, round: 1, move: 2)
             @gu_1, @gu_2, @gu_3 = @game.games_users.order(id: :asc)
@@ -102,7 +103,7 @@ RSpec.describe InGameCardUploadsController, type: :controller do
                                   'statuses': [ {
                                                   'attention_users': [@user_3.id],
                                                   'previous_card': {
-                                                                     'description_text': @gu_2.starting_card.child_card.description_text,
+                                                                     'description_text': @gu_2.starting_card.description_text,
                                                                      'medium': 'description'
                                                                    },
                                                   'user_status': 'working_on_card'
@@ -117,18 +118,19 @@ RSpec.describe InGameCardUploadsController, type: :controller do
                                                 }
                                               ]
                                 }
-            expect(ActionCable.server).to receive(:broadcast).with( "game_#{@game.id}", expected_response.to_json )
 
-            post :create, params: { card: {description_text: 'description_text' }, format: :js}
+            expect(ActionCable.server).to receive(:broadcast).with( "game_#{@game.id}", kind_of(String) ).once
 
+            post :create, params: { card: {description_text: @expected_description_text }, format: :js}
+
+            expect(JSON.parse(assigns['broadcast_statuses'])).to include_json expected_response
             expect(response).to have_http_status :ok
-            expect(JSON.parse(assigns['game_component_params'])).to include_json expected_response
           end
         end
       end
 
       context 'Round 2' do
-        context 'Move 1 statuses for everyone' do
+        context 'Move 1 statuses for those involved in the transaction' do
           before :all do
             @game = FactoryBot.create(:midgame, callback_wanted: :midgame, round: 1, move: 3)
             @gu_1, @gu_2, @gu_3 = @game.games_users.order(id: :asc)
@@ -169,7 +171,7 @@ RSpec.describe InGameCardUploadsController, type: :controller do
           end
         end
 
-        context 'Move 2 statuses for players involved in transaction', :r5 do
+        context 'Move 2 statuses for players involved in transaction' do
           before :all do
             @game = FactoryBot.create(:midgame, callback_wanted: :midgame, round: 2, move: 1)
             @gu_1, @gu_2, @gu_3 = @game.games_users.order(id: :asc)
@@ -179,7 +181,7 @@ RSpec.describe InGameCardUploadsController, type: :controller do
             @drawn_image = Rack::Test::UploadedFile.new(File.join(Rails.root, 'spec' ,'support', 'images', @file_name ), "image/jpg")
           end
 
-          it 'user_2' do
+          it 'user_2 and user_3' do
             cookies.signed[:user_id] = @user_2.id
             expected_response = {
                                   'statuses': [ {
@@ -211,7 +213,7 @@ RSpec.describe InGameCardUploadsController, type: :controller do
           end
         end
 
-        context 'Move 3 statuses for everyone', :r5 do
+        context 'Move 3 statuses for those involved in the transaction' do
           before :all do
             @game = FactoryBot.create(:midgame, callback_wanted: :midgame, round: 2, move: 2)
             @gu_1, @gu_2, @gu_3 = @game.games_users.order(id: :asc)
@@ -258,7 +260,7 @@ RSpec.describe InGameCardUploadsController, type: :controller do
       end
 
       context 'Round 3' do
-        context 'Move 1 statuses for everyone', :r5 do
+        context 'Move 1 statuses for those involved in the transaction' do
 
           before :all do
             @game = FactoryBot.create(:midgame, callback_wanted: :midgame, round: 2, move: 3)
@@ -268,7 +270,7 @@ RSpec.describe InGameCardUploadsController, type: :controller do
           end
 
 
-          it 'user_1' do
+          it 'user_1 and user_2' do
             cookies.signed[:user_id] = @user_1.id
 
             expected_response = {
@@ -297,7 +299,7 @@ RSpec.describe InGameCardUploadsController, type: :controller do
           end
         end
 
-        context 'Move 2 statuses for everyone', :r5 do
+        context 'Move 2 statuses for those involved in the transaction' do
           before :all do
             @game = FactoryBot.create(:midgame, callback_wanted: :midgame, round: 3, move: 1)
             @gu_1, @gu_2, @gu_3 = @game.games_users.order(id: :asc)
@@ -305,7 +307,7 @@ RSpec.describe InGameCardUploadsController, type: :controller do
             @expected_description_text = TokenPhrase.generate(' ', numbers: false)
           end
 
-          it 'user_2' do
+          it 'user_2 and user_3' do
             cookies.signed[:user_id] = @user_2.id
 
             expected_response = {
@@ -336,7 +338,7 @@ RSpec.describe InGameCardUploadsController, type: :controller do
           end
         end
 
-        context 'Move 3 statuses for everyone', :r5_wip do
+        context 'Move 3 statuses for those involved in the transaction' do
           before :all do
             @game = FactoryBot.create(:midgame, callback_wanted: :midgame, round: 3, move: 2)
             @gu_1, @gu_2, @gu_3 = @game.games_users.order(id: :asc)
@@ -344,7 +346,7 @@ RSpec.describe InGameCardUploadsController, type: :controller do
             @expected_description_text = TokenPhrase.generate(' ', numbers: false)
           end
 
-          it 'user_3' do
+          it 'everyone' do
             cookies.signed[:user_id] = @user_3.id
             expected_response = { 'game_over': { 'redirect_url': game_path(@game.id) } }
 
@@ -353,33 +355,65 @@ RSpec.describe InGameCardUploadsController, type: :controller do
             post :create, params: { card: {description_text: @expected_description_text }, format: :js}
 
             expect(response).to have_http_status :ok
-            expect(JSON.parse(assigns['game_component_params'])).to eq expected_response
+            expect(JSON.parse(assigns['broadcast_statuses'])).to include_json expected_response
           end
         end
       end
     end
 
-    xcontext 'unsuccessful; NOT a midgame', :r5 do
-      it 'game is a pregame' do
-        game = FactoryBot.create(:pregame, callback_wanted: :pregame)
-        current_user = game.users.first
+    context 'unsuccessful; NOT a midgame' do
+      context 'game is a pregame' do
+        it 'and uploading a description' do
+          game = FactoryBot.create(:pregame, callback_wanted: :pregame)
+          current_user = game.users.first
 
-        cookies.signed[:user_id] = current_user.id
+          cookies.signed[:user_id] = current_user.id
 
-        get :new
+          post :create, params: { card: {description_text: @expected_description_text }, format: :js}
 
-        expect(response).to redirect_to(choose_game_type_page_path)
+          expect(response).to redirect_to(choose_game_type_page_path)
+        end
+
+        it 'and uploading a drawing' do
+          game = FactoryBot.create(:pregame, callback_wanted: :pregame)
+          current_user = game.users.first
+
+          cookies.signed[:user_id] = current_user.id
+
+
+          @file_name = 'Ace_of_Diamonds.jpg'
+          @drawn_image = Rack::Test::UploadedFile.new(File.join(Rails.root, 'spec' ,'support', 'images', @file_name ), "image/jpg")
+          post :create, params: { card: {drawing: @drawn_image }, format: :js}
+
+          expect(response).to redirect_to(choose_game_type_page_path)
+        end
       end
 
-      it 'game is a postgame', :r5 do
-        game = FactoryBot.create(:postgame, callback_wanted: :postgame)
-        current_user = game.users.first
 
-        cookies.signed[:user_id] = current_user.id
+      context 'game is a postgame' do
+        it 'and uploading a description' do
+          game = FactoryBot.create(:postgame, callback_wanted: :postgame)
+          current_user = game.users.first
 
-        get :new
+          cookies.signed[:user_id] = current_user.id
 
-        expect(response).to redirect_to( choose_game_type_page_path )
+          post :create, params: { card: {description_text: @expected_description_text }, format: :js}
+
+          expect(response).to redirect_to(choose_game_type_page_path)
+        end
+
+        it 'and uploading a drawing' do
+          game = FactoryBot.create(:postgame, callback_wanted: :postgame)
+          current_user = game.users.first
+
+          cookies.signed[:user_id] = current_user.id
+
+          @file_name = 'Ace_of_Diamonds.jpg'
+          @drawn_image = Rack::Test::UploadedFile.new(File.join(Rails.root, 'spec' ,'support', 'images', @file_name ), "image/jpg")
+          post :create, params: { card: {drawing: @drawn_image }, format: :js}
+
+          expect(response).to redirect_to(choose_game_type_page_path)
+        end
       end
     end
   end
