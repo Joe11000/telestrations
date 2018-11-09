@@ -68,7 +68,7 @@ class Game extends React.Component {
     };
 
     const propState = this
-      App.game = App.cable.subscriptions.create({
+    App.game = App.cable.subscriptions.create({
         channel: 'GameChannel'
       }, {
         received: function(data) {
@@ -109,15 +109,18 @@ class Game extends React.Component {
     // }
   // input: json from updates broadcasted from in_game_card_uploads_controller#create
   decipherData(channelData) {
-    if(typeof(channelData.game_over) == 'object' ){
-      window.location = channelData.statuses.url_redirect
+    debugger
+    if( typeof(channelData.game_over) == 'object' ) {
+      window.location = channelData.game_over.redirect_url;
       return;
     }
 
     // if state is meant for user, then save data to state
     var _statuses = channelData.statuses
     for(var i in _statuses) {
-      if(_statuses[i].attention_users.includes(this.props.data.current_user_id)) {
+
+      // this user is waiting and broadcast is intended for this user
+      if( this.user_status == 'waiting' && _statuses[i].attention_users.includes(this.props.data.current_user_id) ) {
         debugger
         this.setState({
                         previous_card: _statuses[i].previous_card,

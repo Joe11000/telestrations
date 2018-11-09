@@ -7,13 +7,24 @@ import PropTypes from 'prop-types'
 export default class DescriptionSection extends React.Component {
   constructor(props){
     super(props)
+
+    this.state = {
+      custom_input_value: undefined
+    }
+
     this.random_description_text = React.createRef();
     this.custom_description_text = React.createRef();
   }
 
   disableButtons(event){
-    this.random_description_text.current.disabled =  true
-    this.custom_description_text.current.disabled =  true
+    this.random_description_text.current.disabled = true
+    this.custom_description_text.current.disabled = true
+  }
+
+  handleCustomInputValueChange(event) {
+    this.setState({
+      custom_input_value: event.target.value
+    });
   }
 
   render() {
@@ -52,12 +63,19 @@ export default class DescriptionSection extends React.Component {
             <form className="make-description-form mt-2" action='/cards/in_game_card_uploads' method='post' data-remote='true' onSubmit={(e) => this.disableButtons(e)} data-id="make-description-form" id='make-description-form'>
               <input type="hidden" name="authenticity_token" value={this.props.authenticity_token} />
 
-              <input type="text" name="card[description_text]"
-                     className="span2 card-text text-capitalize form-control" title="Can't be blank" />
+              <input type="text"
+                     name="card[description_text]"
+                     className="span2 card-text text-capitalize form-control"
+                     title="Can't be blank"
+                     onChange={(e) => this.handleCustomInputValueChange(e) }
+                     />
 
               <br className='d-inline-block'/>
             </form>
-              <button className="btn btn-primary d-inline-block" form='make-description-form' ref={this.random_description_text} type="submit">Submit Text</button>
+              <button className="btn btn-primary d-inline-block"
+                      form='make-description-form'
+                      disabled={!this.state.custom_input_value}
+                      ref={this.random_description_text} type="submit">Submit Text</button>
               {back_up_starting_description_form_button}
           </div>
 
