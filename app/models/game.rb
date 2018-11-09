@@ -211,6 +211,13 @@ class Game < ActiveRecord::Base
     true
   end
 
+    # working!!!
+    def next_player_after user_id
+      user_index = parse_passing_order.index(user_id)
+      return User.none if user_index.nil?
+      user_id_of_next_user = parse_passing_order[ (user_index + 1) % parse_passing_order.length ]
+      return User.find_by( id: user_id_of_next_user )
+    end
   protected
 
     # called indirectly by games_channel through 'set_up_next_players_turn' for to prepare for the next players turn
@@ -223,13 +230,6 @@ class Game < ActiveRecord::Base
       return card.save
     end
 
-    # working!!!
-    def next_player_after user_id
-      user_index = parse_passing_order.index(user_id)
-      return User.none if user_index.nil?
-      user_id_of_next_user = parse_passing_order[ (user_index + 1) % parse_passing_order.length ]
-      return User.find_by( id: user_id_of_next_user )
-    end
 
     #     # working!!!
     # def prev_player_before user_id

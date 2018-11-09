@@ -12,8 +12,8 @@ class GamesController < ApplicationController
                                                                game: @game}).result_to_json
   end
 
+  # @game from redirect method
   def show
-    # @game from redirect method
     @current_user = current_user
     @game = current_user.games.order(:id).last
     @arr_of_postgame_card_sets = [ Card.cards_from_finished_game(@game.id) ]
@@ -27,21 +27,15 @@ class GamesController < ApplicationController
     @arr_of_postgame_card_sets = Card.cards_from_finished_games(current_user.games.postgame.ids)
   end
 
-
   protected
     def redirect_if_not_playing_game
       case set_game_for_action_new_method.try(:status)
       when 'pregame', nil
-        redirect_to choose_game_type_page_url and return
-      when 'postgame'
-        redirect_to postgame_page_url and return
+        redirect_to choose_game_type_page_path and return
       end
     end
 
     def set_game_for_action_new_method
       @game ||= current_user.current_game
     end
-
-
-
 end
