@@ -14,6 +14,27 @@ export default class DescriptionSection extends React.Component {
 
     this.random_description_text = React.createRef();
     this.custom_description_text = React.createRef();
+
+    this.disableButtons = this.disableButtons.bind(this)
+    this.handleFormSubmission = this.handleFormSubmission.bind(this)
+    this.handleCustomInputValueChange = this.handleCustomInputValueChange.bind(this)
+
+  }
+
+  handleFormSubmission(e) {
+    e.preventDefault();
+
+    if(!this.drawingHasBeenSelected){
+      this.disableButtons();
+
+      var data = new FormData(e.target)
+
+      let req = new XMLHttpRequest()
+      req.open('POST', '/cards/in_game_card_uploads', true);
+      req.send(data)
+
+      this.props.switchToLoadingScreen();
+    }
   }
 
   disableButtons(event){
@@ -40,7 +61,12 @@ export default class DescriptionSection extends React.Component {
 
     var back_up_starting_description_form_button = '';
     if( !(this.props.previous_card && this.props.previous_card.drawing_url) ) {
-      back_up_starting_description_form_button = <form action='/cards/in_game_card_uploads' method='post' data-remote='true' onSubmit={(e) => this.disableButtons(e)} className='d-inline-block' >
+      back_up_starting_description_form_button = <form action='/cards/in_game_card_uploads'
+                                                       method='post'
+                                                       data-remote='true'
+                                                       onSubmit={this.handleFormSubmission}
+                                                       className='d-inline-block' >
+
                                                   <input type="hidden" name="authenticity_token" value={this.props.authenticity_token} />
                                                   <input type="hidden" name="card[description_text]" id="hidden_description_text_input_field" data-id="hidden_description_text_input_field" value={this.props.back_up_starting_description} />
                                                   <button ref={this.custom_description_text} className='btn btn-info ml-3' type='submit'>Submit Random Answer</button>
@@ -60,14 +86,21 @@ export default class DescriptionSection extends React.Component {
           <div className='card-body'>
             {topText}
 
-            <form className="make-description-form mt-2" action='/cards/in_game_card_uploads' method='post' data-remote='true' onSubmit={(e) => this.disableButtons(e)} data-id="make-description-form" id='make-description-form'>
+            <form className="make-description-form mt-2"
+                  action='/cards/in_game_card_uploads'
+                  method='post'
+                  data-remote='true'
+                  onSubmit={this.handleFormSubmission}
+                  data-id="make-description-form"
+                  id='make-description-form'>
+
               <input type="hidden" name="authenticity_token" value={this.props.authenticity_token} />
 
               <input type="text"
                      name="card[description_text]"
                      className="span2 card-text text-capitalize form-control"
                      title="Can't be blank"
-                     onChange={(e) => this.handleCustomInputValueChange(e) }
+                     onChange={this.handleCustomInputValueChange }
                      />
 
               <br className='d-inline-block'/>

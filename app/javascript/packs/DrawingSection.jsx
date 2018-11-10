@@ -6,7 +6,10 @@ import axios from 'axios'
 // props = { previous_card: {medium: 'description', descripion_text: 'https://somewhere.com/stuff/jpg' }
 //           form_authenticity_token: 'fashlashleasf-32fsdfag4srfds'
 //         }
+
+
 export default class DrawingSection extends React.Component {
+
   constructor(props) {
     super(props);
 
@@ -14,11 +17,10 @@ export default class DrawingSection extends React.Component {
       drawingHasBeenSelected: false
     }
 
-
     this.submit_button = React.createRef();
     this.uploadInput = React.createRef();
 
-    this.handlefileUpload = this.handlefileUpload.bind(this)
+    this.handleFileSubmission = this.handleFileSubmission.bind(this)
     this.enableSubmitButtonIfPopulated = this.enableSubmitButtonIfPopulated.bind(this)
   }
 
@@ -26,38 +28,30 @@ export default class DrawingSection extends React.Component {
     this.submit_button.current.disabled = true
   }
 
-  switchToLoadingScreen(){
-    this.setState({
-                    previous_card: undefined,
-                    user_status: 'waiting',
-                    drawingHasBeenSelected: false
-                  });
-  }
-
   enableSubmitButtonIfPopulated(event){
-    debugger
     this.setState({
       drawingHasBeenSelected: !!(event.target.value)
     })
   }
 
-  handlefileUpload(e) {
+  handleFileSubmission(e) {
     e.preventDefault();
-    this.disableButton();
 
-    var data = new FormData(e.target)
+    if(!this.drawingHasBeenSelected){
+      this.disableButton();
+      debugger
+      var data = new FormData(e.target)
 
-    this.switchToLoadingScreen();
+      let req = new XMLHttpRequest()
+      req.open('POST', '/cards/in_game_card_uploads', true);
+      req.send(data)
 
-    let req = new XMLHttpRequest()
-    req.open('POST', '/cards/in_game_card_uploads', true);
-    req.send(data)
+      this.props.switchToLoadingScreen();
+    }
   }
 
   render() {
     return (
-
-
       <div className='make-drawing-container'>
         <div className='card'>
           <div className='card-body'>
@@ -69,7 +63,7 @@ export default class DrawingSection extends React.Component {
                   data_remote='true'
                   encType="multipart/form-data"
                   acceptCharset="UTF-8"
-                  onSubmit={this.handlefileUpload}
+                  onSubmit={this.handleFileSubmission}
                   id='make-drawing-form'>
               <input type="hidden" name="authenticity_token" value={this.props.form_authenticity_token} />
               {/*<input name="utf8" type="hidden" value="✓">*/}
@@ -160,6 +154,15 @@ export default class DrawingSection extends React.Component {
   }
 }
 
+DrawingSection.propTypes = {
+  previous_card: function(props, propName, componentName){
+    debugger
+  },
+
+  // PropTypes.oneOf([ undefined, PropTypes.object ]),
+  form_authenticity_token: PropTypes.string.isRequired,
+  switchToLoadingScreen: PropTypes.func.isRequired
+}
 
 
 

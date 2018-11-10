@@ -328,7 +328,7 @@ RSpec.describe Game, type: :model do
           expect(game.is_player_finished? user_3.id).to eq false
         end
 
-        it 'in last round of game with a finished player', :r5 do
+        it 'in last round of game with a finished player' do
           game = FactoryBot.create :midgame, callback_wanted: :midgame, round: 3, move: 1
           user_1, user_2, user_3 = game.users.order(id: :asc)
 
@@ -374,7 +374,7 @@ RSpec.describe Game, type: :model do
 
 
 
-    context '#remove_player', :r5_wip do
+    context '#remove_player', :r5 do
       context 'does nothing and returns false if' do
         it 'user does not exist', :no_travis do
           game = FactoryBot.create(:pregame, callback_wanted: :pregame)
@@ -399,7 +399,7 @@ RSpec.describe Game, type: :model do
         end
       end
 
-      context 'if other users are rendezvouing' do
+      context 'if other users are in lobby' do
         it 'removes only the user' do
           game = FactoryBot.create(:pregame, callback_wanted: :pregame)
           user_ids = game.users.ids
@@ -411,7 +411,7 @@ RSpec.describe Game, type: :model do
         end
       end
 
-      context 'if NO other users are rendezvouing' do
+      context 'if NO other users are in lobby' do
         it 'removes the user and the game' do
           game = FactoryBot.create(:pregame, callback_wanted: :pregame)
           user = game.users.first
@@ -805,7 +805,7 @@ RSpec.describe Game, type: :model do
       end
 
       context 'creates a GamesUser association from game to the new player' do
-        it 'when a user is rendezvouing with a new game and isnt currently playing one' do
+        it 'when a user is in lobby with a new game and isnt currently playing one' do
           game = FactoryBot.create(:pregame, callback_wanted: :pregame)
           user = FactoryBot.create(:user)
           game_user_ids = game.users.ids

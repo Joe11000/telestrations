@@ -15,7 +15,9 @@ class GamesController < ApplicationController
   # @game from redirect method
   def show
     @current_user = current_user
-    @game = current_user.games.order(:id).last
+    @game = current_user.games.order(:id).try(:last)
+
+    redirect_to choose_game_type_page_path if @game.blank?
     @arr_of_postgame_card_sets = [ Card.cards_from_finished_game(@game.id) ]
   end
 
