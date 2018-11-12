@@ -179,7 +179,6 @@ class Game extends React.Component {
 Game.propTypes =  {
                     back_up_starting_description: PropTypes.string,
                     current_user_id:         PropTypes.oneOfType([ PropTypes.number, PropTypes.string ]).isRequired,
-                    form_authenticity_token: PropTypes.string.isRequired,
                     previous_card_id:        PropTypes.oneOfType([ PropTypes.number, PropTypes.string ])
                   }
 
