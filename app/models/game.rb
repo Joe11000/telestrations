@@ -160,22 +160,27 @@ class Game < ActiveRecord::Base
   def get_status_for_users users_arr
     return false if pregame?
 
-
+              # byebug
     broadcast_params = { statuses: [] }
     if postgame? || game_over?
       return ( { game_over: { redirect_url: game_path(id) } } )
     end
+              # byebug
 
     users_arr.each_with_index do |user, index|
 
+              # byebug
       placeholder_card = Card.get_placeholder_card(user.id, self)
 
       _user_status_in_game = { attention_users: [user.id] }
+              # byebug
 
       #  if the user is done or waiting for others to pass him a card
       if( placeholder_card.present?)
+              # byebug
         _user_status_in_game[:user_status] = 'working_on_card'
       else
+              # byebug
         player_is_finished = GamesUser.find_by(user_id: next_player_after(user.id), game_id: id).set_complete
         _user_status_in_game[:user_status] = player_is_finished ? 'finished' : 'waiting'
       end
@@ -183,15 +188,20 @@ class Game < ActiveRecord::Base
       previous_card = placeholder_card.try(:parent_card)
       if previous_card.present?
         if previous_card.description?
+              # byebug
           _user_status_in_game[:previous_card] = { medium: previous_card.medium, description_text: previous_card.description_text }
         else
+              # byebug
           previous_card_drawing_url = rails_blob_path(previous_card.drawing, disposition: 'attachment')
           _user_status_in_game[:previous_card] = { medium: previous_card.medium, drawing_url: previous_card_drawing_url }
+              # byebug
         end
       end
       broadcast_params[:statuses] << _user_status_in_game
+              # byebug
     end
 
+              # byebug
     return broadcast_params
   end
 
