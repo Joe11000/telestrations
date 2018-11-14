@@ -31,3 +31,4 @@ yarn-debug.log*
 
 examples\.txt
 /tmp/storage/*
+/storage/*
