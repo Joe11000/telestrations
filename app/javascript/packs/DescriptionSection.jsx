@@ -61,10 +61,7 @@ export default class DescriptionSection extends React.Component {
 
     var back_up_starting_description_form_button = '';
     if( !(this.props.previous_card && this.props.previous_card.drawing_url) ) {
-      back_up_starting_description_form_button = <form action='/cards/in_game_card_uploads'
-                                                       method='post'
-                                                       data-remote='true'
-                                                       onSubmit={this.handleFormSubmission}
+      back_up_starting_description_form_button = <form onSubmit={this.handleFormSubmission}
                                                        className='d-inline-block' >
 
                                                   <input type="hidden" name="authenticity_token" value={this.props.authenticity_token} />

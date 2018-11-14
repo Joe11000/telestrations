@@ -58,9 +58,6 @@ export default class DrawingSection extends React.Component {
           <h5 className="card-title text-dark">Upload Drawing of the description</h5>
 
             <form className="make-drawing-form mt-2"
-                  action='/cards/in_game_card_uploads'
-                  method='post'
-                  data_remote='true'
                   encType="multipart/form-data"
                   acceptCharset="UTF-8"
                   onSubmit={this.handleFileSubmission}

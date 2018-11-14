@@ -10,15 +10,18 @@ class InGameCardUploadsController < ApplicationController
       format.js do
         begin
           if uploaded_card_placeholder.description? && create_params.dig('description_text').present?
+            byebug
             uploaded_card_placeholder.update(description_text: create_params['description_text'], placeholder: false)
           elsif uploaded_card_placeholder.drawing? && create_params.dig('drawing').present?
             byebug
             uploaded_card_placeholder.update(placeholder: false)
             uploaded_card_placeholder.drawing.attach create_params['drawing']
           else
+            byebug
             head status: "#{uploaded_card_placeholder.medium} card was expected but received #{create_params.keys.first}" and return
           end
         rescue => e
+          byebug
           ActionCable.server.broadcast("game_#{@game.id}", alert: "Upload Unsuccessful. #{e.full_message}")
 
           render json: { alert: 'error' }  and return

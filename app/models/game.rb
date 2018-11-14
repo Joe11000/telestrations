@@ -207,11 +207,14 @@ class Game < ActiveRecord::Base
 
   def set_up_next_players_turn current_card
     next_player = next_player_after(current_card.uploader_id)
-    gu = current_card.starting_games_user
+    starting_games_user = current_card.starting_games_user
     current_user_id = current_card.uploader_id
+    cards = starting_games_user.cards
 
-    if next_player.id == gu.user_id
-      gu.update(set_complete: true)
+    byebug
+
+    if next_player.id == starting_games_user.user_id
+      starting_games_user.update(set_complete: true)
 
       update(status: 'postgame') if game_over? # are any sets not completed?
     else
