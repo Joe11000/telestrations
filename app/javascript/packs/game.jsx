@@ -66,17 +66,28 @@ class Game extends React.Component {
       user_status:             this.props.data.statuses[0].user_status,
       form_authenticity_token: this.props.data.statuses[0].form_authenticity_token
     };
+    debugger
 
     const propState = this
-      App.game = App.cable.subscriptions.create({
+    App.game = App.cable.subscriptions.create({
         channel: 'GameChannel'
       }, {
         received: function(data) {
           propState.decipherData( JSON.parse(data) )
       }
     });
+
+    this.switchToLoadingScreen = this.switchToLoadingScreen.bind(this);
   }
 
+
+  switchToLoadingScreen(){
+    this.setState({
+                    previous_card: undefined,
+                    user_status: 'waiting',
+                    drawingHasBeenSelected: false
+                  });
+  }
 
   // input channelData options
     // channelData = { game_over: { redirect_url: game_path(id) } }
@@ -109,15 +120,18 @@ class Game extends React.Component {
     // }
   // input: json from updates broadcasted from in_game_card_uploads_controller#create
   decipherData(channelData) {
-    if(typeof(channelData.game_over) == 'object' ){
-      window.location = channelData.statuses.url_redirect
+    debugger
+    if( typeof(channelData.game_over) == 'object' ) {
+      window.location = channelData.game_over.redirect_url;
       return;
     }
 
     // if state is meant for user, then save data to state
     var _statuses = channelData.statuses
     for(var i in _statuses) {
-      if(_statuses[i].attention_users.includes(this.props.data.current_user_id)) {
+
+      // this user is waiting and broadcast is intended for this user
+      if( this.state.user_status == 'waiting' && _statuses[i].attention_users.includes(this.props.data.current_user_id) ) {
         debugger
         this.setState({
                         previous_card: _statuses[i].previous_card,
@@ -132,13 +146,15 @@ class Game extends React.Component {
       case 'working_on_card':
         if(this.state.previous_card && this.state.previous_card.medium == 'description') {
           return(<DrawingSection previous_card={this.state.previous_card}
-                                 form_authenticity_token={this.props.data.statuses[0].form_authenticity_token} />
+                                 form_authenticity_token={this.props.data.statuses[0].form_authenticity_token}
+                                 switchToLoadingScreen={this.switchToLoadingScreen} />
                 )
         }
         else{
           return(<DescriptionSection back_up_starting_description={this.props.data.back_up_starting_description}
                                      form_authenticity_token={this.props.data.statuses[0].form_authenticity_token}
-                                     previous_card={this.state.previous_card} />
+                                     previous_card={this.state.previous_card}
+                                     switchToLoadingScreen={this.switchToLoadingScreen} />
                 )
         }
       case 'waiting':
@@ -161,10 +177,9 @@ class Game extends React.Component {
 }
 
 Game.propTypes =  {
-                    game_id:                 PropTypes.oneOfType([ PropTypes.number, PropTypes.string ]),
-                    previous_card_id:        PropTypes.oneOfType([ PropTypes.number, PropTypes.string ]),
-                    current_user_id:         PropTypes.oneOfType([ PropTypes.number, PropTypes.string ]),
-                    form_authenticity_token: PropTypes.string
+                    back_up_starting_description: PropTypes.string,
+                    current_user_id:         PropTypes.oneOfType([ PropTypes.number, PropTypes.string ]).isRequired,
+                    previous_card_id:        PropTypes.oneOfType([ PropTypes.number, PropTypes.string ])
                   }
 
 

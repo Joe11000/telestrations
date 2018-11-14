@@ -66,6 +66,7 @@ RSpec.describe GamesController, type: :controller do
             expect(response).to have_http_status :ok
             expect(JSON.parse(assigns['game_component_params'])).to include_json expected_response
             expect(assigns['game_component_params']['previous_card']).to eq nil # actively call out this is not in expected_response
+            expect(assigns['game_component_params']['back_up_starting_description']).to eq nil # actively call out this is not in expected_response
           end
 
           it 'user_2' do
@@ -137,6 +138,8 @@ RSpec.describe GamesController, type: :controller do
             expect(response).to have_http_status :ok
             expect(JSON.parse(assigns['game_component_params'])).to include_json expected_response
             expect(assigns['game_component_params']['previous_card']).to eq nil # actively call out this is not in expected_response
+            expect(assigns['game_component_params']['back_up_starting_description']).to eq nil # actively call out this is not in expected_response
+
           end
 
           it 'user_2' do
@@ -157,6 +160,7 @@ RSpec.describe GamesController, type: :controller do
 
             expect(response).to have_http_status :ok
             expect(JSON.parse(assigns['game_component_params'])).to include_json expected_response
+            expect(assigns['game_component_params']['back_up_starting_description']).to eq nil # actively call out this is not in expected_response
           end
 
           it 'user_3' do
@@ -207,6 +211,7 @@ RSpec.describe GamesController, type: :controller do
 
             expect(response).to have_http_status :ok
             expect(JSON.parse(assigns['game_component_params'])).to include_json expected_response
+            expect(assigns['game_component_params']['back_up_starting_description']).to eq nil # actively call out this is not in expected_response
           end
 
           it 'user_2' do
@@ -229,6 +234,7 @@ RSpec.describe GamesController, type: :controller do
 
             expect(response).to have_http_status :ok
             expect(JSON.parse(assigns['game_component_params'])).to include_json expected_response
+            expect(assigns['game_component_params']['back_up_starting_description']).to eq nil # actively call out this is not in expected_response
           end
 
           it 'user_3' do
@@ -251,6 +257,7 @@ RSpec.describe GamesController, type: :controller do
 
             expect(response).to have_http_status :ok
             expect(JSON.parse(assigns['game_component_params'])).to include_json expected_response
+            expect(assigns['game_component_params']['back_up_starting_description']).to eq nil # actively call out this is not in expected_response
           end
         end
       end
@@ -279,8 +286,8 @@ RSpec.describe GamesController, type: :controller do
 
             expect(response).to have_http_status :ok
             expect(JSON.parse(assigns['game_component_params'])).to include_json expected_response
-            expect(assigns['game_component_params']['back_up_starting_description']).to eq nil # actively call out this is not in expected_response
             expect(assigns['game_component_params']['statuses'][0]['previous_card']).to eq nil # actively call out this is not in expected_response
+            expect(assigns['game_component_params']['back_up_starting_description']).to eq nil # actively call out this is not in expected_response
           end
 
           it 'user_2' do
@@ -303,6 +310,7 @@ RSpec.describe GamesController, type: :controller do
 
             expect(response).to have_http_status :ok
             expect(JSON.parse(assigns['game_component_params'])).to include_json expected_response
+            expect(assigns['game_component_params']['back_up_starting_description']).to eq nil # actively call out this is not in expected_response
           end
 
           it 'user_3' do
@@ -325,6 +333,7 @@ RSpec.describe GamesController, type: :controller do
 
             expect(response).to have_http_status :ok
             expect(JSON.parse(assigns['game_component_params'])).to include_json expected_response
+            expect(assigns['game_component_params']['back_up_starting_description']).to eq nil # actively call out this is not in expected_response
           end
         end
 
@@ -352,8 +361,8 @@ RSpec.describe GamesController, type: :controller do
 
             expect(response).to have_http_status :ok
             expect(JSON.parse(assigns['game_component_params'])).to include_json expected_response
-            expect(assigns['game_component_params']['back_up_starting_description']).to eq nil # actively call out this is not in expected_response
             expect(assigns['game_component_params']['statuses'][0]['previous_card']).to eq nil # actively call out this is not in expected_response
+            expect(assigns['game_component_params']['back_up_starting_description']).to eq nil # actively call out this is not in expected_response
           end
 
 
@@ -375,8 +384,8 @@ RSpec.describe GamesController, type: :controller do
             get :new
 
             expect(response).to have_http_status :ok
-            expect(assigns['game_component_params']['back_up_starting_description']).to eq nil # actively call out this is not in expected_response
             expect(JSON.parse(assigns['game_component_params'])).to include_json expected_response
+            expect(assigns['game_component_params']['back_up_starting_description']).to eq nil # actively call out this is not in expected_response
           end
 
 
@@ -400,6 +409,7 @@ RSpec.describe GamesController, type: :controller do
 
             expect(response).to have_http_status :ok
             expect(JSON.parse(assigns['game_component_params'])).to include_json expected_response
+            expect(assigns['game_component_params']['back_up_starting_description']).to eq nil # actively call out this is not in expected_response
           end
         end
 
@@ -432,6 +442,7 @@ RSpec.describe GamesController, type: :controller do
 
             expect(response).to have_http_status :ok
             expect(JSON.parse(assigns['game_component_params'])).to include_json expected_response
+            expect(assigns['game_component_params']['back_up_starting_description']).to eq nil # actively call out this is not in expected_response
           end
 
           it 'user_2' do
@@ -452,8 +463,8 @@ RSpec.describe GamesController, type: :controller do
             get :new
 
             expect(response).to have_http_status :ok
-            expect(assigns['game_component_params']['back_up_starting_description']).to eq nil # actively call out this is not in expected_response
             expect(JSON.parse(assigns['game_component_params'])).to include_json expected_response
+            expect(assigns['game_component_params']['back_up_starting_description']).to eq nil # actively call out this is not in expected_response
           end
 
           it 'user_3' do
@@ -478,6 +489,7 @@ RSpec.describe GamesController, type: :controller do
 
             expect(response).to have_http_status :ok
             expect(JSON.parse(assigns['game_component_params'])).to include_json expected_response
+            expect(assigns['game_component_params']['back_up_starting_description']).to eq nil # actively call out this is not in expected_response
           end
         end
       end
@@ -494,11 +506,11 @@ RSpec.describe GamesController, type: :controller do
           it 'user_1' do
             cookies.signed[:user_id] = @user_1.id
 
-            expected_response = { 'current_user_id': @user_1.id,
-                                  'statuses': [
+            expected_response = { 'current_user_id' => @user_1.id,
+                                  'statuses' => [
                                                 {
-                                                  'attention_users': [@user_1.id],
-                                                  'user_status': 'finished'
+                                                  'attention_users' => [@user_1.id],
+                                                  'user_status' => 'finished'
                                                 }
                                               ]
                                 }
@@ -506,8 +518,7 @@ RSpec.describe GamesController, type: :controller do
             get :new
 
             expect(response).to have_http_status :ok
-            expect(JSON.parse(assigns['game_component_params'])).to include_json expected_response
-            expect(assigns['game_component_params']['back_up_starting_description']).to eq nil # actively call out this is not in expected_response
+            expect(JSON.parse(assigns['game_component_params'])).to eq expected_response
           end
 
           it 'user_2' do
@@ -528,8 +539,8 @@ RSpec.describe GamesController, type: :controller do
             get :new
 
             expect(response).to have_http_status :ok
-            expect(assigns['game_component_params']['back_up_starting_description']).to eq nil # actively call out this is not in expected_response
             expect(JSON.parse(assigns['game_component_params'])).to include_json expected_response
+            expect(assigns['game_component_params']['back_up_starting_description']).to eq nil # actively call out this is not in expected_response
           end
 
           it 'user_3' do
@@ -554,6 +565,7 @@ RSpec.describe GamesController, type: :controller do
 
             expect(response).to have_http_status :ok
             expect(JSON.parse(assigns['game_component_params'])).to include_json expected_response
+            expect(assigns['game_component_params']['back_up_starting_description']).to eq nil # actively call out this is not in expected_response
           end
         end
 
@@ -567,11 +579,11 @@ RSpec.describe GamesController, type: :controller do
           it 'user_1' do
             cookies.signed[:user_id] = @user_1.id
 
-            expected_response = { 'current_user_id': @user_1.id,
-                                  'statuses': [
+            expected_response = { 'current_user_id' => @user_1.id,
+                                  'statuses' => [
                                                 {
-                                                  'attention_users': [@user_1.id],
-                                                  'user_status': 'finished'
+                                                  'attention_users' => [@user_1.id],
+                                                  'user_status' => 'finished'
                                                 }
                                               ]
                                 }
@@ -579,18 +591,18 @@ RSpec.describe GamesController, type: :controller do
             get :new
 
             expect(response).to have_http_status :ok
-            expect(JSON.parse(assigns['game_component_params'])).to include_json expected_response
+            expect(JSON.parse(assigns['game_component_params'])).to eq expected_response
             expect(assigns['game_component_params']['back_up_starting_description']).to eq nil # actively call out this is not in expected_response
           end
 
           it 'user_2' do
             cookies.signed[:user_id] = @user_2.id
 
-            expected_response = { 'current_user_id': @user_2.id,
-                                  'statuses': [
+            expected_response = { 'current_user_id' => @user_2.id,
+                                  'statuses' => [
                                                 {
-                                                  'attention_users': [@user_2.id],
-                                                  'user_status': 'finished'
+                                                  'attention_users' => [@user_2.id],
+                                                  'user_status' => 'finished'
                                                 }
                                               ]
                                 }
@@ -598,7 +610,7 @@ RSpec.describe GamesController, type: :controller do
             get :new
 
             expect(response).to have_http_status :ok
-            expect(JSON.parse(assigns['game_component_params'])).to include_json expected_response
+            expect(JSON.parse(assigns['game_component_params'])).to eq expected_response
             expect(assigns['game_component_params']['back_up_starting_description']).to eq nil # actively call out this is not in expected_response
           end
 
@@ -624,6 +636,7 @@ RSpec.describe GamesController, type: :controller do
 
             expect(response).to have_http_status :ok
             expect(JSON.parse(assigns['game_component_params'])).to include_json expected_response
+            expect(assigns['game_component_params']['back_up_starting_description']).to eq nil # actively call out this is not in expected_response
           end
         end
 
@@ -636,47 +649,35 @@ RSpec.describe GamesController, type: :controller do
 
           it 'user_1' do
             cookies.signed[:user_id] = @user_1.id
-            expected_response = { 'game_over': { 'redirect_url': game_path(@game.id) } }
+            expected_response = { 'game_over' => { 'redirect_url' => game_path(@game.id) } }
 
             get :new
 
             expect(response).to have_http_status :ok
-            expect(JSON.parse(assigns['game_component_params'])).to include_json expected_response
+            expect(JSON.parse(assigns['game_component_params'])).to eq expected_response
           end
 
           it 'user_2' do
             cookies.signed[:user_id] = @user_2.id
-            expected_response = { 'game_over': { 'redirect_url': game_path(@game.id) } }
+            expected_response = { 'game_over' => { 'redirect_url' => game_path(@game.id) } }
 
             get :new
 
             expect(response).to have_http_status :ok
-            expect(JSON.parse(assigns['game_component_params'])).to include_json expected_response
+            expect(JSON.parse(assigns['game_component_params'])).to eq expected_response
           end
 
 
           it 'user_3' do
             cookies.signed[:user_id] = @user_3.id
-            expected_response = { 'game_over': { 'redirect_url': game_path(@game.id) } }
+            expected_response = { 'game_over' => { 'redirect_url' => game_path(@game.id) } }
 
             get :new
 
             expect(response).to have_http_status :ok
-            expect(JSON.parse(assigns['game_component_params'])).to include_json expected_response
+            expect(JSON.parse(assigns['game_component_params'])).to eq expected_response
           end
         end
-      end
-
-      xit 'Move 3 statuses for everyone' do
-        game = FactoryBot.create(:postgame, callback_wanted: :postgame)
-        gu_1, gu_2, gu_3 = game.games_users.order(id: :asc)
-        user_1, user_2, user_3 = gu_1.user, gu_2.user, gu_3.user
-
-        expected_response = { game_over: { redirect_url: game_path(game.id) } }
-
-        expect( game.get_status_for_users([user_1, user_2, user_3]) ).to eq expected_response
-        expect( game.get_status_for_users([user_1, user_2]) ).to eq expected_response
-        expect( game.get_status_for_users([user_1]) ).to eq expected_response
       end
     end
 

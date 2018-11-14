@@ -15,6 +15,7 @@ class GamesController
                           _result = @game.get_status_for_users([@current_user])
 
                           unless @game.game_over?
+                            byebug
                             # update each status with a form_authenticity_token for each form
                             unless @game.is_player_finished? @current_user.id
                               add__authenticity_tokens__to_statuses _result

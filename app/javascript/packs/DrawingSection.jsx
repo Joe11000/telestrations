@@ -1,59 +1,76 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import axios from 'axios'
+// import update from ImmutableHelper from 'immutability-helper'
 
 // props = { previous_card: {medium: 'description', descripion_text: 'https://somewhere.com/stuff/jpg' }
 //           form_authenticity_token: 'fashlashleasf-32fsdfag4srfds'
 //         }
+
+
 export default class DrawingSection extends React.Component {
+
   constructor(props) {
     super(props);
+
+    this.state = {
+      drawingHasBeenSelected: false
+    }
 
     this.submit_button = React.createRef();
     this.uploadInput = React.createRef();
 
-    this.handlefileUpload = this.handlefileUpload.bind(this)
+    this.handleFileSubmission = this.handleFileSubmission.bind(this)
+    this.enableSubmitButtonIfPopulated = this.enableSubmitButtonIfPopulated.bind(this)
   }
 
   disableButton(){
     this.submit_button.current.disabled = true
   }
 
-  handlefileUpload(e) {
+  enableSubmitButtonIfPopulated(event){
+    this.setState({
+      drawingHasBeenSelected: !!(event.target.value)
+    })
+  }
+
+  handleFileSubmission(e) {
     e.preventDefault();
-    this.disableButton();
 
-    var data = new FormData(e.target)
+    if(!this.drawingHasBeenSelected){
+      this.disableButton();
+      debugger
+      var data = new FormData(e.target)
 
-    let req = new XMLHttpRequest()
-    req.open('POST', '/cards/in_game_card_uploads', true);
-    req.send(data)
+      let req = new XMLHttpRequest()
+      req.open('POST', '/cards/in_game_card_uploads', true);
+      req.send(data)
+
+      this.props.switchToLoadingScreen();
+    }
   }
 
   render() {
     return (
-
-
       <div className='make-drawing-container'>
         <div className='card'>
           <div className='card-body'>
           <h5 className="card-title text-dark">Upload Drawing of the description</h5>
 
             <form className="make-drawing-form mt-2"
-                  action='/cards/in_game_card_uploads'
-                  method='post'
-                  data_remote='true'
                   encType="multipart/form-data"
                   acceptCharset="UTF-8"
-                  onSubmit={this.handlefileUpload}
+                  onSubmit={this.handleFileSubmission}
                   id='make-drawing-form'>
               <input type="hidden" name="authenticity_token" value={this.props.form_authenticity_token} />
               {/*<input name="utf8" type="hidden" value="✓">*/}
 
               <div className='form-group'>
                 <label htmlFor='card-drawing' className='text-primary'>{this.props.previous_card.description_text}</label>
-                <input type="file" name="card[drawing]"
+                <input type="file"
+                       name="card[drawing]"
                        className="form-control-file border-transparent"
+                       onChange={this.enableSubmitButtonIfPopulated}
                        title="Can't be blank"
                        id='card-drawing'
                        ref={this.uploadInput}
@@ -61,7 +78,10 @@ export default class DrawingSection extends React.Component {
               </div>
               <br className='d-inline-block'/>
 
-              <button className="btn btn-primary d-inline-block" ref={this.submit_button} type="submit">Submit Drawing</button>
+              <button className="btn btn-primary d-inline-block"
+                      ref={this.submit_button}
+                      disabled={!this.state.drawingHasBeenSelected}
+                      type="submit">Submit Drawing</button>
             </form>
           </div>
 
@@ -131,6 +151,15 @@ export default class DrawingSection extends React.Component {
   }
 }
 
+DrawingSection.propTypes = {
+  previous_card: function(props, propName, componentName){
+    debugger
+  },
+
+  // PropTypes.oneOf([ undefined, PropTypes.object ]),
+  form_authenticity_token: PropTypes.string.isRequired,
+  switchToLoadingScreen: PropTypes.func.isRequired
+}
 
 
 
