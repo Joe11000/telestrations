@@ -1,33 +1,36 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-
+import LoadingIcon from 'images/loading_icon.gif'
 
 export default class LoadingContainer extends React.Component {
   render() {
+    let message_to_user = '';
+
+    switch(this.props.user_status){
+      case "waiting":
+        message_to_user = 'Waiting for a card to be passed to you.'
+        break;
+      case 'finished':
+        message_to_user = 'You are finished. Waiting for others to finish.';
+        break;
+    }
+    let message_to_user__element = <h2 className='text-center mt-5'>{message_to_user}</h2>
+
+    let LoadingIconIMG = <div className='text-center mt-5'><img src={LoadingIcon} src='/assets/loading_icon.gif' /></div>
+
     return (
       <div className='loading-container'>
-        <p>Loading Container</p>
+        {message_to_user__element}
+        {LoadingIconIMG}
       </div>
     )
   }
 }
-      // #make-description-container data-id='make-description-container' class=(@placeholder_card.try(:description?) ? '' : 'd-none')
-      //   #drawing-to-describe-container.mt-2.text-center data-id='drawing-to-describe-container'
-      //     img#drawing-to-describe data-id='drawing-to-describe' src=( @prev_card.blank? ? '' : @prev_card.try(:drawing).try(:url) )
-
-      //   form.make-description-form.mt-2 data-id='make-description-form'
-      //     .form-group data-id='make-description-group'
-      //       .input-group
-      //         = text_field_tag(:description_text_input_field, nil,  {data: {id: 'description_text_input_field'}, placeholder: 'Enter A Description', class: 'span2 form-control text-capitalize'})
-      //         .input-group-btn
-      //           button.btn.btn-primary type='submit' Submit
-
-      //   p.h3#text-to-draw data-id='drawing-to-describe' = @text_to_draw
 
 
-
-
-
+LoadingContainer.propTypes = {
+  user_status: PropTypes.PropTypes.oneOf(['waiting', 'finished']),
+}
 
 
 
@@ -41,7 +44,7 @@ export default class LoadingContainer extends React.Component {
 //     .drawing.col-12.offset-sm-1.col-sm-10.offset-md-2.col-md-8
 //       #make-drawing-container data-id='make-drawing-container' class=(@placeholder_card.try(:is_drawing?) ? '' : 'd-none')
 //         #description-to-draw.mb-3
-//           p#text-to-draw.h3.capitalize.text-center data-id='description-text-to-draw' = @prev_card.blank? ? '' : @prev_card.try(:description_text)
+//           p#text-to-draw.h2.capitalize.text-center data-id='description-text-to-draw' = @prev_card.blank? ? '' : @prev_card.try(:description_text)
 //         #drawing-tab data-id='drawing-tab'
 //           ul.nav.nav-tabs.nav-justified role='tablist'
 //             li.active role="presentation"

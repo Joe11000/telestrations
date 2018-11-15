@@ -1,62 +1,129 @@
 @import 'shared/color_schemes';
 
 
-.card_slideshow {
 
-  h3.game-index-counter {
-    text-decoration: uppercase;
-  }
-  .carousel.slide {
-    max-width: 500px;
-    margin: auto;
-    margin-bottom: 30px;
+// .card_slideshow {
 
-    .carousel-indicators li {
-      position: relative;
-      bottom: -35px;
-      background-color: $background_color;
-      margin: auto 2px;
+//   h3.game-index-counter {
+//     text-decoration: uppercase;
+//   }
+//   .carousel.slide {
+//     max-width: 500px;
+//     // margin: auto;
+//     // margin-bottom: 30px;
 
-      &.active { background-color: $first_color; }
-    }
-    .carousel-inner {
-      min-height: 285px;
+//     .carousel-indicators li {
+//       // position: relative;
+//       // bottom: -35px;
+//       // background-color: $background_color;
+//       // margin: auto 2px;
 
-      .card-author-container {
-        margin-bottom: 10px;
-        & * {
-          text-align: center;
-          margin: 5px 0 5px 0;
-        }
-        img {
-          max-height: 350px;
-          max-width: 350px;
-        }
-      }
-      .carousel-caption {
-        height: 100%;
-        position: absolute;
-        top: 0px;
+//       &.active { background-color: $first_color; }
+//     }
+//     .carousel-inner {
+//       // min-height: 285px;
 
-        .description-text {
-          position: relative;
-          top: 38%;
-        }
-      }
-      .item {
-        min-height: 285px;
+//       .card-author-container {
+//         // margin-bottom: 10px;
+//         & * {
+//           // text-align: center;
+//           // margin: 5px 0 5px 0;
+//         }
+//         img {
+//           // max-height: 350px;
+//           // max-width: 350px;
+//         }
+//       }
+//       .carousel-caption {
+//         // height: 100%;
+//         // position: absolute;
+//         // top: 0px;
 
-        img {
-          margin: auto;
-        }
-      }
-    }
-    .glyphicon {
-      color: $first_color;
-    }
-  }
+//         .description-text {
+//           // position: relative;
+//           // top: 38%;
+//         }
+//       }
+//       .item {
+//         min-height: 285px;
 
-  .glow {
-    color: $glow_color;
-  }
-}
+//         img {
+//           // margin: auto;
+//         }
+//       }
+//     }
+//     // .glyphicon {
+//     //   color: $first_color;
+//     // }
+//   }
+
+//   .glow {
+//     color: $glow_color;
+//   }
+// }
+
+
+
+// .card_slideshow {
+
+//   h3.game-index-counter {
+//     text-decoration: uppercase;
+//   }
+//   .carousel.slide {
+//     max-width: 500px;
+//     margin: auto;
+//     margin-bottom: 30px;
+
+//     .carousel-indicators li {
+//       position: relative;
+//       bottom: -35px;
+//       background-color: $background_color;
+//       margin: auto 2px;
+
+//       &.active { background-color: $first_color; }
+//     }
+//     .carousel-inner {
+//       min-height: 285px;
+
+//       .card-author-container {
+//         margin-bottom: 10px;
+//         & * {
+//           text-align: center;
+//           margin: 5px 0 5px 0;
+//         }
+//         img {
+//           max-height: 350px;
+//           max-width: 350px;
+//         }
+//       }
+//       .carousel-caption {
+//         height: 100%;
+//         position: absolute;
+//         top: 0px;
+
+//         .description-text {
+//           position: relative;
+//           top: 38%;
+//         }
+//       }
+//       .item {
+//         min-height: 285px;
+
+//         img {
+//           margin: auto;
+//         }
+//       }
+//     }
+//     .glyphicon {
+//       color: $first_color;
+//     }
+//   }
+
+//   .glow {
+//     color: $glow_color;
+//   }
+// }
+
+
+
+

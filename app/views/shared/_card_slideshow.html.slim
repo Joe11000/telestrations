@@ -4,7 +4,7 @@
 
   / The card.uploader_id compared to @current_user.id will reveal if current_user drew that card
   / have text glow if
-.card-slideshow
+.card-carousel
   - arr_of_postgame_card_sets.each_with_index do |game_card_set, game_card_set_index|
     hr
     h3.h3.game-index-counter = "Game #{game_card_set_index + 1}"
@@ -26,18 +26,17 @@
                 p.h4 class=(did_i_make_card == 0 ? 'glow' : '') class=(did_i_make_card ? 'glow': '') Created By:
                 p.h4 class=(did_i_make_card == 0 ? 'glow' : '') class=(did_i_make_card ? 'glow': '') = card_container[0]
               - if(card_container[1].drawing?)
-                /= image_tag card_container[1].drawing.variant(resize: "100x100").processed.service_url
-                = image_tag get_drawing_url(card_container[1]), alt: 'User Drawing', class: 'w-200', width: '400px;'
+                = image_tag get_drawing_url(card_container[1]), alt: "Drawing to describe", class: 'd-block w-200'
 
               .carousel-caption
                 - if(card_container[1].description?)
                   h3.h3.description-text = card_container[1].description_text
 
         /! Controls
-        a.left.carousel-control-prev data-slide='prev' href="##{carousel_id}" role='button'
+        a.carousel-control-prev data-slide='prev' href="##{carousel_id}" role='button'
           i.glyphicon.glyphicon-chevron-left.fa.fa-chevron-left aria-hidden='true'
           span.sr-only Previous
 
-        a.right.carousel-control-next data-slide='next' href="##{carousel_id}" role='button'
+        a.carousel-control-next data-slide='next' href="##{carousel_id}" role='button'
           i.glyphicon.glyphicon-chevron-right.fa.fa-chevron-right aria-hidden='true'
           span.sr-only Next

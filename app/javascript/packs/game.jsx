@@ -64,9 +64,9 @@ class Game extends React.Component {
     this.state = {
       previous_card:           this.props.data.statuses[0].previous_card,
       user_status:             this.props.data.statuses[0].user_status,
-      form_authenticity_token: this.props.data.statuses[0].form_authenticity_token
+      form_authenticity_token: this.props.data.statuses[0].form_authenticity_token,
+      size_of_card_backlog: 2
     };
-    debugger
 
     const propState = this
     App.game = App.cable.subscriptions.create({
@@ -120,7 +120,6 @@ class Game extends React.Component {
     // }
   // input: json from updates broadcasted from in_game_card_uploads_controller#create
   decipherData(channelData) {
-    debugger
     if( typeof(channelData.game_over) == 'object' ) {
       window.location = channelData.game_over.redirect_url;
       return;
@@ -132,7 +131,6 @@ class Game extends React.Component {
 
       // this user is waiting and broadcast is intended for this user
       if( this.state.user_status == 'waiting' && _statuses[i].attention_users.includes(this.props.data.current_user_id) ) {
-        debugger
         this.setState({
                         previous_card: _statuses[i].previous_card,
                         user_status: _statuses[i].user_status
@@ -147,19 +145,25 @@ class Game extends React.Component {
         if(this.state.previous_card && this.state.previous_card.medium == 'description') {
           return(<DrawingSection previous_card={this.state.previous_card}
                                  form_authenticity_token={this.props.data.statuses[0].form_authenticity_token}
-                                 switchToLoadingScreen={this.switchToLoadingScreen} />
+                                 switchToLoadingScreen={this.switchToLoadingScreen}
+                                 size_of_card_backlog={this.state.size_of_card_backlog}
+                                 />
                 )
         }
         else{
           return(<DescriptionSection back_up_starting_description={this.props.data.back_up_starting_description}
                                      form_authenticity_token={this.props.data.statuses[0].form_authenticity_token}
                                      previous_card={this.state.previous_card}
-                                     switchToLoadingScreen={this.switchToLoadingScreen} />
+                                     switchToLoadingScreen={this.switchToLoadingScreen}
+                                     size_of_card_backlog={this.state.size_of_card_backlog}
+
+                                     />
                 )
         }
       case 'waiting':
       case 'finished':
-        return(<LoadingContainer user_status={this.props.data.user_status}/>);
+        debugger
+        return(<LoadingContainer user_status={this.state.user_status}/>);
     }
   }
 
@@ -178,8 +182,19 @@ class Game extends React.Component {
 
 Game.propTypes =  {
                     back_up_starting_description: PropTypes.string,
-                    current_user_id:         PropTypes.oneOfType([ PropTypes.number, PropTypes.string ]).isRequired,
-                    previous_card_id:        PropTypes.oneOfType([ PropTypes.number, PropTypes.string ])
+                    current_user_id:         PropTypes.number.isRequired,
+                    form_authenticity_token: PropTypes.string,
+                    // ,size_of_card_backlog: PropTypes.integer.isRequired,
+
+                    statuses: PropTypes.shape({
+                      attention_users: PropTypes.arrayOf(PropTypes.number),
+                      user_status: PropTypes.oneOf(['working_on_card', 'waiting', 'finished']).isRequired,
+
+                      previous_card: function(props, propName, componentName){
+                        debugger
+
+                      }
+                    })
                   }
 
 

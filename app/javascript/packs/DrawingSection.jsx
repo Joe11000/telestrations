@@ -12,7 +12,7 @@ export default class DrawingSection extends React.Component {
 
   constructor(props) {
     super(props);
-
+    debugger
     this.state = {
       drawingHasBeenSelected: false
     }
@@ -51,12 +51,15 @@ export default class DrawingSection extends React.Component {
   }
 
   render() {
+    let purple_border = {}
+    let card_styles = Object.assign({maxWidth: '35rem', margin: 'auto'}, purple_border)
+
     return (
       <div className='make-drawing-container'>
-        <div className='card'>
-          <div className='card-body'>
-          <h5 className="card-title text-dark">Upload Drawing of the description</h5>
+        <div className='card bg-dark border-primary' style={card_styles}>
+          <h3 className="card-header border-primary">Upload a drawing of the description</h3>
 
+          <div className='card-body border-primary' style={purple_border}>
             <form className="make-drawing-form mt-2"
                   encType="multipart/form-data"
                   acceptCharset="UTF-8"
@@ -64,18 +67,16 @@ export default class DrawingSection extends React.Component {
                   id='make-drawing-form'>
               <input type="hidden" name="authenticity_token" value={this.props.form_authenticity_token} />
               {/*<input name="utf8" type="hidden" value="✓">*/}
+              <h4 className='text-primary card-title text-capitalize'>{this.props.previous_card.description_text}</h4>
 
-              <div className='form-group'>
-                <label htmlFor='card-drawing' className='text-primary'>{this.props.previous_card.description_text}</label>
-                <input type="file"
-                       name="card[drawing]"
-                       className="form-control-file border-transparent"
-                       onChange={this.enableSubmitButtonIfPopulated}
-                       title="Can't be blank"
-                       id='card-drawing'
-                       ref={this.uploadInput}
-                       accept="image/png,image/gif,image/jpeg,image/jpg"/>
-              </div>
+              <input type="file"
+                     name="card[drawing]"
+                     className="form-control-file border-transparent"
+                     onChange={this.enableSubmitButtonIfPopulated}
+                     title="Can't be blank"
+                     id='card-drawing'
+                     ref={this.uploadInput}
+                     accept="image/png,image/gif,image/jpeg,image/jpg"/>
               <br className='d-inline-block'/>
 
               <button className="btn btn-primary d-inline-block"
@@ -85,6 +86,11 @@ export default class DrawingSection extends React.Component {
             </form>
           </div>
 
+          {this.props.size_of_card_backlog && (
+            <div className={"card-footer font-warning border-primary " + (this.props.size_of_card_backlog >= 2 ? 'text-danger' : 'text-warning') }>
+              {this.props.size_of_card_backlog} {this.props.size_of_card_backlog >= 2 ? 'cards' : 'card' } waiting on you
+            </div>
+          )}
         </div>
       </div>
 

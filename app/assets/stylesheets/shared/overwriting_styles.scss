@@ -24,6 +24,14 @@ body {
   border-color: $third_color;
 }
 
+.border-primary {
+  border-color: $first_color !important;
+}
+
+// .text-secondary {
+//   color: $third_color !important;
+// }
+
 .popover {
   min-width: 100px;
   border-color: $first_color;

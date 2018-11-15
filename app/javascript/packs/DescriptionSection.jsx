@@ -51,12 +51,13 @@ export default class DescriptionSection extends React.Component {
   render() {
     var topText = '';
     var topImage = '';
+    var footer = '';
 
     if(this.props.previous_card && this.props.previous_card.drawing_url) {
-      topText = <h5 className="card-title text-dark">Describe The drawing</h5>
+      topText = <h5 className="card-title">Describe The drawing</h5>
     }
     else{
-      topText = <h5 className="card-title text-dark">Think up an idea for the next person to draw</h5>
+      topText = <h5 className="card-title">Think up an idea for the next person to draw</h5>
     }
 
     var back_up_starting_description_form_button = '';
@@ -76,9 +77,16 @@ export default class DescriptionSection extends React.Component {
                   />
     }
 
+    if(this.props.size_of_card_backlog) {
+
+      footer = <div className={"card-footer font-warning border-primary " + (this.props.size_of_card_backlog >= 2 ? 'text-danger' : 'text-warning') }>
+                 {this.props.size_of_card_backlog} {this.props.size_of_card_backlog >= 2 ? 'cards' : 'card' } waiting on you
+               </div>
+    }
+
     return (
       <div className='make-description-container'>
-        <div className='card'>
+        <div className='card bg-dark border-primary'>
           {topImage}
           <div className='card-body'>
             {topText}
@@ -109,6 +117,7 @@ export default class DescriptionSection extends React.Component {
               {back_up_starting_description_form_button}
           </div>
 
+          {footer}
         </div>
       </div>
     )
