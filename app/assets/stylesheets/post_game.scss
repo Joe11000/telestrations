@@ -4,24 +4,4 @@
   .glow {
     color: $reddish;
   }
-
-  hr {
-    border-top: 2px solid $text_color;
-    width: 100%;
-  }
-
-  hr.dotted-line {
-    border-top: 2px dotted $text_color;
-    width: 75%;
-  }
-
-
-  a.carousel-control {
-    opacity: .9;
-
-    & > * {
-      color: $first_color;
-      opacity: 1;
-    }
-  }
 }

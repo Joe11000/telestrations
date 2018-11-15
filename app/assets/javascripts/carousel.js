@@ -1,3 +1,3 @@
 $(() => {
-  $('.carousel').carousel()
+  $('.carousel').carousel();
 });

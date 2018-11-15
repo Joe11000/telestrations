@@ -17,8 +17,23 @@ class GamesController < ApplicationController
     @current_user = current_user
     @game = current_user.games.order(:id).try(:last)
 
-    (redirect_to choose_game_type_page_path and return) if @game.blank?
-    @arr_of_postgame_card_sets = [ Card.cards_from_finished_game(@game.id) ]
+    respond_to do |format|
+      format.html do
+        if @game.blank?
+          ( redirect_to(choose_game_type_page_path, alert: 'User can not see game, because they did not play in that game') and return)
+        end
+
+        @arr_of_postgame_card_sets = [ Card.cards_from_finished_game(@game.id) ]
+      end
+
+      format.js do
+        if @game.present?
+          render( json: [ Card.cards_from_finished_game(@game.id) ] ) and return
+        else
+          render( json: {error: 'User can not see game, because they did not play in that game'}) and return
+        end
+      end
+    end
   end
 
   def index
@@ -26,7 +41,7 @@ class GamesController < ApplicationController
     @current_user = current_user
     @out_of_game_cards = Card.where(out_of_game_card_upload: true, user: current_user)
 
-    @arr_of_postgame_card_sets = Card.cards_from_finished_games(current_user.games.postgame.ids)
+    @arr_of_postgame_card_set = Card.cards_from_finished_game(current_user.games.postgame.last.id)
   end
 
   protected
