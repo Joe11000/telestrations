@@ -153,10 +153,6 @@ def new_game_associations game, num_of_players, evaluator
   true
 end
 
-# user = FactoryBot.create :user
-# pregame = FactoryBot.create :pregame, callback_wanted: :pregame, with_user_ids: [user.id]
-# pregame.user_ids.include? user.id
-
 # class GameBuilder
 #   attr_reader :round_num, :move_num, :users, :gus
 
