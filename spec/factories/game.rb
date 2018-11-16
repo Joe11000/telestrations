@@ -10,6 +10,7 @@ FactoryBot.define do
       callback_wanted { 'none' }
       round { 0 }
       move { 0 }
+      with_user_ids {[]}
     end
 
     trait :public_game do
@@ -33,7 +34,7 @@ FactoryBot.define do
 
       after(:create) do |game, evaluator|
         if evaluator.callback_wanted == :midgame_with_no_moves
-          new_game_associations game, evaluator.num_of_players
+          new_game_associations game, evaluator.num_of_players, evaluator
 
           game.update(passing_order: game.user_ids.to_s, join_code: nil)
         end
@@ -47,13 +48,13 @@ FactoryBot.define do
 
       after(:create) do |game, evaluator|
         if evaluator.callback_wanted == :midgame && (evaluator.round == 0 && evaluator.move == 0)
-          new_game_associations game, evaluator.num_of_players
+          new_game_associations game, evaluator.num_of_players, evaluator
           game.update(passing_order: game.user_ids.to_s, join_code: nil)
           ::GameWithThreePeople::additional_player_moves game
 
 
         elsif evaluator.callback_wanted == :midgame && (evaluator.round != 0 && evaluator.move != 0)
-          new_game_associations game, evaluator.num_of_players
+          new_game_associations game, evaluator.num_of_players, evaluator
           game.update(passing_order: game.user_ids.to_s, join_code: nil)
 
           case evaluator.round
@@ -117,7 +118,7 @@ FactoryBot.define do
 
       after(:create) do |game, evaluator|
         if evaluator.callback_wanted == :postgame
-          new_game_associations game, evaluator.num_of_players
+          new_game_associations game, evaluator.num_of_players, evaluator
           ::GameWithThreePeople::additional_player_moves game
           ::GameWithThreePeople::complete_the_game_associations game
           game.update(passing_order: game.user_ids.to_s, join_code: nil)
@@ -130,8 +131,16 @@ FactoryBot.define do
 end
 
 # these add users with their users_game_names and a placeholder starting card
-def new_game_associations game, num_of_players
-  num_of_players.times do |num|
+def new_game_associations game, num_of_players, evaluator
+  if evaluator.with_user_ids.present?
+    evaluator.with_user_ids.each do |user_id|
+      current_gu = FactoryBot.create(:games_user, game_id: game.id, user_id: user_id)
+      current_gu.starting_card = FactoryBot.create(:description, :placeholder, uploader_id: current_gu.user_id, idea_catalyst_id: current_gu.id, starting_games_user_id: current_gu.id)
+    end
+  end
+
+  remaining_number_of_users_to_make = num_of_players - evaluator.with_user_ids.length
+  remaining_number_of_users_to_make.times do
     current_gu = FactoryBot.create(:games_user, game_id: game.id)
     current_gu.starting_card = FactoryBot.create(:description, :placeholder, uploader_id: current_gu.user_id, idea_catalyst_id: current_gu.id, starting_games_user_id: current_gu.id)
   end

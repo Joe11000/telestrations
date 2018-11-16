@@ -5,767 +5,765 @@ RSpec.configure do |c|
 end
 
 RSpec.describe GamesController, type: :controller do
-  describe "GET #new", :r5 do
+  context 'Actions' do
+    describe ":new", :r5 do
 
 
-   # 4 statuses possible
-    # user drawing card
-    # user creating description
-    # user passing is now done and
-    # *) is waiting for friends to finish - aka status: finished
-    # *) all other players are already finished - aka gameover
-    context 'successful; A midgame.' do
-      it 'midgame_with_no_moves' do
-        game = FactoryBot.create(:midgame_with_no_moves, callback_wanted: :midgame_with_no_moves)
-        user_1, user_2, user_3 = game.users.order(id: :asc)
+     # 4 statuses possible
+      # user drawing card
+      # user creating description
+      # user passing is now done and
+      # *) is waiting for friends to finish - aka status: finished
+      # *) all other players are already finished - aka gameover
+      context 'successful; A midgame.' do
+        it 'midgame_with_no_moves' do
+          game = FactoryBot.create(:midgame_with_no_moves, callback_wanted: :midgame_with_no_moves)
+          user_1, user_2, user_3 = game.users.order(id: :asc)
 
-        expected_response = { statuses: [ {
-                                            attention_users: [user_1.id],
-                                            user_status: 'working_on_card'
-                                          },
-                                          {
-                                            attention_users: [user_2.id],
-                                            user_status: 'working_on_card'
-                                          },
+          expected_response = { statuses: [ {
+                                              attention_users: [user_1.id],
+                                              user_status: 'working_on_card'
+                                            },
+                                            {
+                                              attention_users: [user_2.id],
+                                              user_status: 'working_on_card'
+                                            },
 
-                                          {
-                                            attention_users: [user_3.id],
-                                            user_status: 'working_on_card'
-                                          }
-                              ]
-                            }
+                                            {
+                                              attention_users: [user_3.id],
+                                              user_status: 'working_on_card'
+                                            }
+                                ]
+                              }
 
-        expect( game.get_status_for_users([user_1, user_2, user_3]) ).to eq expected_response
-      end
+          expect( game.get_status_for_users([user_1, user_2, user_3]) ).to eq expected_response
+        end
 
-      context 'Round 1' do
-        context 'Move 1 statuses for everyone' do
-          before :all do
-            @game = FactoryBot.create(:midgame, callback_wanted: :midgame, round: 1, move: 1)
-            @gu_1, @gu_2, @gu_3 = @game.games_users.order(id: :asc)
-            @user_1, @user_2, @user_3 = @gu_1.user, @gu_2.user, @gu_3.user
+        context 'Round 1' do
+          context 'Move 1 statuses for everyone' do
+            before :all do
+              @game = FactoryBot.create(:midgame, callback_wanted: :midgame, round: 1, move: 1)
+              @gu_1, @gu_2, @gu_3 = @game.games_users.order(id: :asc)
+              @user_1, @user_2, @user_3 = @gu_1.user, @gu_2.user, @gu_3.user
+            end
+
+            # attributes only visible in games#new and not in_game_card_upload_broadcast
+              #  * expected_response[:back_up_starting_description]
+              #  * expected_response[statuses: {form_authenticity_token:} ]
+              #  * expected_response[:current_user_id]
+            it 'user_1' do
+              cookies.signed[:user_id] = @user_1.id
+              expected_response = { 'current_user_id': @user_1.id,
+                                    'statuses': [
+                                                  {
+                                                    'form_authenticity_token': (be_a String),
+                                                    'attention_users': [@user_1.id],
+                                                    'user_status': 'waiting'
+                                                  }
+                                                ]
+                                  }
+              get :new
+
+              expect(response).to have_http_status :ok
+              expect(JSON.parse(assigns['game_component_params'])).to include_json expected_response
+              expect(assigns['game_component_params']['previous_card']).to eq nil # actively call out this is not in expected_response
+              expect(assigns['game_component_params']['back_up_starting_description']).to eq nil # actively call out this is not in expected_response
+            end
+
+            it 'user_2' do
+              cookies.signed[:user_id] = @user_2.id
+
+              expected_response = {
+                                    'back_up_starting_description': (be_a String),
+                                    'current_user_id': @user_2.id,
+                                    'statuses': [
+                                                  {
+                                                    'attention_users': [@user_2.id],
+                                                    'form_authenticity_token': (be_a String),
+                                                    'user_status': 'working_on_card'
+                                                  }
+                                                ]
+                                  }
+
+              get :new
+
+              expect(response).to have_http_status :ok
+              expect(JSON.parse(assigns['game_component_params'])).to include_json expected_response
+              expect(assigns['game_component_params']['previous_card']).to eq nil # actively call out this is not in expected_response
+            end
+
+            it 'user_3'  do
+              cookies.signed[:user_id] = @user_3.id
+
+              expected_response = {
+                                    'back_up_starting_description': (be_a String),
+                                    'current_user_id': @user_3.id,
+                                    'statuses': [
+                                                  {
+                                                    'attention_users': [@user_3.id],
+                                                    'form_authenticity_token': (be_a String),
+                                                    'user_status': 'working_on_card'
+                                                  }
+                                                ]
+                                  }
+
+              get :new
+
+              expect(response).to have_http_status :ok
+              expect(JSON.parse(assigns['game_component_params'])).to include_json expected_response
+              expect(assigns['game_component_params']['previous_card']).to eq nil # actively call out this is not in expected_response
+            end
           end
 
-          # attributes only visible in games#new and not in_game_card_upload_broadcast
-            #  * expected_response[:back_up_starting_description]
-            #  * expected_response[statuses: {form_authenticity_token:} ]
-            #  * expected_response[:current_user_id]
-          it 'user_1' do
-            cookies.signed[:user_id] = @user_1.id
-            expected_response = { 'current_user_id': @user_1.id,
-                                  'statuses': [
-                                                {
-                                                  'form_authenticity_token': (be_a String),
-                                                  'attention_users': [@user_1.id],
-                                                  'user_status': 'waiting'
-                                                }
-                                              ]
-                                }
-            get :new
+          context 'Move 2 statuses for everyone' do
+            before :all do
+              @game = FactoryBot.create(:midgame, callback_wanted: :midgame, round: 1, move: 2)
+              @gu_1, @gu_2, @gu_3 = @game.games_users.order(id: :asc)
+              @user_1, @user_2, @user_3 = @gu_1.user, @gu_2.user, @gu_3.user
+            end
 
-            expect(response).to have_http_status :ok
-            expect(JSON.parse(assigns['game_component_params'])).to include_json expected_response
-            expect(assigns['game_component_params']['previous_card']).to eq nil # actively call out this is not in expected_response
-            expect(assigns['game_component_params']['back_up_starting_description']).to eq nil # actively call out this is not in expected_response
-          end
+            it 'user_1' do
+              cookies.signed[:user_id] = @user_1.id
 
-          it 'user_2' do
-            cookies.signed[:user_id] = @user_2.id
+              expected_response = { 'current_user_id': @user_1.id,
+                                      'statuses': [ {
+                                                      'attention_users': [@user_1.id],
+                                                      'form_authenticity_token': (be_a String),
+                                                      'user_status': 'waiting'
+                                                    }
+                                                  ]
+                                  }
 
-            expected_response = {
-                                  'back_up_starting_description': (be_a String),
-                                  'current_user_id': @user_2.id,
-                                  'statuses': [
-                                                {
-                                                  'attention_users': [@user_2.id],
-                                                  'form_authenticity_token': (be_a String),
-                                                  'user_status': 'working_on_card'
-                                                }
-                                              ]
-                                }
+              get :new
 
-            get :new
+              expect(response).to have_http_status :ok
+              expect(JSON.parse(assigns['game_component_params'])).to include_json expected_response
+              expect(assigns['game_component_params']['previous_card']).to eq nil # actively call out this is not in expected_response
+              expect(assigns['game_component_params']['back_up_starting_description']).to eq nil # actively call out this is not in expected_response
 
-            expect(response).to have_http_status :ok
-            expect(JSON.parse(assigns['game_component_params'])).to include_json expected_response
-            expect(assigns['game_component_params']['previous_card']).to eq nil # actively call out this is not in expected_response
-          end
+            end
 
-          it 'user_3'  do
-            cookies.signed[:user_id] = @user_3.id
+            it 'user_2' do
+              cookies.signed[:user_id] = @user_2.id
+              expected_response = { 'current_user_id': @user_2.id,
+                                     'statuses': [ {
+                                        'attention_users': [@user_2.id],
+                                        'form_authenticity_token': (be_a String),
+                                        'previous_card': {
+                                                          'description_text': Card.get_placeholder_card(@user_2.id, @game).parent_card.description_text,
+                                                          'medium': 'description'
+                                                         },
+                                        'user_status': 'working_on_card'
+                                      }
+                                    ]
+                                  }
+              get :new
 
-            expected_response = {
-                                  'back_up_starting_description': (be_a String),
-                                  'current_user_id': @user_3.id,
-                                  'statuses': [
-                                                {
+              expect(response).to have_http_status :ok
+              expect(JSON.parse(assigns['game_component_params'])).to include_json expected_response
+              expect(assigns['game_component_params']['back_up_starting_description']).to eq nil # actively call out this is not in expected_response
+            end
+
+            it 'user_3' do
+              cookies.signed[:user_id] = @user_3.id
+
+              expected_response = {
+                                    'back_up_starting_description': (be_a String),
+                                    'current_user_id': @user_3.id,
+                                    'statuses': [ {
                                                   'attention_users': [@user_3.id],
-                                                  'form_authenticity_token': (be_a String),
+                                                  'form_authenticity_token' => (be_a String),
                                                   'user_status': 'working_on_card'
                                                 }
                                               ]
-                                }
+                                  }
+              get :new
 
-            get :new
+              expect(response).to have_http_status :ok
+              expect(JSON.parse(assigns['game_component_params'])).to include_json expected_response
+            end
+          end
 
-            expect(response).to have_http_status :ok
-            expect(JSON.parse(assigns['game_component_params'])).to include_json expected_response
-            expect(assigns['game_component_params']['previous_card']).to eq nil # actively call out this is not in expected_response
+          context 'Move 3 statuses for everyone' do
+            before :all do
+              @game = FactoryBot.create(:midgame, callback_wanted: :midgame, round: 1, move: 3)
+              @gu_1, @gu_2, @gu_3 = @game.games_users.order(id: :asc)
+              @user_1, @user_2, @user_3 = @gu_1.user, @gu_2.user, @gu_3.user
+            end
+
+
+            it 'user_1' do
+              cookies.signed[:user_id] = @user_1.id
+
+              expected_response = { 'current_user_id': @user_1.id,
+                                    'statuses': [ {
+                                                    'attention_users': [@user_1.id],
+                                                    'form_authenticity_token': (be_a String),
+                                                    'previous_card': {
+                                                                       'description_text': Card.get_placeholder_card(@user_1.id, @game).parent_card.description_text,
+                                                                       'medium': 'description'
+                                                                     },
+                                                    'user_status': 'working_on_card'
+                                                  },
+                                                ]
+                                  }
+
+              get :new
+
+              expect(response).to have_http_status :ok
+              expect(JSON.parse(assigns['game_component_params'])).to include_json expected_response
+              expect(assigns['game_component_params']['back_up_starting_description']).to eq nil # actively call out this is not in expected_response
+            end
+
+            it 'user_2' do
+              cookies.signed[:user_id] = @user_2.id
+
+              expected_response = { 'current_user_id': @user_2.id,
+                                    'statuses': [ {
+                                                    'attention_users': [@user_2.id],
+                                                    'form_authenticity_token': (be_a String),
+                                                    'previous_card': {
+                                                                       'description_text': Card.get_placeholder_card(@user_2.id, @game).parent_card.description_text,
+                                                                       'medium': 'description'
+                                                                     },
+                                                    'user_status': 'working_on_card'
+                                                  },
+                                                ]
+                                  }
+
+              get :new
+
+              expect(response).to have_http_status :ok
+              expect(JSON.parse(assigns['game_component_params'])).to include_json expected_response
+              expect(assigns['game_component_params']['back_up_starting_description']).to eq nil # actively call out this is not in expected_response
+            end
+
+            it 'user_3' do
+              cookies.signed[:user_id] = @user_3.id
+
+              expected_response = { 'current_user_id': @user_3.id,
+                                    'statuses': [ {
+                                                    'attention_users': [@user_3.id],
+                                                    'form_authenticity_token': (be_a String),
+                                                    'previous_card': {
+                                                                       'description_text': Card.get_placeholder_card(@user_3.id, @game).parent_card.description_text,
+                                                                       'medium': 'description'
+                                                                     },
+                                                    'user_status': 'working_on_card'
+                                                  }
+                                                ]
+                                  }
+
+              get :new
+
+              expect(response).to have_http_status :ok
+              expect(JSON.parse(assigns['game_component_params'])).to include_json expected_response
+              expect(assigns['game_component_params']['back_up_starting_description']).to eq nil # actively call out this is not in expected_response
+            end
           end
         end
 
-        context 'Move 2 statuses for everyone' do
-          before :all do
-            @game = FactoryBot.create(:midgame, callback_wanted: :midgame, round: 1, move: 2)
-            @gu_1, @gu_2, @gu_3 = @game.games_users.order(id: :asc)
-            @user_1, @user_2, @user_3 = @gu_1.user, @gu_2.user, @gu_3.user
-          end
+        context 'Round 2' do
+          context 'Move 1 statuses for everyone' do
+            before :all do
+              @game = FactoryBot.create(:midgame, callback_wanted: :midgame, round: 2, move: 1)
+              @gu_1, @gu_2, @gu_3 = @game.games_users.order(id: :asc)
+              @user_1, @user_2, @user_3 = @gu_1.user, @gu_2.user, @gu_3.user
+            end
 
-          it 'user_1' do
-            cookies.signed[:user_id] = @user_1.id
+            it 'user_1' do
+              cookies.signed[:user_id] = @user_1.id
 
-            expected_response = { 'current_user_id': @user_1.id,
+              expected_response = { 'current_user_id': @user_1.id,
                                     'statuses': [ {
                                                     'attention_users': [@user_1.id],
                                                     'form_authenticity_token': (be_a String),
                                                     'user_status': 'waiting'
                                                   }
                                                 ]
-                                }
+                                  }
 
-            get :new
+              get :new
 
-            expect(response).to have_http_status :ok
-            expect(JSON.parse(assigns['game_component_params'])).to include_json expected_response
-            expect(assigns['game_component_params']['previous_card']).to eq nil # actively call out this is not in expected_response
-            expect(assigns['game_component_params']['back_up_starting_description']).to eq nil # actively call out this is not in expected_response
+              expect(response).to have_http_status :ok
+              expect(JSON.parse(assigns['game_component_params'])).to include_json expected_response
+              expect(assigns['game_component_params']['statuses'][0]['previous_card']).to eq nil # actively call out this is not in expected_response
+              expect(assigns['game_component_params']['back_up_starting_description']).to eq nil # actively call out this is not in expected_response
+            end
 
+            it 'user_2' do
+              cookies.signed[:user_id] = @user_2.id
+
+              expected_response = { 'current_user_id': @user_2.id,
+                                    'statuses': [ {
+                                                    'attention_users': [@user_2.id],
+                                                    'form_authenticity_token': (be_a String),
+                                                    'previous_card': {
+                                                                       'description_text': Card.get_placeholder_card(@user_2.id, @game).parent_card.description_text,
+                                                                       'medium': 'description'
+                                                                     },
+                                                    'user_status': 'working_on_card'
+                                                  },
+                                                ]
+                                  }
+
+              get :new
+
+              expect(response).to have_http_status :ok
+              expect(JSON.parse(assigns['game_component_params'])).to include_json expected_response
+              expect(assigns['game_component_params']['back_up_starting_description']).to eq nil # actively call out this is not in expected_response
+            end
+
+            it 'user_3' do
+              cookies.signed[:user_id] = @user_3.id
+
+              expected_response = { 'current_user_id': @user_3.id,
+                                    'statuses': [ {
+                                                    'attention_users': [@user_3.id],
+                                                    'form_authenticity_token': (be_a String),
+                                                    'previous_card': {
+                                                                       'description_text': Card.get_placeholder_card(@user_3.id, @game).parent_card.description_text,
+                                                                       'medium': 'description'
+                                                                     },
+                                                    'user_status': 'working_on_card'
+                                                  }
+                                                ]
+                                  }
+
+              get :new
+
+              expect(response).to have_http_status :ok
+              expect(JSON.parse(assigns['game_component_params'])).to include_json expected_response
+              expect(assigns['game_component_params']['back_up_starting_description']).to eq nil # actively call out this is not in expected_response
+            end
           end
 
-          it 'user_2' do
-            cookies.signed[:user_id] = @user_2.id
-            expected_response = { 'current_user_id': @user_2.id,
-                                   'statuses': [ {
-                                      'attention_users': [@user_2.id],
-                                      'form_authenticity_token': (be_a String),
-                                      'previous_card': {
-                                                        'description_text': Card.get_placeholder_card(@user_2.id, @game).parent_card.description_text,
-                                                        'medium': 'description'
-                                                       },
-                                      'user_status': 'working_on_card'
-                                    }
-                                  ]
-                                }
-            get :new
+          context 'Move 2 statuses for everyone' do
+            before :all do
+              @game = FactoryBot.create(:midgame, callback_wanted: :midgame, round: 2, move: 2)
+              @gu_1, @gu_2, @gu_3 = @game.games_users.order(id: :asc)
+              @user_1, @user_2, @user_3 = @gu_1.user, @gu_2.user, @gu_3.user
+            end
 
-            expect(response).to have_http_status :ok
-            expect(JSON.parse(assigns['game_component_params'])).to include_json expected_response
-            expect(assigns['game_component_params']['back_up_starting_description']).to eq nil # actively call out this is not in expected_response
+
+            it 'user_1' do
+              cookies.signed[:user_id] = @user_1.id
+
+              expected_response = { 'current_user_id': @user_1.id,
+                                    'statuses': [ {
+                                                    'attention_users': [@user_1.id],
+                                                    'form_authenticity_token': (be_a String),
+                                                    'user_status': 'waiting'
+                                                  }
+                                                ]
+                                  }
+
+              get :new
+
+              expect(response).to have_http_status :ok
+              expect(JSON.parse(assigns['game_component_params'])).to include_json expected_response
+              expect(assigns['game_component_params']['statuses'][0]['previous_card']).to eq nil # actively call out this is not in expected_response
+              expect(assigns['game_component_params']['back_up_starting_description']).to eq nil # actively call out this is not in expected_response
+            end
+
+
+            it 'user_2' do
+              cookies.signed[:user_id] = @user_2.id
+              expected_response = {
+                                    'current_user_id': @user_2.id,
+                                    'statuses': [ {
+                                       'attention_users': [@user_2.id],
+                                       'form_authenticity_token': (be_a String),
+                                       'previous_card': {
+                                                         'drawing_url': get_drawing_url( Card.get_placeholder_card(@user_2.id, @game).parent_card ),
+                                                         'medium': 'drawing'
+                                                        },
+                                       'user_status': 'working_on_card'
+                                      }
+                                    ]
+                                  }
+              get :new
+
+              expect(response).to have_http_status :ok
+              expect(JSON.parse(assigns['game_component_params'])).to include_json expected_response
+              expect(assigns['game_component_params']['back_up_starting_description']).to eq nil # actively call out this is not in expected_response
+            end
+
+
+            it 'user_3' do
+              cookies.signed[:user_id] = @user_3.id
+
+              expected_response = { 'current_user_id': @user_3.id,
+                                    'statuses': [ {
+                                                    'attention_users': [@user_3.id],
+                                                    'form_authenticity_token': (be_a String),
+                                                    'previous_card': {
+                                                                       'description_text': Card.get_placeholder_card(@user_3.id, @game).parent_card.description_text,
+                                                                       'medium': 'description'
+                                                                     },
+                                                    'user_status': 'working_on_card'
+                                                  }
+                                                ]
+                                  }
+
+              get :new
+
+              expect(response).to have_http_status :ok
+              expect(JSON.parse(assigns['game_component_params'])).to include_json expected_response
+              expect(assigns['game_component_params']['back_up_starting_description']).to eq nil # actively call out this is not in expected_response
+            end
           end
 
-          it 'user_3' do
-            cookies.signed[:user_id] = @user_3.id
+          context 'Move 3 statuses for everyone' do
+            before :all do
+              @game = FactoryBot.create(:midgame, callback_wanted: :midgame, round: 2, move: 3)
+              @gu_1, @gu_2, @gu_3 = @game.games_users.order(id: :asc)
+              @user_1, @user_2, @user_3 = @gu_1.user, @gu_2.user, @gu_3.user
+            end
 
-            expected_response = {
-                                  'back_up_starting_description': (be_a String),
-                                  'current_user_id': @user_3.id,
-                                  'statuses': [ {
-                                                'attention_users': [@user_3.id],
-                                                'form_authenticity_token' => (be_a String),
-                                                'user_status': 'working_on_card'
-                                              }
-                                            ]
-                                }
-            get :new
+            it 'user_1' do
+              cookies.signed[:user_id] = @user_1.id
 
-            expect(response).to have_http_status :ok
-            expect(JSON.parse(assigns['game_component_params'])).to include_json expected_response
+              expected_response = {
+                                    'current_user_id': @user_1.id,
+                                    'statuses': [
+                                                  {
+                                                    'attention_users': [@user_1.id],
+                                                    'form_authenticity_token': (be_a String),
+                                                    'previous_card': {
+                                                                       'drawing_url': get_drawing_url( Card.get_placeholder_card(@user_1.id, @game).parent_card ),
+                                                                       'medium': 'drawing'
+                                                                     },
+                                                    'user_status': 'working_on_card'
+                                                  }
+                                                ]
+                                  }
+
+              get :new
+
+              expect(response).to have_http_status :ok
+              expect(JSON.parse(assigns['game_component_params'])).to include_json expected_response
+              expect(assigns['game_component_params']['back_up_starting_description']).to eq nil # actively call out this is not in expected_response
+            end
+
+            it 'user_2' do
+              cookies.signed[:user_id] = @user_2.id
+              expected_response = {
+                                    'current_user_id': @user_2.id,
+                                    'statuses': [ {
+                                       'attention_users': [@user_2.id],
+                                       'form_authenticity_token': (be_a String),
+                                       'previous_card': {
+                                                         'drawing_url': get_drawing_url( Card.get_placeholder_card(@user_2.id, @game).parent_card ),
+                                                         'medium': 'drawing'
+                                                        },
+                                       'user_status': 'working_on_card'
+                                      }
+                                    ]
+                                  }
+              get :new
+
+              expect(response).to have_http_status :ok
+              expect(JSON.parse(assigns['game_component_params'])).to include_json expected_response
+              expect(assigns['game_component_params']['back_up_starting_description']).to eq nil # actively call out this is not in expected_response
+            end
+
+            it 'user_3' do
+              cookies.signed[:user_id] = @user_3.id
+
+              expected_response = {
+                                    'current_user_id': @user_3.id,
+                                    'statuses': [
+                                                  {
+                                                    'attention_users': [@user_3.id],
+                                                    'form_authenticity_token': (be_a String),
+                                                    'previous_card': {
+                                                                       'drawing_url': get_drawing_url( Card.get_placeholder_card(@user_3.id, @game).parent_card ),
+                                                                       'medium': 'drawing'
+                                                                     },
+                                                    'user_status': 'working_on_card'
+                                                  }
+                                                ]
+                                  }
+
+              get :new
+
+              expect(response).to have_http_status :ok
+              expect(JSON.parse(assigns['game_component_params'])).to include_json expected_response
+              expect(assigns['game_component_params']['back_up_starting_description']).to eq nil # actively call out this is not in expected_response
+            end
           end
         end
 
-        context 'Move 3 statuses for everyone' do
-          before :all do
-            @game = FactoryBot.create(:midgame, callback_wanted: :midgame, round: 1, move: 3)
-            @gu_1, @gu_2, @gu_3 = @game.games_users.order(id: :asc)
-            @user_1, @user_2, @user_3 = @gu_1.user, @gu_2.user, @gu_3.user
+        context 'Round 3' do
+          context 'Move 1 statuses for everyone' do
+
+            before :all do
+              @game = FactoryBot.create(:midgame, callback_wanted: :midgame, round: 3, move: 1)
+              @gu_1, @gu_2, @gu_3 = @game.games_users.order(id: :asc)
+              @user_1, @user_2, @user_3 = @gu_1.user, @gu_2.user, @gu_3.user
+            end
+
+            it 'user_1' do
+              cookies.signed[:user_id] = @user_1.id
+
+              expected_response = { 'current_user_id' => @user_1.id,
+                                    'statuses' => [
+                                                  {
+                                                    'attention_users' => [@user_1.id],
+                                                    'user_status' => 'finished'
+                                                  }
+                                                ]
+                                  }
+
+              get :new
+
+              expect(response).to have_http_status :ok
+              expect(JSON.parse(assigns['game_component_params'])).to eq expected_response
+            end
+
+            it 'user_2' do
+              cookies.signed[:user_id] = @user_2.id
+              expected_response = {
+                                    'current_user_id': @user_2.id,
+                                    'statuses': [ {
+                                       'attention_users': [@user_2.id],
+                                       'form_authenticity_token': (be_a String),
+                                       'previous_card': {
+                                                         'drawing_url': get_drawing_url( Card.get_placeholder_card(@user_2.id, @game).parent_card ),
+                                                         'medium': 'drawing'
+                                                        },
+                                       'user_status': 'working_on_card'
+                                      }
+                                    ]
+                                  }
+              get :new
+
+              expect(response).to have_http_status :ok
+              expect(JSON.parse(assigns['game_component_params'])).to include_json expected_response
+              expect(assigns['game_component_params']['back_up_starting_description']).to eq nil # actively call out this is not in expected_response
+            end
+
+            it 'user_3' do
+              cookies.signed[:user_id] = @user_3.id
+
+              expected_response = {
+                                    'current_user_id': @user_3.id,
+                                    'statuses': [
+                                                  {
+                                                    'attention_users': [@user_3.id],
+                                                    'form_authenticity_token': (be_a String),
+                                                    'previous_card': {
+                                                                       'drawing_url': get_drawing_url( Card.get_placeholder_card(@user_3.id, @game).parent_card ),
+                                                                       'medium': 'drawing'
+                                                                     },
+                                                    'user_status': 'working_on_card'
+                                                  }
+                                                ]
+                                  }
+
+              get :new
+
+              expect(response).to have_http_status :ok
+              expect(JSON.parse(assigns['game_component_params'])).to include_json expected_response
+              expect(assigns['game_component_params']['back_up_starting_description']).to eq nil # actively call out this is not in expected_response
+            end
           end
 
+          context 'Move 2 statuses for everyone' do
+            before :all do
+              @game = FactoryBot.create(:midgame, callback_wanted: :midgame, round: 3, move: 2)
+              @gu_1, @gu_2, @gu_3 = @game.games_users.order(id: :asc)
+              @user_1, @user_2, @user_3 = @gu_1.user, @gu_2.user, @gu_3.user
+            end
 
-          it 'user_1' do
-            cookies.signed[:user_id] = @user_1.id
+            it 'user_1' do
+              cookies.signed[:user_id] = @user_1.id
 
-            expected_response = { 'current_user_id': @user_1.id,
-                                  'statuses': [ {
-                                                  'attention_users': [@user_1.id],
-                                                  'form_authenticity_token': (be_a String),
-                                                  'previous_card': {
-                                                                     'description_text': Card.get_placeholder_card(@user_1.id, @game).parent_card.description_text,
-                                                                     'medium': 'description'
-                                                                   },
-                                                  'user_status': 'working_on_card'
-                                                },
-                                              ]
-                                }
+              expected_response = { 'current_user_id' => @user_1.id,
+                                    'statuses' => [
+                                                  {
+                                                    'attention_users' => [@user_1.id],
+                                                    'user_status' => 'finished'
+                                                  }
+                                                ]
+                                  }
 
-            get :new
+              get :new
 
-            expect(response).to have_http_status :ok
-            expect(JSON.parse(assigns['game_component_params'])).to include_json expected_response
-            expect(assigns['game_component_params']['back_up_starting_description']).to eq nil # actively call out this is not in expected_response
+              expect(response).to have_http_status :ok
+              expect(JSON.parse(assigns['game_component_params'])).to eq expected_response
+              expect(assigns['game_component_params']['back_up_starting_description']).to eq nil # actively call out this is not in expected_response
+            end
+
+            it 'user_2' do
+              cookies.signed[:user_id] = @user_2.id
+
+              expected_response = { 'current_user_id' => @user_2.id,
+                                    'statuses' => [
+                                                  {
+                                                    'attention_users' => [@user_2.id],
+                                                    'user_status' => 'finished'
+                                                  }
+                                                ]
+                                  }
+
+              get :new
+
+              expect(response).to have_http_status :ok
+              expect(JSON.parse(assigns['game_component_params'])).to eq expected_response
+              expect(assigns['game_component_params']['back_up_starting_description']).to eq nil # actively call out this is not in expected_response
+            end
+
+            it 'user_3' do
+              cookies.signed[:user_id] = @user_3.id
+
+              expected_response = {
+                                    'current_user_id': @user_3.id,
+                                    'statuses': [
+                                                  {
+                                                    'attention_users': [@user_3.id],
+                                                    'form_authenticity_token': (be_a String),
+                                                    'previous_card': {
+                                                                       'drawing_url': get_drawing_url( Card.get_placeholder_card(@user_3.id, @game).parent_card ),
+                                                                       'medium': 'drawing'
+                                                                     },
+                                                    'user_status': 'working_on_card'
+                                                  }
+                                                ]
+                                  }
+
+              get :new
+
+              expect(response).to have_http_status :ok
+              expect(JSON.parse(assigns['game_component_params'])).to include_json expected_response
+              expect(assigns['game_component_params']['back_up_starting_description']).to eq nil # actively call out this is not in expected_response
+            end
           end
 
-          it 'user_2' do
-            cookies.signed[:user_id] = @user_2.id
+          context 'Move 3 statuses for everyone' do
+            before :all do
+              @game = FactoryBot.create(:midgame, callback_wanted: :midgame, round: 3, move: 3)
+              @gu_1, @gu_2, @gu_3 = @game.games_users.order(id: :asc)
+              @user_1, @user_2, @user_3 = @gu_1.user, @gu_2.user, @gu_3.user
+            end
 
-            expected_response = { 'current_user_id': @user_2.id,
-                                  'statuses': [ {
-                                                  'attention_users': [@user_2.id],
-                                                  'form_authenticity_token': (be_a String),
-                                                  'previous_card': {
-                                                                     'description_text': Card.get_placeholder_card(@user_2.id, @game).parent_card.description_text,
-                                                                     'medium': 'description'
-                                                                   },
-                                                  'user_status': 'working_on_card'
-                                                },
-                                              ]
-                                }
+            it 'user_1' do
+              cookies.signed[:user_id] = @user_1.id
+              expected_response = { 'game_over' => { 'redirect_url' => game_path(@game.id) } }
 
-            get :new
+              get :new
 
-            expect(response).to have_http_status :ok
-            expect(JSON.parse(assigns['game_component_params'])).to include_json expected_response
-            expect(assigns['game_component_params']['back_up_starting_description']).to eq nil # actively call out this is not in expected_response
-          end
+              expect(response).to have_http_status :ok
+              expect(JSON.parse(assigns['game_component_params'])).to eq expected_response
+            end
 
-          it 'user_3' do
-            cookies.signed[:user_id] = @user_3.id
+            it 'user_2' do
+              cookies.signed[:user_id] = @user_2.id
+              expected_response = { 'game_over' => { 'redirect_url' => game_path(@game.id) } }
 
-            expected_response = { 'current_user_id': @user_3.id,
-                                  'statuses': [ {
-                                                  'attention_users': [@user_3.id],
-                                                  'form_authenticity_token': (be_a String),
-                                                  'previous_card': {
-                                                                     'description_text': Card.get_placeholder_card(@user_3.id, @game).parent_card.description_text,
-                                                                     'medium': 'description'
-                                                                   },
-                                                  'user_status': 'working_on_card'
-                                                }
-                                              ]
-                                }
+              get :new
 
-            get :new
+              expect(response).to have_http_status :ok
+              expect(JSON.parse(assigns['game_component_params'])).to eq expected_response
+            end
 
-            expect(response).to have_http_status :ok
-            expect(JSON.parse(assigns['game_component_params'])).to include_json expected_response
-            expect(assigns['game_component_params']['back_up_starting_description']).to eq nil # actively call out this is not in expected_response
+
+            it 'user_3' do
+              cookies.signed[:user_id] = @user_3.id
+              expected_response = { 'game_over' => { 'redirect_url' => game_path(@game.id) } }
+
+              get :new
+
+              expect(response).to have_http_status :ok
+              expect(JSON.parse(assigns['game_component_params'])).to eq expected_response
+            end
           end
         end
       end
 
-      context 'Round 2' do
-        context 'Move 1 statuses for everyone' do
-          before :all do
-            @game = FactoryBot.create(:midgame, callback_wanted: :midgame, round: 2, move: 1)
-            @gu_1, @gu_2, @gu_3 = @game.games_users.order(id: :asc)
-            @user_1, @user_2, @user_3 = @gu_1.user, @gu_2.user, @gu_3.user
-          end
+      context 'unsuccessful; NOT a midgame' do
+        it 'game is a pregame' do
+          game = FactoryBot.create(:pregame, callback_wanted: :pregame)
+          current_user = game.users.first
 
-          it 'user_1' do
-            cookies.signed[:user_id] = @user_1.id
+          cookies.signed[:user_id] = current_user.id
 
-            expected_response = { 'current_user_id': @user_1.id,
-                                  'statuses': [ {
-                                                  'attention_users': [@user_1.id],
-                                                  'form_authenticity_token': (be_a String),
-                                                  'user_status': 'waiting'
-                                                }
-                                              ]
-                                }
+          get :new
 
-            get :new
-
-            expect(response).to have_http_status :ok
-            expect(JSON.parse(assigns['game_component_params'])).to include_json expected_response
-            expect(assigns['game_component_params']['statuses'][0]['previous_card']).to eq nil # actively call out this is not in expected_response
-            expect(assigns['game_component_params']['back_up_starting_description']).to eq nil # actively call out this is not in expected_response
-          end
-
-          it 'user_2' do
-            cookies.signed[:user_id] = @user_2.id
-
-            expected_response = { 'current_user_id': @user_2.id,
-                                  'statuses': [ {
-                                                  'attention_users': [@user_2.id],
-                                                  'form_authenticity_token': (be_a String),
-                                                  'previous_card': {
-                                                                     'description_text': Card.get_placeholder_card(@user_2.id, @game).parent_card.description_text,
-                                                                     'medium': 'description'
-                                                                   },
-                                                  'user_status': 'working_on_card'
-                                                },
-                                              ]
-                                }
-
-            get :new
-
-            expect(response).to have_http_status :ok
-            expect(JSON.parse(assigns['game_component_params'])).to include_json expected_response
-            expect(assigns['game_component_params']['back_up_starting_description']).to eq nil # actively call out this is not in expected_response
-          end
-
-          it 'user_3' do
-            cookies.signed[:user_id] = @user_3.id
-
-            expected_response = { 'current_user_id': @user_3.id,
-                                  'statuses': [ {
-                                                  'attention_users': [@user_3.id],
-                                                  'form_authenticity_token': (be_a String),
-                                                  'previous_card': {
-                                                                     'description_text': Card.get_placeholder_card(@user_3.id, @game).parent_card.description_text,
-                                                                     'medium': 'description'
-                                                                   },
-                                                  'user_status': 'working_on_card'
-                                                }
-                                              ]
-                                }
-
-            get :new
-
-            expect(response).to have_http_status :ok
-            expect(JSON.parse(assigns['game_component_params'])).to include_json expected_response
-            expect(assigns['game_component_params']['back_up_starting_description']).to eq nil # actively call out this is not in expected_response
-          end
+          expect(response).to redirect_to(choose_game_type_page_path)
         end
 
-        context 'Move 2 statuses for everyone' do
-          before :all do
-            @game = FactoryBot.create(:midgame, callback_wanted: :midgame, round: 2, move: 2)
-            @gu_1, @gu_2, @gu_3 = @game.games_users.order(id: :asc)
-            @user_1, @user_2, @user_3 = @gu_1.user, @gu_2.user, @gu_3.user
-          end
+        it 'game is a postgame' do
+          game = FactoryBot.create(:postgame, callback_wanted: :postgame)
+          current_user = game.users.first
 
+          cookies.signed[:user_id] = current_user.id
 
-          it 'user_1' do
-            cookies.signed[:user_id] = @user_1.id
+          get :new
 
-            expected_response = { 'current_user_id': @user_1.id,
-                                  'statuses': [ {
-                                                  'attention_users': [@user_1.id],
-                                                  'form_authenticity_token': (be_a String),
-                                                  'user_status': 'waiting'
-                                                }
-                                              ]
-                                }
-
-            get :new
-
-            expect(response).to have_http_status :ok
-            expect(JSON.parse(assigns['game_component_params'])).to include_json expected_response
-            expect(assigns['game_component_params']['statuses'][0]['previous_card']).to eq nil # actively call out this is not in expected_response
-            expect(assigns['game_component_params']['back_up_starting_description']).to eq nil # actively call out this is not in expected_response
-          end
-
-
-          it 'user_2' do
-            cookies.signed[:user_id] = @user_2.id
-            expected_response = {
-                                  'current_user_id': @user_2.id,
-                                  'statuses': [ {
-                                     'attention_users': [@user_2.id],
-                                     'form_authenticity_token': (be_a String),
-                                     'previous_card': {
-                                                       'drawing_url': get_drawing_url( Card.get_placeholder_card(@user_2.id, @game).parent_card ),
-                                                       'medium': 'drawing'
-                                                      },
-                                     'user_status': 'working_on_card'
-                                    }
-                                  ]
-                                }
-            get :new
-
-            expect(response).to have_http_status :ok
-            expect(JSON.parse(assigns['game_component_params'])).to include_json expected_response
-            expect(assigns['game_component_params']['back_up_starting_description']).to eq nil # actively call out this is not in expected_response
-          end
-
-
-          it 'user_3' do
-            cookies.signed[:user_id] = @user_3.id
-
-            expected_response = { 'current_user_id': @user_3.id,
-                                  'statuses': [ {
-                                                  'attention_users': [@user_3.id],
-                                                  'form_authenticity_token': (be_a String),
-                                                  'previous_card': {
-                                                                     'description_text': Card.get_placeholder_card(@user_3.id, @game).parent_card.description_text,
-                                                                     'medium': 'description'
-                                                                   },
-                                                  'user_status': 'working_on_card'
-                                                }
-                                              ]
-                                }
-
-            get :new
-
-            expect(response).to have_http_status :ok
-            expect(JSON.parse(assigns['game_component_params'])).to include_json expected_response
-            expect(assigns['game_component_params']['back_up_starting_description']).to eq nil # actively call out this is not in expected_response
-          end
-        end
-
-        context 'Move 3 statuses for everyone' do
-          before :all do
-            @game = FactoryBot.create(:midgame, callback_wanted: :midgame, round: 2, move: 3)
-            @gu_1, @gu_2, @gu_3 = @game.games_users.order(id: :asc)
-            @user_1, @user_2, @user_3 = @gu_1.user, @gu_2.user, @gu_3.user
-          end
-
-          it 'user_1' do
-            cookies.signed[:user_id] = @user_1.id
-
-            expected_response = {
-                                  'current_user_id': @user_1.id,
-                                  'statuses': [
-                                                {
-                                                  'attention_users': [@user_1.id],
-                                                  'form_authenticity_token': (be_a String),
-                                                  'previous_card': {
-                                                                     'drawing_url': get_drawing_url( Card.get_placeholder_card(@user_1.id, @game).parent_card ),
-                                                                     'medium': 'drawing'
-                                                                   },
-                                                  'user_status': 'working_on_card'
-                                                }
-                                              ]
-                                }
-
-            get :new
-
-            expect(response).to have_http_status :ok
-            expect(JSON.parse(assigns['game_component_params'])).to include_json expected_response
-            expect(assigns['game_component_params']['back_up_starting_description']).to eq nil # actively call out this is not in expected_response
-          end
-
-          it 'user_2' do
-            cookies.signed[:user_id] = @user_2.id
-            expected_response = {
-                                  'current_user_id': @user_2.id,
-                                  'statuses': [ {
-                                     'attention_users': [@user_2.id],
-                                     'form_authenticity_token': (be_a String),
-                                     'previous_card': {
-                                                       'drawing_url': get_drawing_url( Card.get_placeholder_card(@user_2.id, @game).parent_card ),
-                                                       'medium': 'drawing'
-                                                      },
-                                     'user_status': 'working_on_card'
-                                    }
-                                  ]
-                                }
-            get :new
-
-            expect(response).to have_http_status :ok
-            expect(JSON.parse(assigns['game_component_params'])).to include_json expected_response
-            expect(assigns['game_component_params']['back_up_starting_description']).to eq nil # actively call out this is not in expected_response
-          end
-
-          it 'user_3' do
-            cookies.signed[:user_id] = @user_3.id
-
-            expected_response = {
-                                  'current_user_id': @user_3.id,
-                                  'statuses': [
-                                                {
-                                                  'attention_users': [@user_3.id],
-                                                  'form_authenticity_token': (be_a String),
-                                                  'previous_card': {
-                                                                     'drawing_url': get_drawing_url( Card.get_placeholder_card(@user_3.id, @game).parent_card ),
-                                                                     'medium': 'drawing'
-                                                                   },
-                                                  'user_status': 'working_on_card'
-                                                }
-                                              ]
-                                }
-
-            get :new
-
-            expect(response).to have_http_status :ok
-            expect(JSON.parse(assigns['game_component_params'])).to include_json expected_response
-            expect(assigns['game_component_params']['back_up_starting_description']).to eq nil # actively call out this is not in expected_response
-          end
-        end
-      end
-
-      context 'Round 3' do
-        context 'Move 1 statuses for everyone' do
-
-          before :all do
-            @game = FactoryBot.create(:midgame, callback_wanted: :midgame, round: 3, move: 1)
-            @gu_1, @gu_2, @gu_3 = @game.games_users.order(id: :asc)
-            @user_1, @user_2, @user_3 = @gu_1.user, @gu_2.user, @gu_3.user
-          end
-
-          it 'user_1' do
-            cookies.signed[:user_id] = @user_1.id
-
-            expected_response = { 'current_user_id' => @user_1.id,
-                                  'statuses' => [
-                                                {
-                                                  'attention_users' => [@user_1.id],
-                                                  'user_status' => 'finished'
-                                                }
-                                              ]
-                                }
-
-            get :new
-
-            expect(response).to have_http_status :ok
-            expect(JSON.parse(assigns['game_component_params'])).to eq expected_response
-          end
-
-          it 'user_2' do
-            cookies.signed[:user_id] = @user_2.id
-            expected_response = {
-                                  'current_user_id': @user_2.id,
-                                  'statuses': [ {
-                                     'attention_users': [@user_2.id],
-                                     'form_authenticity_token': (be_a String),
-                                     'previous_card': {
-                                                       'drawing_url': get_drawing_url( Card.get_placeholder_card(@user_2.id, @game).parent_card ),
-                                                       'medium': 'drawing'
-                                                      },
-                                     'user_status': 'working_on_card'
-                                    }
-                                  ]
-                                }
-            get :new
-
-            expect(response).to have_http_status :ok
-            expect(JSON.parse(assigns['game_component_params'])).to include_json expected_response
-            expect(assigns['game_component_params']['back_up_starting_description']).to eq nil # actively call out this is not in expected_response
-          end
-
-          it 'user_3' do
-            cookies.signed[:user_id] = @user_3.id
-
-            expected_response = {
-                                  'current_user_id': @user_3.id,
-                                  'statuses': [
-                                                {
-                                                  'attention_users': [@user_3.id],
-                                                  'form_authenticity_token': (be_a String),
-                                                  'previous_card': {
-                                                                     'drawing_url': get_drawing_url( Card.get_placeholder_card(@user_3.id, @game).parent_card ),
-                                                                     'medium': 'drawing'
-                                                                   },
-                                                  'user_status': 'working_on_card'
-                                                }
-                                              ]
-                                }
-
-            get :new
-
-            expect(response).to have_http_status :ok
-            expect(JSON.parse(assigns['game_component_params'])).to include_json expected_response
-            expect(assigns['game_component_params']['back_up_starting_description']).to eq nil # actively call out this is not in expected_response
-          end
-        end
-
-        context 'Move 2 statuses for everyone' do
-          before :all do
-            @game = FactoryBot.create(:midgame, callback_wanted: :midgame, round: 3, move: 2)
-            @gu_1, @gu_2, @gu_3 = @game.games_users.order(id: :asc)
-            @user_1, @user_2, @user_3 = @gu_1.user, @gu_2.user, @gu_3.user
-          end
-
-          it 'user_1' do
-            cookies.signed[:user_id] = @user_1.id
-
-            expected_response = { 'current_user_id' => @user_1.id,
-                                  'statuses' => [
-                                                {
-                                                  'attention_users' => [@user_1.id],
-                                                  'user_status' => 'finished'
-                                                }
-                                              ]
-                                }
-
-            get :new
-
-            expect(response).to have_http_status :ok
-            expect(JSON.parse(assigns['game_component_params'])).to eq expected_response
-            expect(assigns['game_component_params']['back_up_starting_description']).to eq nil # actively call out this is not in expected_response
-          end
-
-          it 'user_2' do
-            cookies.signed[:user_id] = @user_2.id
-
-            expected_response = { 'current_user_id' => @user_2.id,
-                                  'statuses' => [
-                                                {
-                                                  'attention_users' => [@user_2.id],
-                                                  'user_status' => 'finished'
-                                                }
-                                              ]
-                                }
-
-            get :new
-
-            expect(response).to have_http_status :ok
-            expect(JSON.parse(assigns['game_component_params'])).to eq expected_response
-            expect(assigns['game_component_params']['back_up_starting_description']).to eq nil # actively call out this is not in expected_response
-          end
-
-          it 'user_3' do
-            cookies.signed[:user_id] = @user_3.id
-
-            expected_response = {
-                                  'current_user_id': @user_3.id,
-                                  'statuses': [
-                                                {
-                                                  'attention_users': [@user_3.id],
-                                                  'form_authenticity_token': (be_a String),
-                                                  'previous_card': {
-                                                                     'drawing_url': get_drawing_url( Card.get_placeholder_card(@user_3.id, @game).parent_card ),
-                                                                     'medium': 'drawing'
-                                                                   },
-                                                  'user_status': 'working_on_card'
-                                                }
-                                              ]
-                                }
-
-            get :new
-
-            expect(response).to have_http_status :ok
-            expect(JSON.parse(assigns['game_component_params'])).to include_json expected_response
-            expect(assigns['game_component_params']['back_up_starting_description']).to eq nil # actively call out this is not in expected_response
-          end
-        end
-
-        context 'Move 3 statuses for everyone' do
-          before :all do
-            @game = FactoryBot.create(:midgame, callback_wanted: :midgame, round: 3, move: 3)
-            @gu_1, @gu_2, @gu_3 = @game.games_users.order(id: :asc)
-            @user_1, @user_2, @user_3 = @gu_1.user, @gu_2.user, @gu_3.user
-          end
-
-          it 'user_1' do
-            cookies.signed[:user_id] = @user_1.id
-            expected_response = { 'game_over' => { 'redirect_url' => game_path(@game.id) } }
-
-            get :new
-
-            expect(response).to have_http_status :ok
-            expect(JSON.parse(assigns['game_component_params'])).to eq expected_response
-          end
-
-          it 'user_2' do
-            cookies.signed[:user_id] = @user_2.id
-            expected_response = { 'game_over' => { 'redirect_url' => game_path(@game.id) } }
-
-            get :new
-
-            expect(response).to have_http_status :ok
-            expect(JSON.parse(assigns['game_component_params'])).to eq expected_response
-          end
-
-
-          it 'user_3' do
-            cookies.signed[:user_id] = @user_3.id
-            expected_response = { 'game_over' => { 'redirect_url' => game_path(@game.id) } }
-
-            get :new
-
-            expect(response).to have_http_status :ok
-            expect(JSON.parse(assigns['game_component_params'])).to eq expected_response
-          end
+          expect(response).to redirect_to( choose_game_type_page_path )
         end
       end
     end
 
-    context 'unsuccessful; NOT a midgame' do
-      it 'game is a pregame' do
-        game = FactoryBot.create(:pregame, callback_wanted: :pregame)
-        current_user = game.users.first
 
-        cookies.signed[:user_id] = current_user.id
+    context ':index', :clean_as_group do
 
-        get :new
+    end
 
-        expect(response).to redirect_to(choose_game_type_page_path)
-      end
+    xcontext ':show' do
+      it 'redirects if no postgames'
 
-      it 'game is a postgame' do
-        game = FactoryBot.create(:postgame, callback_wanted: :postgame)
-        current_user = game.users.first
+      it 'redirects if user not associated with postgame', :r5_wip do
+        cookies.signed[:user_id] = unassociated_postgame.user_ids.first
 
-        cookies.signed[:user_id] = current_user.id
+        get :index, params: {id: postgame.id}
 
-        get :new
-
-        expect(response).to redirect_to( choose_game_type_page_path )
+        expect(response).to redirect_to choose_game_type_page_path
       end
     end
   end
 
-
-  context ':show' do
-    it 'redirects if no postgames'
-
-    it 'redirects if user not associated with postgame'
-  end
-
-
-  context ':index', :clean_as_group do
-
-  end
-
-  context 'AssemblePostgamesComponentParams', :clean_as_group do
-    let!(:unassociated_pregame) { FactoryBot.create(:pregame, callback_wanted: :pregame) }
-    let!(:unassociated_midgame) { FactoryBot.create(:midgame, callback_wanted: :midgame, round: 3, move: 2) }
-    let!(:unassociated_postgame) { FactoryBot.create(:postgame, callback_wanted: :postgame) }
-    let!(:postgame) { FactoryBot.create(:postgame, callback_wanted: :postgame) }
-    let!(:expected_response) { {} }
+  context 'Inner Classes' do
+    context 'AssemblePostgamesComponentParams', :clean_as_group do
+      let!(:unassociated_pregame) { FactoryBot.create(:pregame, callback_wanted: :pregame) }
+      let!(:unassociated_midgame) { FactoryBot.create(:midgame, callback_wanted: :midgame, round: 3, move: 2) }
+      let!(:unassociated_postgame) { FactoryBot.create(:postgame, callback_wanted: :postgame) }
 
 
-    xit 'is returns expected re' do
-      cookies.signed[:user_id] = postgame.user_ids.first
+      context 'returns json string of component params for the user\'s last postgame', :r5_wip do
+        it 'is returns expected re' do
+          earlier_postgame =  FactoryBot.create(:postgame, callback_wanted: :postgame)
 
-      get :index, params: {id: postgame.id}
+          current_postgame = FactoryBot.create(:postgame, callback_wanted: :postgame)
+          curr
 
-      expect(response).to have_http_status :ok
-      expect(assigns[:postgame_component_params] ).to eq expected_response
-    end
+          let!(:expected__postgame_component_params) {
+                                                      {
+                                                        'current_user' => current_user.to_json,
+                                                        'out_of_game_cards' => out_of_game_cards,
+                                                        'arr_of_postgame_card_set' => arr_of_postgame_card_set,
+                                                        'all__current_user__game_ids' => current_user.game_ids
+                                                      }
+                                                    }
+          cookies.signed[:user_id] = postgame.user_ids.first
 
-    it 'redirects if no postgames', :r5 do
-      cookies.signed[:user_id] = FactoryBot.create(:user).id
+          get :index, params: {id: postgame.id}
 
-      get :index, params: {id: unassociated_postgame.id}
+          expect(response).to have_http_status :ok
+          expect( JSON.parse(assigns[:postgame_component_params]) ).to include_json expected__postgame_component_params
+        end
 
-      expect(response).to redirect_to choose_game_type_page_path
-      expect(assigns[:postgame_component_params] ).to eq nil
-    end
+        it 'redirects if no postgames', :r5 do
+          cookies.signed[:user_id] = FactoryBot.create(:user).id
 
-    it 'redirects if user not associated with postgame', :r5_wip do
-      cookies.signed[:user_id] = unassociated_postgame.user_ids.first
+          get :index, params: {id: unassociated_postgame.id}
 
-      get :index, params: {id: postgame.id}
-
-      expect(response).to have_http_status :ok
-      expect(response).to redirect_to choose_game_type_page_path
-    end
-  end
-
-
-  xdescribe "GET #show" do
-    it "returns http success" do
-      get :show
-      expect(response).to have_http_status(:success)
-    end
-  end
-
-  xdescribe "GET #index" do
-    it "returns http success" do
-      get :index
-      expect(response).to have_http_status(:success)
+          expect(response).to redirect_to choose_game_type_page_path
+          expect(assigns[:postgame_component_params] ).to eq nil
+        end
+      end
     end
   end
 end

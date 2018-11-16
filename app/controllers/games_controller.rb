@@ -14,34 +14,38 @@ class GamesController < ApplicationController
 
   # @game from redirect method
   def show
-    @current_user = current_user
-    @game = current_user.games.order(:id).try(:last)
+    # @current_user = current_user
+    # @game = current_user.games.order(:id).try(:last)
 
     respond_to do |format|
-      format.html do
-        if @game.blank?
-          ( redirect_to(choose_game_type_page_path, alert: 'User can not see game, because they did not play in that game') and return)
-        end
+      # format.html do
+      #   if @game.blank?
+      #     ( redirect_to(choose_game_type_page_path, alert: 'User can not see game, because they did not play in that game') and return)
+      #   end
 
-        @arr_of_postgame_card_sets = [ Card.cards_from_finished_game(@game.id) ]
-      end
+      #   @arr_of_postgame_card_sets = [ Card.cards_from_finished_game(@game.id) ]
+      # end
 
       format.js do
+        game_id = current_user.games.postgame.find(params[:id])
+        @postgame_component_params = AssemblePostgamesComponentParams.new(current_user: current_user, game_id: game_id).result_to_json
+
         if @game.present?
           render( json: [ Card.cards_from_finished_game(@game.id) ] ) and return
         else
-          render( json: {error: 'User can not see game, because they did not play in that game'}) and return
+          render( json: { error: 'User can not see game, because they did not play in that game' } ) and return
         end
       end
     end
   end
 
   def index
-    # want to pass down who the player was in each game so that i can highlight their games_user_name in the (postgame_page + all_postgames_page)
-    @current_user = current_user
-    @out_of_game_cards = Card.where(out_of_game_card_upload: true, user: current_user)
+    current_user_postgames = current_user.games.postgame
+    (redirect_to(choose_game_type_page_path) and return) if current_user_postgames.blank?
 
-    @arr_of_postgame_card_set = Card.cards_from_finished_game(current_user.games.postgame.last.id)
+    last_postgame_id = current_user_postgames.last.id
+    @postgame_component_params = AssemblePostgamesComponentParams.new(current_user: current_user,
+                                                                      game_id:      last_postgame_id).result
   end
 
   protected
