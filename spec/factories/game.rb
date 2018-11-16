@@ -10,7 +10,7 @@ FactoryBot.define do
       callback_wanted { 'none' }
       round { 0 }
       move { 0 }
-      with_user_ids {[]}
+      add_existing_users {[]}
     end
 
     trait :public_game do
@@ -25,9 +25,9 @@ FactoryBot.define do
       after(:create) do |game, evaluator|
 
         if evaluator.callback_wanted == :pregame
-          evaluator.with_user_ids.each{ |user_id| game.users << User.find(user_id) }
+          evaluator.add_existing_users.each{ |user| game.users << user }
 
-          users_left_to_create = evaluator.num_of_players - evaluator.with_user_ids.length
+          users_left_to_create = evaluator.num_of_players - evaluator.add_existing_users.length
           game.users << FactoryBot.create_list(:user, users_left_to_create)
         end
       end
@@ -130,23 +130,23 @@ FactoryBot.define do
       end
     end
   end
-# FactoryBot.create(:pregame, callback_wanted: :pregame, with_user_ids: []
+# FactoryBot.create(:pregame, callback_wanted: :pregame, add_existing_users: []
 
 end
 
 # these add users with their users_game_names and a placeholder starting card
 def new_game_associations game, num_of_players, evaluator
-  if evaluator.with_user_ids.present?
-    evaluator.with_user_ids.each do |user_id|
-      current_gu = FactoryBot.create(:games_user, game_id: game.id, user_id: user_id)
-      current_gu.starting_card = FactoryBot.create(:description, :placeholder, uploader_id: current_gu.user_id, idea_catalyst_id: current_gu.id, starting_games_user_id: current_gu.id)
+  if evaluator.add_existing_users.present?
+    evaluator.add_existing_users.each do |user|
+      current_gu = FactoryBot.create(:games_user, game: game, user: user)
+      current_gu.starting_card = FactoryBot.create(:description, :placeholder, uploader: user, idea_catalyst: current_gu, starting_games_user: current_gu)
     end
   end
 
-  remaining_number_of_users_to_make = num_of_players - evaluator.with_user_ids.length
+  remaining_number_of_users_to_make = num_of_players - evaluator.add_existing_users.length
   remaining_number_of_users_to_make.times do
-    current_gu = FactoryBot.create(:games_user, game_id: game.id)
-    current_gu.starting_card = FactoryBot.create(:description, :placeholder, uploader_id: current_gu.user_id, idea_catalyst_id: current_gu.id, starting_games_user_id: current_gu.id)
+    current_gu = FactoryBot.create(:games_user, game: game)
+    current_gu.starting_card = FactoryBot.create(:description, :placeholder, uploader_id: current_gu.user_id, idea_catalyst: current_gu, starting_games_user: current_gu)
   end
 
   game.reload

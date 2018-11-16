@@ -8,7 +8,6 @@ RSpec.describe GamesController, type: :controller do
   context 'Actions' do
     describe ":new", :r5 do
 
-
      # 4 statuses possible
       # user drawing card
       # user creating description
@@ -735,9 +734,10 @@ RSpec.describe GamesController, type: :controller do
       context 'returns json string of component params for the user\'s last postgame', :r5_wip do
         it 'is returns expected re' do
           earlier_postgame =  FactoryBot.create(:postgame, callback_wanted: :postgame)
+          user = earlier_postgame.users.first
+          current_postgame = FactoryBot.create(:postgame, callback_wanted: :postgame, add_existing_users: [user])
 
-          current_postgame = FactoryBot.create(:postgame, callback_wanted: :postgame)
-          curr
+
 
           let!(:expected__postgame_component_params) {
                                                       {
@@ -767,10 +767,3 @@ RSpec.describe GamesController, type: :controller do
     end
   end
 end
-
-
-
-
-
-
-finish testing games#index
