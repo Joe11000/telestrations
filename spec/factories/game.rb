@@ -23,8 +23,12 @@ FactoryBot.define do
 
     factory :pregame do
       after(:create) do |game, evaluator|
+
         if evaluator.callback_wanted == :pregame
-          game.users << FactoryBot.create_list(:user, evaluator.num_of_players)
+          evaluator.with_user_ids.each{ |user_id| game.users << User.find(user_id) }
+
+          users_left_to_create = evaluator.num_of_players - evaluator.with_user_ids.length
+          game.users << FactoryBot.create_list(:user, users_left_to_create)
         end
       end
     end
@@ -126,7 +130,7 @@ FactoryBot.define do
       end
     end
   end
-
+# FactoryBot.create(:pregame, callback_wanted: :pregame, with_user_ids: []
 
 end
 
@@ -149,7 +153,9 @@ def new_game_associations game, num_of_players, evaluator
   true
 end
 
-
+# user = FactoryBot.create :user
+# pregame = FactoryBot.create :pregame, callback_wanted: :pregame, with_user_ids: [user.id]
+# pregame.user_ids.include? user.id
 
 # class GameBuilder
 #   attr_reader :round_num, :move_num, :users, :gus

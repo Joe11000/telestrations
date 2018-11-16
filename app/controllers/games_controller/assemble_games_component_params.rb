@@ -77,6 +77,7 @@ class GamesController
       def result
         @result ||= begin
           # want to pass down who the player was in each game so that i can highlight their games_user_name in the (postgame_page + all_postgames_page)
+          byebug
           postgame_component_params = {
                                         current_user: current_user.to_json,
                                         out_of_game_cards: out_of_game_cards,

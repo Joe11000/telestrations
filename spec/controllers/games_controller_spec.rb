@@ -708,7 +708,7 @@ RSpec.describe GamesController, type: :controller do
     end
 
 
-    context ':index', :clean_as_group do
+    context ':index', clean_as_group: true do
 
     end
 
@@ -767,3 +767,10 @@ RSpec.describe GamesController, type: :controller do
     end
   end
 end
+
+
+
+
+
+
+finish testing games#index

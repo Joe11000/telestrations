@@ -63,12 +63,27 @@ RSpec.describe Game, type: :model do
         end
       end
 
-      context 'a private pregame' do
+      context 'a public pregame' do
         it_behaves_like 'a pregame', :pregame, :public_game, callback_wanted: :pregame
 
         it 'is valid' do
           public_pregame = FactoryBot.build_stubbed(:pregame, :public_game, callback_wanted: :pregame)
           expect(public_pregame.public_game?).to eq true
+        end
+
+        it 'test adding a user into game when creating' do
+          user_1 = FactoryBot.create :user
+          game = FactoryBot.create :pregame, :public_game, callback_wanted: :pregame, with_user_ids: [user_1.id]
+
+          expect(game.user_ids).to include user_1.id
+        end
+
+        it 'test adding 2 users into game when creating' do
+          user_1 = FactoryBot.create :user
+          user_2 = FactoryBot.create :user
+          game = FactoryBot.create :pregame, :public_game, callback_wanted: :pregame, with_user_ids: [user_1.id, user_2.id]
+
+          expect(game.user_ids).to include(user_1.id, user_2.id)
         end
       end
 
@@ -78,6 +93,21 @@ RSpec.describe Game, type: :model do
         it 'is valid' do
           private_pregame = FactoryBot.build_stubbed(:pregame, :private_game, callback_wanted: :pregame)
           expect(private_pregame.private_game?).to eq true
+        end
+
+        it 'test adding a user into game when creating' do
+          user_1 = FactoryBot.create :user
+          game = FactoryBot.create :pregame, :private_game, callback_wanted: :pregame, with_user_ids: [user_1.id]
+
+          expect(game.user_ids).to include user_1.id
+        end
+
+        it 'test adding 2 users into game when creating' do
+          user_1 = FactoryBot.create :user
+          user_2 = FactoryBot.create :user
+          game = FactoryBot.create :pregame, :private_game, callback_wanted: :pregame, with_user_ids: [user_1.id, user_2.id]
+
+          expect(game.user_ids).to include(user_1.id, user_2.id)
         end
       end
     end
@@ -119,6 +149,21 @@ RSpec.describe Game, type: :model do
           public_midgame_with_no_moves = FactoryBot.build_stubbed(:midgame_with_no_moves, :public_game, callback_wanted: :midgame_with_no_moves)
           expect(public_midgame_with_no_moves.public_game?).to eq true
         end
+
+        it 'test adding a user into game when creating' do
+          user_1 = FactoryBot.create :user
+          game = FactoryBot.create :midgame_with_no_moves, :public_game, callback_wanted: :midgame_with_no_moves, with_user_ids: [user_1.id]
+
+          expect(game.user_ids).to include user_1.id
+        end
+
+        it 'test adding 2 users into game when creating' do
+          user_1 = FactoryBot.create :user
+          user_2 = FactoryBot.create :user
+          game = FactoryBot.create :midgame_with_no_moves, :public_game, callback_wanted: :midgame_with_no_moves, with_user_ids: [user_1.id, user_2.id]
+
+          expect(game.user_ids).to include(user_1.id, user_2.id)
+        end
       end
 
       # FactoryBot.create(:midgame_with_no_moves, :private_game, callback_wanted: :midgame_with_no_moves)
@@ -128,6 +173,21 @@ RSpec.describe Game, type: :model do
         it 'is valid' do
           private_midgame_with_no_moves = FactoryBot.build_stubbed(:midgame_with_no_moves, :private_game, callback_wanted: :midgame_with_no_moves)
           expect(private_midgame_with_no_moves.private_game?).to eq true
+        end
+
+        it 'test adding a user into game when creating' do
+          user_1 = FactoryBot.create :user
+          game = FactoryBot.create :midgame_with_no_moves, :private_game, callback_wanted: :midgame_with_no_moves, with_user_ids: [user_1.id]
+
+          expect(game.user_ids).to include user_1.id
+        end
+
+        it 'test adding 2 users into game when creating' do
+          user_1 = FactoryBot.create :user
+          user_2 = FactoryBot.create :user
+          game = FactoryBot.create :midgame_with_no_moves, :private_game, callback_wanted: :midgame_with_no_moves, with_user_ids: [user_1.id, user_2.id]
+
+          expect(game.user_ids).to include(user_1.id, user_2.id)
         end
       end
     end
@@ -209,6 +269,21 @@ RSpec.describe Game, type: :model do
           public_pregame = FactoryBot.build_stubbed(:midgame, :public_game, callback_wanted: :midgame)
           expect(public_pregame.public_game?).to eq true
         end
+
+        it 'test adding a user into game when creating' do
+          user_1 = FactoryBot.create :user
+          game = FactoryBot.create :midgame, :public_game, callback_wanted: :midgame, with_user_ids: [user_1.id]
+
+          expect(game.user_ids).to include user_1.id
+        end
+
+        it 'test adding 2 users into game when creating' do
+          user_1 = FactoryBot.create :user
+          user_2 = FactoryBot.create :user
+          game = FactoryBot.create :midgame, :public_game, callback_wanted: :midgame, with_user_ids: [user_1.id, user_2.id]
+
+          expect(game.user_ids).to include(user_1.id, user_2.id)
+        end
       end
 
       context 'a private midgame' do
@@ -217,6 +292,21 @@ RSpec.describe Game, type: :model do
         it 'is valid' do
           private_midgame = FactoryBot.build_stubbed(:midgame, :private_game, callback_wanted: :midgame)
           expect(private_midgame.private_game?).to eq true
+        end
+
+        it 'test adding a user into game when creating' do
+          user_1 = FactoryBot.create :user
+          game = FactoryBot.create :midgame, :private_game, callback_wanted: :midgame, with_user_ids: [user_1.id]
+
+          expect(game.user_ids).to include user_1.id
+        end
+
+        it 'test adding 2 users into game when creating' do
+          user_1 = FactoryBot.create :user
+          user_2 = FactoryBot.create :user
+          game = FactoryBot.create :midgame, :private_game, callback_wanted: :midgame, with_user_ids: [user_1.id, user_2.id]
+
+          expect(game.user_ids).to include(user_1.id, user_2.id)
         end
       end
     end
@@ -271,6 +361,21 @@ RSpec.describe Game, type: :model do
           expect(public_postgame.public_game?).to eq true
         end
 
+        it 'test adding a user into game when creating' do
+          user_1 = FactoryBot.create :user
+          game = FactoryBot.create :postgame, :public_game, callback_wanted: :postgame, with_user_ids: [user_1.id]
+
+          expect(game.user_ids).to include user_1.id
+        end
+
+        it 'test adding 2 users into game when creating' do
+          user_1 = FactoryBot.create :user
+          user_2 = FactoryBot.create :user
+          game = FactoryBot.create :postgame, :public_game, callback_wanted: :postgame, with_user_ids: [user_1.id, user_2.id]
+
+          expect(game.user_ids).to include(user_1.id, user_2.id)
+        end
+
       end
 
       context 'a private postgame' do
@@ -279,6 +384,21 @@ RSpec.describe Game, type: :model do
         it 'is valid' do
           private_postgame = FactoryBot.build_stubbed(:postgame, :private_game, callback_wanted: :postgame)
           expect(private_postgame.private_game?).to eq true
+        end
+
+        it 'test adding a user into game when creating' do
+          user_1 = FactoryBot.create :user
+          game = FactoryBot.create :postgame, :private_game, callback_wanted: :postgame, with_user_ids: [user_1.id]
+
+          expect(game.user_ids).to include user_1.id
+        end
+
+        it 'test adding 2 users into game when creating' do
+          user_1 = FactoryBot.create :user
+          user_2 = FactoryBot.create :user
+          game = FactoryBot.create :postgame, :private_game, callback_wanted: :postgame, with_user_ids: [user_1.id, user_2.id]
+
+          expect(game.user_ids).to include(user_1.id, user_2.id)
         end
       end
     end
