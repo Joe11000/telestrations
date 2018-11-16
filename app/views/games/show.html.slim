@@ -1,12 +1,12 @@
-#postgame.form-horizontal
-  / back button
-  .col-xs-10.col-sm-10.offset-sm-1.offset-md-2.col-md-8.offset-lg-3.col-lg-6.back-link-col
-    a data-id='To Main Menu' href=choose_game_type_page_url
-      p
-        i.fa.fa-arrow-circle-left &nbsp;
-        | Main Menu
-  .clearfix
+/ #postgame.form-horizontal
+/   / back button
+/   .col-xs-10.col-sm-10.offset-sm-1.offset-md-2.col-md-8.offset-lg-3.col-lg-6.back-link-col
+/     a data-id='To Main Menu' href=choose_game_type_page_url
+/       p
+/         i.fa.fa-arrow-circle-left &nbsp;
+/         | Main Menu
+/   .clearfix
 
-  h3.h3.text-center Post Game
-  h6.h6.text-center.glow = "( Colored 'Created By' cards were made by you. )"
-  = render partial: 'shared/card_slideshow', locals: { arr_of_postgame_card_sets: @arr_of_postgame_card_sets}
+/   h3.h3.text-center Post Game
+/   h6.h6.text-center.glow = "( Colored 'Created By' cards were made by you. )"
+/   = render partial: 'shared/card_slideshow', locals: { arr_of_postgame_card_sets: @arr_of_postgame_card_sets}

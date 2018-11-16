@@ -706,6 +706,55 @@ RSpec.describe GamesController, type: :controller do
     end
   end
 
+
+  context ':show' do
+    it 'redirects if no postgames'
+
+    it 'redirects if user not associated with postgame'
+  end
+
+
+  context ':index', :clean_as_group do
+
+  end
+
+  context 'AssemblePostgamesComponentParams', :clean_as_group do
+    let!(:unassociated_pregame) { FactoryBot.create(:pregame, callback_wanted: :pregame) }
+    let!(:unassociated_midgame) { FactoryBot.create(:midgame, callback_wanted: :midgame, round: 3, move: 2) }
+    let!(:unassociated_postgame) { FactoryBot.create(:postgame, callback_wanted: :postgame) }
+    let!(:postgame) { FactoryBot.create(:postgame, callback_wanted: :postgame) }
+    let!(:expected_response) { {} }
+
+
+    xit 'is returns expected re' do
+      cookies.signed[:user_id] = postgame.user_ids.first
+
+      get :index, params: {id: postgame.id}
+
+      expect(response).to have_http_status :ok
+      expect(assigns[:postgame_component_params] ).to eq expected_response
+    end
+
+    it 'redirects if no postgames', :r5 do
+      cookies.signed[:user_id] = FactoryBot.create(:user).id
+
+      get :index, params: {id: unassociated_postgame.id}
+
+      expect(response).to redirect_to choose_game_type_page_path
+      expect(assigns[:postgame_component_params] ).to eq nil
+    end
+
+    it 'redirects if user not associated with postgame', :r5_wip do
+      cookies.signed[:user_id] = unassociated_postgame.user_ids.first
+
+      get :index, params: {id: postgame.id}
+
+      expect(response).to have_http_status :ok
+      expect(response).to redirect_to choose_game_type_page_path
+    end
+  end
+
+
   xdescribe "GET #show" do
     it "returns http success" do
       get :show
