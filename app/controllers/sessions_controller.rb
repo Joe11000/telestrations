@@ -5,16 +5,17 @@ class SessionsController < ApplicationController
 
   def create
     @user = User.find_or_initialize_by(create_params)
-    puts @user
-    puts "Look Here!!!!!!!"
-    if @user.new_record?
+    logger.info @user
 
-      puts "New Record Here!!!!!!!"
+    logger.info "Look Here!!!!!!!"
+    if @user.new_record?
+      logger.info "New Record Here!!!!!!!"
       attach_users_avatar_from_provider @user, provider_avatar_url
     end
-    puts "New Cookie Here!!!!!!!"
+
+    logger.info "New Cookie Here!!!!!!!"
     cookies.signed[:user_id] = @user.id if @user
-    puts "Redirect Here!!!!!!!"
+    logger.info "Redirect Here!!!!!!!"
     redirect_to choose_game_type_page_url
   end
 
