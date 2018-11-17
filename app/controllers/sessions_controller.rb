@@ -4,6 +4,8 @@ class SessionsController < ApplicationController
   end
 
   def create
+    byebug
+
     @user = User.find_or_initialize_by(create_params)
 
     if @user.new_record?
