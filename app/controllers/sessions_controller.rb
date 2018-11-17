@@ -1,3 +1,5 @@
+require 'open-uri'
+
 class SessionsController < ApplicationController
   def new
     redirect_to choose_game_type_page_url if current_user
@@ -41,13 +43,17 @@ class SessionsController < ApplicationController
   private
 
     def attach_users_avatar_from_provider user, url
-      require 'open-uri'
+      logger.info "attach_users_avatar_from_provider!!!!!!!"
       # open the link
+
       downloaded_image = open(url)
 
+      logger.info "opened url #{downloaded_image} !!!!!!!!"
       # upload via ActiveStorage
       # be careful here! the type may be png or other type!
       user.provider_avatar.attach(io: downloaded_image, filename: 'avatar.jpg', content_type: "image/jpeg")
+      logger.info "attached provider_avatar !!!!!"
       user.save
+      logger.info "user saved !!!!!"
     end
 end
