@@ -47,6 +47,8 @@ group :development, :test do
   gem 'byebug', platform: :mri
   gem 'factory_bot_rails'
   gem 'faker'
+  gem 'rspec-rails'
+
 end
 
 group :development do
@@ -124,5 +126,4 @@ gem 'token_phrase'
 gem 'mini_magick'
 gem 'rubocop'
 gem 'webpacker'
-gem 'rspec-rails'
 # gem 'teaspoon-mocha', group: [:development, :test]
