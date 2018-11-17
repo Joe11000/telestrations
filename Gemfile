@@ -30,7 +30,6 @@ gem 'turbolinks'
 gem 'jbuilder'
 # Use Puma as the app server
 gem 'puma'
-gem 'byebug'
 
 # Use Puma as the app server
 # Use SCSS for stylesheets
@@ -48,6 +47,7 @@ group :development, :test do
   gem 'factory_bot_rails'
   gem 'faker'
   gem 'rspec-rails'
+  gem 'byebug'
 
 end
 

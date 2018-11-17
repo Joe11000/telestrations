@@ -5,7 +5,7 @@ class LobbiesController < ApplicationController
   layout proc { false if request.xhr? }
 
   def choose_game_type_page
-    byebug
+    puts "choose_game_type_page controller!!!!!"
   end
 
   # joining the lobby of another game via join_code
