@@ -45,10 +45,14 @@ group :development, :test do
   # Call '' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platform: :mri
   gem 'factory_bot_rails'
+<<<<<<< HEAD
   gem 'faker'
+=======
+>>>>>>> not sure what this is
   gem 'rspec-rails'
 
 end
+  gem 'faker'
 
 group :development do
   # Access an IRB console on exception pages or by using <%= console %> in views
@@ -74,6 +78,7 @@ gem 'redis'
 gem 'sidekiq'
 gem 'sidetiq'
 gem 'paranoia'
+
 
 # Add support to use es6 based on top of babel, instead of using coffeescript
 gem 'sprockets-es6'
@@ -105,10 +110,10 @@ group :development do
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring-watcher-listen'
   gem 'travis'
-  gem 'foreman'
   gem 'bullet'
   gem 'rails-erd'
 end
+  gem 'foreman'
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]

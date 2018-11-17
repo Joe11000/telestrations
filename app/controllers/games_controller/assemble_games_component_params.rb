@@ -55,9 +55,9 @@ class GamesController
   class AssemblePostgamesComponentParams
     attr_reader :current_user, :game
 
-    def initialize current_user:, game_id: nil
+    def initialize current_user:, game: nil
       @current_user = current_user
-      @game = current_user.games.postgame.find(game_id) # make sure game is attached to user
+      @game = current_user.games.postgame.find(game.id) # make sure game is attached to user
     end
 
     def result_to_json
@@ -67,7 +67,25 @@ class GamesController
     private
 
       def out_of_game_cards
-        Card.where(out_of_game_card_upload: true, user: current_user)
+        Card.where(out_of_game_card_upload: true, uploader: current_user)
+
+        out_of_game_cards = GamesUser.where(user: current_user).last.cards.map do |card|
+          pull_info_from card
+        end
+      end
+
+      def pull_info_from card
+        result = nil
+
+        if card.drawing?
+          result = card.slice(:medium, :uploader)
+          byebug
+          result.merge!( {'drawing_url' => get_drawing_url(card)} )
+          result
+        else
+          card.slice(:medium, :description_text, :uploader)
+        end
+        result
       end
 
       def arr_of_postgame_card_set
@@ -77,11 +95,10 @@ class GamesController
       def result
         @result ||= begin
           # want to pass down who the player was in each game so that i can highlight their games_user_name in the (postgame_page + all_postgames_page)
-          byebug
           postgame_component_params = {
                                         current_user: current_user.to_json,
                                         out_of_game_cards: out_of_game_cards,
-                                        arr_of_postgame_card_set: arr_of_postgame_card_set,
+                                        arr_of_postgame_card_set: arr_of_postgame_card_set.to_json,
                                         all__current_user__game_ids: current_user.game_ids
                                       }
         end

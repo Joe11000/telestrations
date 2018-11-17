@@ -707,8 +707,56 @@ RSpec.describe GamesController, type: :controller do
     end
 
 
-    context ':index', clean_as_group: true do
+    xcontext ':index', :clean_as_group do
+      let!(:unassociated_pregame) { FactoryBot.create(:pregame, callback_wanted: :pregame) }
+      let!(:unassociated_midgame) { FactoryBot.create(:midgame, callback_wanted: :midgame, round: 3, move: 2) }
+      let!(:unassociated_postgame) { FactoryBot.create(:postgame, callback_wanted: :postgame) }
 
+
+      context 'returns json string of component params for the user\'s last postgame' do
+        it 'is returns expected re', :r5_wip do
+          # earlier_postgame =  FactoryBot.create(:postgame, callback_wanted: :postgame)
+          # current_user = earlier_postgame.users.first
+          # current_postgame = FactoryBot.create(:postgame, callback_wanted: :postgame, add_existing_users: [current_user])
+
+          # out_of_game_cards = GamesUser.where(user: current_user).last.cards.map do |card|
+
+          #   if card.drawing?
+          #     result = card.slice(:medium, :uploader)
+          #     result.merge!( {'drawing_url' => get_drawing_url(card)} )
+          #     result
+          #   else
+          #     card.slice(:medium, :description_text, :uploader)
+          #   end
+          # end
+
+          # expected__postgame_component_params = {
+
+          #                                         'current_user' => current_user.slice(:id),
+          #                                         'out_of_game_cards' => out_of_game_cards,
+
+          #                                         # ,'arr_of_postgame_card_set' => arr_of_postgame_card_set,
+          #                                         'all__current_user__game_ids' => current_user.game_ids.sort
+          #                                       }
+
+
+          cookies.signed[:user_id] = current_user.id
+
+          get :index
+
+          expect(response).to have_http_status :ok
+          expect( JSON.parse(assigns[:postgame_component_params]) ).to include_json expected__postgame_component_params
+        end
+
+        it 'redirects if no postgames', :r5 do
+          cookies.signed[:user_id] = FactoryBot.create(:user).id
+
+          get :index
+
+          expect(response).to redirect_to choose_game_type_page_path
+          expect(assigns[:postgame_component_params] ).to eq nil
+        end
+      end
     end
 
     xcontext ':show' do
@@ -724,46 +772,50 @@ RSpec.describe GamesController, type: :controller do
     end
   end
 
-  context 'Inner Classes' do
-    context 'AssemblePostgamesComponentParams', :clean_as_group do
-      let!(:unassociated_pregame) { FactoryBot.create(:pregame, callback_wanted: :pregame) }
-      let!(:unassociated_midgame) { FactoryBot.create(:midgame, callback_wanted: :midgame, round: 3, move: 2) }
-      let!(:unassociated_postgame) { FactoryBot.create(:postgame, callback_wanted: :postgame) }
-
-
-      context 'returns json string of component params for the user\'s last postgame', :r5_wip do
-        it 'is returns expected re' do
-          earlier_postgame =  FactoryBot.create(:postgame, callback_wanted: :postgame)
-          user = earlier_postgame.users.first
-          current_postgame = FactoryBot.create(:postgame, callback_wanted: :postgame, add_existing_users: [user])
+end
 
 
 
-          let!(:expected__postgame_component_params) {
-                                                      {
-                                                        'current_user' => current_user.to_json,
-                                                        'out_of_game_cards' => out_of_game_cards,
-                                                        'arr_of_postgame_card_set' => arr_of_postgame_card_set,
-                                                        'all__current_user__game_ids' => current_user.game_ids
-                                                      }
-                                                    }
-          cookies.signed[:user_id] = postgame.user_ids.first
+RSpec.describe AssemblePostgamesComponentParams, :clean_as_group do
+  let!(:unassociated_pregame) { FactoryBot.create(:pregame, callback_wanted: :pregame) }
+  let!(:unassociated_midgame) { FactoryBot.create(:midgame, callback_wanted: :midgame, round: 3, move: 2) }
+  let!(:unassociated_postgame) { FactoryBot.create(:postgame, callback_wanted: :postgame) }
 
-          get :index, params: {id: postgame.id}
+  context 'returns json string of component params for the user\'s last postgame' do
+    it 'is returns expected re', :r5_wip do
+        earlier_postgame =  FactoryBot.create(:postgame, callback_wanted: :postgame)
+        current_user = earlier_postgame.users.first
+        current_postgame = FactoryBot.create(:postgame, callback_wanted: :postgame, add_existing_users: [current_user])
 
-          expect(response).to have_http_status :ok
-          expect( JSON.parse(assigns[:postgame_component_params]) ).to include_json expected__postgame_component_params
+        out_of_game_cards = GamesUser.where(user: current_user).last.cards.map do |card|
+
+          if card.drawing?
+            result = card.slice(:medium, :uploader)
+            result.merge!( {'drawing_url' => get_drawing_url(card)} )
+            result
+          else
+            card.slice(:medium, :description_text, :uploader)
+          end
         end
 
-        it 'redirects if no postgames', :r5 do
-          cookies.signed[:user_id] = FactoryBot.create(:user).id
+        expected__postgame_component_params = {
 
-          get :index, params: {id: unassociated_postgame.id}
+                                                'current_user' => current_user.slice(:id),
+                                                'out_of_game_cards' => out_of_game_cards,
 
-          expect(response).to redirect_to choose_game_type_page_path
-          expect(assigns[:postgame_component_params] ).to eq nil
-        end
-      end
+                                                # ,'arr_of_postgame_card_set' => arr_of_postgame_card_set,
+                                                'all__current_user__game_ids' => current_user.game_ids.sort
+                                              }
+      byebug
+      response = AssemblePostgamesComponentParams.new(current_user: current_user, game: current_postgame)
+
+      expect( JSON.parse(response) ).to include_json expected__postgame_component_params
+    end
+
+    xit 'redirects if no postgames', :r5 do
+      # expect(response).to redirect_to choose_game_type_page_path
+      # expect(assigns[:postgame_component_params] ).to eq nil
     end
   end
 end
+

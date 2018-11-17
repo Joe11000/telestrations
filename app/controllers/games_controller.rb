@@ -43,9 +43,9 @@ class GamesController < ApplicationController
     current_user_postgames = current_user.games.postgame
     (redirect_to(choose_game_type_page_path) and return) if current_user_postgames.blank?
 
-    last_postgame_id = current_user_postgames.last.id
-    @postgame_component_params = AssemblePostgamesComponentParams.new(current_user: current_user,
-                                                                      game_id:      last_postgame_id).result
+    last_postgame = current_user_postgames.last
+    byebug
+    @postgame_component_params = AssemblePostgamesComponentParams.new(current_user: current_user, game: last_postgame).result_to_json
   end
 
   protected
