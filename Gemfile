@@ -30,7 +30,7 @@ gem 'turbolinks'
 gem 'jbuilder'
 # Use Puma as the app server
 gem 'puma'
-
+gem 'byebug'
 
 # Use Puma as the app server
 # Use SCSS for stylesheets
