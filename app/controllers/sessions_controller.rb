@@ -10,7 +10,7 @@ class SessionsController < ApplicationController
     logger.info @user
 
     logger.info "Look Here!!!!!!!"
-    logger.info params
+    logger.info "params #{params}"
 
     if @user.new_record?
       logger.info "New Record Here!!!!!!!"
