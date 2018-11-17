@@ -10,6 +10,8 @@ class SessionsController < ApplicationController
     logger.info @user
 
     logger.info "Look Here!!!!!!!"
+    logger.info params
+
     if @user.new_record?
       logger.info "New Record Here!!!!!!!"
       attach_users_avatar_from_provider @user, provider_avatar_url
