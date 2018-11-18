@@ -59,7 +59,8 @@ group :development do
   # gem 'guard'
   # gem 'guard-rspec'
 end
-  gem 'guard-rails'
+
+gem 'guard-rails', require: false
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
@@ -95,6 +96,7 @@ group :test do
   gem 'database_cleaner'
   gem 'rails-controller-testing' # for testing games_controller
   gem 'rspec-json_expectations'
+  gem 'simplecov', require: false
 end
 
 
