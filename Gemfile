@@ -45,10 +45,6 @@ group :development, :test do
   # Call '' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platform: :mri
   gem 'factory_bot_rails'
-<<<<<<< HEAD
-  gem 'faker'
-=======
->>>>>>> not sure what this is
   gem 'rspec-rails'
 
 end
