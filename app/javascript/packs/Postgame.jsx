@@ -6,28 +6,6 @@ class Postgame extends React.Component {
 
   constructor(props) {
     super(props);
-    debugger
-    this.state = {
-
-    };
-  }
-
-
-  // input: json from updates broadcasted from in_game_card_uploads_controller#create
-  decipherData(channelData) {
-
-    // if state is meant for user, then save data to state
-    var _statuses = channelData.statuses
-    for(var i in _statuses) {
-
-      // this user is waiting and broadcast is intended for this user
-      if( this.state.user_status == 'waiting' && _statuses[i].attention_users.includes(this.props.data.current_user_id) ) {
-        this.setState({
-                        previous_card: _statuses[i].previous_card,
-                        user_status: _statuses[i].user_status
-                      })
-      }
-    }
   }
 
   renderSection(status) {
@@ -42,16 +20,9 @@ class Postgame extends React.Component {
         </div>
         <div class='clearfix'>
       </div>
-
-
-
-
     )
   }
 }
-
-
-
 
 
 document.addEventListener('DOMContentLoaded', () => {

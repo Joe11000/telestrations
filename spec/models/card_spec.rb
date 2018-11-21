@@ -114,7 +114,7 @@ RSpec.describe Card, type: :model do
     context '.cards_from_finished_game', :r5 do
       before(:all) do
         @game = FactoryBot.create(:postgame, callback_wanted: :postgame)
-        FactoryBot.create(:drawing, :out_of_game_card_upload)
+        FactoryBot.create(:drawing, out_of_game_card_upload: true)
         FactoryBot.create(:midgame, callback_wanted: :midgame)
         FactoryBot.create(:midgame, :public_game, callback_wanted: :midgame)
         FactoryBot.create(:postgame, :public_game, callback_wanted: :postgame)
@@ -152,7 +152,7 @@ RSpec.describe Card, type: :model do
         random_placeholder1 = FactoryBot.create(:drawing, :placeholder)
         random_placeholder2 = FactoryBot.create(:description, :placeholder)
         random_placeholder3 = FactoryBot.create(:description, :placeholder)
-        FactoryBot.create(:drawing, :out_of_game_card_upload)
+        FactoryBot.create(:drawing, out_of_game_card_upload: true)
 
         gu1, gu2, gu3 = game.games_users.order(id: :asc) # simulates each of the stacks of paper being passed
         user_1, user_2, user_3 = gu1.user, gu2.user, gu3.user
@@ -184,7 +184,7 @@ RSpec.describe Card, type: :model do
         random_placeholder1 = FactoryBot.create(:drawing, :placeholder)
         random_placeholder2 = FactoryBot.create(:description, :placeholder)
         random_placeholder3 = FactoryBot.create(:description, :placeholder)
-        FactoryBot.create(:drawing, :out_of_game_card_upload)
+        FactoryBot.create(:drawing, out_of_game_card_upload: true)
 
         gu1, gu2, gu3 = game.games_users.order(id: :asc)
 
@@ -205,7 +205,7 @@ RSpec.describe Card, type: :model do
         random_placeholder1 = FactoryBot.create(:drawing, :placeholder)
         random_placeholder2 = FactoryBot.create(:description, :placeholder)
         random_placeholder3 = FactoryBot.create(:description, :placeholder)
-        FactoryBot.create(:drawing, :out_of_game_card_upload)
+        FactoryBot.create(:drawing, out_of_game_card_upload: true)
 
         gu1, gu2, gu3 = game.games_users
         expect( Card.get_placeholder_card(gu1.user_id, game) ).to eq nil
@@ -219,7 +219,7 @@ RSpec.describe Card, type: :model do
         random_placeholder1 = FactoryBot.create(:drawing, :placeholder)
         random_placeholder2 = FactoryBot.create(:description, :placeholder)
         random_placeholder3 = FactoryBot.create(:description, :placeholder)
-        FactoryBot.create(:drawing, :out_of_game_card_upload)
+        FactoryBot.create(:drawing, out_of_game_card_upload: true)
 
         gu1, gu2, gu3 = game.games_users
         expect( Card.get_placeholder_card(gu1.user_id, game) ).to eq nil

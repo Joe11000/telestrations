@@ -32,12 +32,6 @@ FactoryBot.define do
                             filename: 'provider_avatar.jpg')
       end
 
-
-      trait :out_of_game_card_upload do
-        out_of_game_card_upload { true }
-      end
-
-
       trait :placeholder do
         placeholder { true }
         description_text { nil }
@@ -46,7 +40,6 @@ FactoryBot.define do
           card.drawing.detach
         end
       end
-
     end
   end
 end

@@ -156,7 +156,6 @@ class Game extends React.Component {
                                      previous_card={this.state.previous_card}
                                      switchToLoadingScreen={this.switchToLoadingScreen}
                                      size_of_card_backlog={this.state.size_of_card_backlog}
-
                                      />
                 )
         }

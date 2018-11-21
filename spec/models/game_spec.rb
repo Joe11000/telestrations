@@ -484,7 +484,7 @@ RSpec.describe Game, type: :model do
     it '#cards', :r5 do
       game = FactoryBot.create(:midgame, callback_wanted: :midgame)
 
-      FactoryBot.create(:drawing, :out_of_game_card_upload)
+      FactoryBot.create(:drawing, out_of_game_card_upload: true)
       FactoryBot.create(:midgame, callback_wanted: :midgame)
       FactoryBot.create(:midgame, :public_game, callback_wanted: :midgame)
       FactoryBot.create(:postgame, :public_game, callback_wanted: :postgame)

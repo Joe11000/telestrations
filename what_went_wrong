@@ -1,0 +1,85 @@
+Run options: include {:r5_wip=>true}
+
+GamesController
+  Actions
+    :index
+      returns json string of component params for the user's last postgame
+        is returns expected re (PENDING: Temporarily skipped with xcontext)
+    :show
+      redirects if user not associated with postgame (PENDING: Temporarily skipped with xcontext)
+  AssemblePostgamesComponentParams
+    returns json string of component params for the user's last postgame
+
+[1, 10] in /Users/joe/Dropbox/coding/coding/ruby/rails/wip/rails5/telestrations/app/controllers/concerns/active_storage_url_constructor.rb
+    1: module ActiveStorageUrlConstructor
+    2: 
+    3:   def get_drawing_url card
+    4:     include Rails.application.routes.url_helpers
+    5:     byebug
+=>  6:     unless (card.drawing? && card.drawing.attached?)
+    7:       raise 'Card must be a drawing with an image attached'
+    8:     end
+    9: 
+   10:     return rails_blob_path(card.drawing, disposition: 'attachment')
+(byebug) s what_went_wrong 
+(byebug) c
+
+[807, 816] in /Users/joe/Dropbox/coding/coding/ruby/rails/wip/rails5/telestrations/spec/controllers/games_controller_spec.rb
+   807: 
+   808:                                                   # ,'arr_of_postgame_card_set' => arr_of_postgame_card_set,
+   809:                                                   'all__current_user__game_ids' => current_user.game_ids.sort
+   810:                                                 }
+   811:         byebug
+=> 812:         response = GamesController::AssemblePostgamesComponentParams.new(current_user: current_user, game: current_postgame).result_to_json
+   813: 
+   814:         expect( JSON.parse(response) ).to include_json expected__postgame_component_params
+   815:       end
+   816: 
+(byebug) c
+
+[78, 87] in /Users/joe/Dropbox/coding/coding/ruby/rails/wip/rails5/telestrations/app/controllers/games_controller/assemble_games_component_params.rb
+   78:         result = nil
+   79: 
+   80:         if card.drawing?
+   81:           result = card.slice(:medium, :uploader)
+   82:           byebug
+=> 83:           result.merge!( {'drawing_url' => get_drawing_url(card)} )
+   84:           result
+   85:         else
+   86:           card.slice(:medium, :description_text, :uploader)
+   87:         end
+(byebug) c
+      is returns expected re (FAILED - 1)
+
+Pending: (Failures listed here are expected and do not affect your suite's status)
+
+  1) GamesController Actions :index returns json string of component params for the user's last postgame is returns expected re
+     # Temporarily skipped with xcontext
+     # ./spec/controllers/games_controller_spec.rb:722
+
+  2) GamesController Actions :show redirects if user not associated with postgame
+     # Temporarily skipped with xcontext
+     # ./spec/controllers/games_controller_spec.rb:770
+
+Failures:
+
+  1) GamesController AssemblePostgamesComponentParams returns json string of component params for the user's last postgame is returns expected re
+     Failure/Error: result.merge!( {'drawing_url' => get_drawing_url(card)} )
+
+     NoMethodError:
+       undefined method `get_drawing_url' for #<GamesController::AssemblePostgamesComponentParams:0x00007fc44c018cf0>
+     # ./app/controllers/games_controller/assemble_games_component_params.rb:83:in `pull_info_from'
+     # ./app/controllers/games_controller/assemble_games_component_params.rb:73:in `block in out_of_game_cards'
+     # ./app/controllers/games_controller/assemble_games_component_params.rb:72:in `map'
+     # ./app/controllers/games_controller/assemble_games_component_params.rb:72:in `out_of_game_cards'
+     # ./app/controllers/games_controller/assemble_games_component_params.rb:100:in `result'
+     # ./app/controllers/games_controller/assemble_games_component_params.rb:64:in `result_to_json'
+     # ./spec/controllers/games_controller_spec.rb:812:in `block (4 levels) in <top (required)>'
+
+Finished in 1 minute 5.14 seconds (files took 7.49 seconds to load)
+3 examples, 1 failure, 2 pending
+
+Failed examples:
+
+rspec ./spec/controllers/games_controller_spec.rb:787 # GamesController AssemblePostgamesComponentParams returns json string of component params for the user's last postgame is returns expected re
+

@@ -17,15 +17,4 @@ class ApplicationController < ActionController::Base
   def redirect_if_not_logged_in
     redirect_to login_url unless logged_in?
   end
-
-  include Rails.application.routes.url_helpers
-
-  def get_drawing_url card
-    byebug
-    unless (card.drawing? && card.drawing.attached?)
-      raise 'Card must be a drawing with an image attached'
-    end
-
-    return rails_blob_path(card.drawing, disposition: 'attachment')
-  end
 end

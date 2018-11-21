@@ -1,6 +1,8 @@
-module
+module ActiveStorageUrlCreater
+
   def get_drawing_url card
-    byebug
+    include Rails.application.routes.url_helpers
+
     unless (card.drawing? && card.drawing.attached?)
       raise 'Card must be a drawing with an image attached'
     end
