@@ -2,9 +2,9 @@ require 'spec_helper'
 require 'rails_helper'
 require 'json'
 
-RSpec.configure do |c|
-  c.include CardHelper
-end
+# RSpec.configure do |c|
+#   c.include CardHelper
+# end
 
 RSpec.describe Game, type: :model do
 
@@ -824,7 +824,7 @@ RSpec.describe Game, type: :model do
       #         gu_1, gu_2, gu_3 = game.games_users.order(id: :asc)
       #         user_1, user_2, user_3 = gu_1.user, gu_2.user, gu_3.user
 
-      #         expected_response = { game_over: { redirect_url: game_path(game.id) } }
+      #         expected_response = { game_over: { redirect_url: games_path } }
 
       #         expect( game.get_status_for_users([user_1, user_2, user_3]) ).to eq expected_response
       #         expect( game.get_status_for_users([user_1, user_2]) ).to eq expected_response
@@ -837,7 +837,7 @@ RSpec.describe Game, type: :model do
       #       gu_1, gu_2, gu_3 = game.games_users.order(id: :asc)
       #       user_1, user_2, user_3 = gu_1.user, gu_2.user, gu_3.user
 
-      #       expected_response = { game_over: { redirect_url: game_path(game.id) } }
+      #       expected_response = { game_over: { redirect_url: games_path } }
 
       #       expect( game.get_status_for_users([user_1, user_2, user_3]) ).to eq expected_response
       #       expect( game.get_status_for_users([user_1, user_2]) ).to eq expected_response
@@ -1129,7 +1129,7 @@ RSpec.describe Game, type: :model do
             gu_1, gu_2, gu_3 = game.games_users.order(id: :asc)
             user_1, user_2, user_3 = gu_1.user, gu_2.user, gu_3.user
 
-            expected_response = { game_over: { redirect_url: game_path(game.id) } }
+            expected_response = { game_over: { redirect_url: games_path } }
 
             expect( game.get_status_for_users([user_1, user_2, user_3]) ).to eq expected_response
             expect( game.get_status_for_users([user_1, user_2]) ).to eq expected_response
@@ -1142,7 +1142,7 @@ RSpec.describe Game, type: :model do
           gu_1, gu_2, gu_3 = game.games_users.order(id: :asc)
           user_1, user_2, user_3 = gu_1.user, gu_2.user, gu_3.user
 
-          expected_response = { game_over: { redirect_url: game_path(game.id) } }
+          expected_response = { game_over: { redirect_url: games_path } }
 
           expect( game.get_status_for_users([user_1, user_2, user_3]) ).to eq expected_response
           expect( game.get_status_for_users([user_1, user_2]) ).to eq expected_response
@@ -1162,7 +1162,7 @@ RSpec.describe Game, type: :model do
           game = FactoryBot.create(:postgame, callback_wanted: :postgame)
           current_user = game.users.first
 
-          expected_response = {'game_over': {'redirect_url': game_path(game)}}
+          expected_response = {'game_over': {'redirect_url': games_path}}
 
           expect( game.get_status_for_users([current_user]) ).to eq expected_response
         end
@@ -1431,7 +1431,7 @@ RSpec.describe Game, type: :model do
             it 'user_2 and user_1' do
               cookies.signed[:user_id] = @user_2.id
 
-              expected_response = { 'game_over' => { 'redirect_url' => game_path(@game.id) } }
+              expected_response = { 'game_over' => { 'redirect_url' => games_path } }
 
               expect(ActionCable.server).to receive(:broadcast).with( "game_#{@game.id}", expected_response.to_json )
 

@@ -807,7 +807,6 @@ require 'rails_helper'
 #   #                                                 # ,'arr_of_postgame_card_set' => arr_of_postgame_card_set,
 #   #                                                 'all__current_user__game_ids' => current_user.game_ids.sort
 #   #                                               }
-  #       byebug
 #   #       response = GamesController::AssemblePostgamesComponentParams.new(current_user: current_user, game: current_postgame).result_to_json
 
 #   #       expect( JSON.parse(response) ).to include_json expected__postgame_component_params
@@ -825,7 +824,7 @@ require 'rails_helper'
 require File.join(Rails.root, 'app', 'services', 'active_storage_url_creater' )
 require File.join(Rails.root, 'app', 'controllers', 'games_controller', 'assemble_games_component_params' )
 
-RSpec.describe GamesController::AssemblePostgamesComponentParams, :clean_as_group do
+RSpec.describe GamesController::AssemblePostgamesComponentParams, :r5_wip, :clean_as_group do
   let!(:unassociated_pregame) { FactoryBot.create(:pregame, callback_wanted: :pregame) }
   let!(:unassociated_midgame) { FactoryBot.create(:midgame, callback_wanted: :midgame, round: 3, move: 2) }
   let!(:unassociated_postgame) { FactoryBot.create(:postgame, callback_wanted: :postgame) }
@@ -833,7 +832,7 @@ RSpec.describe GamesController::AssemblePostgamesComponentParams, :clean_as_grou
   context 'returns json string of component params for the user\'s last postgame' do
     include ActiveStorageUrlCreater
 
-    it 'is returns expected re', :r5_wip do
+    it 'is returns expected re' do
       out_of_game_card_upload = FactoryBot.create :drawing, out_of_game_card_upload: true
       earlier_postgame =  FactoryBot.create(:postgame, callback_wanted: :postgame)
       current_user = earlier_postgame.users.first
@@ -853,17 +852,14 @@ RSpec.describe GamesController::AssemblePostgamesComponentParams, :clean_as_grou
       arr_of_postgame_card_set = _cards_from__current_users__last_game.map do |card|
         counter += 1
         if card.drawing?
-          byebug
           result = card.slice(:medium, :uploader)
           result.merge!( {'drawing_url' => get_drawing_url(card)} )
           result
         else
-          # byebug
           result = card.slice(:medium, :description_text, :uploader)
           result
         end
       end
-      # byebug
 
       expected__postgame_component_params = {
                                               'current_user' => current_user.slice(:id),

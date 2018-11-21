@@ -1,10 +1,9 @@
 require 'rails_helper'
-
-RSpec.configure do |c|
-  c.include CardHelper
-end
+require File.join(Rails.root, 'app', 'services', 'active_storage_url_creater')
 
 RSpec.describe InGameCardUploadsController, type: :controller do
+  include ActiveStorageUrlCreater
+
   describe "GET #new", :r5 do
 
     # 3rd time testing this because it should be the same results from game#get_status_for_users and not the same as games_controller#new.

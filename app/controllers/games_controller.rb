@@ -1,5 +1,6 @@
 class GamesController < ApplicationController
   include ActionController::RequestForgeryProtection
+  # include ActiveStorageUrlCreater
 
   before_action :redirect_if_not_logged_in
   before_action :redirect_if_not_playing_game, only: [:new]
@@ -14,21 +15,10 @@ class GamesController < ApplicationController
 
   # @game from redirect method
   def show
-    # @current_user = current_user
-    # @game = current_user.games.order(:id).try(:last)
-
     respond_to do |format|
-      # format.html do
-      #   if @game.blank?
-      #     ( redirect_to(choose_game_type_page_path, alert: 'User can not see game, because they did not play in that game') and return)
-      #   end
-
-      #   @arr_of_postgame_card_sets = [ Card.cards_from_finished_game(@game.id) ]
-      # end
-
       format.js do
-        game_id = current_user.games.postgame.find(params[:id])
-        @postgame_component_params = AssemblePostgamesComponentParams.new(current_user: current_user, game_id: game_id).result_to_json
+        game = current_user.games.postgame.find(params[:id])
+        @postgame_component_params = AssemblePostgamesComponentParams.new(current_user: current_user, game: game).result_to_json
 
         if @game.present?
           render( json: [ Card.cards_from_finished_game(@game.id) ] ) and return

@@ -1,7 +1,7 @@
 require 'json'
+require File.join(Rails.root, 'app', 'services', 'active_storage_url_creater')
 
 class GamesController
-
   class AssembleGamesComponentParams
 
     def initialize current_user:, game:, form_authenticity_token:
@@ -53,6 +53,9 @@ class GamesController
   end
 
   class AssemblePostgamesComponentParams
+    # include ActiveStorageUrlCreater
+    include Rails.application.routes.url_helpers
+
     attr_reader :current_user, :game
 
     def initialize current_user:, game: nil
@@ -64,7 +67,16 @@ class GamesController
       @result_to_json ||= result.to_json
     end
 
+
     private
+
+      def get_drawing_url card
+        unless (card.drawing? && card.drawing.attached?)
+          raise 'Card must be a drawing with an image attached'
+        end
+
+        return rails_blob_path(card.drawing, disposition: 'attachment', only_path: true)
+      end
 
       def out_of_game_cards
         Card.where(out_of_game_card_upload: true, uploader: current_user)
@@ -93,6 +105,7 @@ class GamesController
       end
 
       def result
+        # byebug
         @result ||= begin
           # want to pass down who the player was in each game so that i can highlight their games_user_name in the (postgame_page + all_postgames_page)
           postgame_component_params = {
@@ -106,4 +119,6 @@ class GamesController
         return @result
       end
   end
+
+
 end

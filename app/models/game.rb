@@ -162,7 +162,7 @@ class Game < ActiveRecord::Base
 
     broadcast_params = { statuses: [] }
     if postgame? || game_over?
-      return ( { game_over: { redirect_url: game_path(id) } } )
+      return ( { game_over: { redirect_url: games_path } } )
     end
 
     users_arr.each_with_index do |user, index|

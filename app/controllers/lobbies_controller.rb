@@ -10,7 +10,6 @@ class LobbiesController < ApplicationController
 
   # joining the lobby of another game via join_code
   def join_lobby
-    # byebug
     @game = Game.find_by(join_code: join_lobby_params.upcase)
     if @game.blank?
       redirect_to(choose_game_type_page_url, alert: "Join Code #{join_lobby_params} doesn't exist.") and return
@@ -25,11 +24,9 @@ class LobbiesController < ApplicationController
       format.html do
 
         @game = current_user.current_game
-        # byebug
 
         # user associated with another pregame that has a different status and wants to join another game. This will only happen when user uses browser's back button instead of the "Leave Lobby" button on the lobby page
         if @game.try(:pregame?) && different_game_type_chosen?(params[:game_type], @game.game_type)
-        # byebug
           @game.remove_player current_user.id
           @game = nil
         end
@@ -52,12 +49,10 @@ class LobbiesController < ApplicationController
               end
           end
         elsif @game.pregame? && params[:game_type] != @game.game_type # user associated with another pregame that has a different status
-          # byebug
           # @game.remove_player current_user.id
           # @user_already_joined = false
 
         elsif @game.pregame? && current_user.current_games_user_name  # user already joined this game
-        # byebug
 
           @user_already_joined = true
         elsif @game.pregame?
@@ -67,7 +62,6 @@ class LobbiesController < ApplicationController
           raise "shouldn't have gotten here, something is wrong: game_id: #{@game.try(:id)}, current_user_id: #{current_user.id}"
         end
 
-        # byebug
         @users_not_joined = @game.unassociated_rendezousing_games_users
         @users_joined = Game.all_users_game_names @game.join_code
       end
