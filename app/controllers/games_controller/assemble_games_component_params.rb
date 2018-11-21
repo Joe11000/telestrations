@@ -91,7 +91,7 @@ class GamesController
 
         if card.drawing?
           result = card.slice(:medium, :uploader)
-          byebug
+          # byebug
           result.merge!( {'drawing_url' => get_drawing_url(card)} )
           result
         else

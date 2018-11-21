@@ -7,7 +7,6 @@ module ActiveStorageUrlCreater
       raise 'Card must be a drawing with an image attached'
     end
 
-    byebug
     return rails_blob_path(card.drawing, disposition: 'attachment', only_path: true)
   end
 end
