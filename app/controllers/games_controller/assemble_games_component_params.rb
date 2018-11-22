@@ -53,8 +53,6 @@ class GamesController
   end
 
   class AssemblePostgamesComponentParams
-    # include ActiveStorageUrlCreater
-    include Rails.application.routes.url_helpers
 
     attr_reader :current_user, :game
 
@@ -70,6 +68,8 @@ class GamesController
 
     private
 
+      #####  recreated ActiveStorageUrlCreater because couldn't do it another way
+      include Rails.application.routes.url_helpers
       def get_drawing_url card
         unless (card.drawing? && card.drawing.attached?)
           raise 'Card must be a drawing with an image attached'
@@ -77,6 +77,7 @@ class GamesController
 
         return rails_blob_path(card.drawing, disposition: 'attachment', only_path: true)
       end
+      ######
 
       def out_of_game_cards
         Card.where(out_of_game_card_upload: true, uploader: current_user)

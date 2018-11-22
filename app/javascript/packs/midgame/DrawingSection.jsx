@@ -12,7 +12,7 @@ export default class DrawingSection extends React.Component {
 
   constructor(props) {
     super(props);
-    debugger
+
     this.state = {
       drawingHasBeenSelected: false
     }

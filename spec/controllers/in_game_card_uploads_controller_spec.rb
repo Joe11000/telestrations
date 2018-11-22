@@ -151,7 +151,7 @@ RSpec.describe InGameCardUploadsController, type: :controller do
           it 'user_2 and user_1' do
             cookies.signed[:user_id] = @user_2.id
 
-            expected_response = { 'game_over' => { 'redirect_url' => game_path(@game.id) } }
+            expected_response = { 'game_over' => { 'redirect_url' => games_path } }
 
             expect(ActionCable.server).to receive(:broadcast).with( "game_#{@game.id}", expected_response.to_json ).once
 
@@ -503,7 +503,7 @@ RSpec.describe InGameCardUploadsController, type: :controller do
 
           it 'everyone' do
             cookies.signed[:user_id] = @user_3.id
-            expected_response = { 'game_over' => { 'redirect_url' => game_path(@game.id) } }
+            expected_response = { 'game_over' => { 'redirect_url' => games_path } }
 
             expect(ActionCable.server).to receive(:broadcast).with( "game_#{@game.id}", expected_response.to_json ).once
 
