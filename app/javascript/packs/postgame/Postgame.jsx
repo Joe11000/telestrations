@@ -3,70 +3,102 @@ import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types'
 import SlideshowList from './SlideshowList'
 import GameSelector from './GameSelector'
+import axios from 'axios'
 
 class Postgame extends React.Component {
-
   constructor(props) {
     super(props);
-    debugger
 
-    this.retrieveOutOfGameCards = this.retrieveOutOfGameCards.bind(this);
-
-    this.state = {
-      viewing_postgames: true
-    }
+    this.state = { viewing_postgames: false }
 
     // this.postgame_tab = React.createRef();
     // this.out_of_game_card_upload_tab = React.createRef();
+
+    // this.retrieveOutOfGameCards = this.retrieveOutOfGameCards.bind(this);
   }
 
-  retrieveOutOfGameCards(event){
-    event.preventDefault();
 
-    if(this.state.viewing_postgames == false){
-      this.setState({
-        viewing_postgames: false
-      });
-    // axios card
-    }
+  componentDidMount(){
+    debugger
+    // axios to the games/show page
+    retrievePostgameCards(0);
   }
 
-  retrieveGameCards(event){
-    event.preventDefault();
 
-    this.setState({
-      viewing_postgames: false
-    });
-    // axios card
+  handlePostgameChange(id){
+
   }
+
+  retrievePostgameCards(id){
+    axios.get(`/games/${id}`).then(res => {
+      const response_json = res.data;
+      this.setState({ response_json, viewing_postgames: false })
+    })
+  }
+
+
+
+
+  // handleOutOfGameCardsClick(event){
+
+  // }
+
+  // retrieveOutOfGameCards(id){
+  //   event.preventDefault();
+
+  //   if(this.state.viewing_postgames == false){
+  //     this.setState({
+  //       viewing_postgames: false
+  //     });
+  //   // axios card
+  //   }
+  // }
+
 
   render() {
     return (
       <div data-id='postgame-component'>
-      <h1>Postgame Page</h1>
-        <div className='card text-center'>
-          <div className='card-header'>
-            <div className='nav nav-tabs card-header-tabs'>
-              <li className="nav-item">
-                <a className='nav-link active' onClick={this.retrieveGameCards} href='#' ></a>
-              </li>
+        <div className='row'>
+          <div className='col-12 col-sm-10 offset-sm-1 col-md-8 offset-sm-2 col-lg-6 offset-lg-3 '>
+            <div className='card text-center bg-dark border-primary'>
+              {/*{!!this.props && // after games#show info retrieved*/}
+                <div className='card-header'>
+                  <div className='nav nav-tabs card-header-tabs'>
+                    <li className="nav-item">
+                      <a className={'nav-link' + (!!this.state.viewing_postgames ? ' active' : '') } onClick={this.retrievePostgameCards} href='#' >Post Games</a>
+                    </li>
 
-              <li className="nav-item">
-                <a className='nav-link' onClick={this.retrieveOutOfGameCards} href='#'></a>
-              </li>
+                    <li className="nav-item">
+                      <a className={'nav-link' + (!!this.state.viewing_postgames ? '' : ' active') } onClick={this.retrieveOutOfGameCards} href='#'>Out of game card uploads</a>
+                    </li>
+                  </div>
+                </div>
+
+                <div className='card-body'>
+                  <h3 className='card-title'>Post Game Results </h3>
+                    <GameSelector all__current_user__game_info={this.state.data && this.state.data.all__current_user__game_info}
+                                  handleGameSelectorChange={(e) => {this.handleGameSelectorChange(e.target.id) } }
+                                  />
+
+                  <SlideshowList decks='' />
+                </div>
+              {/*}*/}
             </div>
           </div>
-
-          <div className='card-body'>
-            <GameSelector list_of_game_ids={[111,222,333,444,555,666]} />
-            <SlideshowList decks='' />
-          </div>
-        </div>
-        <div className='clearfix'>
         </div>
       </div>
     )
   }
+}
+
+Postgame.propTypes = {
+  all__current_user__game_info: PropTypes.shape({
+                            id: PropTypes.number.isRequired,
+                            created_at_strftime: PropTypes.string.isRequired
+                          }),
+  arr_of_postgame_card_set: PropTypes.object.isRequired,
+  current_user:             PropTypes.object.isRequired,
+  out_of_game_cards:        PropTypes.object
 }
 
 document.addEventListener('DOMContentLoaded', () => {

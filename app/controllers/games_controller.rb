@@ -15,8 +15,14 @@ class GamesController < ApplicationController
 
   # @game from redirect method
   def show
+    # if user inputs params[:id] == 0, then user doen't know their last postgame and wants to view it.
+    if params[:id] == 0
+      params[:id] = current_user.games.postgame.last
+    end
+
     respond_to do |format|
       format.js do
+
         game = current_user.games.postgame.find(params[:id])
         @postgame_component_params = AssemblePostgamesComponentParams.new(current_user: current_user, game: game).result_to_json
 
@@ -30,12 +36,12 @@ class GamesController < ApplicationController
   end
 
   def index
-    current_user_postgames = current_user.games.postgame
-    (redirect_to(choose_game_type_page_path) and return) if current_user_postgames.blank?
+    # current_user_postgames = current_user.games.postgame
+    # (redirect_to(choose_game_type_page_path) and return) if current_user_postgames.blank?
 
-    last_postgame = current_user_postgames.last
+    # last_postgame = current_user_postgames.last
 
-    @postgame_component_params = AssemblePostgamesComponentParams.new(current_user: current_user, game: last_postgame).result_to_json
+    # @postgame_component_params = AssemblePostgamesComponentParams.new(current_user: current_user, game: last_postgame).result_to_json
   end
 
   protected

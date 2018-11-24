@@ -10,11 +10,12 @@ export default class GameSelector extends React.Component {
   render() {
     return (
       <div>
-        { !!this.props.list_of_game_ids &&
-          <select className='custom-select'>
-            { this.props.list_of_game_ids.map(function(game_id, index) {
-              return(<option value={game_id}>Game {index + 1}</option>)
-              }
+        { !!this.props.all__current_user__game_info &&
+          <select className='custom-select' onChange={this.props.handleGameSelectorChange}>
+            {
+              this.props.all__current_user__game_info.map(function(game_id, index) {
+                return(<option value={game_id}>Game {index + 1}</option>)
+              })
             }
           </select>
         }

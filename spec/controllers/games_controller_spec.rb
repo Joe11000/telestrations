@@ -738,7 +738,7 @@ require 'rails_helper'
 #           #                                         'out_of_game_cards' => out_of_game_cards,
 
 #           #                                         # ,'arr_of_postgame_card_set' => arr_of_postgame_card_set,
-#           #                                         'all__current_user__game_ids' => current_user.game_ids.sort
+#           #                                         'all__current_user__game_info' => current_user.game_ids.sort
 #           #                                       }
 
 
@@ -805,7 +805,7 @@ require 'rails_helper'
 #   #                                                 'out_of_game_cards' => out_of_game_cards,
 
 #   #                                                 # ,'arr_of_postgame_card_set' => arr_of_postgame_card_set,
-#   #                                                 'all__current_user__game_ids' => current_user.game_ids.sort
+#   #                                                 'all__current_user__game_info' => current_user.game_ids.sort
 #   #                                               }
 #   #       response = GamesController::AssemblePostgamesComponentParams.new(current_user: current_user, game: current_postgame).result_to_json
 
@@ -866,7 +866,7 @@ RSpec.describe GamesController::AssemblePostgamesComponentParams, :r5_wip, :clea
                                               'out_of_game_cards' => out_of_game_cards,
 
                                               'arr_of_postgame_card_set' => arr_of_postgame_card_set,
-                                              'all__current_user__game_ids' => current_user.game_ids.sort
+                                              'all__current_user__game_info' => current_user.game_ids.sort
                                             }
       response = GamesController::AssemblePostgamesComponentParams.new(current_user: current_user, game: current_postgame).result_to_json
 

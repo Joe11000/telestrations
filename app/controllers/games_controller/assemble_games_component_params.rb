@@ -92,9 +92,7 @@ class GamesController
 
         if card.drawing?
           result = card.slice(:medium, :uploader)
-          # byebug
           result.merge!( {'drawing_url' => get_drawing_url(card)} )
-          result
         else
           card.slice(:medium, :description_text, :uploader)
         end
@@ -105,21 +103,27 @@ class GamesController
         Card.cards_from_finished_game(game.id)
       end
 
+
+      def all__current_user__game_info
+        current_user.games.map do |game|
+          result = game.slice(:id)
+          result.merge!( { 'created_at_strftime' => game.created_at.strftime('%a %b %e, %Y') } )
+        end
+      end
+
       def result
-        # byebug
+        byebug
         @result ||= begin
           # want to pass down who the player was in each game so that i can highlight their games_user_name in the (postgame_page + all_postgames_page)
           postgame_component_params = {
-                                        current_user: current_user.to_json,
+                                        current_user: current_user.attributes,
                                         out_of_game_cards: out_of_game_cards,
-                                        arr_of_postgame_card_set: arr_of_postgame_card_set.to_json,
-                                        all__current_user__game_ids: current_user.game_ids
+                                        arr_of_postgame_card_set: arr_of_postgame_card_set.attributes,
+                                        all__current_user__game_info: all__current_user__game_info
                                       }
         end
 
         return @result
       end
   end
-
-
 end
