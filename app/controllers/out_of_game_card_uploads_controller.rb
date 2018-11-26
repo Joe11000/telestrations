@@ -6,7 +6,12 @@ class OutOfGameCardUploadsController < ApplicationController
 
 
   def index
-    render(json: {out_of_game_cards: out_of_game_cards}) and return
+    respond_to do |format|
+      format.js do
+        json = OutOfGameCardUploadsInfoGenerator.new(current_user: current_user)
+        render(json: json) and return
+      end
+    end
   end
 
   def create

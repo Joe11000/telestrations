@@ -93,16 +93,16 @@ class GamesController
 
       def result
         byebug
-        @result ||= begin
+        @postgame_component_params ||= begin
           # want to pass down who the player was in each game so that i can highlight their games_user_name in the (postgame_page + all_postgames_page)
-          postgame_component_params = {
-                                        current_user_info: current_user.slice(:id, :name),
-                                        arr_of_postgame_card_set: arr_of_postgame_card_set.attributes,
-                                        all__current_user__game_info: all__current_user__game_info
-                                      }
+          {
+            current_user_info: current_user.slice(:id, :name),
+            arr_of_postgame_card_set: arr_of_postgame_card_set.attributes,
+            all__current_user__game_info: all__current_user__game_info
+          }
         end
 
-        return @result
+        return @postgame_component_params
       end
   end
 end

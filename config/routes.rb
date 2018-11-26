@@ -16,7 +16,7 @@ Rails.application.routes.draw do
   scope 'cards' do
     resources :in_game_card_uploads, only: [:new, :create], as: :in_game_card_uploads
 
-    resources :out_of_game_card_uploads, only: [:new, :create], as: :out_of_game_card_uploads
+    resources :out_of_game_card_uploads, only: [:index, :new, :create ], as: :out_of_game_card_uploads
   end
 
   get  'login'          => 'sessions#new'
