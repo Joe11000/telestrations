@@ -13,8 +13,9 @@ export default class GameSelector extends React.Component {
         { !!this.props.all__current_user__game_info &&
           <select className='custom-select' onChange={this.props.handleGameSelectorChange}>
             {
-              this.props.all__current_user__game_info.map(function(game_id, index) {
-                return(<option value={game_id}>Game {index + 1}</option>)
+              this.props.all__current_user__game_info.map(function(game_info, index) {
+                debugger
+                return(<option value={game_info.id}>Game {index + 1}</option>)
               })
             }
           </select>
@@ -25,5 +26,8 @@ export default class GameSelector extends React.Component {
 }
 
 GameSelector.propTypes = {
-
+  all__current_user__game_info: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    created_at_strftime: PropTypes.string.isRequired
+  })
 }

@@ -20,21 +20,18 @@ class Postgame extends React.Component {
 
   componentDidMount(){
     debugger
-    // axios to the games/show page
-    retrievePostgameCards(0);
+    this.retrieveCardsForPostgame(0);
   }
 
-
-  handlePostgameChange(id){
-
-  }
-
-  retrievePostgameCards(id){
-    axios.get(`/games/${id}`).then(res => {
-      const response_json = res.data;
-      this.setState({ response_json, viewing_postgames: false })
+  retrieveCardsForPostgame(id){
+    $.getJSON(`/games/${id}`, function(response){
+      debugger
+      setState({response});
+      response;
     })
   }
+
+
 
 
 
@@ -65,7 +62,7 @@ class Postgame extends React.Component {
                 <div className='card-header'>
                   <div className='nav nav-tabs card-header-tabs'>
                     <li className="nav-item">
-                      <a className={'nav-link' + (!!this.state.viewing_postgames ? ' active' : '') } onClick={this.retrievePostgameCards} href='#' >Post Games</a>
+                      <a className={'nav-link' + (!!this.state.viewing_postgames ? ' active' : '') } onClick={this.retrieveCardsForPostgame} href='#' >Post Games</a>
                     </li>
 
                     <li className="nav-item">
@@ -97,7 +94,7 @@ Postgame.propTypes = {
                             created_at_strftime: PropTypes.string.isRequired
                           }),
   arr_of_postgame_card_set: PropTypes.object.isRequired,
-  current_user:             PropTypes.object.isRequired,
+  current_user_info:        PropTypes.object.isRequired,
   out_of_game_cards:        PropTypes.object
 }
 
@@ -111,7 +108,6 @@ document.addEventListener('DOMContentLoaded', () => {
       document.querySelector(selector)
     )
 });
-
 
     // - unless @out_of_game_card_upload.blank?
     //   h3.h3#out_of_game_card_upload-header.text-center = "Unassociated Cards I've uploaded"

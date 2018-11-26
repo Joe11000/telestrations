@@ -4,6 +4,11 @@ class OutOfGameCardUploadsController < ApplicationController
   def new
   end
 
+
+  def index
+    render(json: {out_of_game_cards: out_of_game_cards}) and return
+  end
+
   def create
     begin
       create_params[:drawings].each do |drawing|

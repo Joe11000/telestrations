@@ -1,6 +1,5 @@
 class GamesController < ApplicationController
   include ActionController::RequestForgeryProtection
-  # include ActiveStorageUrlCreater
 
   before_action :redirect_if_not_logged_in
   before_action :redirect_if_not_playing_game, only: [:new]
@@ -16,22 +15,34 @@ class GamesController < ApplicationController
   # @game from redirect method
   def show
     # if user inputs params[:id] == 0, then user doen't know their last postgame and wants to view it.
-    if params[:id] == 0
-      params[:id] = current_user.games.postgame.last
+    if params[:id].to_i == 0
+      params[:id] = current_user.games.postgame.try(:last).try(:id)
     end
 
+    byebug
     respond_to do |format|
+      format.html do
+        byebug # shouldn't see this
+      end
+
       format.js do
 
+        byebug
         game = current_user.games.postgame.find(params[:id])
         @postgame_component_params = AssemblePostgamesComponentParams.new(current_user: current_user, game: game).result_to_json
 
+        byebug
         if @game.present?
+          byebug
           render( json: [ Card.cards_from_finished_game(@game.id) ] ) and return
         else
           render( json: { error: 'User can not see game, because they did not play in that game' } ) and return
         end
       end
+    end
+
+    format.json do
+      byebug
     end
   end
 
