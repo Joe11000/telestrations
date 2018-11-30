@@ -74,27 +74,25 @@ class Postgame extends React.Component {
     return (
       <div data-id='postgame-component'>
         <div className='row'>
-          {/*{this.state.tab_selected != undefined &&*/}
-            <div className='col-12 col-sm-10 offset-sm-1 col-md-8 offset-sm-2 col-lg-6 offset-lg-3 '>
-              <div className='card text-center bg-dark border-primary'>
-                <div className='card-header'>
-                  <div className='nav nav-tabs card-header-tabs'>
-                    <li className="nav-item">
-                      <a className={nav_link__postgametab__classes} onClick={this.retrieveCardsForPostgame} href='#' >Post Games</a>
-                    </li>
+          <div className='col-12 col-sm-10 offset-sm-1 col-md-8 offset-sm-2 col-lg-6 offset-lg-3 '>
+            <div className='card text-center bg-dark border-primary'>
+              <div className='card-header'>
+                <div className='nav nav-tabs card-header-tabs'>
+                  <li className="nav-item">
+                    <a className={nav_link__postgametab__classes} onClick={this.retrieveCardsForPostgame} href='#' >Post Games</a>
+                  </li>
 
-                    <li className="nav-item">
-                      <a className={nav_link__outofgametab__classes} onClick={this.retrieveOutOfGameCards} href='#'>Out of game card uploads</a>
-                    </li>
-                  </div>
-                </div>
-
-                <div className='card-body'>
-                  {card_body_html}
+                  <li className="nav-item">
+                    <a className={nav_link__outofgametab__classes} onClick={this.retrieveOutOfGameCards} href='#'>Out of game card uploads</a>
+                  </li>
                 </div>
               </div>
+
+              <div className='card-body'>
+                {card_body_html}
+              </div>
             </div>
-          {/*}*/}
+          </div>
         </div>
       </div>
     )
@@ -121,6 +119,7 @@ document.addEventListener('DOMContentLoaded', () => {
     )
 });
 
+export default Postgame
 
     // - unless @out_of_game_card_upload.blank?
     //   h3.h3#out_of_game_card_upload-header.text-center = "Unassociated Cards I've uploaded"
