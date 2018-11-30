@@ -5,12 +5,14 @@ import PropTypes from 'prop-types'
 export default class Slideshow extends React.Component {
   constructor(props){
     super(props);
+    debugger
   }
 
   render() {
+    debugger
     return (
-      <div>
-        Here is a Slideshow
+      <div className='slideshow'>
+        {this}
       </div>
     )
   }

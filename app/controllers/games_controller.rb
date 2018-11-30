@@ -14,45 +14,27 @@ class GamesController < ApplicationController
 
   # @game from redirect method
   def show
-    # if user inputs params[:id] == 0, then user doen't know their last postgame and wants to view it.
-    if params[:id].to_i == 0
+    # if user inputs params[:id] == , then user doen't know their last postgame and wants to view it.
+    if params[:id].to_i == -1
       params[:id] = current_user.games.postgame.try(:last).try(:id)
     end
 
-    byebug
     respond_to do |format|
-      format.html do
-        byebug # shouldn't see this
-      end
-
       format.js do
-
-        byebug
         game = current_user.games.postgame.find(params[:id])
         @postgame_component_params = AssemblePostgamesComponentParams.new(current_user: current_user, game: game).result_to_json
-
         byebug
-        if @game.present?
-          byebug
-          render( json: [ Card.cards_from_finished_game(@game.id) ] ) and return
+
+        if game.present?
+          render( json: @postgame_component_params ) and return
         else
           render( json: { error: 'User can not see game, because they did not play in that game' } ) and return
         end
       end
     end
-
-    format.json do
-      byebug
-    end
   end
 
   def index
-    # current_user_postgames = current_user.games.postgame
-    # (redirect_to(choose_game_type_page_path) and return) if current_user_postgames.blank?
-
-    # last_postgame = current_user_postgames.last
-
-    # @postgame_component_params = AssemblePostgamesComponentParams.new(current_user: current_user, game: last_postgame).result_to_json
   end
 
   protected

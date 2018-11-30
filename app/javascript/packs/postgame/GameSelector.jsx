@@ -5,29 +5,39 @@ export default class GameSelector extends React.Component {
   constructor(props){
     super(props);
     debugger
+
+    this.handleChangeGameSelector = this.handleChangeGameSelector.bind(this);
+  }
+
+  handleChangeGameSelector(event){
+    event.preventDefault();
+    let game_id = parseInt(event.target.value)
+    debugger
+    this.props.retrieveCardsForPostgame(game_id)
   }
 
   render() {
+    debugger
     return (
-      <div>
-        { !!this.props.all__current_user__game_info &&
-          <select className='custom-select' onChange={this.props.handleGameSelectorChange}>
+      <div id='game-selector-container'>
+        { !!this.props.all_postgames_of__current_user &&
+          <select className='custom-select' onChange={this.handleChangeGameSelector}>
             {
-              this.props.all__current_user__game_info.map(function(game_info, index) {
-                debugger
-                return(<option value={game_info.id}>Game {index + 1}</option>)
+              this.props.all_postgames_of__current_user.map(function(game_info, index) {
+                return(<option key={game_info.id} value={game_info.id}>Game {index + 1} - {game_info.created_at_strftime}</option>);
               })
             }
           </select>
         }
       </div>
-    )
+    );
   }
 }
 
 GameSelector.propTypes = {
-  all__current_user__game_info: PropTypes.shape({
+  all_postgames_of__current_user: PropTypes.shape({
     id: PropTypes.number.isRequired,
     created_at_strftime: PropTypes.string.isRequired
-  })
+  }),
+  retrieveCardsForPostgame: PropTypes.func.isRequired
 }

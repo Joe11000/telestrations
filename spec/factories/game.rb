@@ -10,7 +10,7 @@ FactoryBot.define do
       callback_wanted { 'none' }
       round { 0 }
       move { 0 }
-      add_existing_users {[]}
+      with_existing_users {[]}
     end
 
     trait :public_game do
@@ -25,9 +25,9 @@ FactoryBot.define do
       after(:create) do |game, evaluator|
 
         if evaluator.callback_wanted == :pregame
-          evaluator.add_existing_users.each{ |user| game.users << user }
+          evaluator.with_existing_users.each{ |user| game.users << user }
 
-          users_left_to_create = evaluator.num_of_players - evaluator.add_existing_users.length
+          users_left_to_create = evaluator.num_of_players - evaluator.with_existing_users.length
           game.users << FactoryBot.create_list(:user, users_left_to_create)
         end
       end
@@ -130,20 +130,20 @@ FactoryBot.define do
       end
     end
   end
-# FactoryBot.create(:pregame, callback_wanted: :pregame, add_existing_users: []
+# FactoryBot.create(:pregame, callback_wanted: :pregame, with_existing_users: []
 
 end
 
 # these add users with their users_game_names and a placeholder starting card
 def new_game_associations game, num_of_players, evaluator
-  if evaluator.add_existing_users.present?
-    evaluator.add_existing_users.each do |user|
+  if evaluator.with_existing_users.present?
+    evaluator.with_existing_users.each do |user|
       current_gu = FactoryBot.create(:games_user, game: game, user: user)
       current_gu.starting_card = FactoryBot.create(:description, :placeholder, uploader: user, idea_catalyst: current_gu, starting_games_user: current_gu)
     end
   end
 
-  remaining_number_of_users_to_make = num_of_players - evaluator.add_existing_users.length
+  remaining_number_of_users_to_make = num_of_players - evaluator.with_existing_users.length
   remaining_number_of_users_to_make.times do
     current_gu = FactoryBot.create(:games_user, game: game)
     current_gu.starting_card = FactoryBot.create(:description, :placeholder, uploader_id: current_gu.user_id, idea_catalyst: current_gu, starting_games_user: current_gu)

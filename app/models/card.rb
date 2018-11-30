@@ -42,7 +42,7 @@ class Card < ActiveRecord::Base
       card = gu.starting_card
 
       until card.blank? do
-        gu_set << [ GamesUser.find_by(game_id: game_id, user_id: card.uploader_id).users_game_name, card ]
+        gu_set << [ GamesUser.find_by(game_id: game_id, user_id: card.uploader_id).users_game_name, card.attributes ]
         card = card.child_card
       end
 

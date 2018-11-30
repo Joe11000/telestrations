@@ -73,7 +73,7 @@ RSpec.describe Game, type: :model do
 
         it 'test adding a user into game when creating' do
           user_1 = FactoryBot.create :user
-          game = FactoryBot.create :pregame, :public_game, callback_wanted: :pregame, add_existing_users: [user_1]
+          game = FactoryBot.create :pregame, :public_game, callback_wanted: :pregame, with_existing_users: [user_1]
 
           expect(game.user_ids).to include user_1.id
         end
@@ -81,7 +81,7 @@ RSpec.describe Game, type: :model do
         it 'test adding 2 users into game when creating' do
           user_1 = FactoryBot.create :user
           user_2 = FactoryBot.create :user
-          game = FactoryBot.create :pregame, :public_game, callback_wanted: :pregame, add_existing_users: [user_1, user_2]
+          game = FactoryBot.create :pregame, :public_game, callback_wanted: :pregame, with_existing_users: [user_1, user_2]
 
           expect(game.user_ids).to include(user_1.id, user_2.id)
         end
@@ -97,7 +97,7 @@ RSpec.describe Game, type: :model do
 
         it 'test adding a user into game when creating' do
           user_1 = FactoryBot.create :user
-          game = FactoryBot.create :pregame, :private_game, callback_wanted: :pregame, add_existing_users: [user_1]
+          game = FactoryBot.create :pregame, :private_game, callback_wanted: :pregame, with_existing_users: [user_1]
 
           expect(game.user_ids).to include user_1.id
         end
@@ -105,7 +105,7 @@ RSpec.describe Game, type: :model do
         it 'test adding 2 users into game when creating' do
           user_1 = FactoryBot.create :user
           user_2 = FactoryBot.create :user
-          game = FactoryBot.create :pregame, :private_game, callback_wanted: :pregame, add_existing_users: [user_1, user_2]
+          game = FactoryBot.create :pregame, :private_game, callback_wanted: :pregame, with_existing_users: [user_1, user_2]
 
           expect(game.user_ids).to include(user_1.id, user_2.id)
         end
@@ -152,7 +152,7 @@ RSpec.describe Game, type: :model do
 
         it 'test adding a user into game when creating' do
           user_1 = FactoryBot.create :user
-          game = FactoryBot.create :midgame_with_no_moves, :public_game, callback_wanted: :midgame_with_no_moves, add_existing_users: [user_1]
+          game = FactoryBot.create :midgame_with_no_moves, :public_game, callback_wanted: :midgame_with_no_moves, with_existing_users: [user_1]
 
           expect(game.user_ids).to include user_1.id
         end
@@ -160,7 +160,7 @@ RSpec.describe Game, type: :model do
         it 'test adding 2 users into game when creating' do
           user_1 = FactoryBot.create :user
           user_2 = FactoryBot.create :user
-          game = FactoryBot.create :midgame_with_no_moves, :public_game, callback_wanted: :midgame_with_no_moves, add_existing_users: [user_1, user_2]
+          game = FactoryBot.create :midgame_with_no_moves, :public_game, callback_wanted: :midgame_with_no_moves, with_existing_users: [user_1, user_2]
 
           expect(game.user_ids).to include(user_1.id, user_2.id)
         end
@@ -177,7 +177,7 @@ RSpec.describe Game, type: :model do
 
         it 'test adding a user into game when creating' do
           user_1 = FactoryBot.create :user
-          game = FactoryBot.create :midgame_with_no_moves, :private_game, callback_wanted: :midgame_with_no_moves, add_existing_users: [user_1]
+          game = FactoryBot.create :midgame_with_no_moves, :private_game, callback_wanted: :midgame_with_no_moves, with_existing_users: [user_1]
 
           expect(game.user_ids).to include user_1.id
         end
@@ -185,7 +185,7 @@ RSpec.describe Game, type: :model do
         it 'test adding 2 users into game when creating' do
           user_1 = FactoryBot.create :user
           user_2 = FactoryBot.create :user
-          game = FactoryBot.create :midgame_with_no_moves, :private_game, callback_wanted: :midgame_with_no_moves, add_existing_users: [user_1, user_2]
+          game = FactoryBot.create :midgame_with_no_moves, :private_game, callback_wanted: :midgame_with_no_moves, with_existing_users: [user_1, user_2]
 
           expect(game.user_ids).to include(user_1.id, user_2.id)
         end
@@ -272,7 +272,7 @@ RSpec.describe Game, type: :model do
 
         it 'test adding a user into game when creating' do
           user_1 = FactoryBot.create :user
-          game = FactoryBot.create :midgame, :public_game, callback_wanted: :midgame, add_existing_users: [user_1]
+          game = FactoryBot.create :midgame, :public_game, callback_wanted: :midgame, with_existing_users: [user_1]
 
           expect(game.user_ids).to include user_1.id
         end
@@ -280,7 +280,7 @@ RSpec.describe Game, type: :model do
         it 'test adding 2 users into game when creating' do
           user_1 = FactoryBot.create :user
           user_2 = FactoryBot.create :user
-          game = FactoryBot.create :midgame, :public_game, callback_wanted: :midgame, add_existing_users: [user_1, user_2]
+          game = FactoryBot.create :midgame, :public_game, callback_wanted: :midgame, with_existing_users: [user_1, user_2]
 
           expect(game.user_ids).to include(user_1.id, user_2.id)
         end
@@ -296,7 +296,7 @@ RSpec.describe Game, type: :model do
 
         it 'test adding a user into game when creating' do
           user_1 = FactoryBot.create :user
-          game = FactoryBot.create :midgame, :private_game, callback_wanted: :midgame, add_existing_users: [user_1]
+          game = FactoryBot.create :midgame, :private_game, callback_wanted: :midgame, with_existing_users: [user_1]
 
           expect(game.user_ids).to include user_1.id
         end
@@ -304,7 +304,7 @@ RSpec.describe Game, type: :model do
         it 'test adding 2 users into game when creating' do
           user_1 = FactoryBot.create :user
           user_2 = FactoryBot.create :user
-          game = FactoryBot.create :midgame, :private_game, callback_wanted: :midgame, add_existing_users: [user_1, user_2]
+          game = FactoryBot.create :midgame, :private_game, callback_wanted: :midgame, with_existing_users: [user_1, user_2]
 
           expect(game.user_ids).to include(user_1.id, user_2.id)
         end
@@ -363,7 +363,7 @@ RSpec.describe Game, type: :model do
 
         it 'test adding a user into game when creating' do
           user_1 = FactoryBot.create :user
-          game = FactoryBot.create :postgame, :public_game, callback_wanted: :postgame, add_existing_users: [user_1]
+          game = FactoryBot.create :postgame, :public_game, callback_wanted: :postgame, with_existing_users: [user_1]
 
           expect(game.user_ids).to include user_1.id
         end
@@ -371,7 +371,7 @@ RSpec.describe Game, type: :model do
         it 'test adding 2 users into game when creating' do
           user_1 = FactoryBot.create :user
           user_2 = FactoryBot.create :user
-          game = FactoryBot.create :postgame, :public_game, callback_wanted: :postgame, add_existing_users: [user_1, user_2]
+          game = FactoryBot.create :postgame, :public_game, callback_wanted: :postgame, with_existing_users: [user_1, user_2]
 
           expect(game.user_ids).to include(user_1.id, user_2.id)
         end
@@ -388,7 +388,7 @@ RSpec.describe Game, type: :model do
 
         it 'test adding a user into game when creating' do
           user_1 = FactoryBot.create :user
-          game = FactoryBot.create :postgame, :private_game, callback_wanted: :postgame, add_existing_users: [user_1]
+          game = FactoryBot.create :postgame, :private_game, callback_wanted: :postgame, with_existing_users: [user_1]
 
           expect(game.user_ids).to include user_1.id
         end
@@ -396,7 +396,7 @@ RSpec.describe Game, type: :model do
         it 'test adding 2 users into game when creating' do
           user_1 = FactoryBot.create :user
           user_2 = FactoryBot.create :user
-          game = FactoryBot.create :postgame, :private_game, callback_wanted: :postgame, add_existing_users: [user_1, user_2]
+          game = FactoryBot.create :postgame, :private_game, callback_wanted: :postgame, with_existing_users: [user_1, user_2]
 
           expect(game.user_ids).to include(user_1.id, user_2.id)
         end

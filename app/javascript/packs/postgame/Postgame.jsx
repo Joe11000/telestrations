@@ -1,87 +1,100 @@
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types'
-import SlideshowList from './SlideshowList'
-import GameSelector from './GameSelector'
-import axios from 'axios'
+import OutOfGameCardUploadTab from './TabBody/OutOfGameCardUploadTab'
+import PostGameTab from './TabBody/PostGameTab'
+// import axios from 'axios'
 
 class Postgame extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = { viewing_postgames: false }
+    // tab_selected (undefined||'PostGameTab'||'OutOfGameCardUploadTab')
+    this.state = { tab_selected: undefined }
 
-    // this.postgame_tab = React.createRef();
-    // this.out_of_game_card_upload_tab = React.createRef();
 
-    // this.retrieveOutOfGameCards = this.retrieveOutOfGameCards.bind(this);
+    this.retrieveCardsForPostgame = this.retrieveCardsForPostgame.bind(this);
+    this.retrieveOutOfGameCards = this.retrieveOutOfGameCards.bind(this);
+    this.selectTab = this.selectTab.bind(this);
   }
 
+  // tab_selected (undefined||'PostGameTab'||'OutOfGameCardUploadTab')
+  retrieveCardsForPostgame(id) {
+    if( this.state.tab_selected != 'PostGameTab') {
+      var that = this;
 
-  componentDidMount(){
-    debugger
-    this.retrieveCardsForPostgame(0);
+      $.getJSON(`/games/${id}`, function(response) {
+        let edited_response = Object.assign(response, {tab_selected: 'PostGameTab'} );
+        // debugger
+        that.setState(edited_response);
+      });
+    }
   }
 
-  retrieveCardsForPostgame(id){
-    $.getJSON(`/games/${id}`, function(response){
-      debugger
-      setState({response});
-      response;
-    })
+  retrieveOutOfGameCards(){
+    var that = this;
+
+    if( this.state.tab_selected != 'OutOfGameCardUploadTab' ){
+      $.getJSON(`/out_of_game_card_uploads_controller/${this.state.current_user_info.id}`, function(response){
+        let edited_response = Object.assign(response, {tab_selected: 'OutOfGameCardUploadTab'} );
+        that.setState(edited_response);
+      });
+    }
   }
 
-
-
-
-
-
-  // handleOutOfGameCardsClick(event){
-
-  // }
-
-  // retrieveOutOfGameCards(id){
-  //   event.preventDefault();
-
-  //   if(this.state.viewing_postgames == false){
-  //     this.setState({
-  //       viewing_postgames: false
-  //     });
-  //   // axios card
-  //   }
-  // }
-
+  selectTab(tab_selected){
+    switch(this.state.tab_selected)
+    {
+      case 'PostGameTab':
+      case 'OutOfGameCardUploadTab':
+             this.setState({ tab_selected: tab_selected });
+             break;
+    }
+  }
 
   render() {
+    let nav_link__postgametab__classes = 'nav-link bg-transparent text-white' + (this.state.tab_selected == 'PostGameTab' ? ' active' : '')
+    let nav_link__outofgametab__classes = 'nav-link bg-transparent text-white' + (this.state.tab_selected == 'OutOfGameCardUploadTab'  ? ' active' : '')
+
+    let card_body_html;
+    switch(this.state.tab_selected) {
+      case 'PostGameTab':
+      case undefined:
+        card_body_html = <PostGameTab selectTab={this.selectTab}
+                                      retrieveCardsForPostgame={this.retrieveCardsForPostgame}
+                                      all_postgames_of__current_user={this.state.all_postgames_of__current_user}
+                                      />;
+        break;
+
+      case 'OutOfGameCardUploadTab':
+        card_body_html = <OutOfGameCardUploadTab selectTab={this.selectTab}/>;
+        break;
+    }
+
     return (
       <div data-id='postgame-component'>
         <div className='row'>
-          <div className='col-12 col-sm-10 offset-sm-1 col-md-8 offset-sm-2 col-lg-6 offset-lg-3 '>
-            <div className='card text-center bg-dark border-primary'>
-              {/*{!!this.props && // after games#show info retrieved*/}
+          {/*{this.state.tab_selected != undefined &&*/}
+            <div className='col-12 col-sm-10 offset-sm-1 col-md-8 offset-sm-2 col-lg-6 offset-lg-3 '>
+              <div className='card text-center bg-dark border-primary'>
                 <div className='card-header'>
                   <div className='nav nav-tabs card-header-tabs'>
                     <li className="nav-item">
-                      <a className={'nav-link' + (!!this.state.viewing_postgames ? ' active' : '') } onClick={this.retrieveCardsForPostgame} href='#' >Post Games</a>
+                      <a className={nav_link__postgametab__classes} onClick={this.retrieveCardsForPostgame} href='#' >Post Games</a>
                     </li>
 
                     <li className="nav-item">
-                      <a className={'nav-link' + (!!this.state.viewing_postgames ? '' : ' active') } onClick={this.retrieveOutOfGameCards} href='#'>Out of game card uploads</a>
+                      <a className={nav_link__outofgametab__classes} onClick={this.retrieveOutOfGameCards} href='#'>Out of game card uploads</a>
                     </li>
                   </div>
                 </div>
 
                 <div className='card-body'>
-                  <h3 className='card-title'>Post Game Results </h3>
-                    <GameSelector all__current_user__game_info={this.state.data && this.state.data.all__current_user__game_info}
-                                  handleGameSelectorChange={(e) => {this.handleGameSelectorChange(e.target.id) } }
-                                  />
-
-                  <SlideshowList decks='' />
+                  {card_body_html}
                 </div>
-              {/*}*/}
+              </div>
             </div>
-          </div>
+          {/*}*/}
         </div>
       </div>
     )
@@ -89,13 +102,12 @@ class Postgame extends React.Component {
 }
 
 Postgame.propTypes = {
-  all__current_user__game_info: PropTypes.shape({
-                            id: PropTypes.number.isRequired,
-                            created_at_strftime: PropTypes.string.isRequired
-                          }),
-  arr_of_postgame_card_set: PropTypes.object.isRequired,
-  current_user_info:        PropTypes.object.isRequired,
-  out_of_game_cards:        PropTypes.object
+  // *all_postgames_of__current_user: PropTypes.shape({
+  //                           id: PropTypes.number.isRequired,
+  //                           created_at_strftime: PropTypes.string.isRequired
+  //                         }),
+  // *arr_of_postgame_card_set: PropTypes.object.isRequired,
+  // *current_user_info:        PropTypes.object.isRequired
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -108,6 +120,7 @@ document.addEventListener('DOMContentLoaded', () => {
       document.querySelector(selector)
     )
 });
+
 
     // - unless @out_of_game_card_upload.blank?
     //   h3.h3#out_of_game_card_upload-header.text-center = "Unassociated Cards I've uploaded"

@@ -719,7 +719,7 @@ require 'rails_helper'
 #         it 'is returns expected re' do
 #           # earlier_postgame =  FactoryBot.create(:postgame, callback_wanted: :postgame)
 #           # current_user = earlier_postgame.users.first
-#           # current_postgame = FactoryBot.create(:postgame, callback_wanted: :postgame, add_existing_users: [current_user])
+#           # current_postgame = FactoryBot.create(:postgame, callback_wanted: :postgame, with_existing_users: [current_user])
 
 #           # out_of_game_cards = GamesUser.where(user: current_user).last.cards.map do |card|
 
@@ -786,7 +786,7 @@ require 'rails_helper'
 
 #   #         earlier_postgame =  FactoryBot.create(:postgame, callback_wanted: :postgame)
 #   #         current_user = earlier_postgame.users.first
-#   #         current_postgame = FactoryBot.create(:postgame, callback_wanted: :postgame, add_existing_users: [current_user])
+#   #         current_postgame = FactoryBot.create(:postgame, callback_wanted: :postgame, with_existing_users: [current_user])
 
 #   #         out_of_game_cards = GamesUser.where(user: current_user).last.cards.map do |card|
 
@@ -836,7 +836,7 @@ RSpec.describe GamesController::AssemblePostgamesComponentParams, :r5_wip, :clea
       out_of_game_card_upload = FactoryBot.create :drawing, out_of_game_card_upload: true
       earlier_postgame =  FactoryBot.create(:postgame, callback_wanted: :postgame)
       current_user = earlier_postgame.users.first
-      current_postgame = FactoryBot.create(:postgame, callback_wanted: :postgame, add_existing_users: [current_user])
+      current_postgame = FactoryBot.create(:postgame, callback_wanted: :postgame, with_existing_users: [current_user])
       counter = 0
 
       _cards = Card.where(uploader: current_user, medium: :drawing, out_of_game_card_upload: true)
