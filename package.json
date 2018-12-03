@@ -16,6 +16,7 @@
     "enzyme": "^3.7.0",
     "enzyme-adapter-react-16": "^1.7.0",
     "jest": "^23.6.0",
+    "react-testing-library": "^5.3.1",
     "webpack-dev-server": "2.11.2"
   },
   "jest": {
@@ -27,6 +28,5 @@
       "app/javascript"
     ],
     "setupTestFrameworkScriptFile": "./spec/javascript/setupTests.js"
-
   }
 }

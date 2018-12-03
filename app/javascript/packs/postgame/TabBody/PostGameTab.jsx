@@ -6,7 +6,6 @@ import SlideshowList from '../SlideshowList'
 export default class PostGameTab extends React.Component {
   constructor(props){
     super(props);
-    // debugger
   }
 
   componentDidMount(){
@@ -15,7 +14,6 @@ export default class PostGameTab extends React.Component {
   }
 
   render() {
-    debugger
     return(
       <div>
         { !!this.props.all_postgames_of__current_user &&
@@ -35,9 +33,9 @@ export default class PostGameTab extends React.Component {
 
 PostGameTab.propTypes = {
   selectTab: PropTypes.func.isRequired,
-  retrieveCardsForPostgame: PropTypes.func.isRequired,
-  all_postgames_of__current_user: PropTypes.shape({
-                                    id: PropTypes.number.isRequired,
-                                    created_at_strftime: PropTypes.string.isRequired
-                                  })
+  retrieveCardsForPostgame: PropTypes.func.isRequired
+    // all_postgames_of__current_user: PropTypes.shape({
+  //                                   id: PropTypes.number.isRequired,
+  //                                   created_at_strftime: PropTypes.string.isRequired
+  //                                 })
 }

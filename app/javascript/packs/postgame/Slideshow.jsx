@@ -18,4 +18,4 @@ export default class Slideshow extends React.Component {
   }
 }
 
-Slideshow.propTypes = {}
+// Slideshow.propTypes = {}

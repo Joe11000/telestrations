@@ -23,7 +23,6 @@ class GamesController < ApplicationController
       format.js do
         game = current_user.games.postgame.find(params[:id])
         @postgame_component_params = AssemblePostgamesComponentParams.new(current_user: current_user, game: game).result_to_json
-        byebug
 
         if game.present?
           render( json: @postgame_component_params ) and return

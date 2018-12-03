@@ -4,7 +4,6 @@ import PropTypes from 'prop-types'
 export default class GameSelector extends React.Component {
   constructor(props){
     super(props);
-    debugger
 
     this.handleChangeGameSelector = this.handleChangeGameSelector.bind(this);
   }
@@ -12,12 +11,10 @@ export default class GameSelector extends React.Component {
   handleChangeGameSelector(event){
     event.preventDefault();
     let game_id = parseInt(event.target.value)
-    debugger
     this.props.retrieveCardsForPostgame(game_id)
   }
 
   render() {
-    debugger
     return (
       <div id='game-selector-container'>
         { !!this.props.all_postgames_of__current_user &&
@@ -35,9 +32,22 @@ export default class GameSelector extends React.Component {
 }
 
 GameSelector.propTypes = {
-  all_postgames_of__current_user: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    created_at_strftime: PropTypes.string.isRequired
-  }),
+  all_postgames_of__current_user: PropTypes.arrayOf(function(propValue, key, componentName, location, propFullName) {
+    debugger
+    let _propValueTypesValidator = {
+      'id': 'number',
+      'created_at_strftime': 'string'
+    }
+
+    Object.keys(_propValueTypesValidator).forEach(propValueKey => {
+      if(typeof propValue[key][propValueKey] != _propValueTypesValidator[propValueKey]) {
+        return new Error(
+          'Invalid prop `' + propFullName + '` supplied to' +
+          ' `' + componentName + '`. Validation failed.'
+        )
+      }
+    })
+  }).isRequired,
+
   retrieveCardsForPostgame: PropTypes.func.isRequired
 }

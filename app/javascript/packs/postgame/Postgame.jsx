@@ -100,12 +100,27 @@ class Postgame extends React.Component {
 }
 
 Postgame.propTypes = {
-  // *all_postgames_of__current_user: PropTypes.shape({
-  //                           id: PropTypes.number.isRequired,
-  //                           created_at_strftime: PropTypes.string.isRequired
-  //                         }),
-  // *arr_of_postgame_card_set: PropTypes.object.isRequired,
-  // *current_user_info:        PropTypes.object.isRequired
+  // all_postgames_of__current_user: PropTypes.arrayOf(function(propValue, key, componentName, location, propFullName) {
+  //     debugger
+  //     debugger
+  //   let propValueTypes = {
+  //     'id': 'number',
+  //     'created_at_strftime': 'string'
+  //   }
+
+  //   Object.entries(propValueTypes, function(key,value){
+  //     debugger
+  //     // if(typeof propValueTypes[key] != propValue[propValueTypes[key]] || typeof propValue[key]['created_at_strftime'] != 'string'){
+  //       return new Error(
+  //         'Invalid prop `' + propFullName + '` supplied to' +
+  //         ' `' + componentName + '`. Validation failed.'
+  //       );
+  //     // }
+  //   })
+
+  // }),
+  arr_of_postgame_card_set: PropTypes.object,
+  current_user_info:        PropTypes.object
 }
 
 document.addEventListener('DOMContentLoaded', () => {
