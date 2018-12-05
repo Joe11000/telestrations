@@ -3,6 +3,9 @@ import {shallow} from 'enzyme'
 import GameSelector from 'packs/postgame/GameSelector'
 import {render, fireEvent} from 'react-testing-library'
 
+import enzymeSerializer from 'enzyme-to-json/serializer'
+expect.addSnapshotSerializer(enzymeSerializer)
+
 describe('GameSelector Component', ()=>{
   // describe('proptypes', ()=>{
   //   // props = {
@@ -15,15 +18,11 @@ describe('GameSelector Component', ()=>{
   //   //         }
   // })
   it('sets correct values', ()=>{
-    debugger
     let game_1 = {'id': 11, 'created_at_strftime': 'Mon Nov 1, 2018'}
     let game_2 = {'id': 22, 'created_at_strftime': 'Tues Nov 2, 2018'}
     let game_3 = {'id': 33, 'created_at_strftime': 'Wed Nov 3, 2018'}
-    debugger
 
     const mockRetrieveCardsForPostgame = jest.fn()
-    // mockRetrieveCardsForPostgame.mockReturnValue(true);
-
 
     let props = {
                     'all_postgames_of__current_user': [
@@ -38,7 +37,7 @@ describe('GameSelector Component', ()=>{
                                                         {
                                                           'id': game_3.id,
                                                           'created_at_strftime': game_3.created_at_strftime
-                                                        },
+                                                        }
                                                       ],
 
                     'retrieveCardsForPostgame': mockRetrieveCardsForPostgame
@@ -48,11 +47,13 @@ describe('GameSelector Component', ()=>{
 
     // expect(mockRetrieveCardsForPostgame).toBeCalled()
     // expect(mockRetrieveCardsForPostgame).toBeCalledWith(game_3.id)
-    expect( game_selector.containsAllMatchingElements([
-                                                       <option value={game_1.id}>Game 1 - {game_1.created_at_strftime}</option>,
-                                                       <option value={game_2.id}>Game 2 - {game_2.created_at_strftime}</option>,
-                                                       <option value={game_3.id}>Game 3 - {game_3.created_at_strftime}</option>
-                                                     ]) ).toEqual(true);
+    expect( game_selector).toMatchSnapshot();
+
+    // expect( game_selector.containsAllMatchingElements([
+    //                                                    <option value={game_1.id}>Game 1 - {game_1.created_at_strftime}</option>,
+    //                                                    <option value={game_2.id}>Game 2 - {game_2.created_at_strftime}</option>,
+    //                                                    <option value={game_3.id}>Game 3 - {game_3.created_at_strftime}</option>
+    //                                                  ]) ).toEqual(true);
 
 
   })

@@ -2,13 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 export default class GameSelector extends React.Component {
-  constructor(props){
-    super(props);
-
-    this.handleChangeGameSelector = this.handleChangeGameSelector.bind(this);
-  }
-
-  handleChangeGameSelector(event){
+  handleChangeGameSelector = event => {
+    debugger
     event.preventDefault();
     let game_id = parseInt(event.target.value)
     this.props.retrieveCardsForPostgame(game_id)
@@ -30,6 +25,8 @@ export default class GameSelector extends React.Component {
     );
   }
 }
+
+
 
 GameSelector.propTypes = {
   all_postgames_of__current_user: PropTypes.arrayOf(function(propValue, key, componentName, location, propFullName) {

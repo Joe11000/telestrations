@@ -53,8 +53,8 @@ class Postgame extends React.Component {
   }
 
   render() {
-    let nav_link__postgametab__classes = 'nav-link bg-transparent text-white' + (this.state.tab_selected == 'PostGameTab' ? ' active' : '')
-    let nav_link__outofgametab__classes = 'nav-link bg-transparent text-white' + (this.state.tab_selected == 'OutOfGameCardUploadTab'  ? ' active' : '')
+    let nav_link__postgametab__classes = 'nav-link border-white bg-transparent text-white' + (this.state.tab_selected == 'PostGameTab' ? ' active' : '')
+    let nav_link__outofgametab__classes = 'nav-link border-white text-white' + (this.state.tab_selected == 'OutOfGameCardUploadTab'  ? ' active' : '')
 
     let card_body_html;
     switch(this.state.tab_selected) {
@@ -78,7 +78,7 @@ class Postgame extends React.Component {
             <div className='card text-center bg-dark border-primary'>
               <div className='card-header'>
                 <div className='nav nav-tabs card-header-tabs'>
-                  <li className="nav-item">
+                  <li className="nav-item" >
                     <a className={nav_link__postgametab__classes} onClick={this.retrieveCardsForPostgame} href='#' >Post Games</a>
                   </li>
 
