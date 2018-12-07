@@ -10,10 +10,11 @@ export default class GameSelector extends React.Component {
   }
 
   render() {
+    var that = this;
     return (
       <div id='game-selector-container'>
         { !!this.props.all_postgames_of__current_user &&
-          <select className='custom-select' onChange={this.handleChangeGameSelector}>
+          <select value={this.props.current_postgame_id} className='custom-select' onChange={this.handleChangeGameSelector}>
             {
               this.props.all_postgames_of__current_user.map(function(game_info, index) {
                 return(<option key={game_info.id} value={game_info.id}>Game {index + 1} - {game_info.created_at_strftime}</option>);
@@ -30,7 +31,6 @@ export default class GameSelector extends React.Component {
 
 GameSelector.propTypes = {
   all_postgames_of__current_user: PropTypes.arrayOf(function(propValue, key, componentName, location, propFullName) {
-    debugger
     let _propValueTypesValidator = {
       'id': 'number',
       'created_at_strftime': 'string'
@@ -46,5 +46,6 @@ GameSelector.propTypes = {
     })
   }).isRequired,
 
-  retrieveCardsForPostgame: PropTypes.func.isRequired
+  retrieveCardsForPostgame: PropTypes.func.isRequired,
+  current_postgame_id: PropTypes.number
 }

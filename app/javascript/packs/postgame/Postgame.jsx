@@ -26,7 +26,7 @@ class Postgame extends React.Component {
       $.getJSON(`/games/${id}`, function(response) {
         let edited_response = Object.assign(response, {tab_selected: 'PostGameTab'} );
         // debugger
-        that.setState(edited_response);
+        that.setState(edited_response, 'current_postgame_id': id);
       });
     }
   }
@@ -63,6 +63,7 @@ class Postgame extends React.Component {
         card_body_html = <PostGameTab selectTab={this.selectTab}
                                       retrieveCardsForPostgame={this.retrieveCardsForPostgame}
                                       all_postgames_of__current_user={this.state.all_postgames_of__current_user}
+                                      current_postgame_id={this.state.current_postgame_id}
                                       />;
         break;
 

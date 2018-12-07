@@ -21,6 +21,7 @@ export default class PostGameTab extends React.Component {
             <h3 className='card-title'>Post Game Results</h3>
             <GameSelector all_postgames_of__current_user={this.props.all_postgames_of__current_user}
                           retrieveCardsForPostgame={this.props.retrieveCardsForPostgame }
+                          current_postgame_id={this.props.current_postgame_id}
                           />
 
             <SlideshowList arr_of_postgame_card_set={this.props.arr_of_postgame_card_set} />
@@ -33,9 +34,10 @@ export default class PostGameTab extends React.Component {
 
 PostGameTab.propTypes = {
   selectTab: PropTypes.func.isRequired,
-  retrieveCardsForPostgame: PropTypes.func.isRequired
+  retrieveCardsForPostgame: PropTypes.func.isRequired,
     // all_postgames_of__current_user: PropTypes.shape({
   //                                   id: PropTypes.number.isRequired,
   //                                   created_at_strftime: PropTypes.string.isRequired
   //                                 })
+  current_postgame_id: PropTypes.number
 }
