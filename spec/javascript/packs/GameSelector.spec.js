@@ -8,15 +8,23 @@ expect.addSnapshotSerializer(enzymeSerializer)
 
 describe('GameSelector Component', ()=>{
   it('has propTypes', ()=>{
+        props = {
+              all_postgames_of__current_user: PropTypes.shape({
+                id: PropTypes.number.isRequired,
+                created_at_strftime: PropTypes.string.isRequired
+              }),
+              retrieveCardsForPostgame: PropTypes.func.isRequired
 
-    // props = {
-    //           all_postgames_of__current_user: PropTypes.shape({
-    //             id: PropTypes.number.isRequired,
-    //             created_at_strftime: PropTypes.string.isRequired
-    //           }),
-    //           retrieveCardsForPostgame: PropTypes.func.isRequired
+            }
+    expect()
+    props = {
+              all_postgames_of__current_user: PropTypes.shape({
+                id: PropTypes.number.isRequired,
+                created_at_strftime: PropTypes.string.isRequired
+              }),
+              retrieveCardsForPostgame: PropTypes.func.isRequired
 
-    //         }
+            }
   })
 
   describe('sets correct values', ()=>{

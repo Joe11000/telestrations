@@ -24,8 +24,8 @@ class Postgame extends React.Component {
       var that = this;
 
       $.getJSON(`/games/${id}`, function(response) {
-        let edited_response = Object.assign(response, {tab_selected: 'PostGameTab'} );
-        // debugger
+        let edited_response = Object.assign(response, {tab_selected: 'PostGameTab', 'current_postgame_id': id });
+        debugger
         that.setState(edited_response, 'current_postgame_id': id);
       });
     }

@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 
 export default class GameSelector extends React.Component {
   handleChangeGameSelector = event => {
-    debugger
     event.preventDefault();
     let game_id = parseInt(event.target.value)
     this.props.retrieveCardsForPostgame(game_id)
@@ -11,9 +10,11 @@ export default class GameSelector extends React.Component {
 
   render() {
     var that = this;
+    debugger
     return (
       <div id='game-selector-container'>
-        { !!this.props.all_postgames_of__current_user &&
+        {
+          !!this.props.all_postgames_of__current_user &&
           <select value={this.props.current_postgame_id} className='custom-select' onChange={this.handleChangeGameSelector}>
             {
               this.props.all_postgames_of__current_user.map(function(game_info, index) {
@@ -47,5 +48,5 @@ GameSelector.propTypes = {
   }).isRequired,
 
   retrieveCardsForPostgame: PropTypes.func.isRequired,
-  current_postgame_id: PropTypes.number
+  current_postgame_id: PropTypes.number.isRequired
 }
