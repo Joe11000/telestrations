@@ -47,6 +47,6 @@ GameSelector.propTypes = {
     })
   }).isRequired,
 
+  current_postgame_id: PropTypes.number.isRequired,
   retrieveCardsForPostgame: PropTypes.func.isRequired,
-  current_postgame_id: PropTypes.number.isRequired
 }
