@@ -15,6 +15,7 @@ export default class GameSelector extends React.Component {
       <div id='game-selector-container'>
         {
           !!this.props.all_postgames_of__current_user &&
+          !!this.props.current_postgame_id &&
           <select value={this.props.current_postgame_id} className='custom-select' onChange={this.handleChangeGameSelector}>
             {
               this.props.all_postgames_of__current_user.map(function(game_info, index) {

@@ -8,15 +8,11 @@ export default class PostGameTab extends React.Component {
     super(props);
   }
 
-  componentDidMount(){
-    // Controller knows game_id of -1 means like accessing user's last postgame(like in an array[-1])
-    this.props.retrieveCardsForPostgame(-1);
-  }
-
   render() {
     return(
       <div>
         { !!this.props.all_postgames_of__current_user &&
+          !!this.props.current_postgame_id &&
           <div>
             <h3 className='card-title'>Post Game Results</h3>
             <GameSelector all_postgames_of__current_user={this.props.all_postgames_of__current_user}

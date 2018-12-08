@@ -77,3 +77,43 @@ exports[`GameSelector Component sets correct values onload 1`] = `
   </select>
 </div>
 `;
+
+exports[`GameSelector Component sets correct values onload, default selects last game played 1`] = `
+<div
+  id="game-selector-container"
+>
+  <select
+    className="custom-select"
+    onChange={[Function]}
+    value={33}
+  >
+    <option
+      key="11"
+      value={11}
+    >
+      Game 
+      1
+       - 
+      Mon Nov 1, 2018
+    </option>
+    <option
+      key="22"
+      value={22}
+    >
+      Game 
+      2
+       - 
+      Tues Nov 2, 2018
+    </option>
+    <option
+      key="33"
+      value={33}
+    >
+      Game 
+      3
+       - 
+      Wed Nov 3, 2018
+    </option>
+  </select>
+</div>
+`;

@@ -1,9 +1,11 @@
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types'
+import $ from 'jquery'
+// import axios from 'axios'
+
 import OutOfGameCardUploadTab from './TabBody/OutOfGameCardUploadTab'
 import PostGameTab from './TabBody/PostGameTab'
-// import axios from 'axios'
 
 class Postgame extends React.Component {
   constructor(props) {
@@ -12,10 +14,14 @@ class Postgame extends React.Component {
     // tab_selected (undefined||'PostGameTab'||'OutOfGameCardUploadTab')
     this.state = { tab_selected: undefined }
 
-
     this.retrieveCardsForPostgame = this.retrieveCardsForPostgame.bind(this);
     this.retrieveOutOfGameCards = this.retrieveOutOfGameCards.bind(this);
     this.selectTab = this.selectTab.bind(this);
+  }
+
+  componentDidMount(){
+    // Controller knows game_id of -1 means like accessing user's last postgame(like in an array[-1])
+    this.retrieveCardsForPostgame(-1);
   }
 
   // tab_selected (undefined||'PostGameTab'||'OutOfGameCardUploadTab')
@@ -23,10 +29,16 @@ class Postgame extends React.Component {
     if( this.state.tab_selected != 'PostGameTab') {
       var that = this;
 
-      $.getJSON(`/games/${id}`, function(response) {
-        let edited_response = Object.assign(response, {tab_selected: 'PostGameTab', 'current_postgame_id': id });
-        debugger
-        that.setState(edited_response, 'current_postgame_id': id);
+      $.getJSON(`/games/${id}`, function(_response) {
+        let _current_postgame_id;
+        if(id == -1) {
+         _current_postgame_id = _response.all_postgames_of__current_user[_response.all_postgames_of__current_user.length - 1].id;
+        }else{
+          _current_postgame_id = id;
+        }
+        let _edited_response = Object.assign(_response, {tab_selected: 'PostGameTab', 'current_postgame_id': _current_postgame_id} );
+
+        that.setState(_edited_response);
       });
     }
   }

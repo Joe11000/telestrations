@@ -35,11 +35,11 @@ describe('GameSelector Component', ()=>{
 
       const game_selector = shallow(<GameSelector {...props} />)
 
-      expect(game_selector.find('select').value).toBe(game_3.id)
+      expect(game_selector.find("select").props().value).toBe(game_3.id)
       expect( game_selector).toMatchSnapshot();
     });
 
-    test('selector onChange calls props.retrieveCardsForPostgame(game_id)', ()=>{
+    it('selector onChange calls props.retrieveCardsForPostgame(game_id)', ()=>{
       let game_1 = {'id': 11, 'created_at_strftime': 'Mon Nov 1, 2018'}
       let game_2 = {'id': 22, 'created_at_strftime': 'Tues Nov 2, 2018'}
       let game_3 = {'id': 33, 'created_at_strftime': 'Wed Nov 3, 2018'}
@@ -74,8 +74,6 @@ describe('GameSelector Component', ()=>{
 
       expect(mockRetrieveCardsForPostgame.mock.calls.length).toBe(1)
       expect(mockRetrieveCardsForPostgame).toBeCalledWith(change_to_value)
-
-      expect(game_selector.find('select').value).toBe(change_to_value)
     });
   });
 });
