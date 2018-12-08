@@ -10,7 +10,6 @@ export default class GameSelector extends React.Component {
 
   render() {
     var that = this;
-    debugger
     return (
       <div id='game-selector-container'>
         {
