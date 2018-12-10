@@ -66,7 +66,7 @@ describe('Slideshow component', () => {
     expect( postgame.contains('.card') ).toBeDefined();
     // expect( postgame.contains('.card-header .nav-item') ).to.have.lengthOf(2);
     // expect( postgame.contains('.card-header .nav-item:eq(1)') ).to.eq.lengthOf(2);
-    expect( postgame.find('.card') ).to.have.lengthOf(1);
+    expect( postgame.find('.slideshow') ).to.have.lengthOf(1);
 
   });
 
