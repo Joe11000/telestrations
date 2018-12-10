@@ -36,7 +36,6 @@ describe('GameSelector Component', ()=>{
       const game_selector = shallow(<GameSelector {...props} />)
 
       expect(game_selector.find("select").props().value).toBe(game_3.id)
-      expect( game_selector).toMatchSnapshot();
     });
 
     it('selector onChange calls props.retrieveCardsForPostgame(game_id)', ()=>{

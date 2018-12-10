@@ -29,11 +29,23 @@ export default class PostGameTab extends React.Component {
 }
 
 PostGameTab.propTypes = {
-  selectTab: PropTypes.func.isRequired,
+  all_postgames_of__current_user: PropTypes.arrayOf(function(propValue, key, componentName, location, propFullName) {
+    let _propValueTypesValidator = {
+      'id': 'number',
+      'created_at_strftime': 'string'
+    }
+
+    Object.keys(_propValueTypesValidator).forEach(propValueKey => {
+      if(typeof propValue[key][propValueKey] != _propValueTypesValidator[propValueKey]) {
+        return new Error(
+          'Invalid prop `' + propFullName + '` supplied to' +
+          ' `' + componentName + '`. Validation failed.'
+        )
+      }
+    })
+  }).isRequired,
+
+  current_postgame_id: PropTypes.number,
   retrieveCardsForPostgame: PropTypes.func.isRequired,
-    // all_postgames_of__current_user: PropTypes.shape({
-  //                                   id: PropTypes.number.isRequired,
-  //                                   created_at_strftime: PropTypes.string.isRequired
-  //                                 })
-  current_postgame_id: PropTypes.number
+  selectTab: PropTypes.func.isRequired,
 }

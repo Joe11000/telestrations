@@ -4,9 +4,9 @@ import Slideshow from './Slideshow'
 // import LoadingIcon from 'images/loading_icon.gif'
 
 export default class SlideshowList extends React.Component {
-  constructor(props){
+  constructor(props) {
     super(props);
-    // debugger
+    debugger
   }
 
   render() {
@@ -22,3 +22,8 @@ export default class SlideshowList extends React.Component {
 }
 
 SlideshowList.propTypes = {}
+
+
+
+
+

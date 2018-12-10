@@ -7,7 +7,7 @@ import enzymeSerializer from 'enzyme-to-json/serializer'
 expect.addSnapshotSerializer(enzymeSerializer)
 
 describe('PostGameTab Component', ()=>{
-  it('renders correctly', () => {
+  test('renders correctly', () => {
       let game_1 = {'id': 11, 'created_at_strftime': 'Mon Nov 1, 2018'}
       let game_2 = {'id': 22, 'created_at_strftime': 'Tues Nov 2, 2018'}
       let game_3 = {'id': 33, 'created_at_strftime': 'Wed Nov 3, 2018'}
@@ -31,10 +31,15 @@ describe('PostGameTab Component', ()=>{
                                                         ],
 
                       'current_postgame_id': game_3.id,
-                      'retrieveCardsForPostgame': mockRetrieveCardsForPostgame
+                      'retrieveCardsForPostgame': mockRetrieveCardsForPostgame,
+                      'selectTab': jest.fn(),
+                      'retrieveCardsForPostgame': jest.fn(),
                     }
 
       const postgame_tab = shallow(<PostGameTab {...props} />)
 
+      expect(postgame_tab.find('.card-title').text()).toEqual('Post Game Results')
+      expect(postgame_tab.find('GameSelector').length).toEqual(1);
+      expect(postgame_tab.find('SlideshowList').length).toEqual(1)
   })
 });
