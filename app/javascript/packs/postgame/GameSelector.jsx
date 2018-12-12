@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import $ from 'jquery'
 
 export default class GameSelector extends React.Component {
   handleChangeGameSelector = event => {
@@ -24,7 +25,7 @@ export default class GameSelector extends React.Component {
           </select>
         }
       </div>
-    );
+    )
   }
 }
 

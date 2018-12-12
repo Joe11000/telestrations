@@ -6,7 +6,7 @@ import {render, fireEvent} from 'react-testing-library'
 import enzymeSerializer from 'enzyme-to-json/serializer'
 expect.addSnapshotSerializer(enzymeSerializer)
 
-describe('PostGameTab Component', ()=>{
+describe('PostGameTab Component', () => {
   test('renders correctly', () => {
       let game_1 = {'id': 11, 'created_at_strftime': 'Mon Nov 1, 2018'}
       let game_2 = {'id': 22, 'created_at_strftime': 'Tues Nov 2, 2018'}
@@ -15,26 +15,25 @@ describe('PostGameTab Component', ()=>{
       const mockRetrieveCardsForPostgame = jest.fn()
 
       let props = {
-                      'all_postgames_of__current_user': [
-                                                          {
-                                                            'id': game_1.id,
-                                                            'created_at_strftime': game_1.created_at_strftime
-                                                          },
-                                                          {
-                                                            'id': game_2.id,
-                                                            'created_at_strftime': game_2.created_at_strftime
-                                                          },
-                                                          {
-                                                            'id': game_3.id,
-                                                            'created_at_strftime': game_3.created_at_strftime
-                                                          }
-                                                        ],
-
-                      'current_postgame_id': game_3.id,
-                      'retrieveCardsForPostgame': mockRetrieveCardsForPostgame,
-                      'selectTab': jest.fn(),
-                      'retrieveCardsForPostgame': jest.fn(),
-                    }
+                     'all_postgames_of__current_user': [
+                                                         {
+                                                           'id': game_1.id,
+                                                           'created_at_strftime': game_1.created_at_strftime
+                                                         },
+                                                         {
+                                                           'id': game_2.id,
+                                                           'created_at_strftime': game_2.created_at_strftime
+                                                         },
+                                                         {
+                                                           'id': game_3.id,
+                                                           'created_at_strftime': game_3.created_at_strftime
+                                                         }
+                                                       ],
+                     'current_postgame_id': game_3.id,
+                     'retrieveCardsForPostgame': mockRetrieveCardsForPostgame,
+                     'selectTab': jest.fn(),
+                     'retrieveCardsForPostgame': jest.fn(),
+                   }
 
       const postgame_tab = shallow(<PostGameTab {...props} />)
 

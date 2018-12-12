@@ -2,6 +2,9 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import GameSelector from '../GameSelector'
 import SlideshowList from '../SlideshowList'
+import Slideshow from '../Slideshow'
+import $ from 'jquery'
+
 
 export default class PostGameTab extends React.Component {
   constructor(props){
@@ -9,6 +12,7 @@ export default class PostGameTab extends React.Component {
   }
 
   render() {
+
     return(
       <div>
         { !!this.props.all_postgames_of__current_user &&
@@ -16,11 +20,13 @@ export default class PostGameTab extends React.Component {
           <div>
             <h3 className='card-title'>Post Game Results</h3>
             <GameSelector all_postgames_of__current_user={this.props.all_postgames_of__current_user}
-                          retrieveCardsForPostgame={this.props.retrieveCardsForPostgame }
                           current_postgame_id={this.props.current_postgame_id}
+                          retrieveCardsForPostgame={this.props.retrieveCardsForPostgame }
                           />
 
-            <SlideshowList arr_of_postgame_card_set={this.props.arr_of_postgame_card_set} />
+            <SlideshowList arr_of_postgame_card_set={this.props.arr_of_postgame_card_set}
+                           current_user_info={this.props.current_user_info}
+                            />
           </div>
         }
       </div>
@@ -43,7 +49,7 @@ PostGameTab.propTypes = {
         )
       }
     })
-  }).isRequired,
+  }),
 
   current_postgame_id: PropTypes.number,
   retrieveCardsForPostgame: PropTypes.func.isRequired,

@@ -3,15 +3,26 @@ import PropTypes from 'prop-types'
 // import LoadingIcon from 'images/loading_icon.gif'
 
 export default class Slideshow extends React.Component {
-  constructor(props){
-    super(props);
-  }
+
+
 
   render() {
     debugger
+    const that_props = this.props;
+
     return (
       <div className='slideshow'>
-        {this}
+      {
+        this.props.deck.forEach((element, index) => {
+          <div id='carousel_id' className='carousel slide' data-ride='carousel' data-interval={false}>
+            <div className='carousel-inner' role='listbox'>
+              <div className='item'>
+                {that_props.deck}
+              </div>
+            </div>
+          </div>
+        })
+      }
       </div>
     )
   }
@@ -19,10 +30,6 @@ export default class Slideshow extends React.Component {
 
 
 
-    // - unless @out_of_game_card_upload.blank?
-    //   h3.h3#out_of_game_card_upload-header.text-center = "Unassociated Cards I've uploaded"
-    //   .out_of_game_card_upload-i-uploaded
-    //     - carousel_id = "out_of_game_card_upload"
     //     .carousel.slide data-ride='carousel' data-interval='false' id=carousel_id
     //       /! Wrapper for slides
     //       .carousel-inner role="listbox"
@@ -42,6 +49,7 @@ export default class Slideshow extends React.Component {
     //         - @out_of_game_card_upload.each_with_index do |card_container, card_container_index|
     //           li data-slide-to="#{card_container_index}" data-target="##{carousel_id}" class=(card_container_index == 0 ? 'active' : '')
     //     hr
+
 
 
     // .col-12.col-sm-12.text-center

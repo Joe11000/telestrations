@@ -11,47 +11,49 @@ class Postgame extends React.Component {
   constructor(props) {
     super(props);
 
-    // tab_selected (undefined||'PostGameTab'||'OutOfGameCardUploadTab')
-    this.state = { tab_selected: undefined }
+    this.state = {
+                   'all_postgames_of__current_user': null,
+                   'arr_of_postgame_card_set': null,
+                   'current_user_info': null,
+                   'current_postgame_id': null,
+                   'tab_selected': undefined, // tab_selected (undefined||'PostGameTab'||'OutOfGameCardUploadTab')
+                 }
 
     this.retrieveCardsForPostgame = this.retrieveCardsForPostgame.bind(this);
     this.retrieveOutOfGameCards = this.retrieveOutOfGameCards.bind(this);
     this.selectTab = this.selectTab.bind(this);
   }
 
-  componentDidMount(){
+  componentDidMount() {
     // Controller knows game_id of -1 means like accessing user's last postgame(like in an array[-1])
     this.retrieveCardsForPostgame(-1);
   }
 
   // tab_selected (undefined||'PostGameTab'||'OutOfGameCardUploadTab')
   retrieveCardsForPostgame(id) {
-    if( this.state.tab_selected != 'PostGameTab') {
-      var that = this;
+    var that = this;
 
-      $.getJSON(`/games/${id}`, function(_response) {
-        let _current_postgame_id;
-        if(id == -1) {
-         _current_postgame_id = _response.all_postgames_of__current_user[_response.all_postgames_of__current_user.length - 1].id;
-        }else{
-          _current_postgame_id = id;
-        }
-        let _edited_response = Object.assign(_response, {tab_selected: 'PostGameTab', 'current_postgame_id': _current_postgame_id} );
+    $.getJSON(`/games/${id}`, function(_response) {
+      let _current_postgame_id;
+      if(id == -1) {
+       _current_postgame_id = _response.all_postgames_of__current_user[_response.all_postgames_of__current_user.length - 1].id;
+      }else{
+        _current_postgame_id = id;
+      }
+      debugger
+      let _edited_response = Object.assign(_response, {tab_selected: 'PostGameTab', 'current_postgame_id': _current_postgame_id} );
 
-        that.setState(_edited_response);
-      });
-    }
+      that.setState(_edited_response);
+    });
   }
 
   retrieveOutOfGameCards(){
     var that = this;
 
-    if( this.state.tab_selected != 'OutOfGameCardUploadTab' ){
-      $.getJSON(`/out_of_game_card_uploads_controller/${this.state.current_user_info.id}`, function(response){
-        let edited_response = Object.assign(response, {tab_selected: 'OutOfGameCardUploadTab'} );
-        that.setState(edited_response);
-      });
-    }
+    $.getJSON(`/out_of_game_card_uploads_controller/${this.state.current_user_info.id}`, function(response){
+      let edited_response = Object.assign(response, {tab_selected: 'OutOfGameCardUploadTab'} );
+      that.setState(edited_response);
+    });
   }
 
   selectTab(tab_selected){
@@ -72,15 +74,17 @@ class Postgame extends React.Component {
     switch(this.state.tab_selected) {
       case 'PostGameTab':
       case undefined:
-        card_body_html = <PostGameTab selectTab={this.selectTab}
-                                      retrieveCardsForPostgame={this.retrieveCardsForPostgame}
-                                      all_postgames_of__current_user={this.state.all_postgames_of__current_user}
+        card_body_html = <PostGameTab all_postgames_of__current_user={this.state.all_postgames_of__current_user}
+                                      arr_of_postgame_card_set={this.state.arr_of_postgame_card_set}
                                       current_postgame_id={this.state.current_postgame_id}
+                                      current_user_info={this.state.current_user_info}
+                                      retrieveCardsForPostgame={this.retrieveCardsForPostgame}
+                                      selectTab={this.selectTab}
                                       />;
         break;
 
       case 'OutOfGameCardUploadTab':
-        card_body_html = <OutOfGameCardUploadTab selectTab={this.selectTab}/>;
+        card_body_html = <OutOfGameCardUploadTab selectTab={this.selectTab} />;
         break;
     }
 

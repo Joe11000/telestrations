@@ -39,7 +39,7 @@ describe('Slideshow component', () => {
                                 'updated_at': "2018-12-09T23:21:05.818Z"
                                 'uploader_id': 14
                               }
-                            ]
+                            ],
                             [
                               "Lincoln Cartwright IV",
                               {

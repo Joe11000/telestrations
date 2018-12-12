@@ -41,7 +41,7 @@ describe('SlideshowList component', () => {
                                     'updated_at': "2018-12-09T23:21:05.818Z"
                                     'uploader_id': 14
                                   }
-                                ]
+                                ],
                                 [
                                   "Lincoln Cartwright IV",
                                   {
@@ -62,7 +62,6 @@ describe('SlideshowList component', () => {
                               ],
                               [
                                 [
-
                                   "Devon Kreiger I",
                                   {
                                     'created_at': "2018-12-09T23:21:04.805Z"
