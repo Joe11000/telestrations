@@ -58,8 +58,7 @@ describe('Slideshow component', () => {
                               }
                             ]
                           ]
-                      }
-    }
+                  }
 
     const postgame = shallow(<Slideshow {..props} />)
 

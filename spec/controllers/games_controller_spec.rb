@@ -725,7 +725,7 @@ require 'rails_helper'
 
 #           #   if card.drawing?
 #           #     result = card.slice(:medium, :uploader)
-#           #     result.merge!( {'drawing_url' => get_drawing_url(card)} )
+#           #     result.merge!( {'drawing_url' => card.get_drawing_url} )
 #           #     result
 #           #   else
 #           #     card.slice(:medium, :description_text, :uploader)
@@ -792,7 +792,7 @@ require 'rails_helper'
 
 #   #           if card.drawing?
 #   #             result = card.slice(:medium, :uploader)
-#   #             result.merge!( {'drawing_url' => get_drawing_url(card)} )
+#   #             result.merge!( {'drawing_url' => card.get_drawing_url} )
 #   #             result
 #   #           else
 #   #             card.slice(:medium, :description_text, :uploader)
@@ -830,7 +830,7 @@ RSpec.describe GamesController::AssemblePostgamesComponentParams, :r5_wip, :clea
   let!(:unassociated_postgame) { FactoryBot.create(:postgame, callback_wanted: :postgame) }
 
   context 'returns json string of component params for the user\'s last postgame' do
-    include ActiveStorageUrlCreater
+    # include ActiveStorageUrlCreater
 
     it 'is returns expected re' do
       out_of_game_card_upload = FactoryBot.create :drawing, out_of_game_card_upload: true
@@ -843,7 +843,7 @@ RSpec.describe GamesController::AssemblePostgamesComponentParams, :r5_wip, :clea
       out_of_game_cards = _cards.map do |card|
         if card.drawing?
           result = card.slice(:medium, :uploader)
-          result.merge!( {'drawing_url' => get_drawing_url(card)} )
+          result.merge!( {'drawing_url' => card.get_drawing_url} )
         end
       end
 
@@ -853,7 +853,7 @@ RSpec.describe GamesController::AssemblePostgamesComponentParams, :r5_wip, :clea
         counter += 1
         if card.drawing?
           result = card.slice(:medium, :uploader)
-          result.merge!( {'drawing_url' => get_drawing_url(card)} )
+          result.merge!( {'drawing_url' => card.get_drawing_url} )
           result
         else
           result = card.slice(:medium, :description_text, :uploader)

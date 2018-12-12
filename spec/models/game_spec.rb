@@ -707,7 +707,7 @@ RSpec.describe Game, type: :model do
       #                                             attention_users: [user_2.id],
       #                                             previous_card: {
       #                                                               medium: 'drawing',
-      #                                                               drawing_url: get_drawing_url( Card.get_placeholder_card(user_2.id, game).parent_card )
+      #                                                               drawing_url:  Card.get_placeholder_card(user_2.id, game).parent_card.get_drawing_url
       #                                                             },
       #                                             user_status: 'working_on_card'
       #                                           },
@@ -734,7 +734,7 @@ RSpec.describe Game, type: :model do
       #                                             attention_users: [user_1.id],
       #                                             previous_card: {
       #                                                               medium: 'drawing',
-      #                                                               drawing_url: get_drawing_url( Card.get_placeholder_card(user_1.id, game).parent_card )
+      #                                                               drawing_url:  Card.get_placeholder_card(user_1.id, game).parent_card.get_drawing_url
       #                                                             },
       #                                             user_status: 'working_on_card'
       #                                           },
@@ -742,7 +742,7 @@ RSpec.describe Game, type: :model do
       #                                             attention_users: [user_2.id],
       #                                             previous_card: {
       #                                                               medium: 'drawing',
-      #                                                               drawing_url: get_drawing_url( Card.get_placeholder_card(user_2.id, game).parent_card )
+      #                                                               drawing_url:  Card.get_placeholder_card(user_2.id, game).parent_card.get_drawing_url
       #                                                             },
       #                                             user_status: 'working_on_card'
       #                                           },
@@ -750,7 +750,7 @@ RSpec.describe Game, type: :model do
       #                                             attention_users: [user_3.id],
       #                                             previous_card: {
       #                                                               medium: 'drawing',
-      #                                                               drawing_url: get_drawing_url( Card.get_placeholder_card(user_3.id, game).parent_card )
+      #                                                               drawing_url:  Card.get_placeholder_card(user_3.id, game).parent_card.get_drawing_url
       #                                                             },
       #                                             user_status: 'working_on_card'
       #                                           }
@@ -774,7 +774,7 @@ RSpec.describe Game, type: :model do
       #                                             attention_users: [user_2.id],
       #                                             previous_card: {
       #                                                               medium: 'drawing',
-      #                                                               drawing_url: get_drawing_url( Card.get_placeholder_card(user_2.id, game).parent_card )
+      #                                                               drawing_url:  Card.get_placeholder_card(user_2.id, game).parent_card.get_drawing_url
       #                                                             },
       #                                             user_status: 'working_on_card'
       #                                           },
@@ -782,7 +782,7 @@ RSpec.describe Game, type: :model do
       #                                             attention_users: [user_3.id],
       #                                             previous_card: {
       #                                                               medium: 'drawing',
-      #                                                               drawing_url: get_drawing_url( Card.get_placeholder_card(user_3.id, game).parent_card )
+      #                                                               drawing_url:  Card.get_placeholder_card(user_3.id, game).parent_card.get_drawing_url
       #                                                             },
       #                                             user_status: 'working_on_card'
       #                                           }
@@ -809,7 +809,7 @@ RSpec.describe Game, type: :model do
       #                                             attention_users: [user_3.id],
       #                                             previous_card: {
       #                                                               medium: 'drawing',
-      #                                                               drawing_url: get_drawing_url( Card.get_placeholder_card(user_3.id, game).parent_card )
+      #                                                               drawing_url:  Card.get_placeholder_card(user_3.id, game).parent_card.get_drawing_url
       #                                                             },
       #                                             user_status: 'working_on_card'
       #                                           }
@@ -1012,7 +1012,7 @@ RSpec.describe Game, type: :model do
                                                 attention_users: [user_2.id],
                                                 previous_card: {
                                                                   medium: 'drawing',
-                                                                  drawing_url: get_drawing_url( Card.get_placeholder_card(user_2.id, game).parent_card )
+                                                                  drawing_url:  Card.get_placeholder_card(user_2.id, game).parent_card.get_drawing_url
                                                                 },
                                                 user_status: 'working_on_card'
                                               },
@@ -1039,7 +1039,7 @@ RSpec.describe Game, type: :model do
                                                 attention_users: [user_1.id],
                                                 previous_card: {
                                                                   medium: 'drawing',
-                                                                  drawing_url: get_drawing_url( Card.get_placeholder_card(user_1.id, game).parent_card )
+                                                                  drawing_url:  Card.get_placeholder_card(user_1.id, game).parent_card.get_drawing_url
                                                                 },
                                                 user_status: 'working_on_card'
                                               },
@@ -1047,7 +1047,7 @@ RSpec.describe Game, type: :model do
                                                 attention_users: [user_2.id],
                                                 previous_card: {
                                                                   medium: 'drawing',
-                                                                  drawing_url: get_drawing_url( Card.get_placeholder_card(user_2.id, game).parent_card )
+                                                                  drawing_url:  Card.get_placeholder_card(user_2.id, game).parent_card.get_drawing_url
                                                                 },
                                                 user_status: 'working_on_card'
                                               },
@@ -1055,7 +1055,7 @@ RSpec.describe Game, type: :model do
                                                 attention_users: [user_3.id],
                                                 previous_card: {
                                                                   medium: 'drawing',
-                                                                  drawing_url: get_drawing_url( Card.get_placeholder_card(user_3.id, game).parent_card )
+                                                                  drawing_url:  Card.get_placeholder_card(user_3.id, game).parent_card.get_drawing_url
                                                                 },
                                                 user_status: 'working_on_card'
                                               }
@@ -1079,7 +1079,7 @@ RSpec.describe Game, type: :model do
                                                 attention_users: [user_2.id],
                                                 previous_card: {
                                                                   medium: 'drawing',
-                                                                  drawing_url: get_drawing_url( Card.get_placeholder_card(user_2.id, game).parent_card )
+                                                                  drawing_url:  Card.get_placeholder_card(user_2.id, game).parent_card.get_drawing_url
                                                                 },
                                                 user_status: 'working_on_card'
                                               },
@@ -1087,7 +1087,7 @@ RSpec.describe Game, type: :model do
                                                 attention_users: [user_3.id],
                                                 previous_card: {
                                                                   medium: 'drawing',
-                                                                  drawing_url: get_drawing_url( Card.get_placeholder_card(user_3.id, game).parent_card )
+                                                                  drawing_url:  Card.get_placeholder_card(user_3.id, game).parent_card.get_drawing_url
                                                                 },
                                                 user_status: 'working_on_card'
                                               }
@@ -1114,7 +1114,7 @@ RSpec.describe Game, type: :model do
                                                 attention_users: [user_3.id],
                                                 previous_card: {
                                                                   medium: 'drawing',
-                                                                  drawing_url: get_drawing_url( Card.get_placeholder_card(user_3.id, game).parent_card )
+                                                                  drawing_url:  Card.get_placeholder_card(user_3.id, game).parent_card.get_drawing_url
                                                                 },
                                                 user_status: 'working_on_card'
                                               }

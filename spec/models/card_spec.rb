@@ -126,22 +126,31 @@ RSpec.describe Card, type: :model do
         gu1, gu2, gu3 = @game.games_users
         starting_card1, starting_card2, starting_card3 = @game.games_users.map(&:starting_card)
 
+          byebug
+
         expect(@cards).to match_array [
                                         [
-                                          [starting_card1.uploader.games_users.last.users_game_name, starting_card1 ],
-                                          [starting_card1.child_card.uploader.games_users.last.users_game_name, starting_card1.child_card ],
-                                          [starting_card1.child_card.child_card.uploader.games_users.last.users_game_name, starting_card1.child_card.child_card ]
+                                          [starting_card1.uploader.games_users.last.users_game_name, starting_card1.attributes ],
+                                          [starting_card1.child_card.uploader.games_users.last.users_game_name, starting_card1.child_card.attributes ],
+                                          [starting_card1.child_card.child_card.uploader.games_users.last.users_game_name, starting_card1.child_card.child_card.attributes ]
                                         ],
                                         [
-                                          [starting_card2.uploader.games_users.last.users_game_name, starting_card2 ],
-                                          [starting_card2.child_card.uploader.games_users.last.users_game_name, starting_card2.child_card ],
-                                          [starting_card2.child_card.child_card.uploader.games_users.last.users_game_name, starting_card2.child_card.child_card ]
-                                        ],                                        [
-                                          [starting_card3.uploader.games_users.last.users_game_name, starting_card3 ],
-                                          [starting_card3.child_card.uploader.games_users.last.users_game_name, starting_card3.child_card ],
-                                          [starting_card3.child_card.child_card.uploader.games_users.last.users_game_name, starting_card3.child_card.child_card ]
+                                          [starting_card2.uploader.games_users.last.users_game_name, starting_card2.attributes],
+                                          [starting_card2.child_card.uploader.games_users.last.users_game_name, starting_card2.child_card.attributes],
+                                          [starting_card2.child_card.child_card.uploader.games_users.last.users_game_name, starting_card2.child_card.child_card.attributes ]
+                                        ],
+                                        [
+                                          [starting_card3.uploader.games_users.last.users_game_name, starting_card3.attributes ],
+                                          [starting_card3.child_card.uploader.games_users.last.users_game_name, starting_card3.child_card.attributes ],
+                                          [starting_card3.child_card.child_card.uploader.games_users.last.users_game_name, starting_card3.child_card.child_card.attributes ]
                                         ]
                                       ]
+        @cards.each do |gu|
+          byebug
+          expect(gu[1][0].drawing_url).to eq nil
+          expect(gu[1][1].drawing_url).to be_a String
+          expect(gu[1][2].drawing_url).to eq nil
+        end
       end
     end
 

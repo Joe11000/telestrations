@@ -2,7 +2,7 @@ require 'rails_helper'
 require File.join(Rails.root, 'app', 'services', 'active_storage_url_creater')
 
 RSpec.describe InGameCardUploadsController, type: :controller do
-  include ActiveStorageUrlCreater
+  # include ActiveStorageUrlCreater
 
   describe "GET #new", :r5 do
 
@@ -339,7 +339,7 @@ RSpec.describe InGameCardUploadsController, type: :controller do
                                   'statuses' => [ {
                                      'attention_users' => [@user_2.id],
                                      'previous_card' => {
-                                                       'drawing_url' => get_drawing_url(@gu_3.starting_card.child_card), # can't know the image url before it is created,
+                                                       'drawing_url' => @gu_3.starting_card.child_card.get_drawing_url, # can't know the image url before it is created,
                                                        'medium' => 'drawing'
                                                       },
                                      'user_status' => 'working_on_card'
@@ -383,7 +383,7 @@ RSpec.describe InGameCardUploadsController, type: :controller do
                                                 {
                                                   'attention_users' => [@user_3.id],
                                                   'previous_card' => {
-                                                                     'drawing_url' => get_drawing_url( @gu_1.cards[1] ),
+                                                                     'drawing_url' => @gu_1.cards[1].get_drawing_url,
                                                                      'medium' => 'drawing'
                                                                    },
                                                   'user_status' => 'working_on_card'
@@ -431,19 +431,19 @@ RSpec.describe InGameCardUploadsController, type: :controller do
 
             expected_response = {
                                   'statuses' => [
-                                                {
-                                                  'attention_users' => [@user_1.id],
-                                                  'user_status' => 'finished'
-                                                },
-                                                {
-                                                 'attention_users' => [@user_2.id],
-                                                 'previous_card' => {
-                                                                   'drawing_url' => get_drawing_url( Card.get_placeholder_card(@user_2.id, @game).parent_card ),
-                                                                   'medium' => 'drawing'
-                                                                  },
-                                                 'user_status' => 'working_on_card'
-                                                }
-                                              ]
+                                                  {
+                                                    'attention_users' => [@user_1.id],
+                                                    'user_status' => 'finished'
+                                                  },
+                                                  {
+                                                   'attention_users' => [@user_2.id],
+                                                   'previous_card' => {
+                                                                     'drawing_url' => Card.get_placeholder_card(@user_2.id, @game).parent_card.get_drawing_url,
+                                                                     'medium' => 'drawing'
+                                                                    },
+                                                   'user_status' => 'working_on_card'
+                                                  }
+                                                ]
                                 }
             # THIS IS LIKE THIS BECAUSE THE JSON GETS MOVED AROUND WHEN IT GETS TRANSFORMED INTO JSON IN THE CONTROLLER.
             expect(ActionCable.server).to receive(:broadcast).with( "game_#{@game.id}", kind_of(String) ).once
@@ -475,7 +475,7 @@ RSpec.describe InGameCardUploadsController, type: :controller do
                                                 {
                                                   'attention_users' => [@user_3.id],
                                                   'previous_card' => {
-                                                                     'drawing_url' => get_drawing_url( Card.get_placeholder_card(@user_3.id, @game).parent_card ),
+                                                                     'drawing_url' => Card.get_placeholder_card(@user_3.id, @game).parent_card.get_drawing_url,
                                                                      'medium' => 'drawing'
                                                                    },
                                                   'user_status' => 'working_on_card'

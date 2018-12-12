@@ -23,11 +23,7 @@ class Card < ActiveRecord::Base
 
 
   def self.cards_from_finished_games game_ids
-    result = []
-    game_ids.each do |game_id|
-      result << self.cards_from_finished_game(game_id)
-    end
-    result
+    game_ids.map { |game_id| self.cards_from_finished_game(game_id) }
   end
 
     # r5 tested
@@ -42,13 +38,24 @@ class Card < ActiveRecord::Base
       card = gu.starting_card
 
       until card.blank? do
-        gu_set << [ GamesUser.find_by(game_id: game_id, user_id: card.uploader_id).users_game_name, card.attributes ]
+        desired_card_attributes = begin
+          card_attributes = card.attributes
+
+          if card.drawing?
+            card_attributes.merge!({ 'drawing_url' => card.get_drawing_url })
+          end
+
+          card_attributes
+
+        rescue
+          card.attributes
+        end
+
+        gu_set << [ GamesUser.find_by(game_id: game_id, user_id: card.uploader_id).users_game_name, desired_card_attributes ]
         card = card.child_card
       end
-
        result << gu_set
     end
-
     result
   end
 
@@ -60,5 +67,15 @@ class Card < ActiveRecord::Base
     result = Card.where(placeholder: true, uploader_id: current_user_id, starting_games_user_id: game.games_users.ids).order(id: :asc).try(:first)
 
     return result || nil
+  end
+
+
+  include Rails.application.routes.url_helpers
+  def get_drawing_url
+    unless (drawing? && drawing.attached?)
+      raise 'Card must be a drawing with an image attached'
+    end
+
+    return rails_blob_path(drawing, disposition: 'attachment', only_path: true)
   end
 end
