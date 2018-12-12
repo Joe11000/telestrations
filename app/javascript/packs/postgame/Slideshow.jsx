@@ -5,28 +5,27 @@ import PropTypes from 'prop-types'
 export default class Slideshow extends React.Component {
 
 
-
   render() {
     debugger
-    const that_props = this.props;
-
+    // const that_props = this.props;
+    that_key_preface = this.props.key_preface;
     return (
-      <div className='slideshow'>
+      <div className='carousel'>
       {
         this.props.deck.forEach((element, index) => {
-          <div id='carousel_id' className='carousel slide' data-ride='carousel' data-interval={false}>
-            <div className='carousel-inner' role='listbox'>
-              <div className='item'>
-                {that_props.deck}
-              </div>
+
+          return(
+            <div className='item' key={`${that_key_preface}-${index}`}>
+                {`${that_key_preface}-${index}`}
             </div>
-          </div>
+          )
         })
       }
       </div>
     )
   }
 }
+
 
 
 
