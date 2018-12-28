@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types'
 import $ from 'jquery'
 // import axios from 'axios'
+import { Card, CardHeader, CardTitle, CardBody } from 'reactstrap';
+import { Nav, NavItem, NavLink } from 'reactstrap';
 
 import OutOfGameCardUploadTab from './TabBody/OutOfGameCardUploadTab'
 import PostGameTab from './TabBody/PostGameTab'
@@ -67,8 +69,8 @@ class Postgame extends React.Component {
   }
 
   render() {
-    let nav_link__postgametab__classes = 'nav-link border-white bg-transparent text-white' + (this.state.tab_selected == 'PostGameTab' ? ' active' : '')
-    let nav_link__outofgametab__classes = 'nav-link border-white text-white' + (this.state.tab_selected == 'OutOfGameCardUploadTab'  ? ' active' : '')
+    let nav_link__postgametab__classes = 'border-white bg-transparent text-white' + (this.state.tab_selected == 'PostGameTab' ? ' active' : '')
+    let nav_link__outofgametab__classes = 'border-white text-white' + (this.state.tab_selected == 'OutOfGameCardUploadTab'  ? ' active' : '')
 
     let card_body_html;
     switch(this.state.tab_selected) {
@@ -92,23 +94,31 @@ class Postgame extends React.Component {
       <div data-id='postgame-component'>
         <div className='row'>
           <div className='col-12 col-sm-10 offset-sm-1 col-md-8 offset-sm-2 col-lg-6 offset-lg-3 '>
-            <div className='card text-center bg-dark border-primary'>
-              <div className='card-header'>
-                <div className='nav nav-tabs card-header-tabs'>
-                  <li className="nav-item" >
-                    <a className={nav_link__postgametab__classes} onClick={this.retrieveCardsForPostgame} href='#' >Post Games</a>
-                  </li>
+            <Card className='text-center bg-dark border-primary'>
+              <CardHeader>
+                <div>
 
-                  <li className="nav-item">
-                    <a className={nav_link__outofgametab__classes} onClick={this.retrieveOutOfGameCards} href='#'>Out of game card uploads</a>
-                  </li>
+                <Nav vertical={false} tabs className='card-header-tabs'>
+                  <NavItem>
+                    <NavLink className={nav_link__postgametab__classes}  href='#' >
+                      Post Games
+                    </NavLink>
+                  </NavItem>
+                  <NavItem>
+                    <NavLink className={nav_link__outofgametab__classes} 
+                             onClick={this.retrieveOutOfGameCards} 
+                             href='#'>
+                      Out of game card uploads
+                    </NavLink>
+                  </NavItem>
+                </Nav>
                 </div>
-              </div>
+              </CardHeader>
 
-              <div className='card-body'>
+              <CardBody>
                 {card_body_html}
-              </div>
-            </div>
+              </CardBody>
+            </Card>
           </div>
         </div>
       </div>
