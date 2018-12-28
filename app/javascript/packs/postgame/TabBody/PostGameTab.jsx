@@ -4,7 +4,7 @@ import GameSelector from '../GameSelector'
 import SlideshowList from '../SlideshowList'
 import Slideshow from '../Slideshow'
 import $ from 'jquery'
-
+import { CardTitle } from 'reactstrap'
 
 export default class PostGameTab extends React.Component {
   constructor(props){
@@ -18,7 +18,7 @@ export default class PostGameTab extends React.Component {
         { !!this.props.all_postgames_of__current_user &&
           !!this.props.current_postgame_id &&
           <div>
-            <h3 className='card-title'>Post Game Results</h3>
+            <CardTitle>Post Game Results</CardTitle>
             <GameSelector all_postgames_of__current_user={this.props.all_postgames_of__current_user}
                           current_postgame_id={this.props.current_postgame_id}
                           retrieveCardsForPostgame={this.props.retrieveCardsForPostgame }
