@@ -102,8 +102,9 @@ class Slideshow extends Component {
           onExiting={this.onExiting}
           onExited={this.onExited}
           key={items.src}
-        >
-          <img src={items.src} alt={items.altText} />
+          >
+          <img className="d-block w-100" src={item.src} alt={item.altText} />
+          
           <CarouselCaption captionText={items.caption} captionHeader={items.caption} />
         </CarouselItem>
       );
