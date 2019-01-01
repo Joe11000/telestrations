@@ -96,7 +96,7 @@ class Postgame extends React.Component {
           <div className='col-12 col-sm-10 offset-sm-1 col-md-8 offset-sm-2 col-lg-6 offset-lg-3 '>
             <Card className='text-center bg-dark border-primary'>
               <CardHeader>
-                <div>
+                {/* <div> */}
 
                 <Nav vertical={false} tabs className='card-header-tabs'>
                   <NavItem>
@@ -112,7 +112,7 @@ class Postgame extends React.Component {
                     </NavLink>
                   </NavItem>
                 </Nav>
-                </div>
+                {/* </div> */}
               </CardHeader>
 
               <CardBody>

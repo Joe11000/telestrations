@@ -2,6 +2,7 @@ import React from 'react'
 import {shallow} from 'enzyme'
 import PostGameTab from 'packs/postgame/TabBody/PostGameTab'
 import {render, fireEvent} from 'react-testing-library'
+import {CardTitle } from 'reactstrap'
 
 import enzymeSerializer from 'enzyme-to-json/serializer'
 expect.addSnapshotSerializer(enzymeSerializer)
@@ -36,9 +37,10 @@ describe('PostGameTab Component', () => {
                    }
 
       const postgame_tab = shallow(<PostGameTab {...props} />)
-
-      expect(postgame_tab.find('.card-title').text()).toEqual('Post Game Results')
+      
+      
+      expect(postgame_tab.find('CardTitle').text()).toEqual('Post Game Results');
       expect(postgame_tab.find('GameSelector').length).toEqual(1);
-      expect(postgame_tab.find('SlideshowList').length).toEqual(1)
+      expect(postgame_tab.find('SlideshowList').length).toEqual(1);
   })
 });
