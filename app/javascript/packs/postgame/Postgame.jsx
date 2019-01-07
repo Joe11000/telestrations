@@ -34,8 +34,9 @@ class Postgame extends React.Component {
   // tab_selected (undefined||'PostGameTab'||'OutOfGameCardUploadTab')
   retrieveCardsForPostgame(id) {
     var that = this;
-
+    debugger
     $.getJSON(`/games/${id}`, function(_response) {
+      debugger
       let _current_postgame_id;
       if(id == -1) {
        _current_postgame_id = _response.all_postgames_of__current_user[_response.all_postgames_of__current_user.length - 1].id;
