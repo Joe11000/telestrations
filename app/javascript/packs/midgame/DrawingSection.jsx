@@ -39,7 +39,6 @@ export default class DrawingSection extends React.Component {
 
     if(!this.drawingHasBeenSelected){
       this.disableButton();
-      debugger
       var data = new FormData(e.target)
 
       let req = new XMLHttpRequest()
@@ -159,7 +158,6 @@ export default class DrawingSection extends React.Component {
 
 DrawingSection.propTypes = {
   previous_card: function(props, propName, componentName){
-    debugger
   },
 
   // PropTypes.oneOf([ undefined, PropTypes.object ]),

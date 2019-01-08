@@ -7,7 +7,6 @@ import mock_games_index_request from '../mock_games_index_request';
 describe('SlideshowList component', () => {
   test('renders', () => {
     const props = mock_games_index_request
-    debugger
     const postgame = shallow(<SlideshowList {...props} />)
 
     expect( postgame.contains('.card') ).toBeDefined();
