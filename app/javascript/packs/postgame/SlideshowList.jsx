@@ -24,9 +24,9 @@ export default class SlideshowList extends React.Component {
       </ListGroup>
     )
   }
-}
 
+}
 SlideshowList.propTypes = {
-  arr_of_postgame_card_set: PropTypes.object
+  arr_of_postgame_card_set: PropTypes.array
 }
 
