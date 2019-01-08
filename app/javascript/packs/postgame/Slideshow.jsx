@@ -7,9 +7,6 @@ import {
   CarouselCaption
 } from 'reactstrap';
 
-const items = [
-];
-
 class Slideshow extends Component {
   constructor(props) {
     super(props);
@@ -27,6 +24,7 @@ class Slideshow extends Component {
   }
 
   acquireCardInfoForCarousel(deck) {
+    debugger
     return deck.map((card_info, index) => {
       if(card_info[1].medium === 'description'){
         return({
