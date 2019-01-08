@@ -1,4 +1,4 @@
-const mock_games_index_request = {
+module.exports = {
   'decks': [
              [
                [
@@ -161,5 +161,3 @@ const mock_games_index_request = {
              ]
            ]
 }
-
-export default mock_games_index_request;
