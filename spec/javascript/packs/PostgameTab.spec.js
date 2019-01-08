@@ -8,7 +8,7 @@ import enzymeSerializer from 'enzyme-to-json/serializer'
 expect.addSnapshotSerializer(enzymeSerializer)
 
 describe('PostGameTab Component', () => {
-  test('renders correctly', () => {
+  it('renders correctly', () => {
       let game_1 = {'id': 11, 'created_at_strftime': 'Mon Nov 1, 2018'}
       let game_2 = {'id': 22, 'created_at_strftime': 'Tues Nov 2, 2018'}
       let game_3 = {'id': 33, 'created_at_strftime': 'Wed Nov 3, 2018'}

@@ -18,7 +18,7 @@ class Postgame extends React.Component {
                    'arr_of_postgame_card_set': null,
                    'current_user_info': null,
                    'current_postgame_id': null,
-                   'tab_selected': undefined, // tab_selected (undefined||'PostGameTab'||'OutOfGameCardUploadTab')
+                   'tab_selected': undefined, // tab_selected (undefined||'PostGameTab'||'OutOfGameCardUploadTab'),
                  }
 
     this.retrieveCardsForPostgame = this.retrieveCardsForPostgame.bind(this);

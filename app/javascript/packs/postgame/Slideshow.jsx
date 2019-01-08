@@ -13,12 +13,10 @@ const items = [
 class Slideshow extends Component {
   constructor(props) {
     super(props);
-    debugger
     this.next = this.next.bind(this);
     this.previous = this.previous.bind(this);
     this.goToIndex = this.goToIndex.bind(this);
-    this.onExiting = this.onExiting.bind(this);
-    this.onExited = this.onExited.bind(this);
+    debugger
     this.acquireCardInfoForCarousel = this.acquireCardInfoForCarousel.bind(this);
 
     const _carousel_card_info = this.acquireCardInfoForCarousel(this.props.deck)
@@ -50,14 +48,6 @@ class Slideshow extends Component {
     })
   }
 
-  onExiting() {
-    this.animating = true;
-  }
-
-  onExited() {
-    this.animating = false;
-  }
-
   next() {
     if (this.animating) return;
     const nextIndex = this.state.activeIndex === this.state.carousel_card_info.length - 1 ? 0 : this.state.activeIndex + 1;
@@ -81,8 +71,6 @@ class Slideshow extends Component {
     const slides = this.state.carousel_card_info.map((item, slide_index) => {
       return (
           <CarouselItem
-            onExiting={this.onExiting}
-            onExited={this.onExited}
             key={ `${this.props.list_item_index}_${slide_index}_${item.src}` }
             >
             <div className='bg-dark' style={{"height": '300px'}} >
@@ -104,6 +92,7 @@ class Slideshow extends Component {
         activeIndex={activeIndex}
         next={this.next}
         previous={this.previous}
+        interval={false}
       >
         <CarouselIndicators items={this.state.carousel_card_info} activeIndex={activeIndex} onClickHandler={this.goToIndex} />
         {slides}

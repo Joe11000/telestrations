@@ -5,7 +5,7 @@ import SlideshowList from 'packs/postgame/SlideshowList';
 import mock_games_index_request from '../mock_games_index_request';
 
 describe('SlideshowList component', () => {
-  it('renders', () => {
+  test('renders', () => {
     const props = mock_games_index_request
     debugger
     const postgame = shallow(<SlideshowList {...props} />)

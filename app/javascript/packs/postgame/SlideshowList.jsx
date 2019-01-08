@@ -7,7 +7,6 @@ import { ListGroup, ListGroupItem } from 'reactstrap';
 // import LoadingIcon from 'images/loading_icon.gif'
 
 export default class SlideshowList extends React.Component {
-
   render() {
     var that_props = this.props;
 
@@ -25,5 +24,9 @@ export default class SlideshowList extends React.Component {
       </ListGroup>
     )
   }
+}
+
+SlideshowList.propTypes = {
+  arr_of_postgame_card_set: PropTypes.object
 }
 
