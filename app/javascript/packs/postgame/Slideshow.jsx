@@ -15,7 +15,6 @@ import {
   CardImg,
 } from 'reactstrap';
 
-import MediaQuery from 'react-responsive';
 
 class Slideshow extends Component {
   constructor(props) {
@@ -90,16 +89,14 @@ class Slideshow extends Component {
               
               <CardBody style={{'display': 'flex',  justifyContent: 'center', alignItems: 'center'}}>
                 <div style={{flex: 1}}>
-                  <div >
-                    <MediaQuery query="(max-device-width: 576px)">
-                        <p className='h3'>{item.altText}</p>
-                        <p className="h5">{item.caption}</p>
-                    </MediaQuery>
+                  <div className='d-xs-none'>
+                    <p className='h3'>{item.altText}</p>
+                    <p className="h5">{item.caption}</p>
+                  </div>
 
-                    <MediaQuery query="(min-device-width: 577px)">
-                        <p className='h4'>{item.altText}</p>
-                        <p className="h6">{item.caption}</p>
-                    </MediaQuery>
+                  <div className='d-sm-none'>
+                    <p className='h4'>{item.altText}</p>
+                    <p className="h6">{item.caption}</p>
                   </div>
                 </div>
               </CardBody>
