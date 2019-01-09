@@ -58,7 +58,7 @@ class GamesController
 
     def initialize current_user:, game: nil
       @current_user = current_user
-      @game = current_user.games.postgame.find(game.id) # make sure game is attached to user
+      @game = game
     end
 
     def result_to_json
@@ -67,14 +67,14 @@ class GamesController
 
     private
 
-
-
       def arr_of_postgame_card_set
         Card.cards_from_finished_game(game.id)
       end
 
 
       def all_postgames_of__current_user
+        byebug
+
         current_user.games.postgame.map do |game|
           result = game.slice(:id)
           result.merge!( { 'created_at_strftime' => game.created_at.strftime('%a %b %e, %Y') } )
