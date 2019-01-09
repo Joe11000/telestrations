@@ -7,6 +7,16 @@ import {
   CarouselCaption
 } from 'reactstrap';
 
+import {
+  Card,
+  CardText,
+  CardBody, 
+  CardTitle, 
+  CardImg,
+} from 'reactstrap';
+
+import MediaQuery from 'react-responsive';
+
 class Slideshow extends Component {
   constructor(props) {
     super(props);
@@ -67,18 +77,35 @@ class Slideshow extends Component {
     const { activeIndex } = this.state;
     
     const slides = this.state.carousel_card_info.map((item, slide_index) => {
+      debugger
       return (
           <CarouselItem
             key={ `${this.props.list_item_index}_${slide_index}_${item.src}` }
             >
-            <div className='bg-dark' style={{"height": '300px'}} >
+            <Card className='bg-dark border-primary m-auto' style={{"height": '300px'}}>
               {
                 item.src && 
-                <img className="d-block mx-auto h-100" src={item.src} alt={item.altText} /> 
+                <CardImg top className="d-block h-100" src={item.src} alt={item.altText}></CardImg>    
               }
-            </div>
+              
+              <CardBody style={{'display': 'flex',  justifyContent: 'center', alignItems: 'center'}}>
+                <div style={{flex: 1}}>
+                  <div >
+                    <MediaQuery query="(max-device-width: 576px)">
+                        <p className='h3'>{item.altText}</p>
+                        <p className="h5">{item.caption}</p>
+                    </MediaQuery>
 
-            <CarouselCaption className="text-danger" captionText={item.caption} captionHeader={item.caption}  />
+                    <MediaQuery query="(min-device-width: 577px)">
+                        <p className='h4'>{item.altText}</p>
+                        <p className="h6">{item.caption}</p>
+                    </MediaQuery>
+                  </div>
+                </div>
+              </CardBody>
+            </Card>
+
+            {/* <CarouselCaption className="text-danger" captionText={item.caption} captionHeader={item.caption} className='d-block' /> */}
           </CarouselItem>
       );
     });

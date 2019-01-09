@@ -92,7 +92,7 @@ class Postgame extends React.Component {
     return (
       <div data-id='postgame-component'>
         <div className='row'>
-          <div className='col-12 col-sm-10 offset-sm-1 col-md-8 offset-sm-2 col-lg-6 offset-lg-3 '>
+          <div className='col-12 col-sm-10 offset-sm-1 col-md-8 offset-md-2 col-lg-6 offset-lg-3 '>
             <Card className='text-center bg-dark border-primary'>
               <CardHeader>
                 {/* <div> */}
