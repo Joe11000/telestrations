@@ -7,10 +7,10 @@ var mock_games_index_request = require('../mock_games_index_request')
 describe('Slideshow component', () => {
   describe('smoke test', () => {
     it('a carousel is on the screen', () => {
-      const props = mock_games_index_request[0];
+      const props = mock_games_index_request.decks[0];
       
       debugger;
-      const postgame = shallow(<Slideshow {...props} />)
+      const postgame = shallow(<Slideshow deck={...props} />)
       // expect( postgame.contains('.card-header .nav-item') ).to.have.lengthOf(2);
       // expect( postgame.contains('.card-header .nav-item:eq(1)') ).to.eq.lengthOf(2);
       expect( postgame.children(CarouselItem) ).to.have.lengthOf(props.length);

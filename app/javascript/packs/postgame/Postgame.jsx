@@ -43,7 +43,7 @@ class Postgame extends React.Component {
         _current_postgame_id = id;
       }
       let _edited_response = Object.assign(_response, {tab_selected: 'PostGameTab', 'current_postgame_id': _current_postgame_id} );
-
+      debugger
       that.setState(_edited_response);
     });
   }

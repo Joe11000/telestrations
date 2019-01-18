@@ -9,7 +9,7 @@ import { ListGroup, ListGroupItem } from 'reactstrap';
 export default class SlideshowList extends React.Component {
   render() {
     var that_props = this.props;
-
+    debugger
     return (
       <ListGroup flush>
         {
