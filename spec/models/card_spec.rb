@@ -122,7 +122,7 @@ RSpec.describe Card, type: :model do
         @cards = Card.cards_from_finished_game @game.id
       end
 
-      it 'returns correct ordering of cards', :r5 do
+      it 'returns correct ordering of cards', :r5, focus: true do
         gu1, gu2, gu3 = @game.games_users
         starting_card1, starting_card2, starting_card3 = @game.games_users.map(&:starting_card)
 

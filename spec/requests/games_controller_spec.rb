@@ -61,11 +61,8 @@ RSpec.describe GamesController, :type => :request do
         get new_game_path
       end
 
-    xcontext 'user can see' do
 
-    end
-
-    xcontext 'cant see but needs to be in the html' do
+    fcontext 'cant see but needs to be in the html' do
       it 'correct http status' do
         game = FactoryBot.create(:midgame_with_no_moves, callback_wanted: :midgame_with_no_moves)
         @current_user = game.users.first
@@ -75,17 +72,8 @@ RSpec.describe GamesController, :type => :request do
 
         expect(response).to have_http_status :ok
       end
-
-      it 'keeps track of user so the page knows who the game_channel can find out who the user is on the first ' do
-        expect(response.body).to match /data-user-id=\"#{@current_user.id}\"/
-      end
-      it 'knows who the previous card is ', :r5_wip do
-        expect(response.body).to match /data-prev-card-id=\"\"/
-      end
     end
 
-    xcontext 'user can see' do
-    end
 
 
 

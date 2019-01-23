@@ -22,7 +22,7 @@ class Slideshow extends Component {
     this.next = this.next.bind(this);
     this.previous = this.previous.bind(this);
     this.goToIndex = this.goToIndex.bind(this);
-    debugger
+    
     this.acquireCardInfoForCarousel = this.acquireCardInfoForCarousel.bind(this);
 
     const _carousel_card_info = this.acquireCardInfoForCarousel(this.props.deck)
@@ -33,7 +33,6 @@ class Slideshow extends Component {
   }
 
   acquireCardInfoForCarousel(deck) {
-    debugger
     return deck.map((card_info, index) => {
       if(card_info[1].medium === 'description'){
         return({
@@ -73,18 +72,18 @@ class Slideshow extends Component {
   }
 
   render() {
-    const { activeIndex } = this.state;
-    
-    const slides = this.state.carousel_card_info.map((item, slide_index) => {
-      debugger
+    const { activeIndex, carousel_card_info } = this.state;
+    const { deck, list_item_index } = this.props;
+
+    const slides = carousel_card_info.map(function(item, slide_index) {
+      const conjoined_card_ids = deck.map(card => card[1].id).join('-')
+      
       return (
-          <CarouselItem
-            key={ `${this.props.list_item_index}_${slide_index}_${item.src}` }
-            >
+          <CarouselItem key={ conjoined_card_ids } >
             <Card className='bg-dark border-primary m-auto' style={{"height": '300px'}}>
               {
-                item.src && 
-                <CardImg top className="d-block h-100" src={item.src} alt={item.altText}></CardImg>    
+                item.src ? <CardImg top className="d-block h-100" src={item.src} alt={item.altText}></CardImg>
+                          : undefined
               }
               
               <CardBody style={{'display': 'flex',  justifyContent: 'center', alignItems: 'center'}}>
@@ -101,11 +100,9 @@ class Slideshow extends Component {
                 </div>
               </CardBody>
             </Card>
-
-            {/* <CarouselCaption className="text-danger" captionText={item.caption} captionHeader={item.caption} className='d-block' /> */}
           </CarouselItem>
       );
-    });
+    }.bind(this))
 
     return (
       
@@ -116,7 +113,7 @@ class Slideshow extends Component {
         previous={this.previous}
         interval={false}
       >
-        <CarouselIndicators items={this.state.carousel_card_info} activeIndex={activeIndex} onClickHandler={this.goToIndex} />
+        <CarouselIndicators items={carousel_card_info} activeIndex={activeIndex} onClickHandler={this.goToIndex} />
         {slides}
         <CarouselControl direction="prev" directionText="Previous" onClickHandler={this.previous} />
         <CarouselControl direction="next" directionText="Next" onClickHandler={this.next} />

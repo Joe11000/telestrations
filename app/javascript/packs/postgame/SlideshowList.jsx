@@ -8,7 +8,7 @@ import { ListGroup, ListGroupItem } from 'reactstrap';
 
 export default class SlideshowList extends React.Component {
   render() {
-    var that_props = this.props;
+    var current_user_info = this.props.current_user_info;
     debugger
     return (
       <ListGroup flush>
@@ -16,7 +16,7 @@ export default class SlideshowList extends React.Component {
           this.props.arr_of_postgame_card_set && this.props.arr_of_postgame_card_set.map(function(deck, list_item_index){
             return (
               <ListGroupItem  className="list-group-item" key={`list-group-item-${list_item_index}`}>
-                <Slideshow deck={deck} current_user_info={that_props.current_user_info} list_item_index={`slideshow-${list_item_index}`} />
+                <Slideshow deck={deck} current_user_info={current_user_info} list_item_index={`slideshow-${list_item_index}`} />
               </ListGroupItem>
             )
           })
