@@ -495,7 +495,6 @@ DEPENDENCIES
   token_phrase
   travis
   turbolinks
-  tzinfo-data
   uglifier
   vcr (< 4.0)
   web-console
