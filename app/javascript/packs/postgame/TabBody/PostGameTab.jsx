@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import GameSelector from '../GameSelector'
 import SlideshowList from '../SlideshowList'
 import Slideshow from '../Slideshow'
-import $ from 'jquery'
+// import $ from 'jquery'
 import { CardTitle } from 'reactstrap'
 
 export default class PostGameTab extends React.Component {

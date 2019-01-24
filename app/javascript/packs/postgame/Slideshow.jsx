@@ -4,7 +4,7 @@ import {
   CarouselItem,
   CarouselControl,
   CarouselIndicators,
-  CarouselCaption
+  // CarouselCaption
 } from 'reactstrap';
 
 import {
@@ -24,11 +24,8 @@ class Slideshow extends Component {
     this.goToIndex = this.goToIndex.bind(this);
     
     this.acquireCardInfoForCarousel = this.acquireCardInfoForCarousel.bind(this);
-
-    const _carousel_card_info = this.acquireCardInfoForCarousel(this.props.deck)
     this.state = {
-                   activeIndex: 0,
-                   carousel_card_info: _carousel_card_info,
+                   activeIndex: 0
                  };
   }
 
@@ -39,30 +36,33 @@ class Slideshow extends Component {
                 src: '',
                 altText: card_info[1].description_text,
                 caption: `By: ${card_info[0]}`
-              })
+              });
       }
       else if (card_info[1].medium === 'drawing') {
       return({
                 src: card_info[1].drawing_url,
                 altText: '',
                 caption: `By: ${card_info[0]}`
-            })
+            });
       }
       else {
         throw new Error('Card must be a drawing or a description');
       }
-    })
+    });
   }
 
   next() {
+    const num_of_cards = this.props.deck.length;
     if (this.animating) return;
-    const nextIndex = this.state.activeIndex === this.state.carousel_card_info.length - 1 ? 0 : this.state.activeIndex + 1;
+    const nextIndex = this.state.activeIndex === num_of_cards - 1 ? 0 : this.state.activeIndex + 1;
     this.setState({ activeIndex: nextIndex });
   }
 
   previous() {
+    const num_of_cards = this.props.deck.length;
+
     if (this.animating) return;
-    const nextIndex = this.state.activeIndex === 0 ? this.state.carousel_card_info.length - 1 : this.state.activeIndex - 1;
+    const nextIndex = this.state.activeIndex === 0 ? num_of_cards - 1 : this.state.activeIndex - 1;
     this.setState({ activeIndex: nextIndex });
   }
 
@@ -72,17 +72,19 @@ class Slideshow extends Component {
   }
 
   render() {
-    const { activeIndex, carousel_card_info } = this.state;
     const { deck, list_item_index } = this.props;
+    const { activeIndex } = this.state;
+
+    const carousel_card_info = this.acquireCardInfoForCarousel(deck);
 
     const slides = carousel_card_info.map(function(item, slide_index) {
-      const conjoined_card_ids = deck.map(card => card[1].id).join('-')
+      const conjoined_card_id = deck[slide_index][1].id;
       
       return (
-          <CarouselItem key={ conjoined_card_ids } >
+          <CarouselItem key={ `carousel-item-${conjoined_card_id}` } >
             <Card className='bg-dark border-primary m-auto' style={{"height": '300px'}}>
               {
-                item.src ? <CardImg top className="d-block h-100" src={item.src} alt={item.altText}></CardImg>
+                item.src ? <CardImg top className="d-block h-100" src={item.src} alt={item.altText } />
                           : undefined
               }
               
