@@ -1,13 +1,13 @@
-import React, { Component } from 'react'
-import ReactDOM from 'react-dom'
-import PropTypes from 'prop-types'
-import $ from 'jquery'
-// import axios from 'axios'
+import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
+import PropTypes from 'prop-types';
+import $ from 'jquery';
+// import axios from 'axios';
 import { Card, CardHeader, CardTitle, CardBody } from 'reactstrap';
 import { Nav, NavItem, NavLink } from 'reactstrap';
 
-import OutOfGameCardUploadTab from './TabBody/OutOfGameCardUploadTab'
-import PostGameTab from './TabBody/PostGameTab'
+import OutOfGameCardUploadTab from './TabBody/OutOfGameCardUploadTab';;
+import PostGameTab from './TabBody/PostGameTab';
 
 class Postgame extends React.Component {
   constructor(props) {
@@ -19,7 +19,7 @@ class Postgame extends React.Component {
                    'current_user_info': null,
                    'current_postgame_id': null,
                    'tab_selected': undefined, // tab_selected (undefined||'PostGameTab'||'OutOfGameCardUploadTab'),
-                 }
+                 };
 
     this.retrieveCardsForPostgame = this.retrieveCardsForPostgame.bind(this);
     this.retrieveOutOfGameCards = this.retrieveOutOfGameCards.bind(this);
@@ -35,7 +35,7 @@ class Postgame extends React.Component {
   retrieveCardsForPostgame(id) {
     var that = this;
     $.getJSON(`/games/${id}`, function(_response) {
-      debugger
+      // debugger
       let _current_postgame_id;
       if(id == -1) {
        _current_postgame_id = _response.all_postgames_of__current_user[_response.all_postgames_of__current_user.length - 1].id;
@@ -43,7 +43,7 @@ class Postgame extends React.Component {
         _current_postgame_id = id;
       }
       let _edited_response = Object.assign(_response, {tab_selected: 'PostGameTab', 'current_postgame_id': _current_postgame_id} );
-      debugger
+      // debugger
       that.setState(_edited_response);
     });
   }
@@ -71,32 +71,36 @@ class Postgame extends React.Component {
     let nav_link__postgametab__classes = 'border-white bg-transparent text-white' + (this.state.tab_selected == 'PostGameTab' ? ' active' : '')
     let nav_link__outofgametab__classes = 'border-white text-white' + (this.state.tab_selected == 'OutOfGameCardUploadTab'  ? ' active' : '')
 
+    const { all_postgames_of__current_user, 
+            arr_of_postgame_card_set, 
+            current_postgame_id, 
+            current_user_info, 
+          } = this.state;
+          
     let card_body_html;
     switch(this.state.tab_selected) {
       case 'PostGameTab':
       case undefined:
-        card_body_html = <PostGameTab all_postgames_of__current_user={this.state.all_postgames_of__current_user}
-                                      arr_of_postgame_card_set={this.state.arr_of_postgame_card_set}
-                                      current_postgame_id={this.state.current_postgame_id}
-                                      current_user_info={this.state.current_user_info}
+        card_body_html = <PostGameTab all_postgames_of__current_user={all_postgames_of__current_user}
+                                      arr_of_postgame_card_set={arr_of_postgame_card_set}
+                                      current_postgame_id={current_postgame_id}
+                                      current_user_info={current_user_info}
                                       retrieveCardsForPostgame={this.retrieveCardsForPostgame}
                                       selectTab={this.selectTab}
-                                      />;
+                                      />
         break;
 
       case 'OutOfGameCardUploadTab':
-        card_body_html = <OutOfGameCardUploadTab selectTab={this.selectTab} />;
+        card_body_html = <OutOfGameCardUploadTab selectTab={this.selectTab} />
         break;
     }
 
     return (
       <div data-id='postgame-component'>
         <div className='row'>
-          <div className='col-12 col-sm-10 offset-sm-1 col-md-8 offset-md-2 col-lg-6 offset-lg-3 '>
+          <div className='col-12 col-sm-10 offset-sm-1 col-md-8 offset-md-2 col-lg-6 offset-lg-3'>
             <Card className='text-center bg-dark border-primary'>
               <CardHeader>
-                {/* <div> */}
-
                 <Nav vertical={false} tabs className='card-header-tabs'>
                   <NavItem>
                     <NavLink className={nav_link__postgametab__classes}  href='#' >
@@ -111,7 +115,6 @@ class Postgame extends React.Component {
                     </NavLink>
                   </NavItem>
                 </Nav>
-                {/* </div> */}
               </CardHeader>
 
               <CardBody>
