@@ -75,7 +75,7 @@ class GamesController
       def all_postgames_of__current_user
         current_user.games.postgame.map do |game|
           result = game.slice(:id)
-          result.merge!( { 'created_at_strftime' => game.created_at.as_json } )
+          result.merge!( { 'created_at_strftime' => game.created_at.strftime('%a %b %e, %Y') } )
         end
       end
 

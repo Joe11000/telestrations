@@ -824,62 +824,44 @@ require 'rails_helper'
 require File.join(Rails.root, 'app', 'services', 'active_storage_url_creater' )
 require File.join(Rails.root, 'app', 'controllers', 'games_controller', 'assemble_games_component_params' )
 
-RSpec.describe GamesController::AssemblePostgamesComponentParams, :r5_wip, :clean_as_group do
+RSpec.describe GamesController::AssemblePostgamesComponentParams, :r5, :clean_as_group do
   let!(:unassociated_pregame) { FactoryBot.create(:pregame, callback_wanted: :pregame) }
   let!(:unassociated_midgame) { FactoryBot.create(:midgame, callback_wanted: :midgame, round: 3, move: 2) }
   let!(:unassociated_postgame) { FactoryBot.create(:postgame, callback_wanted: :postgame) }
 
   # ONLY TESTING arguments being passed from controller to view in
   context 'Get /games arguments passed into the view' do 
-    context 'returns json string of component params for the user\'s last postgame' do
-      # include ActiveStorageUrlCreater
-
-      def arr_of_postgame_card_set game
-         Card.cards_from_finished_game(game.id) 
-      end
-
-      def all_postgames_of__current_user current_user
-        current_user.games.postgame.map do |game|
-          result = game.slice(:id)
-          result.merge!( { 'created_at_strftime' => game.created_at.as_json} )
-        end 
-      end
-
-      def current_user_info current_user
-        current_user.slice(:id, :name)
-      end
-
-      it 'is returns expected re', now: true do
-        earlier_postgame =  FactoryBot.create(:postgame, callback_wanted: :postgame)
-        current_user = earlier_postgame.users.first
-        out_of_game_card_upload = FactoryBot.create :drawing, out_of_game_card_upload: true, uploader: current_user
-        current_postgame = FactoryBot.create(:postgame, callback_wanted: :postgame, with_existing_users: [current_user])
-      
-        expected__postgame_component_params = {
-                                                'all_postgames_of__current_user' => all_postgames_of__current_user(current_user),
-                                                'arr_of_postgame_card_set' => arr_of_postgame_card_set(current_postgame), 
-                                                'current_user_info' => current_user_info(current_user)
-                                              }
-    
-        response = GamesController::AssemblePostgamesComponentParams.new(current_user: current_user, game: current_postgame).result_to_json
-        
-        jr = JSON.parse(response) 
-        byebug
-        expect(jr['all_postgames_of__current_user']).to include_json expected__postgame_component_params['all_postgames_of__current_user']
-        expect(jr['arr_of_postgame_card_set']).to include_json expected__postgame_component_params['arr_of_postgame_card_set']
-        expect(jr['current_user_info']).to include_json expected__postgame_component_params['current_user_info']
-
-        
-        expect( jr ).to include_json expected__postgame_component_params
-      end
-
-      xit 'redirects if no postgames' do
-        # expect(response).to redirect_to choose_game_type_page_path
-        # expect(assigns[:postgame_component_params] ).to eq nil
-      end
+    def arr_of_postgame_card_set game
+       Card.cards_from_finished_game(game.id) 
     end
 
-    context 'returns json'
+    def all_postgames_of__current_user current_user
+      current_user.games.postgame.map do |game|
+        result = game.slice(:id)
+        result.merge!( { 'created_at_strftime' => game.created_at.strftime('%a %b %e, %Y') } )
+      end 
+    end
+
+    def current_user_info current_user
+      current_user.slice(:id, :name)
+    end
+
+    it 'returns json string of component params for the user\'s last postgame', :r5 do
+      earlier_postgame =  FactoryBot.create(:postgame, callback_wanted: :postgame)
+      current_user = earlier_postgame.users.first
+      out_of_game_card_upload = FactoryBot.create :drawing, out_of_game_card_upload: true, uploader: current_user
+      current_postgame = FactoryBot.create(:postgame, callback_wanted: :postgame, with_existing_users: [current_user])
+    
+      expected__postgame_component_params = {
+                                              'all_postgames_of__current_user' => all_postgames_of__current_user(current_user),
+                                              'arr_of_postgame_card_set' => arr_of_postgame_card_set(current_postgame), 
+                                              'current_user_info' => current_user_info(current_user)
+                                            }
+  
+      response = GamesController::AssemblePostgamesComponentParams.new(current_user: current_user, game: current_postgame).result_to_json
+      
+      expect( JSON.parse(response) ).to include_json expected__postgame_component_params
+    end
   end
 end
 

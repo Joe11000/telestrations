@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
 
 export default class GameSelector extends React.Component {
   constructor(props){
