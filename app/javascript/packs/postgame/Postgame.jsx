@@ -48,6 +48,7 @@ class Postgame extends React.Component {
 
   retrieveOutOfGameCards(){
     $.getJSON(`/out_of_game_card_uploads_controller/${this.state.current_user_info.id}`, function(response) {
+      debugger
       let edited_response = Object.assign(response, {tab_selected: 'OutOfGameCardUploadTab'} );
       this.setState(edited_response);
     }.bind(this));

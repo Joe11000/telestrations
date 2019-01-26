@@ -14,7 +14,7 @@
       <img src="./assets/0.10.2/loading.gif" alt="loading"/>
     </div>
     <div id="wrapper" style="display:none;">
-      <div class="timestamp">Generated <abbr class="timeago" title="2019-01-26T01:02:39-06:00">2019-01-26T01:02:39-06:00</abbr></div>
+      <div class="timestamp">Generated <abbr class="timeago" title="2019-01-26T03:32:55-06:00">2019-01-26T03:32:55-06:00</abbr></div>
       <ul class="group_tabs"></ul>
 
       <div id="content">
@@ -93,7 +93,7 @@
       <tr>
         <td class="strong"><a href="#b2a17f1d5d9d07bb1c597704a93b14ca97060e49" class="src_link" title="app/controllers/games_controller/assemble_games_component_params.rb">app/controllers/games_controller/assemble_games_component_params.rb</a></td>
         <td class="red strong">63.27 %</td>
-        <td>97</td>
+        <td>98</td>
         <td>49</td>
         <td>31</td>
         <td>18</td>
@@ -2022,145 +2022,151 @@
           <code class="ruby"></code>
         </li>
       
-        <li class="covered" data-hits="1" data-linenumber="74">
-          <span class="hits">1</span>
+        <li class="never" data-hits="" data-linenumber="74">
           
-          <code class="ruby">      def all_postgames_of__current_user</code>
+          
+          <code class="ruby"></code>
         </li>
       
         <li class="covered" data-hits="1" data-linenumber="75">
           <span class="hits">1</span>
           
-          <code class="ruby">        current_user.games.postgame.map do |game|</code>
+          <code class="ruby">      def all_postgames_of__current_user</code>
         </li>
       
-        <li class="covered" data-hits="2" data-linenumber="76">
-          <span class="hits">2</span>
+        <li class="covered" data-hits="1" data-linenumber="76">
+          <span class="hits">1</span>
           
-          <code class="ruby">          result = game.slice(:id)</code>
+          <code class="ruby">        current_user.games.postgame.map do |game|</code>
         </li>
       
         <li class="covered" data-hits="2" data-linenumber="77">
           <span class="hits">2</span>
           
-          <code class="ruby">          result.merge!( { &#39;created_at_strftime&#39; =&gt; game.created_at.strftime(&#39;%a %b %e, %Y&#39;) } )</code>
+          <code class="ruby">          result = game.slice(:id)</code>
         </li>
       
-        <li class="never" data-hits="" data-linenumber="78">
+        <li class="covered" data-hits="2" data-linenumber="78">
+          <span class="hits">2</span>
           
-          
-          <code class="ruby">        end</code>
+          <code class="ruby">          result.merge!( { &#39;created_at_strftime&#39; =&gt; game.created_at.as_json } )</code>
         </li>
       
         <li class="never" data-hits="" data-linenumber="79">
           
           
-          <code class="ruby">      end</code>
+          <code class="ruby">        end</code>
         </li>
       
         <li class="never" data-hits="" data-linenumber="80">
           
           
-          <code class="ruby"></code>
+          <code class="ruby">      end</code>
         </li>
       
-        <li class="covered" data-hits="1" data-linenumber="81">
-          <span class="hits">1</span>
+        <li class="never" data-hits="" data-linenumber="81">
           
-          <code class="ruby">      def current_user_info </code>
+          
+          <code class="ruby"></code>
         </li>
       
         <li class="covered" data-hits="1" data-linenumber="82">
           <span class="hits">1</span>
           
-          <code class="ruby">        current_user.slice(:id, :name)</code>
+          <code class="ruby">      def current_user_info </code>
         </li>
       
-        <li class="never" data-hits="" data-linenumber="83">
+        <li class="covered" data-hits="1" data-linenumber="83">
+          <span class="hits">1</span>
           
-          
-          <code class="ruby">      end</code>
+          <code class="ruby">        current_user.slice(:id, :name)</code>
         </li>
       
         <li class="never" data-hits="" data-linenumber="84">
           
           
-          <code class="ruby"></code>
+          <code class="ruby">      end</code>
         </li>
       
-        <li class="covered" data-hits="1" data-linenumber="85">
-          <span class="hits">1</span>
+        <li class="never" data-hits="" data-linenumber="85">
           
-          <code class="ruby">      def result</code>
+          
+          <code class="ruby"></code>
         </li>
       
         <li class="covered" data-hits="1" data-linenumber="86">
           <span class="hits">1</span>
           
+          <code class="ruby">      def result</code>
+        </li>
+      
+        <li class="covered" data-hits="1" data-linenumber="87">
+          <span class="hits">1</span>
+          
           <code class="ruby">        @postgame_component_params ||= begin</code>
         </li>
       
-        <li class="never" data-hits="" data-linenumber="87">
+        <li class="never" data-hits="" data-linenumber="88">
           
           
           <code class="ruby">          {</code>
         </li>
       
-        <li class="covered" data-hits="1" data-linenumber="88">
+        <li class="covered" data-hits="1" data-linenumber="89">
           <span class="hits">1</span>
           
           <code class="ruby">            all_postgames_of__current_user: all_postgames_of__current_user,</code>
         </li>
       
-        <li class="never" data-hits="" data-linenumber="89">
+        <li class="never" data-hits="" data-linenumber="90">
           
           
           <code class="ruby">            arr_of_postgame_card_set: arr_of_postgame_card_set,</code>
         </li>
       
-        <li class="never" data-hits="" data-linenumber="90">
+        <li class="never" data-hits="" data-linenumber="91">
           
           
           <code class="ruby">            current_user_info: current_user_info</code>
         </li>
       
-        <li class="never" data-hits="" data-linenumber="91">
+        <li class="never" data-hits="" data-linenumber="92">
           
           
           <code class="ruby">          }</code>
         </li>
       
-        <li class="never" data-hits="" data-linenumber="92">
+        <li class="never" data-hits="" data-linenumber="93">
           
           
           <code class="ruby">        end</code>
         </li>
       
-        <li class="never" data-hits="" data-linenumber="93">
+        <li class="never" data-hits="" data-linenumber="94">
           
           
           <code class="ruby"></code>
         </li>
       
-        <li class="covered" data-hits="1" data-linenumber="94">
+        <li class="covered" data-hits="1" data-linenumber="95">
           <span class="hits">1</span>
           
           <code class="ruby">        return @postgame_component_params</code>
         </li>
       
-        <li class="never" data-hits="" data-linenumber="95">
+        <li class="never" data-hits="" data-linenumber="96">
           
           
           <code class="ruby">      end</code>
         </li>
       
-        <li class="never" data-hits="" data-linenumber="96">
+        <li class="never" data-hits="" data-linenumber="97">
           
           
           <code class="ruby">  end</code>
         </li>
       
-        <li class="never" data-hits="" data-linenumber="97">
+        <li class="never" data-hits="" data-linenumber="98">
           
           
           <code class="ruby">end</code>
@@ -16049,7 +16055,7 @@
         <li class="covered" data-hits="2" data-linenumber="844">
           <span class="hits">2</span>
           
-          <code class="ruby">          result.merge!( { &#39;created_at_strftime&#39; =&gt; game.created_at.strftime(&#39;%a %b %e, %Y&#39;) } )</code>
+          <code class="ruby">          result.merge!( { &#39;created_at_strftime&#39; =&gt; game.created_at.as_json} )</code>
         </li>
       
         <li class="never" data-hits="" data-linenumber="845">
