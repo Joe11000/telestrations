@@ -38,7 +38,7 @@ PostGameTab.propTypes = {
   all_postgames_of__current_user: PropTypes.arrayOf(function(propValue, key, componentName, location, propFullName) {
     let _propValueTypesValidator = {
       'id': 'number',
-      'created_at_strftime': 'string'
+      'created_at_timestamp': 'string'
     }
 
     Object.keys(_propValueTypesValidator).forEach(propValueKey => {

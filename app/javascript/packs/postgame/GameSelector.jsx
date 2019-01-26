@@ -1,30 +1,28 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import $ from 'jquery'
+import React from 'react';
+import PropTypes from 'prop-types';
 
 export default class GameSelector extends React.Component {
   handleChangeGameSelector = event => {
     event.preventDefault();
-    let game_id = parseInt(event.target.value)
-    this.props.retrieveCardsForPostgame(game_id)
+    let game_id = parseInt(event.target.value);
+    this.props.retrieveCardsForPostgame(game_id);
   }
 
   render() {
-    var that = this;
     return (
-      <div id='game-selector-container'>
+      <React.Fragment>
         {
           !!this.props.all_postgames_of__current_user &&
           !!this.props.current_postgame_id &&
           <select value={this.props.current_postgame_id} className='custom-select' onChange={this.handleChangeGameSelector}>
             {
               this.props.all_postgames_of__current_user.map(function(game_info, index) {
-                return(<option key={game_info.id} value={game_info.id}>Game {index + 1} - {game_info.created_at_strftime}</option>);
+                return(<option key={game_info.id} value={game_info.id}>Game {index + 1} - {game_info.created_at_timestamp}</option>);
               })
             }
           </select>
         }
-      </div>
+      </React.Fragment>
     )
   }
 }
@@ -35,7 +33,7 @@ GameSelector.propTypes = {
   all_postgames_of__current_user: PropTypes.arrayOf(function(propValue, key, componentName, location, propFullName) {
     let _propValueTypesValidator = {
       'id': 'number',
-      'created_at_strftime': 'string'
+      'created_at_timestamp': 'string'
     }
 
     Object.keys(_propValueTypesValidator).forEach(propValueKey => {

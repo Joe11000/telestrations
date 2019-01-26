@@ -12,7 +12,7 @@ class OutOfGameCardUploadsController
 
     private
       def out_of_game_cards
-        Card.where(out_of_game_card_upload: true, uploader: current_user)
+        Card.drawing.where(out_of_game_card_upload: true, uploader: current_user)
 
         out_of_game_cards = GamesUser.where(user: current_user).last.cards.map do |card|
           pull_info_from card

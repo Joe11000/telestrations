@@ -9,23 +9,23 @@ expect.addSnapshotSerializer(enzymeSerializer)
 describe('GameSelector Component', ()=>{
   describe('sets correct values', ()=>{
     it('onload, default selects last game played', ()=>{
-      let game_1 = {'id': 11, 'created_at_strftime': 'Mon Nov 1, 2018'}
-      let game_2 = {'id': 22, 'created_at_strftime': 'Tues Nov 2, 2018'}
-      let game_3 = {'id': 33, 'created_at_strftime': 'Wed Nov 3, 2018'}
+      let game_1 = {'id': 11, 'created_at_timestamp': 'Mon Nov 1, 2018'}
+      let game_2 = {'id': 22, 'created_at_timestamp': 'Tues Nov 2, 2018'}
+      let game_3 = {'id': 33, 'created_at_timestamp': 'Wed Nov 3, 2018'}
 
       let props = {
                       'all_postgames_of__current_user': [
                                                           {
                                                             'id': game_1.id,
-                                                            'created_at_strftime': game_1.created_at_strftime
+                                                            'created_at_timestamp': game_1.created_at_timestamp
                                                           },
                                                           {
                                                             'id': game_2.id,
-                                                            'created_at_strftime': game_2.created_at_strftime
+                                                            'created_at_timestamp': game_2.created_at_timestamp
                                                           },
                                                           {
                                                             'id': game_3.id,
-                                                            'created_at_strftime': game_3.created_at_strftime
+                                                            'created_at_timestamp': game_3.created_at_timestamp
                                                           }
                                                         ],
 
@@ -39,9 +39,9 @@ describe('GameSelector Component', ()=>{
     });
 
     it('selector onChange calls props.retrieveCardsForPostgame(game_id)', ()=>{
-      let game_1 = {'id': 11, 'created_at_strftime': 'Mon Nov 1, 2018'}
-      let game_2 = {'id': 22, 'created_at_strftime': 'Tues Nov 2, 2018'}
-      let game_3 = {'id': 33, 'created_at_strftime': 'Wed Nov 3, 2018'}
+      let game_1 = {'id': 11, 'created_at_timestamp': 'Mon Nov 1, 2018'}
+      let game_2 = {'id': 22, 'created_at_timestamp': 'Tues Nov 2, 2018'}
+      let game_3 = {'id': 33, 'created_at_timestamp': 'Wed Nov 3, 2018'}
 
       const mockRetrieveCardsForPostgame = jest.fn()
 
@@ -49,15 +49,15 @@ describe('GameSelector Component', ()=>{
                       'all_postgames_of__current_user': [
                                                           {
                                                             'id': game_1.id,
-                                                            'created_at_strftime': game_1.created_at_strftime
+                                                            'created_at_timestamp': game_1.created_at_timestamp
                                                           },
                                                           {
                                                             'id': game_2.id,
-                                                            'created_at_strftime': game_2.created_at_strftime
+                                                            'created_at_timestamp': game_2.created_at_timestamp
                                                           },
                                                           {
                                                             'id': game_3.id,
-                                                            'created_at_strftime': game_3.created_at_strftime
+                                                            'created_at_timestamp': game_3.created_at_timestamp
                                                           }
                                                         ],
 

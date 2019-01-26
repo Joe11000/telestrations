@@ -721,7 +721,7 @@ require 'rails_helper'
 #           # current_user = earlier_postgame.users.first
 #           # current_postgame = FactoryBot.create(:postgame, callback_wanted: :postgame, with_existing_users: [current_user])
 
-#           # out_of_game_cards = GamesUser.where(user: current_user).last.cards.map do |card|
+#           # out_of_game_card_uploads = GamesUser.where(user: current_user).last.cards.map do |card|
 
 #           #   if card.drawing?
 #           #     result = card.slice(:medium, :uploader)
@@ -735,7 +735,7 @@ require 'rails_helper'
 #           # expected__postgame_component_params = {
 
 #           #                                         'current_user' => current_user.slice(:id),
-#           #                                         'out_of_game_cards' => out_of_game_cards,
+#           #                                         'out_of_game_card_uploads' => out_of_game_card_uploads,
 
 #           #                                         # ,'arr_of_postgame_card_set' => arr_of_postgame_card_set,
 #           #                                         'all__current_user__game_info' => current_user.game_ids.sort
@@ -788,7 +788,7 @@ require 'rails_helper'
 #   #         current_user = earlier_postgame.users.first
 #   #         current_postgame = FactoryBot.create(:postgame, callback_wanted: :postgame, with_existing_users: [current_user])
 
-#   #         out_of_game_cards = GamesUser.where(user: current_user).last.cards.map do |card|
+#   #         out_of_game_card_uploads = GamesUser.where(user: current_user).last.cards.map do |card|
 
 #   #           if card.drawing?
 #   #             result = card.slice(:medium, :uploader)
@@ -802,7 +802,7 @@ require 'rails_helper'
 #   #         expected__postgame_component_params = {
 
 #   #                                                 'current_user' => current_user.slice(:id),
-#   #                                                 'out_of_game_cards' => out_of_game_cards,
+#   #                                                 'out_of_game_card_uploads' => out_of_game_card_uploads,
 
 #   #                                                 # ,'arr_of_postgame_card_set' => arr_of_postgame_card_set,
 #   #                                                 'all__current_user__game_info' => current_user.game_ids.sort
@@ -829,55 +829,57 @@ RSpec.describe GamesController::AssemblePostgamesComponentParams, :r5_wip, :clea
   let!(:unassociated_midgame) { FactoryBot.create(:midgame, callback_wanted: :midgame, round: 3, move: 2) }
   let!(:unassociated_postgame) { FactoryBot.create(:postgame, callback_wanted: :postgame) }
 
-  context 'returns json string of component params for the user\'s last postgame' do
-    # include ActiveStorageUrlCreater
+  # ONLY TESTING arguments being passed from controller to view in
+  context 'Get /games arguments passed into the view' do 
+    context 'returns json string of component params for the user\'s last postgame' do
+      # include ActiveStorageUrlCreater
 
-    it 'is returns expected re' do
-      out_of_game_card_upload = FactoryBot.create :drawing, out_of_game_card_upload: true
-      earlier_postgame =  FactoryBot.create(:postgame, callback_wanted: :postgame)
-      current_user = earlier_postgame.users.first
-      current_postgame = FactoryBot.create(:postgame, callback_wanted: :postgame, with_existing_users: [current_user])
-      counter = 0
-
-      _cards = Card.where(uploader: current_user, medium: :drawing, out_of_game_card_upload: true)
-      out_of_game_cards = _cards.map do |card|
-        if card.drawing?
-          result = card.slice(:medium, :uploader)
-          result.merge!( {'drawing_url' => card.get_drawing_url} )
-        end
+      def arr_of_postgame_card_set game
+         Card.cards_from_finished_game(game.id) 
       end
 
-
-      _cards_from__current_users__last_game = GamesUser.where(user: current_user).last.game.cards
-      arr_of_postgame_card_set = _cards_from__current_users__last_game.map do |card|
-        counter += 1
-        if card.drawing?
-          result = card.slice(:medium, :uploader)
-          result.merge!( {'drawing_url' => card.get_drawing_url} )
-          result
-        else
-          result = card.slice(:medium, :description_text, :uploader)
-          result
-        end
+      def all_postgames_of__current_user current_user
+        current_user.games.postgame.map do |game|
+          result = game.slice(:id)
+          result.merge!( { 'created_at_timestamp' => game.created_at.to_i } )
+        end 
       end
 
-      expected__postgame_component_params = {
-                                              'current_user' => current_user.slice(:id),
-                                              'out_of_game_cards' => out_of_game_cards,
+      def current_user_info current_user
+        current_user.slice(:id, :name)
+      end
 
-                                              'arr_of_postgame_card_set' => arr_of_postgame_card_set,
-                                              'all__current_user__game_info' => current_user.game_ids.sort
-                                            }
-      response = GamesController::AssemblePostgamesComponentParams.new(current_user: current_user, game: current_postgame).result_to_json
+      it 'is returns expected re', now: true do
+        earlier_postgame =  FactoryBot.create(:postgame, callback_wanted: :postgame)
+        current_user = earlier_postgame.users.first
+        out_of_game_card_upload = FactoryBot.create :drawing, out_of_game_card_upload: true, uploader: current_user
+        current_postgame = FactoryBot.create(:postgame, callback_wanted: :postgame, with_existing_users: [current_user])
+      
+        expected__postgame_component_params = {
+                                                'all_postgames_of__current_user' => all_postgames_of__current_user(current_user),
+                                                'arr_of_postgame_card_set' => arr_of_postgame_card_set(current_postgame), 
+                                                'current_user_info' => current_user_info(current_user)
+                                              }
+    
+        response = GamesController::AssemblePostgamesComponentParams.new(current_user: current_user, game: current_postgame).result_to_json
+        
+        jr = JSON.parse(response) 
+        byebug
+        expect(jr['all_postgames_of__current_user']).to include_json expected__postgame_component_params['all_postgames_of__current_user']
+        expect(jr['arr_of_postgame_card_set']).to include_json expected__postgame_component_params['arr_of_postgame_card_set']
+        expect(jr['current_user_info']).to include_json expected__postgame_component_params['current_user_info']
 
-      expect( JSON.parse(response) ).to include_json expected__postgame_component_params
+        
+        expect( jr ).to include_json expected__postgame_component_params
+      end
+
+      xit 'redirects if no postgames' do
+        # expect(response).to redirect_to choose_game_type_page_path
+        # expect(assigns[:postgame_component_params] ).to eq nil
+      end
     end
 
-    xit 'redirects if no postgames' do
-      # expect(response).to redirect_to choose_game_type_page_path
-      # expect(assigns[:postgame_component_params] ).to eq nil
-    end
+    context 'returns json'
   end
 end
-
 

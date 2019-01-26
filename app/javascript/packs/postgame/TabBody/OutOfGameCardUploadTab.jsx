@@ -12,11 +12,19 @@ export default class OutOfGameCardUploadTab extends React.Component {
 
   render(){
     return(
-      <div>
-        <h3 className='card-title'>Out of Game Card Uploads Results</h3>
+      <React.Fragment>
+      { !!this.props.all_postgames_of__current_user &&
 
-        <SlideshowList decks={this.state.out_of_game_card_uploads} />
-      </div>
+        <React.Fragment>
+          <CardTitle>Your Drawings</CardTitle>
+    
+          <div className='mt-4 mb-4'></div>
+          <SlideshowList arr_of_postgame_card_set={this.props.arr_of_postgame_card_set}
+                        current_user_info={this.props.current_user_info}
+                          />
+        </React.Fragment>
+      }
+    </React.Fragment>
     );
   }
 }

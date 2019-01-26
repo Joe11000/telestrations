@@ -75,16 +75,20 @@ class GamesController
       def all_postgames_of__current_user
         current_user.games.postgame.map do |game|
           result = game.slice(:id)
-          result.merge!( { 'created_at_strftime' => game.created_at.strftime('%a %b %e, %Y') } )
+          result.merge!( { 'created_at_timestamp' => game.created_at.to_i } )
         end
+      end
+
+      def current_user_info 
+        current_user.slice(:id, :name)
       end
 
       def result
         @postgame_component_params ||= begin
           {
-            current_user_info: current_user.slice(:id, :name),
+            all_postgames_of__current_user: all_postgames_of__current_user,
             arr_of_postgame_card_set: arr_of_postgame_card_set,
-            all_postgames_of__current_user: all_postgames_of__current_user
+            current_user_info: current_user_info
           }
         end
 

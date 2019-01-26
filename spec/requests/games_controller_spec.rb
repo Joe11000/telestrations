@@ -62,14 +62,15 @@ RSpec.describe GamesController, :type => :request do
       end
 
 
-    fcontext 'cant see but needs to be in the html' do
+    context 'cant see but needs to be in the html' do
       it 'correct http status' do
         game = FactoryBot.create(:midgame_with_no_moves, callback_wanted: :midgame_with_no_moves)
         @current_user = game.users.first
         set_signed_cookies({user_id: @current_user.id})
 
         get new_game_path
-
+        
+        byebug
         expect(response).to have_http_status :ok
       end
     end
@@ -114,7 +115,7 @@ RSpec.describe GamesController, :type => :request do
     # end
   end
 
-  # xdescribe "GET show", working: true do
+  xdescribe "GET show", working: true do
 
   #   context 'redirected if' do
   #     it 'user not logged in' do
@@ -202,5 +203,5 @@ RSpec.describe GamesController, :type => :request do
   #     expect(assigns[:arr_of_postgame_card_sets]).to be_an Array
   #     expect(response).to have_http_status(:success)
   #   end
-  # end
+  end
 end

@@ -33,9 +33,7 @@ class Postgame extends React.Component {
 
   // tab_selected (undefined||'PostGameTab'||'OutOfGameCardUploadTab')
   retrieveCardsForPostgame(id) {
-    var that = this;
     $.getJSON(`/games/${id}`, function(_response) {
-      // debugger
       let _current_postgame_id;
       if(id == -1) {
        _current_postgame_id = _response.all_postgames_of__current_user[_response.all_postgames_of__current_user.length - 1].id;
@@ -44,17 +42,15 @@ class Postgame extends React.Component {
       }
       let _edited_response = Object.assign(_response, {tab_selected: 'PostGameTab', 'current_postgame_id': _current_postgame_id} );
       // debugger
-      that.setState(_edited_response);
-    });
+      this.setState(_edited_response);
+    }.bind(this));
   }
 
   retrieveOutOfGameCards(){
-    var that = this;
-
-    $.getJSON(`/out_of_game_card_uploads_controller/${this.state.current_user_info.id}`, function(response){
+    $.getJSON(`/out_of_game_card_uploads_controller/${this.state.current_user_info.id}`, function(response) {
       let edited_response = Object.assign(response, {tab_selected: 'OutOfGameCardUploadTab'} );
-      that.setState(edited_response);
-    });
+      this.setState(edited_response);
+    }.bind(this));
   }
 
   selectTab(tab_selected){
@@ -68,8 +64,8 @@ class Postgame extends React.Component {
   }
 
   render() {
-    let nav_link__postgametab__classes = 'border-white bg-transparent text-white' + (this.state.tab_selected == 'PostGameTab' ? ' active' : '')
-    let nav_link__outofgametab__classes = 'border-white text-white' + (this.state.tab_selected == 'OutOfGameCardUploadTab'  ? ' active' : '')
+    let nav_link__postgametab__classes = 'border-white bg-transparent text-white' + (this.state.tab_selected == 'PostGameTab' ? ' active' : '');
+    let nav_link__outofgametab__classes = 'border-white text-white' + (this.state.tab_selected == 'OutOfGameCardUploadTab'  ? ' active' : '');
 
     const { all_postgames_of__current_user, 
             arr_of_postgame_card_set, 
@@ -91,7 +87,7 @@ class Postgame extends React.Component {
         break;
 
       case 'OutOfGameCardUploadTab':
-        card_body_html = <OutOfGameCardUploadTab selectTab={this.selectTab} />
+        card_body_html = <OutOfGameCardUploadTab selectTab={this.selectTab} retrieveOutOfGameCards={this.retrieveOutOfGameCards} />
         break;
     }
 
