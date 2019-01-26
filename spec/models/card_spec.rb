@@ -122,34 +122,33 @@ RSpec.describe Card, type: :model do
         @cards = Card.cards_from_finished_game @game.id
       end
 
-      it 'returns correct ordering of cards', :r5, focus: true do
+      it 'returns correct ordering of cards', :r5 do
         gu1, gu2, gu3 = @game.games_users
         starting_card1, starting_card2, starting_card3 = @game.games_users.map(&:starting_card)
 
-          byebug
 
-        expect(@cards).to match_array [
+        expect(@cards).to include_json [
                                         [
-                                          [starting_card1.uploader.games_users.last.users_game_name, starting_card1.attributes ],
-                                          [starting_card1.child_card.uploader.games_users.last.users_game_name, starting_card1.child_card.attributes ],
-                                          [starting_card1.child_card.child_card.uploader.games_users.last.users_game_name, starting_card1.child_card.child_card.attributes ]
+                                          [starting_card1.uploader.games_users.last.users_game_name, starting_card1.attributes.except('created_at', 'updated_at', 'deleted_at') ],
+                                          [starting_card1.child_card.uploader.games_users.last.users_game_name, starting_card1.child_card.attributes.except('created_at', 'updated_at', 'deleted_at') ],
+                                          [starting_card1.child_card.child_card.uploader.games_users.last.users_game_name, starting_card1.child_card.child_card.attributes.except('created_at', 'updated_at', 'deleted_at') ]
                                         ],
                                         [
-                                          [starting_card2.uploader.games_users.last.users_game_name, starting_card2.attributes],
-                                          [starting_card2.child_card.uploader.games_users.last.users_game_name, starting_card2.child_card.attributes],
-                                          [starting_card2.child_card.child_card.uploader.games_users.last.users_game_name, starting_card2.child_card.child_card.attributes ]
+                                          [starting_card2.uploader.games_users.last.users_game_name, starting_card2.attributes.except('created_at', 'updated_at', 'deleted_at')],
+                                          [starting_card2.child_card.uploader.games_users.last.users_game_name, starting_card2.child_card.attributes.except('created_at', 'updated_at', 'deleted_at')],
+                                          [starting_card2.child_card.child_card.uploader.games_users.last.users_game_name, starting_card2.child_card.child_card.attributes.except('created_at', 'updated_at', 'deleted_at') ]
                                         ],
                                         [
-                                          [starting_card3.uploader.games_users.last.users_game_name, starting_card3.attributes ],
-                                          [starting_card3.child_card.uploader.games_users.last.users_game_name, starting_card3.child_card.attributes ],
-                                          [starting_card3.child_card.child_card.uploader.games_users.last.users_game_name, starting_card3.child_card.child_card.attributes ]
+                                          [starting_card3.uploader.games_users.last.users_game_name, starting_card3.attributes.except('created_at', 'updated_at', 'deleted_at') ],
+                                          [starting_card3.child_card.uploader.games_users.last.users_game_name, starting_card3.child_card.attributes.except('created_at', 'updated_at', 'deleted_at') ],
+                                          [starting_card3.child_card.child_card.uploader.games_users.last.users_game_name, starting_card3.child_card.child_card.attributes.except('created_at', 'updated_at', 'deleted_at') ]
                                         ]
                                       ]
         @cards.each do |gu|
           byebug
-          expect(gu[1][0].drawing_url).to eq nil
-          expect(gu[1][1].drawing_url).to be_a String
-          expect(gu[1][2].drawing_url).to eq nil
+          expect(gu.dig(0, 1, 'drawing_url')).to eq nil
+          expect(gu.dig(1, 1, 'drawing_url')).to be_a String
+          expect(gu.dig(2, 1, 'drawing_url')).to eq nil
         end
       end
     end

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import * as moment from 'moment';
+import moment from 'moment';
 
 export default class GameSelector extends React.Component {
   constructor(props){
@@ -24,7 +24,7 @@ export default class GameSelector extends React.Component {
           <select value={this.props.current_postgame_id} className='custom-select' onChange={this.handleChangeGameSelector}>
             {
               this.props.all_postgames_of__current_user.map(function(game_info, index) {
-                return(<option key={game_info.id} value={game_info.id}>Game {index + 1} - {game_info.created_at_strftime}</option>);
+                return(<option key={game_info.id} value={game_info.id}>Game {index + 1} - {game_info.created_at_timestamp}</option>);
               })
             }
           </select>
@@ -40,7 +40,7 @@ GameSelector.propTypes = {
   all_postgames_of__current_user: PropTypes.arrayOf(function(propValue, key, componentName, location, propFullName) {
     let _propValueTypesValidator = {
       'id': 'number',
-      'created_at_strftime': 'string'
+      'created_at_timestamp': 'string'
     }
 
     Object.keys(_propValueTypesValidator).forEach(propValueKey => {

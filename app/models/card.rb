@@ -39,7 +39,7 @@ class Card < ActiveRecord::Base
 
       until card.blank? do
         desired_card_attributes = begin
-          card_attributes = card.attributes
+          card_attributes = card.attributes.except('created_at', 'deleted_at', 'updated_at')
 
           if card.drawing?
             card_attributes.merge!({ 'drawing_url' => card.get_drawing_url })
