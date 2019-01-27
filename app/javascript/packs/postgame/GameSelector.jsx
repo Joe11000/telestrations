@@ -13,17 +13,19 @@ export default class GameSelector extends React.Component {
   }
 
   render() {
+    const {all_postgames_of__current_user, current_postgame_id} = this.props;
+    
+    
     debugger
-
     return (
       <React.Fragment>
         {
-          !!this.props.all_postgames_of__current_user &&
-          !!this.props.current_postgame_id &&
-          <select value={this.props.current_postgame_id} className='custom-select' onChange={this.handleChangeGameSelector}>
+          !!all_postgames_of__current_user &&
+          !!current_postgame_id &&
+          <select value={current_postgame_id} className='custom-select' onChange={this.handleChangeGameSelector}>
             {
-              this.props.all_postgames_of__current_user.map(function(game_info, index) {
-                return(<option key={game_info.id} value={game_info.id}>Game {index + 1} - {game_info.created_at_timestamp}</option>);
+              all_postgames_of__current_user.map(function(game_info, index) {
+                return(<option key={game_info.id} value={game_info.id}>Game {index + 1} - {game_info.created_at_strftime}</option>);
               })
             }
           </select>
@@ -39,7 +41,7 @@ GameSelector.propTypes = {
   all_postgames_of__current_user: PropTypes.arrayOf(function(propValue, key, componentName, location, propFullName) {
     let _propValueTypesValidator = {
       'id': 'number',
-      'created_at_timestamp': 'string'
+      'created_at_strftime': 'string'
     }
 
     Object.keys(_propValueTypesValidator).forEach(propValueKey => {

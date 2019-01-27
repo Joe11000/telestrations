@@ -42,7 +42,7 @@ RSpec.describe Game, type: :model do
         it 'is valid' do
           pregame = described_class.create(*args)
           users = pregame.users
-          1 + 1
+          
           expect(pregame.pregame?).to eq true
           expect(pregame.midgame?).to eq false
           expect(pregame.postgame?).to eq false

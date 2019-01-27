@@ -12,20 +12,28 @@ export default class PostGameTab extends React.Component {
   }
 
   render() {
-
+    const { 
+            all_postgames_of__current_user, 
+            arr_of_postgame_card_set, 
+            current_user_info,
+            current_postgame_id, 
+            retrieveCardsForPostgame, 
+          } = this.props;
     return(
+
+
       <React.Fragment>
-        { !!this.props.all_postgames_of__current_user &&
-          !!this.props.current_postgame_id &&
+        { !!all_postgames_of__current_user &&
+          !!current_postgame_id &&
           <React.Fragment>
             <CardTitle>Post Game Results</CardTitle>
-            <GameSelector all_postgames_of__current_user={this.props.all_postgames_of__current_user}
-                          current_postgame_id={this.props.current_postgame_id}
-                          retrieveCardsForPostgame={this.props.retrieveCardsForPostgame }
+            <GameSelector all_postgames_of__current_user={all_postgames_of__current_user}
+                          current_postgame_id={current_postgame_id}
+                          retrieveCardsForPostgame={retrieveCardsForPostgame }
                           />
             <div className='mt-4 mb-4'></div>
-            <SlideshowList arr_of_postgame_card_set={this.props.arr_of_postgame_card_set}
-                           current_user_info={this.props.current_user_info}
+            <SlideshowList arr_of_postgame_card_set={arr_of_postgame_card_set}
+                           current_user_info={current_user_info}
                             />
           </React.Fragment>
         }
