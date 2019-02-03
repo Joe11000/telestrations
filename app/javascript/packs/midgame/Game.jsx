@@ -161,7 +161,7 @@ class Game extends React.Component {
         }
       case 'waiting':
       case 'finished':
-        debugger
+        // debugger
         return(<LoadingContainer user_status={this.state.user_status}/>);
     }
   }
@@ -190,7 +190,7 @@ Game.propTypes =  {
                       user_status: PropTypes.oneOf(['working_on_card', 'waiting', 'finished']).isRequired,
 
                       previous_card: function(props, propName, componentName){
-                        debugger
+                        // debugger
 
                       }
                     })

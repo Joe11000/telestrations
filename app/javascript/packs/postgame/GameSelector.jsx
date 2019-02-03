@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 export default class GameSelector extends React.Component {
   constructor(props){
     super(props);
-    debugger
+    // debugger
   }
   handleChangeGameSelector = event => {
     event.preventDefault();
@@ -16,7 +16,7 @@ export default class GameSelector extends React.Component {
     const {all_postgames_of__current_user, current_postgame_id} = this.props;
     
     
-    debugger
+    // debugger
     return (
       <React.Fragment>
         {

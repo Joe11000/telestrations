@@ -1,163 +1,173 @@
-module.exports = {
-  'decks': [
-             [
-               [
-                 'Current_Users__Games_User_Name',
-                 {
-                   'created_at': "2018-12-09T23:21:04.669Z",
-                   'deleted_at': null,
-                   'description_text': "excellent burnt orange tartan ham",
-                   'id': 55,
-                   'idea_catalyst_id': 19,
-                   'medium': "description",
-                   'out_of_game_card_upload': false,
-                   'parent_card_id': null,
-                   'placeholder': false,
-                   'starting_games_user_id': 19,
-                   'updated_at': "2018-12-09T23:21:04.985Z",
-                   'uploader_id': 1,
-                 }
-               ],
-               [
-                 "Devon Kreiger I",
-                 {
-                   'created_at': "2018-12-09T23:21:05.257Z",
-                   'deleted_at': null,
-                   'description_text': null,
-                   'id': 58,
-                   'idea_catalyst_id': null,
-                   'medium': "drawing",
-                   'out_of_game_card_upload': false,
-                   'parent_card_id': 55,
-                   'placeholder': false,
-                   'starting_games_user_id': 19,
-                   'updated_at': "2018-12-09T23:21:05.818Z",
-                   'uploader_id': 14,
-                 }
-               ],
-               [
-                 "Lincoln Cartwright IV",
-                 {
-                   'created_at': "2018-12-09T23:21:05.853Z",
-                   'deleted_at': null,
-                   'description_text': "old fashioned jade plaid ant",
-                   'id': 62,
-                   'idea_catalyst_id': null,
-                   'medium': "description",
-                   'out_of_game_card_upload': false,
-                   'parent_card_id': 58,
-                   'placeholder': false,
-                   'starting_games_user_id': 19,
-                   'updated_at': "2018-12-09T23:21:05.856Z",
-                   'uploader_id': 15,
-                 }
-               ]
-             ],
-             [
-               [
-                 "Devon Kreiger I",
-                 {
-                   'created_at': "2018-12-09T23:21:04.805Z",
-                   'deleted_at': null,
-                   'description_text': "soft chiffon cracked door",
-                   'id': 56,
-                   'idea_catalyst_id': 20,
-                   'medium': "description",
-                   'out_of_game_card_upload': false,
-                   'parent_card_id': null,
-                   'placeholder': false,
-                   'starting_games_user_id': 20,
-                   'updated_at': "2018-12-09T23:21:05.024Z",
-                   'uploader_id': 14,
-                 }
-               ],
-               [
-                 "Lincoln Cartwright IV",
-                 {
-                   'created_at': "2018-12-09T23:21:05.400Z",
-                   'deleted_at': null,
-                   'description_text': null,
-                   'id': 59,
-                   'idea_catalyst_id': null,
-                   'medium': "drawing",
-                   'out_of_game_card_upload': false,
-                   'parent_card_id': 56,
-                   'placeholder': false,
-                   'starting_games_user_id': 20,
-                   'updated_at': "2018-12-09T23:21:06.011Z",
-                   'uploader_id': 15,
-                 }
-               ],
-               [
-                 "Zackary Jaskolski",
-                 {
-                   'created_at': "2018-12-09T23:21:06.049Z",
-                   'deleted_at': null,
-                   'description_text': "lovely midnight blue cracked moose",
-                   'id': 63,
-                   'idea_catalyst_id': null,
-                   'medium': "description",
-                   'out_of_game_card_upload': false,
-                   'parent_card_id': 59,
-                   'placeholder': false,
-                   'starting_games_user_id': 20,
-                   'updated_at': "2018-12-09T23:21:06.053Z",
-                   'uploader_id': 1,
-                 }
-               ]
-             ],
-             [
-               [
-                 "Lincoln Cartwright IV",
-                 {
-                   'created_at': "2018-12-09T23:21:04.932Z",
-                   'deleted_at': null,
-                   'description_text': "tailored lavendar pinstriped bacon",
-                   'id': 57,
-                   'idea_catalyst_id': 21,
-                   'medium': "description",
-                   'out_of_game_card_upload': false,
-                   'parent_card_id': null,
-                   'placeholder': false,
-                   'starting_games_user_id': 21,
-                   'updated_at': "2018-12-09T23:21:05.080Z",
-                   'uploader_id': 15,
-                 }
-               ],
-               [
-                 "Zackary Jaskolski",
-                 {
-                   'created_at': "2018-12-09T23:21:05.632Z",
-                   'deleted_at': null,
-                   'description_text': null,
-                   'id': 60,
-                   'idea_catalyst_id': null,
-                   'medium': "drawing",
-                   'out_of_game_card_upload': false,
-                   'parent_card_id': 57,
-                   'placeholder': false,
-                   'starting_games_user_id': 21,
-                   'updated_at': "2018-12-09T23:21:05.643Z",
-                   'uploader_id': 1,
-                 }
-               ],
-               [
-                 "Devon Kreiger I",
-                 {
-                   'created_at': "2018-12-09T23:21:05.650Z",
-                   'deleted_at': null,
-                   'description_text': "glazed onyx striped sausage",
-                   'id': 61,
-                   'idea_catalyst_id': null,
-                   'medium': "description",
-                   'out_of_game_card_upload': false,
-                   'parent_card_id': 60,
-                   'placeholder': false,
-                   'starting_games_user_id': 21,
-                   'updated_at': "2018-12-09T23:21:06.098Z",
-                   'uploader_id': 14,
-                 }
-               ]
-             ]
-           ]
+module.exports = {  
+  "all_postgames_of__current_user": [  
+    {  
+      "id":1,
+      "created_at_strftime":"Sun Dec  9, 2018"
+    },
+    {  
+      "id":2,
+      "created_at_strftime":"Sun Dec  9, 2018"
+    },
+    {  
+      "id":3,
+      "created_at_strftime":"Sun Dec  9, 2018"
+    },
+    {  
+      "id":4,
+      "created_at_strftime":"Sun Dec  9, 2018"
+    },
+    {  
+      "id":5,
+      "created_at_strftime":"Sun Dec  9, 2018"
+    },
+    {  
+      "id":6,
+      "created_at_strftime":"Sun Dec  9, 2018"
+    },
+    {  
+      "id":7,
+      "created_at_strftime":"Sun Dec  9, 2018"
+    }
+  ],
+  "arr_of_postgame_card_set":[  
+    [  
+      [  
+        "Zackary Jaskolski",
+        {  
+          "id":55,
+          "uploader_id":1,
+          "parent_card_id":null,
+          "starting_games_user_id":19,
+          "idea_catalyst_id":19,
+          "description_text":"excellent burnt orange tartan ham",
+          "medium":"description",
+          "out_of_game_card_upload":false,
+          "placeholder":false
+        }
+      ],
+      [  
+        "Devon Kreiger I",
+        {  
+          "id":58,
+          "uploader_id":14,
+          "parent_card_id":55,
+          "starting_games_user_id":19,
+          "idea_catalyst_id":null,
+          "description_text":null,
+          "medium":"drawing",
+          "out_of_game_card_upload":false,
+          "placeholder":false,
+          "drawing_url":"/rails/active_storage/blobs/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBOZz09IiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--0f3f1adfa5d3d579512daee958eacd7b6a98d277/provider_avatar.jpg?disposition=attachment"
+        }
+      ],
+      [  
+        "Lincoln Cartwright IV",
+        {  
+          "id":62,
+          "uploader_id":15,
+          "parent_card_id":58,
+          "starting_games_user_id":19,
+          "idea_catalyst_id":null,
+          "description_text":"old fashioned jade plaid ant",
+          "medium":"description",
+          "out_of_game_card_upload":false,
+          "placeholder":false
+        }
+      ]
+    ],
+    [  
+      [  
+        "Devon Kreiger I",
+        {  
+          "id":56,
+          "uploader_id":14,
+          "parent_card_id":null,
+          "starting_games_user_id":20,
+          "idea_catalyst_id":20,
+          "description_text":"soft chiffon cracked door",
+          "medium":"description",
+          "out_of_game_card_upload":false,
+          "placeholder":false
+        }
+      ],
+      [  
+        "Lincoln Cartwright IV",
+        {  
+          "id":59,
+          "uploader_id":15,
+          "parent_card_id":56,
+          "starting_games_user_id":20,
+          "idea_catalyst_id":null,
+          "description_text":null,
+          "medium":"drawing",
+          "out_of_game_card_upload":false,
+          "placeholder":false,
+          "drawing_url":"/rails/active_storage/blobs/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBOdz09IiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--a734ad2c355e91bdaed8dca2c0253c1deffc27cc/provider_avatar.jpg?disposition=attachment"
+        }
+      ],
+      [  
+        "Zackary Jaskolski",
+        {  
+          "id":63,
+          "uploader_id":1,
+          "parent_card_id":59,
+          "starting_games_user_id":20,
+          "idea_catalyst_id":null,
+          "description_text":"lovely midnight blue cracked moose",
+          "medium":"description",
+          "out_of_game_card_upload":false,
+          "placeholder":false
+        }
+      ]
+    ],
+    [  
+      [  
+        "Lincoln Cartwright IV",
+        {  
+          "id":57,
+          "uploader_id":15,
+          "parent_card_id":null,
+          "starting_games_user_id":21,
+          "idea_catalyst_id":21,
+          "description_text":"tailored lavendar pinstriped bacon",
+          "medium":"description",
+          "out_of_game_card_upload":false,
+          "placeholder":false
+        }
+      ],
+      [  
+        "Zackary Jaskolski",
+        {  
+          "id":60,
+          "uploader_id":1,
+          "parent_card_id":57,
+          "starting_games_user_id":21,
+          "idea_catalyst_id":null,
+          "description_text":null,
+          "medium":"drawing",
+          "out_of_game_card_upload":false,
+          "placeholder":false,
+          "drawing_url":"/rails/active_storage/blobs/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBOUT09IiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--544f928f22c458fb85b2556e70b7d01869476397/provider_avatar.jpg?disposition=attachment"
+        }
+      ],
+      [  
+        "Devon Kreiger I",
+        {  
+          "id":61,
+          "uploader_id":14,
+          "parent_card_id":60,
+          "starting_games_user_id":21,
+          "idea_catalyst_id":null,
+          "description_text":"glazed onyx striped sausage",
+          "medium":"description",
+          "out_of_game_card_upload":false,
+          "placeholder":false
+        }
+      ]
+    ]
+  ],
+  "current_user_info":{  
+    "id":1,
+    "name":"Joe Noonan"
+  }
 }

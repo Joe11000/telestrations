@@ -20,8 +20,6 @@ class Card < ActiveRecord::Base
                      placeholder: true)
   end
 
-
-
   def self.cards_from_finished_games game_ids
     game_ids.map { |game_id| self.cards_from_finished_game(game_id) }
   end

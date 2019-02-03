@@ -8,18 +8,16 @@ import { ListGroup, ListGroupItem } from 'reactstrap';
 
 export default class SlideshowList extends React.Component {
   render() {
-    var current_user_info = this.props.current_user_info;
-    
-    const {arr_of_postgame_card_set, } = this.props;
+    var {arr_of_postgame_card_set, current_user_info} = this.props;    
 
     return (
       <ListGroup flush>
         {
-          arr_of_postgame_card_set && arr_of_postgame_card_set.map(function(deck){
+          arr_of_postgame_card_set && arr_of_postgame_card_set.map(function(deck, index){
             const first_card_in_the_game = deck.map(deck => deck[1].id).join('.')
 
             return (
-              <ListGroupItem  className="list-group-item" key={`list-group-item-${first_card_in_the_game}`} >
+              <ListGroupItem  className="list-group-item" key={`list-group-item-${first_card_in_the_game}`} accessKey={index}>
                 <Slideshow deck={deck} current_user_info={current_user_info} />
               </ListGroupItem>
             )
