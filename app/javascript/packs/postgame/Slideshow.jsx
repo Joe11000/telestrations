@@ -32,7 +32,7 @@ class Slideshow extends Component {
   }
 
   acquireCardInfoForCarousel(deck) {
-    return deck.map(function (card_info, index)  {
+    return deck.map(function (card_info)  {
 
       // Show text in different color if this card created by the current user
       const shouldGlow = this.props.current_user_info.id == card_info[1].uploader_id;
