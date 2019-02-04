@@ -32,6 +32,7 @@ export default class PostGameTab extends React.Component {
                           retrieveCardsForPostgame={retrieveCardsForPostgame }
                           />
             <div className='mt-4 mb-4'></div>
+            <p className='small glow' style={{textAlign: 'right'}}>( * cards with red text were made by you * )</p>
             <SlideshowList arr_of_postgame_card_set={arr_of_postgame_card_set}
                            current_user_info={current_user_info}
                             />

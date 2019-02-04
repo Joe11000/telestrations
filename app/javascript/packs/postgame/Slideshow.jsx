@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+
 import {
   Carousel,
   CarouselItem,
@@ -9,9 +11,9 @@ import {
 
 import {
   Card,
-  CardText,
+  // CardText,
   CardBody, 
-  CardTitle, 
+  // CardTitle, 
   CardImg,
 } from 'reactstrap';
 
@@ -30,39 +32,48 @@ class Slideshow extends Component {
   }
 
   acquireCardInfoForCarousel(deck) {
-    return deck.map((card_info, index) => {
+    return deck.map(function (card_info, index)  {
+
+      // Show text in different color if this card created by the current user
+      const shouldGlow = this.props.current_user_info.id == card_info[1].uploader_id;
+      
       if(card_info[1].medium === 'description'){
         return({
                 src: '',
                 altText: card_info[1].description_text,
-                caption: `By: ${card_info[0]}`
+                caption: `By: ${card_info[0]}`,
+                shouldGlow 
               });
       }
       else if (card_info[1].medium === 'drawing') {
       return({
                 src: card_info[1].drawing_url,
                 altText: '',
-                caption: `By: ${card_info[0]}`
+                caption: `By: ${card_info[0]}`, 
+                shouldGlow
             });
       }
       else {
         throw new Error('Card must be a drawing or a description');
       }
-    });
+    }.bind(this));
   }
 
   next() {
     const num_of_cards = this.props.deck.length;
+    const { activeIndex } = this.state;
+
     if (this.animating) return;
-    const nextIndex = this.state.activeIndex === num_of_cards - 1 ? 0 : this.state.activeIndex + 1;
+    const nextIndex = activeIndex === num_of_cards - 1 ? 0 : activeIndex + 1;
     this.setState({ activeIndex: nextIndex });
   }
 
   previous() {
     const num_of_cards = this.props.deck.length;
+    const { activeIndex } = this.state;
 
     if (this.animating) return;
-    const nextIndex = this.state.activeIndex === 0 ? num_of_cards - 1 : this.state.activeIndex - 1;
+    const nextIndex = activeIndex === 0 ? num_of_cards - 1 : activeIndex - 1;
     this.setState({ activeIndex: nextIndex });
   }
 
@@ -72,7 +83,7 @@ class Slideshow extends Component {
   }
 
   render() {
-    const { deck, list_item_index } = this.props;
+    const { deck } = this.props;
     const { activeIndex } = this.state;
 
     const carousel_card_info = this.acquireCardInfoForCarousel(deck);
@@ -80,15 +91,17 @@ class Slideshow extends Component {
     const slides = carousel_card_info.map(function(item, slide_index) {
       const conjoined_card_id = deck[slide_index][1].id;
       
+      const card_body_styles = {display: 'flex',  justifyContent: 'center', alignItems: 'center'};
+
       return (
-          <CarouselItem key={ `carousel-item-${conjoined_card_id}` } >
+          <CarouselItem key={ `carousel-item-${conjoined_card_id}` } className={ item.shouldGlow ? 'glow' : ''} >
             <Card className='bg-dark border-primary m-auto' style={{"height": '300px'}}>
               {
                 item.src ? <CardImg top className="d-block h-100" src={item.src} alt={item.altText } />
                           : undefined
               }
               
-              <CardBody style={{'display': 'flex',  justifyContent: 'center', alignItems: 'center'}}>
+              <CardBody style={ card_body_styles } >
                 <div style={{flex: 1}}>
                   <div className='d-xs-none'>
                     <p className='h3'>{item.altText}</p>
@@ -124,4 +137,11 @@ class Slideshow extends Component {
   }
 }
 
+Slideshow.propTypes = {
+  deck: PropTypes.array, 
+  current_user_info: PropTypes.shape({
+    id: PropTypes.number, 
+    name: PropTypes.string,
+  })
+}
 export default Slideshow;

@@ -31,4 +31,3 @@ export default class SlideshowList extends React.Component {
 SlideshowList.propTypes = {
   arr_of_postgame_card_set: PropTypes.array
 }
-

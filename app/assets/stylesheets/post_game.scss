@@ -6,14 +6,13 @@
     .carousel-control-prev,.carousel-control-next {
       cursor:pointer;
     }
-  
-    // .carousel-item > img { 
-    //   width: 100%; 
-    // }
   }
 
 
   .glow {
+    * {
+      color: $reddish;
+    }
     color: $reddish;
   }
 

@@ -43,4 +43,20 @@ describe('PostGameTab Component', () => {
       expect(postgame_tab.find('GameSelector').length).toEqual(1);
       expect(postgame_tab.find('SlideshowList').length).toEqual(1);
   })
+
+
+  // describe('while on the page', ()=>{
+  //   describe('selects a different game in the dropdown selector', ()=>{
+  //     fit("", ()=>{
+  //       const carousel_item = shallow(CarouselItem)
+  //     });
+  //   });
+
+  //   describe('selects the same game in the dropdown selector', ()=>{
+  //     it("doesn't get other ", ()=>{
+  //       expect(1).toEqual(1);
+
+  //     });
+  //   });
+  // });
 });
