@@ -8,12 +8,12 @@ import { ListGroup, ListGroupItem } from 'reactstrap';
 
 export default class SlideshowList extends React.Component {
   render() {
-    var {arr_of_postgame_card_set, current_user_info} = this.props;    
+    var {arr_of_decks_of_cards, current_user_info} = this.props;    
 
     return (
       <ListGroup flush>
         {
-          arr_of_postgame_card_set && arr_of_postgame_card_set.map(function(deck, index){
+          arr_of_decks_of_cards && arr_of_decks_of_cards.map(function(deck, index){
             const first_card_in_the_game = deck.map(deck => deck[1].id).join('.')
 
             return (
@@ -29,5 +29,5 @@ export default class SlideshowList extends React.Component {
 
 }
 SlideshowList.propTypes = {
-  arr_of_postgame_card_set: PropTypes.array
+  arr_of_decks_of_cards: PropTypes.array
 }

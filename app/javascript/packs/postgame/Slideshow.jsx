@@ -138,7 +138,7 @@ class Slideshow extends Component {
 }
 
 Slideshow.propTypes = {
-  deck: PropTypes.array, 
+  deck: PropTypes.arrayOf(PropTypes.object), 
   current_user_info: PropTypes.shape({
     id: PropTypes.number, 
     name: PropTypes.string,

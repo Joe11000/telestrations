@@ -4,11 +4,10 @@ import PropTypes from 'prop-types';
 export default class GameSelector extends React.Component {
   constructor(props){
     super(props);
-    // debugger
   }
   handleChangeGameSelector = event => {
     event.preventDefault();
-    let game_id = parseInt(event.target.value);
+    const game_id = parseInt(event.target.value);
     this.props.retrieveCardsForPostgame(game_id);
   }
 
@@ -20,8 +19,8 @@ export default class GameSelector extends React.Component {
     return (
       <React.Fragment>
         {
-          !!all_postgames_of__current_user &&
-          !!current_postgame_id &&
+          all_postgames_of__current_user &&
+          current_postgame_id &&
           <select value={current_postgame_id} className='custom-select' onChange={this.handleChangeGameSelector}>
             {
               all_postgames_of__current_user.map(function(game_info, index) {

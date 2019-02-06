@@ -36,19 +36,20 @@ class Card < ActiveRecord::Base
       card = gu.starting_card
 
       until card.blank? do
-        desired_card_attributes = begin
-          card_attributes = card.attributes.except('created_at', 'deleted_at', 'updated_at')
+        # desired_card_attributes = begin
+        #   card_attributes = card.attributes.except('created_at', 'deleted_at', 'updated_at')
 
-          if card.drawing?
-            card_attributes.merge!({ 'drawing_url' => card.get_drawing_url })
-          end
+        #   if card.drawing?
+        #     card_attributes.merge!({ 'drawing_url' => card.get_drawing_url })
+        #   end
 
-          card_attributes
+        #   card_attributes
 
-        rescue
-          card.attributes
-        end
+        # rescue
+        #   card.attributes
+        # end
 
+        desired_card_attributes = card.drawing? ? self.attributes_of_drawing_card(card) : self.attributes_of_description_card(card)
         gu_set << [ GamesUser.find_by(game_id: game_id, user_id: card.uploader_id).users_game_name, desired_card_attributes ]
         card = card.child_card
       end
@@ -57,6 +58,12 @@ class Card < ActiveRecord::Base
     result
   end
 
+  # retrieve all postgame attributes for  
+  def self.get_desired_out_of_game_card_attributes current_user
+    drawing.where(uploader_id: current_user, out_of_game_card_upload: true).order(created_at: :desc).map do |card|
+      attributes_of_drawing_card card
+    end
+  end
 
 
   # r5 tested
@@ -76,4 +83,14 @@ class Card < ActiveRecord::Base
 
     return rails_blob_path(drawing, disposition: 'attachment', only_path: true)
   end
+
+  private 
+    def self.attributes_of_drawing_card card
+      card.attributes.except('created_at', 'deleted_at', 'updated_at').merge!({ 'drawing_url' => card.get_drawing_url })
+    end
+
+    def self.attributes_of_description_card card
+      card.attributes.except('created_at', 'deleted_at', 'updated_at')
+    end
+
 end

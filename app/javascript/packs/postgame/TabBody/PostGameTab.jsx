@@ -1,10 +1,8 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import GameSelector from '../GameSelector'
-import SlideshowList from '../SlideshowList'
-import Slideshow from '../Slideshow'
-// import $ from 'jquery'
-import { CardTitle } from 'reactstrap'
+import React from 'react';
+import PropTypes from 'prop-types';
+import GameSelector from '../GameSelector';
+import SlideshowList from '../SlideshowList';
+import { CardTitle } from 'reactstrap';
 
 export default class PostGameTab extends React.Component {
   constructor(props){
@@ -14,11 +12,12 @@ export default class PostGameTab extends React.Component {
   render() {
     const { 
             all_postgames_of__current_user, 
-            arr_of_postgame_card_set, 
             current_user_info,
             current_postgame_id, 
             retrieveCardsForPostgame, 
           } = this.props;
+
+    const arr_of_decks_of_cards = this.props.arr_of_postgame_card_set;
     return(
 
 
@@ -33,7 +32,7 @@ export default class PostGameTab extends React.Component {
                           />
             <div className='mt-4 mb-4'></div>
             <p className='small glow' style={{textAlign: 'right'}}>( * cards with red text were made by you * )</p>
-            <SlideshowList arr_of_postgame_card_set={arr_of_postgame_card_set}
+            <SlideshowList arr_of_decks_of_cards={arr_of_decks_of_cards}
                            current_user_info={current_user_info}
                             />
           </React.Fragment>

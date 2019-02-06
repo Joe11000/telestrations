@@ -1,4 +1,4 @@
-module.exports = {  
+export default {  
   "all_postgames_of__current_user": [  
     {  
       "id":1,

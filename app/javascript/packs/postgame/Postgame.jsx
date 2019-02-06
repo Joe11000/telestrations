@@ -22,8 +22,10 @@ class Postgame extends React.Component {
                  };
 
     this.retrieveCardsForPostgame = this.retrieveCardsForPostgame.bind(this);
-    this.retrieveOutOfGameCards = this.retrieveOutOfGameCards.bind(this);
-    this.selectTab = this.selectTab.bind(this);
+    // this.selectTab = this.selectTab.bind(this);
+
+    this.ref_OutOfGameCardUploadTab = React.createRef();
+    this.ref_PostGameTab = React.createRef();
   }
 
   componentDidMount() {
@@ -45,21 +47,17 @@ class Postgame extends React.Component {
     }.bind(this));
   }
 
-  retrieveOutOfGameCards(){
-    $.getJSON(`/out_of_game_card_uploads_controller/${this.state.current_user_info.id}`, function(response) {
-      
-      let edited_response = Object.assign(response, {tab_selected: 'OutOfGameCardUploadTab'} );
-      this.setState(edited_response);
-    }.bind(this));
-  }
+
 
   selectTab(tab_selected){
+    debugger
     switch(this.state.tab_selected)
     {
       case 'PostGameTab':
       case 'OutOfGameCardUploadTab':
              this.setState({ tab_selected: tab_selected });
              break;
+      default: throw new Error("Invalidly named tab Selected"); 
     }
   }
 
@@ -87,7 +85,7 @@ class Postgame extends React.Component {
         break;
 
       case 'OutOfGameCardUploadTab':
-        card_body_html = <OutOfGameCardUploadTab selectTab={this.selectTab} retrieveOutOfGameCards={this.retrieveOutOfGameCards} />
+        card_body_html = <OutOfGameCardUploadTab current_user_info={current_user_info}/>
         break;
     }
 
@@ -99,13 +97,15 @@ class Postgame extends React.Component {
               <CardHeader>
                 <Nav vertical={false} tabs className='card-header-tabs'>
                   <NavItem>
-                    <NavLink className={nav_link__postgametab__classes}  href='#' >
+                    <NavLink className={nav_link__postgametab__classes}  
+                             onClick={this.selectTab.bind(this, "PostGameTab")} 
+                             href='#' >
                       Post Games
                     </NavLink>
                   </NavItem>
                   <NavItem>
                     <NavLink className={nav_link__outofgametab__classes} 
-                             onClick={this.retrieveOutOfGameCards} 
+                             onClick={this.selectTab.bind(this, "OutOfGameCardUploadTab")} 
                              href='#'>
                       Out of game card uploads
                     </NavLink>

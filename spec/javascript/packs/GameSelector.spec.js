@@ -1,10 +1,11 @@
-import React from 'react'
-import {shallow} from 'enzyme'
-import GameSelector from 'packs/postgame/GameSelector'
-import {render, fireEvent} from 'react-testing-library'
-
-import enzymeSerializer from 'enzyme-to-json/serializer'
-expect.addSnapshotSerializer(enzymeSerializer)
+import React from 'react';
+import {shallow} from 'enzyme';
+import GameSelector from 'packs/postgame/GameSelector';
+import {render, fireEvent} from 'react-testing-library';
+// const mock_games_index_request   = require('../mock_games_index_request');
+import mock_games_index_request from '../mock_games_index_request';
+import enzymeSerializer from 'enzyme-to-json/serializer';
+expect.addSnapshotSerializer(enzymeSerializer);
 
 describe('GameSelector Component', ()=>{
   describe('sets correct values', ()=>{
@@ -32,6 +33,10 @@ describe('GameSelector Component', ()=>{
                       'current_postgame_id': game_3.id,
                       'retrieveCardsForPostgame': jest.fn()
                     }
+
+      const props = { deck:              mock_games_index_request.arr_of_postgame_card_set[0], 
+                      current_user_info: mock_games_index_request.current_user_info }
+
 
       const game_selector = shallow(<GameSelector {...props} />)
 
