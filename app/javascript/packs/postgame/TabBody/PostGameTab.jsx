@@ -10,6 +10,7 @@ export default class PostGameTab extends React.Component {
   }
 
   render() {
+    debugger
     const { 
             all_postgames_of__current_user, 
             current_user_info,

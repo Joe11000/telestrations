@@ -6,14 +6,11 @@ import {
   CarouselItem,
   CarouselControl,
   CarouselIndicators,
-  // CarouselCaption
 } from 'reactstrap';
 
 import {
   Card,
-  // CardText,
   CardBody, 
-  // CardTitle, 
   CardImg,
 } from 'reactstrap';
 
@@ -21,10 +18,10 @@ import {
 class Slideshow extends Component {
   constructor(props) {
     super(props);
+    debugger
     this.next = this.next.bind(this);
     this.previous = this.previous.bind(this);
     this.goToIndex = this.goToIndex.bind(this);
-    
     this.acquireCardInfoForCarousel = this.acquireCardInfoForCarousel.bind(this);
     this.state = {
                    activeIndex: 0
@@ -83,15 +80,20 @@ class Slideshow extends Component {
   }
 
   render() {
+    debugger;
+
     const { deck } = this.props;
     const { activeIndex } = this.state;
 
     const carousel_card_info = this.acquireCardInfoForCarousel(deck);
 
     const slides = carousel_card_info.map(function(item, slide_index) {
+    debugger;
+
       const conjoined_card_id = deck[slide_index][1].id;
       
       const card_body_styles = {display: 'flex',  justifyContent: 'center', alignItems: 'center'};
+      debugger;
 
       return (
           <CarouselItem key={ `carousel-item-${conjoined_card_id}` } className={ item.shouldGlow ? 'glow' : ''} >
@@ -138,7 +140,7 @@ class Slideshow extends Component {
 }
 
 Slideshow.propTypes = {
-  deck: PropTypes.arrayOf(PropTypes.object), 
+  deck: PropTypes.array, 
   current_user_info: PropTypes.shape({
     id: PropTypes.number, 
     name: PropTypes.string,

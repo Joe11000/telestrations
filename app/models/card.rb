@@ -61,7 +61,7 @@ class Card < ActiveRecord::Base
   # retrieve all postgame attributes for  
   def self.get_desired_out_of_game_card_attributes current_user
     drawing.where(uploader_id: current_user, out_of_game_card_upload: true).order(created_at: :desc).map do |card|
-      attributes_of_drawing_card card
+      [ "", attributes_of_drawing_card(card) ] # return "" first because there is no users_game_name from a game that didn't exist
     end
   end
 
