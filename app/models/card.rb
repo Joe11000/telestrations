@@ -36,19 +36,6 @@ class Card < ActiveRecord::Base
       card = gu.starting_card
 
       until card.blank? do
-        # desired_card_attributes = begin
-        #   card_attributes = card.attributes.except('created_at', 'deleted_at', 'updated_at')
-
-        #   if card.drawing?
-        #     card_attributes.merge!({ 'drawing_url' => card.get_drawing_url })
-        #   end
-
-        #   card_attributes
-
-        # rescue
-        #   card.attributes
-        # end
-
         desired_card_attributes = card.drawing? ? self.attributes_of_drawing_card(card) : self.attributes_of_description_card(card)
         gu_set << [ GamesUser.find_by(game_id: game_id, user_id: card.uploader_id).users_game_name, desired_card_attributes ]
         card = card.child_card
@@ -60,9 +47,11 @@ class Card < ActiveRecord::Base
 
   # retrieve all postgame attributes for  
   def self.get_desired_out_of_game_card_attributes current_user
-    drawing.where(uploader_id: current_user, out_of_game_card_upload: true).order(created_at: :desc).map do |card|
-      [ "", attributes_of_drawing_card(card) ] # return "" first because there is no users_game_name from a game that didn't exist
+    result = drawing.where(uploader_id: current_user, out_of_game_card_upload: true).order(created_at: :desc).map do |card|
+      [ "", attributes_of_drawing_card(card) ] # return "" first because there is no users_game_name from a game that didn't exist 
     end
+
+    [result]
   end
 
 

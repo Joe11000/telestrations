@@ -2,7 +2,7 @@ import React from 'react';
 import { mount } from 'enzyme';
 import Slideshow from 'packs/postgame/Slideshow';
 import { finished } from 'stream';
-var mock_games_index_request = require('../mock_games_index_request')
+import { mock_games_index_request } from '../mock_games_index_request';
 
 describe('Slideshow component', () => {
   describe('smoke test', () => {
@@ -44,6 +44,7 @@ describe('Slideshow component', () => {
     });
 
     it('second card has correct content', () => {
+      debugger
       const props_1 = { deck: mock_games_index_request.arr_of_postgame_card_set[0], 
         current_user_info: mock_games_index_request.current_user_info }
       const slideshow_component_1 = mount(<Slideshow {...props_1} />);

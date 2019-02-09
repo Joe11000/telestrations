@@ -28,7 +28,7 @@ RSpec.describe "OutOfGameCardUploadController", type: :request do
 
       get out_of_game_card_uploads_path, params: {}, xhr: true
 
-      JSON.parse(response.body).each_with_index do |gu, i|
+      JSON.parse(response.body)[0].each_with_index do |gu, i| # [0] gets through the 
         expect(gu[0]).to eq ''
         
         whitelist_json = out_of_game_card_uploads[i].slice(whitelist_attributes)

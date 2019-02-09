@@ -1,4 +1,4 @@
-export default {  
+export const mock_games_index_request = {  
   "all_postgames_of__current_user": [  
     {  
       "id":1,
@@ -10,22 +10,6 @@ export default {
     },
     {  
       "id":3,
-      "created_at_strftime":"Sun Dec  9, 2018"
-    },
-    {  
-      "id":4,
-      "created_at_strftime":"Sun Dec  9, 2018"
-    },
-    {  
-      "id":5,
-      "created_at_strftime":"Sun Dec  9, 2018"
-    },
-    {  
-      "id":6,
-      "created_at_strftime":"Sun Dec  9, 2018"
-    },
-    {  
-      "id":7,
       "created_at_strftime":"Sun Dec  9, 2018"
     }
   ],

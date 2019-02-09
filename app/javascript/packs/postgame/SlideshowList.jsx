@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Slideshow from './Slideshow';
-// import $ from 'jquery'
 import { ListGroup, ListGroupItem } from 'reactstrap';
 
 // import LoadingIcon from 'images/loading_icon.gif'
@@ -9,15 +8,15 @@ import { ListGroup, ListGroupItem } from 'reactstrap';
 export default class SlideshowList extends React.Component {
   render() {
     var {arr_of_decks_of_cards, current_user_info} = this.props;    
-
     return (
       <ListGroup flush>
         {
-          arr_of_decks_of_cards && arr_of_decks_of_cards.map(function(deck, index){
-            const first_card_in_the_game = deck.map(deck => deck[1].id).join('.')
-
+          arr_of_decks_of_cards && arr_of_decks_of_cards.map(function(deck){
+            console.log(deck);
+            const first_card_in_the_game = deck.map(deck => deck[1].id).join('.') 
+            debugger
             return (
-              <ListGroupItem  className="list-group-item" key={`list-group-item-${first_card_in_the_game}`} accessKey={index}>
+              <ListGroupItem  className="list-group-item" key={`list-group-item-${first_card_in_the_game}`}>
                 <Slideshow deck={deck} current_user_info={current_user_info} />
               </ListGroupItem>
             )
@@ -29,5 +28,9 @@ export default class SlideshowList extends React.Component {
 
 }
 SlideshowList.propTypes = {
-  arr_of_decks_of_cards: PropTypes.array
+  arr_of_decks_of_cards: PropTypes.array, 
+  current_user_info: PropTypes.shape({
+    id: PropTypes.number, 
+    name: PropTypes.string,
+  })
 }

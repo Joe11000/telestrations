@@ -31,5 +31,4 @@ class OutOfGameCardUploadsController
         result
       end
   end
-
 end

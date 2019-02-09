@@ -1,20 +1,19 @@
-import React from 'react'
-// import ReactDOM from 'react-dom'
-import { shallow } from 'enzyme'
-import Postgame from 'packs/postgame/Postgame'
-import TestRenderer from 'react-test-renderer';
+import React from 'react';
+// import ReactDOM from 'react-dom';
+import { shallow } from 'enzyme';
+import Postgame from 'packs/postgame/Postgame';
+import mock_games_index_request from '../mock_games_index_request';
 
 describe('Postgame component', () => {
   describe('renders with', ()=>{
     it('a postgametab with last game displayed', ()=>{
-      const postgame = shallow(<Postgame />)
-
-      expect(1).toEqual(1)
+      const postgame = render(<Postgame mock_games_index_request/>)
+      const postgame_shallow = shallow(<Postgame mock_games_index_request/>)
+      debugger
+      expect(postgame.find(CarouselItem)).toEqual()
       expect( postgame.contains('.card') ).toBeDefined();
-      // expect( postgame.contains('.card-header .nav-item') ).to.have.lengthOf(2);
-      // expect( postgame.contains('.card-header .nav-item:eq(1)') ).to.eq.lengthOf(2);
-      // expect( postgame.find('.card') ).to.have.lengthOf(1);
-    })
+
+    });
 
   });
 

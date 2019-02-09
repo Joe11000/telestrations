@@ -18,7 +18,6 @@ import {
 class Slideshow extends Component {
   constructor(props) {
     super(props);
-    debugger
     this.next = this.next.bind(this);
     this.previous = this.previous.bind(this);
     this.goToIndex = this.goToIndex.bind(this);
@@ -30,9 +29,9 @@ class Slideshow extends Component {
 
   acquireCardInfoForCarousel(deck) {
     return deck.map(function (card_info)  {
-
+      const {current_user_info} = this.props;
       // Show text in different color if this card created by the current user
-      const shouldGlow = this.props.current_user_info.id == card_info[1].uploader_id;
+      const shouldGlow = (current_user_info && current_user_info.id) == card_info[1].uploader_id;
       
       if(card_info[1].medium === 'description'){
         return({
@@ -80,7 +79,6 @@ class Slideshow extends Component {
   }
 
   render() {
-    debugger;
 
     const { deck } = this.props;
     const { activeIndex } = this.state;
@@ -88,12 +86,10 @@ class Slideshow extends Component {
     const carousel_card_info = this.acquireCardInfoForCarousel(deck);
 
     const slides = carousel_card_info.map(function(item, slide_index) {
-    debugger;
 
       const conjoined_card_id = deck[slide_index][1].id;
       
       const card_body_styles = {display: 'flex',  justifyContent: 'center', alignItems: 'center'};
-      debugger;
 
       return (
           <CarouselItem key={ `carousel-item-${conjoined_card_id}` } className={ item.shouldGlow ? 'glow' : ''} >

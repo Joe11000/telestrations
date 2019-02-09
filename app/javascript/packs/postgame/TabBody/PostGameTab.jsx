@@ -10,7 +10,6 @@ export default class PostGameTab extends React.Component {
   }
 
   render() {
-    debugger
     const { 
             all_postgames_of__current_user, 
             current_user_info,
@@ -23,8 +22,8 @@ export default class PostGameTab extends React.Component {
 
 
       <React.Fragment>
-        { !!all_postgames_of__current_user &&
-          !!current_postgame_id &&
+        { all_postgames_of__current_user &&
+          current_postgame_id &&
           <React.Fragment>
             <CardTitle>Post Game Results</CardTitle>
             <GameSelector all_postgames_of__current_user={all_postgames_of__current_user}

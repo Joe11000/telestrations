@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import $ from 'jquery';
-import update from 'immutability-helper';
-// import axios from 'axios';
+
 import { Card, CardHeader, CardTitle, CardBody } from 'reactstrap';
 import { Nav, NavItem, NavLink } from 'reactstrap';
 
@@ -57,7 +56,6 @@ class Postgame extends React.Component {
 
       case 'OutOfGameCardUploadTab':
       const { OutOfGameCardUploadTab: out_of_game_cards } =  this.state;
-      debugger
         card_body_html = <OutOfGameCardUploadTab current_user_info={current_user_info} retrieveOutOfGameCards={this.retrieveOutOfGameCards} {...out_of_game_cards} />
         break;
     }
@@ -135,20 +133,25 @@ class Postgame extends React.Component {
   }
 
   retrieveOutOfGameCards(){
-      debugger;
-    
-      const { OutOfGameCardUploadTab: {out_of_game_cards: out_of_game_cards } } = this.state;
+    const { OutOfGameCardUploadTab: {out_of_game_cards: out_of_game_cards } } = this.state;
 
     if( out_of_game_cards.length == 0 ) {
       $.getJSON(`/cards/out_of_game_card_uploads`, function(response) {
         this.setState((state) => {
-          debugger;
-
+         return { 
+                  'OutOfGameCardUploadTab': {
+                                              'out_of_game_cards': response
+                                            }
+                }
 
           return response;
         });
       }.bind(this));
     }
+  }
+
+  static getDerivedStateFromError(error) {
+    debugger;
   }
 }
 
