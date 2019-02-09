@@ -45,7 +45,7 @@ class Slideshow extends Component {
       return({
                 src: card_info[1].drawing_url,
                 altText: '',
-                caption: `By: ${card_info[0]}`, 
+                caption: card_info[0] ? `By: ${card_info[0]}` : '', // don't show caption if drawing was uploaded out of game
                 shouldGlow
             });
       }

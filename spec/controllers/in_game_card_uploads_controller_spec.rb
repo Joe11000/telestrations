@@ -12,7 +12,7 @@ RSpec.describe InGameCardUploadsController, type: :controller do
       #  * expected_response[statuses: {form_authenticity_token:} ]
       #  * expected_response[:current_user_id]
     context 'Successful; In a 2-Player midgame.' do
-      context 'Round 1', :r5 do
+      context 'Round 1' do
         context 'Move 1 statuses for people involved' do
           before :all do
             @game = FactoryBot.create(:midgame_with_no_moves, callback_wanted: :midgame_with_no_moves, num_of_players: 2)
@@ -105,7 +105,7 @@ RSpec.describe InGameCardUploadsController, type: :controller do
             @drawn_image = Rack::Test::UploadedFile.new(File.join(Rails.root, 'spec' ,'support', 'images', @file_name ), "image/jpg")
           end
 
-          it 'user_1 and user_2', :r5 do
+          it 'user_1 and user_2' do
             cookies.signed[:user_id] = @user_1.id
 
 
@@ -138,7 +138,7 @@ RSpec.describe InGameCardUploadsController, type: :controller do
           end
         end
 
-        context 'Move 2 statuses for players involved in transaction', :r5 do
+        context 'Move 2 statuses for players involved in transaction' do
           before :all do
             @game = FactoryBot.create(:midgame, callback_wanted: :midgame, round: 2, move: 1, num_of_players: 2 )
             @gu_1, @gu_2 = @game.games_users.order(id: :asc)
@@ -166,7 +166,7 @@ RSpec.describe InGameCardUploadsController, type: :controller do
       end
     end
 
-    context 'Successful; In a 3-Player midgame.', :r5 do
+    context 'Successful; In a 3-Player midgame.' do
       context 'Round 1' do
         context 'Move 1 statuses for people involved' do
           before :all do
@@ -516,7 +516,7 @@ RSpec.describe InGameCardUploadsController, type: :controller do
       end
     end
 
-    context 'Unsuccessful; NOT a midgame', :r5 do
+    context 'Unsuccessful; NOT a midgame' do
       context 'game is a pregame' do
         it 'and uploading a description' do
           game = FactoryBot.create(:pregame, callback_wanted: :pregame)

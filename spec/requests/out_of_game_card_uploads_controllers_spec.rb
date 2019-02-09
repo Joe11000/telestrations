@@ -15,7 +15,7 @@ RSpec.describe "OutOfGameCardUploadController", type: :request do
     #   expect(response).to have_http_status(200)
     # end
 
-    it "should return expected return values for desired component (I know this should be in a controller test testing a controller/get_desired_out_of_game_card_attributes.rb mixin, but bad design planning to fix for later.)", :r5_now do 
+    it "should return expected return values for desired component (I know this should be in a controller test testing a controller/get_desired_out_of_game_card_attributes.rb mixin, but bad design planning to fix for later.)", :r5 do 
       FactoryBot.create(:pregame, callback_wanted: :pregame)
       game = FactoryBot.create(:postgame, callback_wanted: :postgame)
       current_user = game.users.first
