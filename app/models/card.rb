@@ -24,7 +24,7 @@ class Card < ActiveRecord::Base
     game_ids.map { |game_id| self.cards_from_finished_game(game_id) }
   end
 
-    # r5 tested
+  # r5 tested
   # postgame public methods
   def self.cards_from_finished_game game_id
     game = Game.includes(games_users: {starting_card: {child_card: :child_card  } }).find(game_id)

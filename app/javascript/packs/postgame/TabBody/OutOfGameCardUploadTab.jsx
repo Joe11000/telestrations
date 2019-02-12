@@ -33,11 +33,11 @@ export default class OutOfGameCardUploadTab extends React.Component {
 
 
 OutOfGameCardUploadTab.propTypes = {
-  
   current_user_info: PropTypes.shape({
     id: PropTypes.number, 
     name: PropTypes.string,
   }).isRequired,
+
   out_of_game_cards: PropTypes.arrayOf(PropTypes.array), 
   retrieveOutOfGameCards: PropTypes.func
 }

@@ -12,9 +12,8 @@ export default class SlideshowList extends React.Component {
       <ListGroup flush>
         {
           arr_of_decks_of_cards && arr_of_decks_of_cards.map(function(deck){
-            console.log(deck);
             const first_card_in_the_game = deck.map(deck => deck[1].id).join('.') 
-            debugger
+
             return (
               <ListGroupItem  className="list-group-item" key={`list-group-item-${first_card_in_the_game}`}>
                 <Slideshow deck={deck} current_user_info={current_user_info} />
