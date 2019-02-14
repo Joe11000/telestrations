@@ -7,7 +7,10 @@ import { mock_games_index_request } from '../mock_games_index_request';
 describe('Slideshow component', () => {
   describe('smoke test', () => {
     it('a carousel is on the screen', () => {
-      const props = { deck: mock_games_index_request.arr_of_postgame_card_set[0], 
+      const current_postgame_id = mock_games_index_request.PostGameTab.current_postgame_id
+      const decks_from_current_postgame = mock_games_index_request.PostGameTab.storage_of_viewed_postgames[current_postgame_id];
+
+      const props = { deck: decks_from_current_postgame[0], 
                       current_user_info: mock_games_index_request.current_user_info }
       const slideshow_component = mount(<Slideshow {...props} />);
     
@@ -18,8 +21,12 @@ describe('Slideshow component', () => {
     });
 
     it("current_user's card is glowing in each slideshow", () => {
-      const props_1 = { deck: mock_games_index_request.arr_of_postgame_card_set[0], 
-                        current_user_info: mock_games_index_request.current_user_info }
+      const current_postgame_id = mock_games_index_request.PostGameTab.current_postgame_id
+      const decks_from_current_postgame = mock_games_index_request.PostGameTab.storage_of_viewed_postgames[current_postgame_id];
+
+      const props_1 = { deck: decks_from_current_postgame[0], 
+                      current_user_info: mock_games_index_request.current_user_info }
+
       const slideshow_component_1 = mount(<Slideshow {...props_1} />);
       expect(slideshow_component_1.find('.carousel .carousel-item').at(0).hasClass('glow')).toEqual(true);
       expect(slideshow_component_1.find('.carousel .carousel-item').at(1).hasClass('glow')).toEqual(false);
@@ -29,24 +36,32 @@ describe('Slideshow component', () => {
 
     describe('Cards have correct content', () => {
       it("first card has correct content", () => {
-        const props_1 = { deck: mock_games_index_request.arr_of_postgame_card_set[0], 
-          current_user_info: mock_games_index_request.current_user_info }
-          
-          const slideshow_component_1 = mount(<Slideshow {...props_1} />);
-          const carousel_item = slideshow_component_1.find('.carousel .carousel-item').at(0);
-          const description = carousel_item.find('.card-body p').at(0).text(); 
-          const author = carousel_item.find('.card-body p').at(1).text();
-          
-          const expected_description = "excellent burnt orange tartan ham";
-          const expected_author = "By: Zackary Jaskolski";
+        const current_postgame_id = mock_games_index_request.PostGameTab.current_postgame_id
+        const decks_from_current_postgame = mock_games_index_request.PostGameTab.storage_of_viewed_postgames[current_postgame_id];
+
+        const props_1 = { deck: decks_from_current_postgame[0], 
+                        current_user_info: mock_games_index_request.current_user_info }
+            
+        const slideshow_component_1 = mount(<Slideshow {...props_1} />);
+        const carousel_item = slideshow_component_1.find('.carousel .carousel-item').at(0);
+        const description = carousel_item.find('.card-body p').at(0).text(); 
+        const author = carousel_item.find('.card-body p').at(1).text();
         
+        const expected_description = "excellent burnt orange tartan ham";
+        const expected_author = "By: Zackary Jaskolski";
+      
         expect(description).toEqual(expected_description);
         expect(author).toEqual(expected_author);
       });
   
       it('second card has correct content', () => {
-        const props_2 = { deck: mock_games_index_request.arr_of_postgame_card_set[0], 
-          current_user_info: mock_games_index_request.current_user_info }
+
+        const current_postgame_id = mock_games_index_request.PostGameTab.current_postgame_id
+        const decks_from_current_postgame = mock_games_index_request.PostGameTab.storage_of_viewed_postgames[current_postgame_id];
+  
+        const props_2 = { deck: decks_from_current_postgame[0], 
+                        current_user_info: mock_games_index_request.current_user_info }
+
         const slideshow_component_1 = mount(<Slideshow {...props_2} />);
         
         
@@ -62,8 +77,12 @@ describe('Slideshow component', () => {
       });
   
       it("third card has correct content", () => {
-        const props_3 = { deck: mock_games_index_request.arr_of_postgame_card_set[0], 
-          current_user_info: mock_games_index_request.current_user_info }
+        const current_postgame_id = mock_games_index_request.PostGameTab.current_postgame_id
+        const decks_from_current_postgame = mock_games_index_request.PostGameTab.storage_of_viewed_postgames[current_postgame_id];
+  
+        const props_3 = { deck: decks_from_current_postgame[0], 
+                        current_user_info: mock_games_index_request.current_user_info }
+
         const slideshow_component_1 = mount(<Slideshow {...props_3} />);
   
         const carousel_item = slideshow_component_1.find('.carousel .carousel-item').at(2);
