@@ -2,16 +2,16 @@ import React from 'react';
 import { mount } from 'enzyme';
 import Slideshow from 'packs/postgame/Slideshow';
 // import { finished } from 'stream';
-import { mock_games_index_request } from '../mock_games_index_request';
+import { mock_games_show_request } from '../mock_games_show_request';
 
 describe('Slideshow component', () => {
   describe('smoke test', () => {
     it('a carousel is on the screen', () => {
-      const current_postgame_id = mock_games_index_request.PostGameTab.current_postgame_id
-      const decks_from_current_postgame = mock_games_index_request.PostGameTab.storage_of_viewed_postgames[current_postgame_id];
+      const current_postgame_id = mock_games_show_request.PostGameTab.current_postgame_id
+      const decks_from_current_postgame = mock_games_show_request.PostGameTab.storage_of_viewed_postgames[current_postgame_id];
 
       const props = { deck: decks_from_current_postgame[0], 
-                      current_user_info: mock_games_index_request.current_user_info }
+                      current_user_info: mock_games_show_request.current_user_info }
       const slideshow_component = mount(<Slideshow {...props} />);
     
       expect(slideshow_component.find('.carousel .carousel-indicators').length).toEqual(1);
@@ -21,11 +21,11 @@ describe('Slideshow component', () => {
     });
 
     it("current_user's card is glowing in each slideshow", () => {
-      const current_postgame_id = mock_games_index_request.PostGameTab.current_postgame_id
-      const decks_from_current_postgame = mock_games_index_request.PostGameTab.storage_of_viewed_postgames[current_postgame_id];
+      const current_postgame_id = mock_games_show_request.PostGameTab.current_postgame_id
+      const decks_from_current_postgame = mock_games_show_request.PostGameTab.storage_of_viewed_postgames[current_postgame_id];
 
       const props_1 = { deck: decks_from_current_postgame[0], 
-                      current_user_info: mock_games_index_request.current_user_info }
+                      current_user_info: mock_games_show_request.current_user_info }
 
       const slideshow_component_1 = mount(<Slideshow {...props_1} />);
       expect(slideshow_component_1.find('.carousel .carousel-item').at(0).hasClass('glow')).toEqual(true);
@@ -36,11 +36,11 @@ describe('Slideshow component', () => {
 
     describe('Cards have correct content', () => {
       it("first card has correct content", () => {
-        const current_postgame_id = mock_games_index_request.PostGameTab.current_postgame_id
-        const decks_from_current_postgame = mock_games_index_request.PostGameTab.storage_of_viewed_postgames[current_postgame_id];
+        const current_postgame_id = mock_games_show_request.PostGameTab.current_postgame_id
+        const decks_from_current_postgame = mock_games_show_request.PostGameTab.storage_of_viewed_postgames[current_postgame_id];
 
         const props_1 = { deck: decks_from_current_postgame[0], 
-                        current_user_info: mock_games_index_request.current_user_info }
+                        current_user_info: mock_games_show_request.current_user_info }
             
         const slideshow_component_1 = mount(<Slideshow {...props_1} />);
         const carousel_item = slideshow_component_1.find('.carousel .carousel-item').at(0);
@@ -56,11 +56,11 @@ describe('Slideshow component', () => {
   
       it('second card has correct content', () => {
 
-        const current_postgame_id = mock_games_index_request.PostGameTab.current_postgame_id
-        const decks_from_current_postgame = mock_games_index_request.PostGameTab.storage_of_viewed_postgames[current_postgame_id];
+        const current_postgame_id = mock_games_show_request.PostGameTab.current_postgame_id
+        const decks_from_current_postgame = mock_games_show_request.PostGameTab.storage_of_viewed_postgames[current_postgame_id];
   
         const props_2 = { deck: decks_from_current_postgame[0], 
-                        current_user_info: mock_games_index_request.current_user_info }
+                        current_user_info: mock_games_show_request.current_user_info }
 
         const slideshow_component_1 = mount(<Slideshow {...props_2} />);
         
@@ -77,11 +77,11 @@ describe('Slideshow component', () => {
       });
   
       it("third card has correct content", () => {
-        const current_postgame_id = mock_games_index_request.PostGameTab.current_postgame_id
-        const decks_from_current_postgame = mock_games_index_request.PostGameTab.storage_of_viewed_postgames[current_postgame_id];
+        const current_postgame_id = mock_games_show_request.PostGameTab.current_postgame_id
+        const decks_from_current_postgame = mock_games_show_request.PostGameTab.storage_of_viewed_postgames[current_postgame_id];
   
         const props_3 = { deck: decks_from_current_postgame[0], 
-                        current_user_info: mock_games_index_request.current_user_info }
+                        current_user_info: mock_games_show_request.current_user_info }
 
         const slideshow_component_1 = mount(<Slideshow {...props_3} />);
   

@@ -1,4 +1,4 @@
-// export const mock_games_index_request = {  
+// export const mock_games_show_request = {  
 //   "all_postgames_of__current_user": [  
 //     {  
 //       "id":1,
@@ -156,7 +156,7 @@
 //   }
 // }
 
-export const mock_games_index_request = {  
+export const mock_games_show_request = {  
   "current_user_info": {
       "id": 1,
       "name": "Joe Noonan"

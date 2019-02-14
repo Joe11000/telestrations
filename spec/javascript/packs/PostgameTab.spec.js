@@ -3,7 +3,7 @@ import {shallow} from 'enzyme';
 import PostGameTab from 'packs/postgame/TabBody/PostGameTab';
 import {render, fireEvent} from 'react-testing-library';
 import {CardTitle } from 'reactstrap';
-import { mock_games_index_request } from '../mock_games_index_request';
+import { mock_games_show_request } from '../mock_games_show_request';
 
 import enzymeSerializer from 'enzyme-to-json/serializer';
 expect.addSnapshotSerializer(enzymeSerializer)
@@ -11,12 +11,12 @@ expect.addSnapshotSerializer(enzymeSerializer)
 describe('PostGameTab Component', () => {
   it('renders correctly', () => {
     debugger
-    mock_games_index_request
+    mock_games_show_request
     // const props = { , 
-    //   current_user_info: mock_games_index_request.current_user_info }
+    //   current_user_info: mock_games_show_request.current_user_info }
 // 
-      // const props = {  mock_games_index_request.arr_of_postgame_card_set, 
-      //                 current_user_info: mock_games_index_request.current_user_info, 
+      // const props = {  mock_games_show_request.arr_of_postgame_card_set, 
+      //                 current_user_info: mock_games_show_request.current_user_info, 
       //                  }
 
     const post_game_tab_component = shallow(<PostGameTab {...props} />);
