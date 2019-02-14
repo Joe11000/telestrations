@@ -1,7 +1,7 @@
 import React from 'react';
 import { mount } from 'enzyme';
 import Slideshow from 'packs/postgame/Slideshow';
-import { finished } from 'stream';
+// import { finished } from 'stream';
 import { mock_games_index_request } from '../mock_games_index_request';
 
 describe('Slideshow component', () => {

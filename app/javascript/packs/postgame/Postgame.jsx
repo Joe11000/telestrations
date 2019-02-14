@@ -1,31 +1,29 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import PropTypes from 'prop-types';
 import axios from 'axios';
-
 
 import { Card, CardHeader, CardTitle, CardBody } from 'reactstrap';
 import { Nav, NavItem, NavLink } from 'reactstrap';
 
 import OutOfGameCardUploadTab from './TabBody/OutOfGameCardUploadTab';;
 import PostGameTab from './TabBody/PostGameTab';
-import { request } from 'http';
+// import { request } from 'http';
 
-class Postgame extends React.Component {
+class Postgame extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      'current_user_info': null,
-      'tab_selected': undefined, // tab_selected (undefined||'PostGameTab'||'OutOfGameCardUploadTab'),
-      
-      'PostGameTab': {
-                      'all_postgames_of__current_user': null,
-                      'current_postgame_id': null,
-                      'storage_of_viewed_postgames': {}
-                    },
-      'OutOfGameCardUploadTab': {
-                                  'out_of_game_cards': []
-                                }
+                    'current_user_info': null,
+                    'tab_selected': 'PostGameTab', // tab_selected ('PostGameTab'||'OutOfGameCardUploadTab'),
+                    
+                    'PostGameTab': {
+                                    'all_postgames_of__current_user': null,
+                                    'current_postgame_id': null,
+                                    'storage_of_viewed_postgames': {}
+                                  },
+                    'OutOfGameCardUploadTab': {
+                                                'out_of_game_cards': []
+                                              }
                  };
     
     this.retrieveCardsForPostgame = this.retrieveCardsForPostgame.bind(this);
@@ -41,7 +39,6 @@ class Postgame extends React.Component {
     let card_body_html;
     switch(this.state.tab_selected) {
       case 'PostGameTab':
-      case undefined:
         card_body_html = <PostGameTab {...this.statePostGameTab}
                                       retrieveCardsForPostgame={this.retrieveCardsForPostgame}
                                       selectTab={this.selectTab}
@@ -89,19 +86,24 @@ class Postgame extends React.Component {
   }
 
   componentDidMount() {
-    debugger;
-
     // Controller knows game_id of -1 means like accessing user's last postgame(like in an array[-1])
     this.retrieveCardsForPostgame(-1);
   }
 
 
   retrieveCardsForPostgame(id) {
-    if(id < 0 || this.state.PostGameTab.storage_of_viewed_postgames[id] == null) {
+    if(this.state.PostGameTab.storage_of_viewed_postgames[id] == null) {
 
-      axios({method: get, 
+      axios({method: 'get', 
              url: `/games/${id}`, 
-             responseType: 'json'}).then(function(response){
+             headers: {
+               'Accept': 'application/json', 
+               'Content-Type': 'application/json'},
+             data: {}
+            
+            }).then(function(axios_response_wrapper){
+                let response = axios_response_wrapper.data;
+
                 // on first load, find what the id of the most recent game played is
                 let _current_postgame_id;
                 if(id == -1) {
@@ -114,6 +116,7 @@ class Postgame extends React.Component {
                   const new_entry_in_storage_of_viewed_postgames = { [_current_postgame_id]: response.arr_of_postgame_card_set } 
                   
                   const updated_storage_of_viewed_postgames = Object.assign(this.state.PostGameTab.storage_of_viewed_postgames, new_entry_in_storage_of_viewed_postgames);
+                  debugger
 
                   const responseToMergeWithState = {
                                                       'current_user_info': response.current_user_info,
@@ -131,7 +134,6 @@ class Postgame extends React.Component {
                   
 
                   return responseToMergeWithState
-                  // debugger
                   // // get arr_of_postgame_card_set
                   // Object.assign(_response, {storage_of_viewed_postgames:  { [_current_postgame_id]: _response.arr_of_postgame_card_set}}); // rename this prop
                   // delete _response.arr_of_postgame_card_set;
@@ -145,16 +147,11 @@ class Postgame extends React.Component {
 
         const responseToMergeWithState = moldResponse.call(this, response);
 
-        this.setState( (state, props) => { 
-          return responseToMergeWithState;
-        });
+        this.setState({ ...responseToMergeWithState });
       }.bind(this));
     }
     else {
-      
-      this.setState( function(state) { 
-        return { PostGameTab: { current_postgame_id: id } }
-      }.bind(this));
+      this.setState({ PostGameTab: { current_postgame_id: id } });
     }
   }
 
@@ -173,17 +170,15 @@ class Postgame extends React.Component {
     const { OutOfGameCardUploadTab: {out_of_game_cards: out_of_game_cards } } = this.state;
 
     if( out_of_game_cards.length == 0 ) {
-      axios.get(`/cards/out_of_game_card_uploads`).then(function(response) {
-        this.setState((state) => {
-         return { 
-                  'OutOfGameCardUploadTab': {
-                                              'out_of_game_cards': response
-                                            }
-                }
-
-          return response;
-        });
-      }.bind(this));
+      axios.get({
+                  url: `/cards/out_of_game_card_uploads`, 
+                  headers: {
+                    'Accept': 'application/json', 
+                    'Content-Type': 'application/json'},
+                  data: {}
+                }).then(function(response) {
+                          this.setState({ 'OutOfGameCardUploadTab': { 'out_of_game_cards': response } });
+                        }.bind(this));
     }
   }
 

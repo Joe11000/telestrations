@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import GameSelector from '../GameSelector';
 import SlideshowList from '../SlideshowList';
 import { CardTitle } from 'reactstrap';
 
-export default class PostGameTab extends React.Component {
+export default class PostGameTab extends Component {
   constructor(props){
     super(props);
   }
@@ -30,7 +30,7 @@ export default class PostGameTab extends React.Component {
                           />
             <div className='mt-4 mb-4'></div>
             <p className='small glow' style={{textAlign: 'right'}}>( * cards with red text were made by you * )</p>
-            <SlideshowList arr_of_decks_of_cards={storage_of_viewed_postgames[current_postgame_id]}
+            <SlideshowList arr_of_decks_of_cards={storage_of_viewed_postgames[current_postgame_id]} key={`slideshow_list_${current_postgame_id}`}
                            current_user_info={current_user_info}
                             />
           </React.Fragment>
@@ -58,6 +58,10 @@ PostGameTab.propTypes = {
   }),
 
   current_postgame_id: PropTypes.number,
+  current_user_info: PropTypes.shape({
+    id: PropTypes.number, 
+    name: PropTypes.string,
+  }),
   retrieveCardsForPostgame: PropTypes.func.isRequired,
   selectTab: PropTypes.func.isRequired,
 }

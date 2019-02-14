@@ -136,10 +136,10 @@ class Slideshow extends Component {
 }
 
 Slideshow.propTypes = {
-  deck: PropTypes.array, 
   current_user_info: PropTypes.shape({
     id: PropTypes.number, 
     name: PropTypes.string,
-  })
+  }),
+  deck: PropTypes.array
 }
 export default Slideshow;

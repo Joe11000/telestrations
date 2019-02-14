@@ -3,17 +3,38 @@ import {shallow} from 'enzyme';
 import PostGameTab from 'packs/postgame/TabBody/PostGameTab';
 import {render, fireEvent} from 'react-testing-library';
 import {CardTitle } from 'reactstrap';
+import { mock_games_index_request } from '../mock_games_index_request';
 
 import enzymeSerializer from 'enzyme-to-json/serializer';
 expect.addSnapshotSerializer(enzymeSerializer)
 
 describe('PostGameTab Component', () => {
   it('renders correctly', () => {
+    debugger
+    mock_games_index_request
+    // const props = { , 
+    //   current_user_info: mock_games_index_request.current_user_info }
+// 
+      // const props = {  mock_games_index_request.arr_of_postgame_card_set, 
+      //                 current_user_info: mock_games_index_request.current_user_info, 
+      //                  }
+
+    const post_game_tab_component = shallow(<PostGameTab {...props} />);
+
+
+    // {...this.statePostGameTab}
+    // retrieveCardsForPostgame={this.retrieveCardsForPostgame}
+    // selectTab={this.selectTab}
+
+
+
+
+
       let game_1 = {'id': 11, 'created_at_strftime': 'Mon Nov 1, 2018'}
       let game_2 = {'id': 22, 'created_at_strftime': 'Tues Nov 2, 2018'}
       let game_3 = {'id': 33, 'created_at_strftime': 'Wed Nov 3, 2018'}
 
-      const mockRetrieveCardsForPostgame = jest.fn()
+      const mockRetrieveCardsForPostgame = jest.fn();
 
       let props = {
                      'all_postgames_of__current_user': [
