@@ -14,11 +14,11 @@ class GamesController < ApplicationController
 
   # @game from redirect method
   def show
+    byebug
     # if user inputs params[:id] == , then user doen't know their last postgame and wants to view it.
     if params[:id].to_i == -1
       params[:id] = current_user.games.postgame.try(:last).try(:id)
     end
-
     respond_to do |format|
       format.js do
         game = current_user.games.postgame.find(params[:id])

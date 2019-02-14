@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
-import $ from 'jquery';
+import axios from 'axios';
 
 
 import { Card, CardHeader, CardTitle, CardBody } from 'reactstrap';
@@ -88,7 +88,6 @@ class Postgame extends React.Component {
     )
   }
 
-  // I didn't move this down one level to PostGameTab because will be holding onto the retrieved information between tab changes. 
   componentDidMount() {
     debugger;
 
@@ -99,47 +98,50 @@ class Postgame extends React.Component {
 
   retrieveCardsForPostgame(id) {
     if(id < 0 || this.state.PostGameTab.storage_of_viewed_postgames[id] == null) {
-      $.getJSON(`/games/${id}`, function(response) {
-        // on first load, find what the id of the most recent game played is
-        let _current_postgame_id;
-        if(id == -1) {
-          _current_postgame_id = response.all_postgames_of__current_user[response.all_postgames_of__current_user.length - 1].id;
-        }else{
-          _current_postgame_id = id;
-        }
 
-        function moldResponse(response) {
-          const new_entry_in_storage_of_viewed_postgames = { [_current_postgame_id]: response.arr_of_postgame_card_set } 
-          
-          const updated_storage_of_viewed_postgames = Object.assign(this.state.PostGameTab.storage_of_viewed_postgames, new_entry_in_storage_of_viewed_postgames);
+      axios({method: get, 
+             url: `/games/${id}`, 
+             responseType: 'json'}).then(function(response){
+                // on first load, find what the id of the most recent game played is
+                let _current_postgame_id;
+                if(id == -1) {
+                  _current_postgame_id = response.all_postgames_of__current_user[response.all_postgames_of__current_user.length - 1].id;
+                }else{
+                  _current_postgame_id = id;
+                }
 
-          const responseToMergeWithState = {
-                                              'current_user_info': response.current_user_info,
-                                              'tab_selected': 'PostGameTab', // tab_selected (undefined||'PostGameTab'||'OutOfGameCardUploadTab'),
-                                              
-                                              'PostGameTab': {
-                                                              'all_postgames_of__current_user': response.all_postgames_of__current_user,
-                                                              'current_postgame_id': _current_postgame_id,
-                                                              'storage_of_viewed_postgames': updated_storage_of_viewed_postgames
-                                                            },
-                                              'OutOfGameCardUploadTab': {
-                                                                          'out_of_game_cards': response.all_postgames_of__current_user
-                                                                        }
-                                            };
-          
+                function moldResponse(response) {
+                  const new_entry_in_storage_of_viewed_postgames = { [_current_postgame_id]: response.arr_of_postgame_card_set } 
+                  
+                  const updated_storage_of_viewed_postgames = Object.assign(this.state.PostGameTab.storage_of_viewed_postgames, new_entry_in_storage_of_viewed_postgames);
 
-          return responseToMergeWithState
-          // debugger
-          // // get arr_of_postgame_card_set
-          // Object.assign(_response, {storage_of_viewed_postgames:  { [_current_postgame_id]: _response.arr_of_postgame_card_set}}); // rename this prop
-          // delete _response.arr_of_postgame_card_set;
+                  const responseToMergeWithState = {
+                                                      'current_user_info': response.current_user_info,
+                                                      'tab_selected': 'PostGameTab', // tab_selected (undefined||'PostGameTab'||'OutOfGameCardUploadTab'),
+                                                      
+                                                      'PostGameTab': {
+                                                                      'all_postgames_of__current_user': response.all_postgames_of__current_user,
+                                                                      'current_postgame_id': _current_postgame_id,
+                                                                      'storage_of_viewed_postgames': updated_storage_of_viewed_postgames
+                                                                    },
+                                                      'OutOfGameCardUploadTab': {
+                                                                                  'out_of_game_cards': response.all_postgames_of__current_user
+                                                                                }
+                                                    };
+                  
+
+                  return responseToMergeWithState
+                  // debugger
+                  // // get arr_of_postgame_card_set
+                  // Object.assign(_response, {storage_of_viewed_postgames:  { [_current_postgame_id]: _response.arr_of_postgame_card_set}}); // rename this prop
+                  // delete _response.arr_of_postgame_card_set;
+                  
+                  // const newPostGameTab = Object.assign(_response, {'current_postgame_id': _current_postgame_id });
+                  // const current_user_info = newPostGameTab.current_user_info;
+                  // delete newPostGameTab.current_user_info;
           
-          // const newPostGameTab = Object.assign(_response, {'current_postgame_id': _current_postgame_id });
-          // const current_user_info = newPostGameTab.current_user_info;
-          // delete newPostGameTab.current_user_info;
-  
-          // return { tab_selected: 'PostGameTab', PostGameTab: newPostGameTab, current_user_info };
-        }
+                  // return { tab_selected: 'PostGameTab', PostGameTab: newPostGameTab, current_user_info };
+                }
 
         const responseToMergeWithState = moldResponse.call(this, response);
 
@@ -151,9 +153,6 @@ class Postgame extends React.Component {
     else {
       
       this.setState( function(state) { 
-        debugger
-        // return update(this.state, { PostGameTab: { current_postgame_id: { $add: id } } } );
-
         return { PostGameTab: { current_postgame_id: id } }
       }.bind(this));
     }
@@ -174,7 +173,7 @@ class Postgame extends React.Component {
     const { OutOfGameCardUploadTab: {out_of_game_cards: out_of_game_cards } } = this.state;
 
     if( out_of_game_cards.length == 0 ) {
-      $.getJSON(`/cards/out_of_game_card_uploads`, function(response) {
+      axios.get(`/cards/out_of_game_card_uploads`).then(function(response) {
         this.setState((state) => {
          return { 
                   'OutOfGameCardUploadTab': {

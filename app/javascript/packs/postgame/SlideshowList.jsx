@@ -24,8 +24,8 @@ export default class SlideshowList extends React.Component {
       </ListGroup>
     )
   }
-
 }
+
 SlideshowList.propTypes = {
   arr_of_decks_of_cards: PropTypes.array, 
   current_user_info: PropTypes.shape({
