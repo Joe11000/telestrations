@@ -9,75 +9,67 @@ import enzymeSerializer from 'enzyme-to-json/serializer';
 expect.addSnapshotSerializer(enzymeSerializer)
 
 describe('PostGameTab Component', () => {
-  it('renders correctly', () => {
-    debugger
-    mock_games_show_request
-    // const props = { , 
-    //   current_user_info: mock_games_show_request.current_user_info }
-// 
-      // const props = {  mock_games_show_request.arr_of_postgame_card_set, 
-      //                 current_user_info: mock_games_show_request.current_user_info, 
-      //                  }
 
-    const post_game_tab_component = shallow(<PostGameTab {...props} />);
+  it('renders card title', () => {
+    const mockRetrieveCardsForPostgame = jest.fn();
+    const post_game_tab_props = { 
+                                  ...mock_games_show_request.PostGameTab, 
+                                  retrieveCardsForPostgame: mockRetrieveCardsForPostgame
+                                }                              
+    const post_game_tab_component = shallow(<PostGameTab {...post_game_tab_props } />);
 
-
-    // {...this.statePostGameTab}
-    // retrieveCardsForPostgame={this.retrieveCardsForPostgame}
-    // selectTab={this.selectTab}
-
-
-
-
-
-      let game_1 = {'id': 11, 'created_at_strftime': 'Mon Nov 1, 2018'}
-      let game_2 = {'id': 22, 'created_at_strftime': 'Tues Nov 2, 2018'}
-      let game_3 = {'id': 33, 'created_at_strftime': 'Wed Nov 3, 2018'}
-
-      const mockRetrieveCardsForPostgame = jest.fn();
-
-      let props = {
-                     'all_postgames_of__current_user': [
-                                                         {
-                                                           'id': game_1.id,
-                                                           'created_at_strftime': game_1.created_at_strftime
-                                                         },
-                                                         {
-                                                           'id': game_2.id,
-                                                           'created_at_strftime': game_2.created_at_strftime
-                                                         },
-                                                         {
-                                                           'id': game_3.id,
-                                                           'created_at_strftime': game_3.created_at_strftime
-                                                         }
-                                                       ],
-                     'current_postgame_id': game_3.id,
-                     'retrieveCardsForPostgame': mockRetrieveCardsForPostgame,
-                     'selectTab': jest.fn(),
-                     'retrieveCardsForPostgame': jest.fn(),
-                   }
-
-      const postgame_tab = shallow(<PostGameTab {...props} />)
-      
-      
-      expect(postgame_tab.find('CardTitle').text()).toEqual('Post Game Results');
-      expect(postgame_tab.find('GameSelector').length).toEqual(1);
-      expect(postgame_tab.find('SlideshowList').length).toEqual(1);
+    expect(post_game_tab_component.find('CardTitle').children().text()).toEqual('Post Game Results');
   })
 
+  it('renders helpful information on screen', () => {
+    const mockRetrieveCardsForPostgame = jest.fn();
+    const post_game_tab_props = { 
+                                  ...mock_games_show_request.PostGameTab, 
+                                  retrieveCardsForPostgame: mockRetrieveCardsForPostgame
+                                }                              
+    const post_game_tab_component = shallow(<PostGameTab {...post_game_tab_props } />);
+    expect(post_game_tab_component.find('p').text()).toEqual('( * cards with red text were made by you * )');
+  })
 
-  // describe('while on the page', ()=>{
-  //   describe('selects a different game in the dropdown selector', ()=>{
-  //     fit("", ()=>{
-  //       const carousel_item = shallow(CarouselItem)
-  //     });
-  //   });
+  it('renders the GameSelector with correct props and a key', () => {
+    const mockRetrieveCardsForPostgame = jest.fn();
+    const post_game_tab_props = { 
+                                  ...mock_games_show_request.PostGameTab, 
+                                  retrieveCardsForPostgame: mockRetrieveCardsForPostgame
+                                }                              
+    const post_game_tab_component = shallow(<PostGameTab {...post_game_tab_props } />);
 
-  //   describe('selects the same game in the dropdown selector', ()=>{
-  //     it("doesn't get other ", ()=>{
-  //       expect(1).toEqual(1);
+    const expected_game_selector_props = {
+      all_postgames_of__current_user: mock_games_show_request.OutOfGameCardUploadTab.out_of_game_cards,
+      current_postgame_id: mock_games_show_request.PostGameTab.current_postgame_id,
+      retrieveCardsForPostgame: mockRetrieveCardsForPostgame,
+    }
 
-  //     });
-  //   });
-  // });
+    const GameSelector = post_game_tab_component.find('GameSelector');
+    expect(GameSelector.length).toEqual(1);
+    expect(GameSelector.props()).toEqual(expected_game_selector_props);
+  })
+
+  it('creates the list of slideshows that receive the correct props ', () => {
+    const mockRetrieveCardsForPostgame = jest.fn();
+    
+    const post_game_tab_props = { 
+                                  ...mock_games_show_request.PostGameTab, 
+                                  retrieveCardsForPostgame: mockRetrieveCardsForPostgame, 
+                                  current_user_info: { ...mock_games_show_request.current_user_info }
+                                };
+                                
+    const post_game_tab_component = shallow(<PostGameTab {...post_game_tab_props } />);
+    let current_postgame_id = mock_games_show_request.PostGameTab.current_postgame_id;
+    let arr_of_decks_of_cards = mock_games_show_request.PostGameTab.storage_of_viewed_postgames[current_postgame_id];
+    const expected_slideshow_list_props = {
+                                            current_user_info: { ...mock_games_show_request.current_user_info }, 
+                                            arr_of_decks_of_cards
+                                          };
+    
+    const SlideshowList = post_game_tab_component.find('SlideshowList');
+    expect(SlideshowList.length).toEqual(1);
+    expect(SlideshowList.key()).toEqual('slideshow_list_7');
+    expect(SlideshowList.props()).toEqual(expected_slideshow_list_props);
+  })
 });

@@ -30,8 +30,9 @@ export default class PostGameTab extends Component {
                           />
             <div className='mt-4 mb-4'></div>
             <p className='small glow' style={{textAlign: 'right'}}>( * cards with red text were made by you * )</p>
-            <SlideshowList arr_of_decks_of_cards={storage_of_viewed_postgames[current_postgame_id]} key={`slideshow_list_${current_postgame_id}`}
-                           current_user_info={current_user_info}
+            <SlideshowList arr_of_decks_of_cards={ storage_of_viewed_postgames[current_postgame_id] } 
+                           current_user_info={ current_user_info }
+                           key={ `slideshow_list_${current_postgame_id}` }
                             />
           </React.Fragment>
         }
@@ -63,5 +64,5 @@ PostGameTab.propTypes = {
     name: PropTypes.string,
   }),
   retrieveCardsForPostgame: PropTypes.func.isRequired,
-  selectTab: PropTypes.func.isRequired,
+  // selectTab: PropTypes.func.isRequired,
 }

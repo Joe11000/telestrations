@@ -39,9 +39,9 @@ class Postgame extends Component {
     let card_body_html;
     switch(this.state.tab_selected) {
       case 'PostGameTab':
-        card_body_html = <PostGameTab {...this.statePostGameTab}
+        card_body_html = <PostGameTab {...this.state.PostGameTab}
                                       retrieveCardsForPostgame={this.retrieveCardsForPostgame}
-                                      selectTab={this.selectTab}
+                                      // selectTab={this.selectTab}
                                       />
         break;
 
@@ -149,6 +149,9 @@ class Postgame extends Component {
 
         this.setState({ ...responseToMergeWithState });
       }.bind(this));
+    }
+    else if(id == this.state.PostGameTab.current_postgame_id) {
+      return; // user chose to view the game they were looking at
     }
     else {
       this.setState({ PostGameTab: { current_postgame_id: id } });
