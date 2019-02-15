@@ -107,7 +107,7 @@ class Postgame extends Component {
                 // on first load, find what the id of the most recent game played is
                 let _current_postgame_id;
                 if(id == -1) {
-                  _current_postgame_id = response.all_postgames_of__current_user[response.all_postgames_of__current_user.length - 1].id;
+                  _current_postgame_id = response.PostGameTab.all_postgames_of__current_user[response.all_postgames_of__current_user.length - 1].id;
                 }else{
                   _current_postgame_id = id;
                 }

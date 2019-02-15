@@ -14,8 +14,6 @@ export default class GameSelector extends React.Component {
   render() {
     const {all_postgames_of__current_user, current_postgame_id} = this.props;
     
-    
-    // debugger
     return (
       <React.Fragment>
         {
