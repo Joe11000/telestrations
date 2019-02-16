@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-export default class GameSelector extends React.Component {
+class GameSelector extends Component {
   constructor(props){
     super(props);
   }
@@ -22,7 +22,7 @@ export default class GameSelector extends React.Component {
           <select value={current_postgame_id} className='custom-select' onChange={this.handleChangeGameSelector}>
             {
               all_postgames_of__current_user.map(function(game_info, index) {
-                return(<option key={game_info.id} value={game_info.id}>Game {index + 1} - {game_info.created_at_strftime}</option>);
+                return(<option key={`game_selector_postgame_id_${game_info.id}`} value={game_info.id}>Game {index + 1} - {game_info.created_at_strftime}</option>);
               })
             }
           </select>
@@ -54,3 +54,5 @@ GameSelector.propTypes = {
   current_postgame_id: PropTypes.number.isRequired,
   retrieveCardsForPostgame: PropTypes.func.isRequired,
 }
+
+export default GameSelector;
