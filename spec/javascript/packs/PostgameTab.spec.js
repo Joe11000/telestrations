@@ -1,12 +1,10 @@
 import React from 'react';
 import {shallow} from 'enzyme';
 import PostGameTab from 'packs/postgame/TabBody/PostGameTab';
-import {render, fireEvent} from 'react-testing-library';
-import {CardTitle } from 'reactstrap';
 import { mock_games_show_request } from '../mock_games_show_request';
 
-import enzymeSerializer from 'enzyme-to-json/serializer';
-expect.addSnapshotSerializer(enzymeSerializer)
+// import enzymeSerializer from 'enzyme-to-json/serializer';
+// expect.addSnapshotSerializer(enzymeSerializer)
 
 describe('PostGameTab Component', () => {
 

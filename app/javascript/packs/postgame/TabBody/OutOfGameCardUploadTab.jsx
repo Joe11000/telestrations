@@ -15,18 +15,20 @@ export default class OutOfGameCardUploadTab extends React.Component {
       
     return(
       <React.Fragment>
-      { out_of_game_cards.length > 0 &&
+      { 
+        out_of_game_cards.length == 0 ? 
+          <h2>You don't have any images uploaded out of game</h2> : 
 
-        <React.Fragment>
-          <CardTitle>Your Drawings</CardTitle>
-    
-          <div className='mt-4 mb-4'></div> 
-          <SlideshowList arr_of_decks_of_cards={ out_of_game_cards }
-                          current_user_info={current_user_info}
-                          />
-        </React.Fragment>
+          <React.Fragment>
+            <CardTitle>Your Drawings not associated to a game</CardTitle>
+      
+            <div className='mt-4 mb-4'></div> 
+            <SlideshowList  arr_of_decks_of_cards={ out_of_game_cards }
+                            current_user_info={current_user_info}
+                            />
+          </React.Fragment>
       }
-    </React.Fragment>
+      </React.Fragment>
     );
   }
 }
@@ -38,6 +40,10 @@ OutOfGameCardUploadTab.propTypes = {
     name: PropTypes.string,
   }).isRequired,
 
-  out_of_game_cards: PropTypes.arrayOf(PropTypes.array), 
+  out_of_game_cards: PropTypes.arrayOf(
+                        PropTypes.shape({
+                          id: PropTypes.number, 
+                          created_at_strftime: PropTypes.string
+                        }).isRequired).isRequired, 
   retrieveOutOfGameCards: PropTypes.func
 }

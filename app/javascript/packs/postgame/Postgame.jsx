@@ -94,12 +94,12 @@ class Postgame extends Component {
   retrieveCardsForPostgame(id) {
     if(this.state.PostGameTab.storage_of_viewed_postgames[id] == null) {
 
-      axios({method: 'get', 
-             url: `/games/${id}`, 
-             headers: {
-               'Accept': 'application/json', 
-               'Content-Type': 'application/json'},
-             data: {}
+      axios({ method: 'get', 
+              url: `/games/${id}`, 
+              headers: {
+                'Accept': 'application/json', 
+                'Content-Type': 'application/json'},
+              data: {}
             
             }).then(function(axios_response_wrapper){
                 let response = axios_response_wrapper.data;
@@ -107,43 +107,44 @@ class Postgame extends Component {
                 // on first load, find what the id of the most recent game played is
                 let _current_postgame_id;
                 if(id == -1) {
-                  _current_postgame_id = response.PostGameTab.all_postgames_of__current_user[response.all_postgames_of__current_user.length - 1].id;
+                  let index_of_last_game = response.PostGameTab.all_postgames_of__current_user.length - 1
+                  _current_postgame_id = response.PostGameTab.all_postgames_of__current_user[index_of_last_game].id;
                 }else{
                   _current_postgame_id = id;
                 }
 
-                function moldResponse(response) {
-                  const new_entry_in_storage_of_viewed_postgames = { [_current_postgame_id]: response.arr_of_postgame_card_set } 
+                // function moldResponse(response) {
+                //   const new_entry_in_storage_of_viewed_postgames = { [_current_postgame_id]: response.arr_of_postgame_card_set } 
                   
-                  const updated_storage_of_viewed_postgames = Object.assign(this.state.PostGameTab.storage_of_viewed_postgames, new_entry_in_storage_of_viewed_postgames);
-                  debugger
+                //   const updated_storage_of_viewed_postgames = Object.assign(this.state.PostGameTab.storage_of_viewed_postgames, new_entry_in_storage_of_viewed_postgames);
+                //   debugger
 
-                  const responseToMergeWithState = {
-                                                      'current_user_info': response.current_user_info,
-                                                      'tab_selected': 'PostGameTab', // tab_selected (undefined||'PostGameTab'||'OutOfGameCardUploadTab'),
+                //   const responseToMergeWithState = {
+                //                                       'current_user_info': response.current_user_info,
+                //                                       'tab_selected': 'PostGameTab', // tab_selected (undefined||'PostGameTab'||'OutOfGameCardUploadTab'),
                                                       
-                                                      'PostGameTab': {
-                                                                      'all_postgames_of__current_user': response.all_postgames_of__current_user,
-                                                                      'current_postgame_id': _current_postgame_id,
-                                                                      'storage_of_viewed_postgames': updated_storage_of_viewed_postgames
-                                                                    },
-                                                      'OutOfGameCardUploadTab': {
-                                                                                  'out_of_game_cards': response.all_postgames_of__current_user
-                                                                                }
-                                                    };
+                //                                       'PostGameTab': {
+                //                                                       'all_postgames_of__current_user': response.PostGameTab.all_postgames_of__current_user,
+                //                                                       'current_postgame_id': _current_postgame_id,
+                //                                                       'storage_of_viewed_postgames': updated_storage_of_viewed_postgames
+                //                                                     },
+                //                                       'OutOfGameCardUploadTab': {
+                //                                                                   'out_of_game_cards': response.all_postgames_of__current_user
+                //                                                                 }
+                //                                     };
                   
 
-                  return responseToMergeWithState
-                  // // get arr_of_postgame_card_set
-                  // Object.assign(_response, {storage_of_viewed_postgames:  { [_current_postgame_id]: _response.arr_of_postgame_card_set}}); // rename this prop
-                  // delete _response.arr_of_postgame_card_set;
+                //   return responseToMergeWithState
+                //   // // get arr_of_postgame_card_set
+                //   // Object.assign(_response, {storage_of_viewed_postgames:  { [_current_postgame_id]: _response.arr_of_postgame_card_set}}); // rename this prop
+                //   // delete _response.arr_of_postgame_card_set;
                   
-                  // const newPostGameTab = Object.assign(_response, {'current_postgame_id': _current_postgame_id });
-                  // const current_user_info = newPostGameTab.current_user_info;
-                  // delete newPostGameTab.current_user_info;
+                //   // const newPostGameTab = Object.assign(_response, {'current_postgame_id': _current_postgame_id });
+                //   // const current_user_info = newPostGameTab.current_user_info;
+                //   // delete newPostGameTab.current_user_info;
           
-                  // return { tab_selected: 'PostGameTab', PostGameTab: newPostGameTab, current_user_info };
-                }
+                //   // return { tab_selected: 'PostGameTab', PostGameTab: newPostGameTab, current_user_info };
+                // }
 
         const responseToMergeWithState = moldResponse.call(this, response);
 

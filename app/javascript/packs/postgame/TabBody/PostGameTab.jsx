@@ -64,5 +64,9 @@ PostGameTab.propTypes = {
     name: PropTypes.string,
   }),
   retrieveCardsForPostgame: PropTypes.func.isRequired,
+  storage_of_viewed_postgames: PropTypes.shape({
+    id: PropTypes.number, 
+    created_at_strftime: PropTypes.string
+  }).isRequired
   // selectTab: PropTypes.func.isRequired,
 }
