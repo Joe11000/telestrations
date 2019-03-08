@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios';
 
+
 import { Card, CardHeader, CardTitle, CardBody } from 'reactstrap';
 import { Nav, NavItem, NavLink } from 'reactstrap';
 
@@ -112,43 +113,7 @@ class Postgame extends Component {
                 }else{
                   _current_postgame_id = id;
                 }
-
-                // function moldResponse(response) {
-                //   const new_entry_in_storage_of_viewed_postgames = { [_current_postgame_id]: response.arr_of_postgame_card_set } 
-                  
-                //   const updated_storage_of_viewed_postgames = Object.assign(this.state.PostGameTab.storage_of_viewed_postgames, new_entry_in_storage_of_viewed_postgames);
-                //   debugger
-
-                //   const responseToMergeWithState = {
-                //                                       'current_user_info': response.current_user_info,
-                //                                       'tab_selected': 'PostGameTab', // tab_selected (undefined||'PostGameTab'||'OutOfGameCardUploadTab'),
-                                                      
-                //                                       'PostGameTab': {
-                //                                                       'all_postgames_of__current_user': response.PostGameTab.all_postgames_of__current_user,
-                //                                                       'current_postgame_id': _current_postgame_id,
-                //                                                       'storage_of_viewed_postgames': updated_storage_of_viewed_postgames
-                //                                                     },
-                //                                       'OutOfGameCardUploadTab': {
-                //                                                                   'out_of_game_cards': response.all_postgames_of__current_user
-                //                                                                 }
-                //                                     };
-                  
-
-                //   return responseToMergeWithState
-                //   // // get arr_of_postgame_card_set
-                //   // Object.assign(_response, {storage_of_viewed_postgames:  { [_current_postgame_id]: _response.arr_of_postgame_card_set}}); // rename this prop
-                //   // delete _response.arr_of_postgame_card_set;
-                  
-                //   // const newPostGameTab = Object.assign(_response, {'current_postgame_id': _current_postgame_id });
-                //   // const current_user_info = newPostGameTab.current_user_info;
-                //   // delete newPostGameTab.current_user_info;
-          
-                //   // return { tab_selected: 'PostGameTab', PostGameTab: newPostGameTab, current_user_info };
-                // }
-
-        const responseToMergeWithState = moldResponse.call(this, response);
-
-        this.setState({ ...responseToMergeWithState });
+        this.setState( response );
       }.bind(this));
     }
     else if(id == this.state.PostGameTab.current_postgame_id) {
