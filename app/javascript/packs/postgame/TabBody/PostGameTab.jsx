@@ -7,6 +7,7 @@ import { CardTitle } from 'reactstrap';
 export default class PostGameTab extends Component {
   constructor(props){
     super(props);
+    debugger
   }
 
   render() {

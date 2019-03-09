@@ -1,5 +1,5 @@
-// Mocked games#show.json request that has 7 played games and the latest one was a 3 person game 
-export const mock_games_show_request = {  
+// Mocked games#show.json request that has 7 played games and the latest one was a 3 person game
+export const mock_games_show_request_for_last_postgame = {
   "current_user_info": {
       "id": 1,
       "name": "Joe Noonan"
