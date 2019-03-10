@@ -42,6 +42,12 @@
 
       .row#upload-cards-container
         .col-12.col-sm-12
+          h3 View Past Games 
+        .offset-1.col-11.offset-sm-1.col-sm-11.description        
+          = link_to( "View Slideshows Of Past Games You Have Played", games_path)
+
+      .row#upload-cards-container
+        .col-12.col-sm-12
           h3 Upload Cards
         .offset-1.col-11.offset-sm-1.col-sm-11.description
           a href=out_of_game_card_uploads_path data-id='out-of-game-drawings-link'

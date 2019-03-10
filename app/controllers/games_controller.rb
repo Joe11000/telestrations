@@ -47,3 +47,4 @@ class GamesController < ApplicationController
       @game ||= current_user.current_game
     end
 end
+                            

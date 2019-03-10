@@ -859,10 +859,7 @@ RSpec.describe GamesController::AssemblePostgamesComponentParams, :r5, :clean_as
                                                                  'all_postgames_of__current_user' => all_postgames_of__current_user(current_user),
                                                                  'current_postgame_id' => current_postgame.id,
                                                                  'storage_of_viewed_postgames' => { current_postgame.id => arr_of_postgame_card_set(current_postgame) }
-                                                               },
-                                              'OutOfGameCardUploadTab' => {
-                                                                          'out_of_game_cards' => all_postgames_of__current_user(current_user)
-                                                                        }
+                                                               }
                                             };
                                           
       response = GamesController::AssemblePostgamesComponentParams.new(current_user: current_user, game: current_postgame).result_to_json

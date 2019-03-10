@@ -50,7 +50,6 @@ class Card < ActiveRecord::Base
     result = drawing.where(uploader_id: current_user, out_of_game_card_upload: true).order(created_at: :desc).map do |card|
       [ "", attributes_of_drawing_card(card) ] # return "" first because there is no users_game_name from a game that didn't exist 
     end
-
     [result]
   end
 

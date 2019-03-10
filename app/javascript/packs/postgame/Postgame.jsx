@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios';
 
-
 import { Card, CardHeader, CardTitle, CardBody } from 'reactstrap';
 import { Nav, NavItem, NavLink } from 'reactstrap';
 
@@ -28,8 +27,6 @@ class Postgame extends Component {
     
     this.retrieveCardsForPostgame = this.retrieveCardsForPostgame.bind(this);
     this.retrieveOutOfGameCards = this.retrieveOutOfGameCards.bind(this);
-    // this.getNewPostgameInfoRequest = this.getNewPostgameInfoRequest.bind(this);
-    // this.getNewOutOfGameCardsInfoRequest = this.getNewOutOfGameCardsInfoRequest.bind(this);
   }
   
   render() {
@@ -41,7 +38,6 @@ class Postgame extends Component {
     let card_body_html;
     switch(this.state.tab_selected) {
       case 'PostGameTab':
-      debugger
       card_body_html = <PostGameTab {...this.state.PostGameTab}
       retrieveCardsForPostgame={this.retrieveCardsForPostgame}
       />
@@ -164,7 +160,8 @@ class Postgame extends Component {
   }
 
   getNewOutOfGameCardsInfoRequest() {
-    return axios.get({
+    return axios({
+      method: 'get',
       url: `/cards/out_of_game_card_uploads`, 
       headers: {
         'Accept': 'application/json', 
@@ -175,16 +172,15 @@ class Postgame extends Component {
 
   retrieveOutOfGameCards(){
     const { OutOfGameCardUploadTab: {out_of_game_cards: out_of_game_cards } } = this.state;
-
+    
     if( out_of_game_cards.length == 0 ) {
-      this.getNewOutOfGameCardsInfoRequest().then(function(response) {
+      this.getNewOutOfGameCardsInfoRequest().then(axios_wrapper => axios_wrapper.data).then(function(response) {
         this.setState({ 'OutOfGameCardUploadTab': { 'out_of_game_cards': response } });
       }.bind(this));
     }
   }
 
   static getDerivedStateFromError(error) {
-    debugger;
   }
 }
 

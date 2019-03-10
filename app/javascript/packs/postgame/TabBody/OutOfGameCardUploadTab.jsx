@@ -5,6 +5,7 @@ import { CardTitle } from 'reactstrap';
 
 export default class OutOfGameCardUploadTab extends React.Component {
   componentDidMount(){
+    debugger
     if(this.props.out_of_game_cards.length == 0){
       this.props.retrieveOutOfGameCards();
     }
@@ -12,7 +13,7 @@ export default class OutOfGameCardUploadTab extends React.Component {
 
   render(){
     const { current_user_info, out_of_game_cards } = this.props;
-      
+    debugger
     return(
       <React.Fragment>
       { 

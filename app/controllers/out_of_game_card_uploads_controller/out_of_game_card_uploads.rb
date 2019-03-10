@@ -32,13 +32,3 @@ class OutOfGameCardUploadsController
       end
   end
 end
-
-
-
- 
-
-
-
-
-
-

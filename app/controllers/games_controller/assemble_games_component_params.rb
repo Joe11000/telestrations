@@ -92,10 +92,7 @@ class GamesController
                                'all_postgames_of__current_user' => all_postgames_of__current_user,
                                'current_postgame_id' => game.id,
                                'storage_of_viewed_postgames' => { game.id => arr_of_postgame_card_set }
-                             },
-            'OutOfGameCardUploadTab' => {
-                                          'out_of_game_cards' => all_postgames_of__current_user
-                                        }
+                             }
           };
         end
 

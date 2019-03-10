@@ -8,6 +8,11 @@ class OutOfGameCardUploadsController < ApplicationController
   def index
     respond_to do |format|
       format.js do
+        # raise("I don't think this is ever called")
+        # json = Card.get_desired_out_of_game_card_attributes(current_user)
+        # render(json: json) and return
+      end
+      format.json do
         json = Card.get_desired_out_of_game_card_attributes(current_user)
         render(json: json) and return
       end
