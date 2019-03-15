@@ -14,10 +14,10 @@
         span.seperator |
         span#user-name.ml-2 data-id='user-name' = current_user.name
 
-        #user-avatar-container.d-inline.ml-2
-          = link_to games_url
-            - if current_user.provider_avatar.attached?
-              = image_tag polymorphic_url(current_user.provider_avatar.variant(resize: '50x50').processed), class: 'img-thumbnail', id: 'user-avatar', data: {id: 'user-avatar'}, size: '50x50'
-            - else
-              = image_tag 'anonymous.png', class: 'img-thumbnail', id: 'user-avatar', data: {id: 'user-avatar'}, size: '40x40'
+        / #user-avatar-container.d-inline.ml-2
+        /   = link_to games_url
+        /     - if current_user.provider_avatar.attached?
+        /       = image_tag polymorphic_url(current_user.provider_avatar.variant(resize: '50x50').processed), class: 'img-thumbnail', id: 'user-avatar', data: {id: 'user-avatar'}, size: '50x50'
+        /     - else
+        /       = image_tag 'anonymous.png', class: 'img-thumbnail', id: 'user-avatar', data: {id: 'user-avatar'}, size: '40x40'
 
