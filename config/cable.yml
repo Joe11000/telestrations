@@ -9,4 +9,3 @@ test:
 production:
   adapter: redis
   url: <%= Rails.application.credentials.dig(:production, :heroku, :redis_url) %>
-  channel_prefix: telestrations_production

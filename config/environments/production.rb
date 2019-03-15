@@ -94,6 +94,9 @@ Rails.application.configure do
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
+
+  config.middleware.use ActionCableHerokuMiddleware
+  config.web_socket_server_url = "wss://telestrations.herokuapp.com/cable" 
 end
 
 
@@ -162,7 +165,7 @@ Rails.application.configure do
 #   # config.action_dispatch.x_sendfile_header = 'X-Accel-Redirect' # for NGINX
 
 #   # We need to set the cable server's URI for production.
-  config.web_socket_server_url = "wss://action-cable-example.herokuapp.com/cable"
+  config.web_socket_server_url = "wss://telestrations.herokuapp.com/cable"
 
 #   # Action Cable endpoint configuration
   config.action_cable.url = 'wss://telestrations.herokuapp.com/cable'

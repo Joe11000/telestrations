@@ -1,4 +1,4 @@
-class Game < ActiveRecord::Base
+class Game < ApplicationRecord
   include Rails.application.routes.url_helpers
 
   has_many :games_users, ->{ order(id: :asc) }, inverse_of: :game, dependent: :destroy
