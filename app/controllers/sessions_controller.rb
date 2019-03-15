@@ -14,7 +14,7 @@ class SessionsController < ApplicationController
       @user = User.find_or_initialize_by form_session_create_params
 
       if @user.new_record?
-        attach_anonymous_avatar_to_user @user
+        # attach_anonymous_avatar_to_user @user
         # byebug
         @user.assign_attributes({ uid: (User.count || 0) + 1, provider: nil, name: @user.email })
         @user.save
@@ -69,14 +69,14 @@ class SessionsController < ApplicationController
 
   private
 
-    def attach_anonymous_avatar_to_user user
-      user.provider_avatar.attach(io: open(get_anonymous_image_from_public_folder), filename: 'anonymous.png', content_type: "image/png")
-    end
+    # def attach_anonymous_avatar_to_user user
+    #   user.provider_avatar.attach(io: open(get_anonymous_image_from_public_folder), filename: 'anonymous.png', content_type: "image/png")
+    # end
 
-    def get_anonymous_image_from_public_folder
-      file_glob_search = Rails.public_path + 'assets/anony*'
-      Dir[file_glob_search].first
-    end
+    # def get_anonymous_image_from_public_folder
+    #   file_glob_search = Rails.public_path + 'assets/anony*'
+    #   Dir[file_glob_search].first
+    # end
 
     def attach_users_avatar_from_provider user, url
       # logger.info "attach_users_avatar_from_provider!!!!!!!"
