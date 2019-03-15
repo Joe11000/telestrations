@@ -8,6 +8,7 @@ class SessionsController < ApplicationController
   end
 
   def create
+    puts ("params: #{params.inspect.to_s}!!!!!!!!!!!!!!!!")
     puts ("create_params: #{create_params}!!!!!!!!!!!!!!!!")
     # Rails.logger.info("create_params: #{create_params}!!!!!!!!!!!!!!!!")
     # logger.info @user
