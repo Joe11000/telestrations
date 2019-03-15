@@ -1,20 +1,23 @@
 require 'open-uri'
 
 class SessionsController < ApplicationController
+  before_action :create_params, only: :create
+
   def new
     redirect_to choose_game_type_page_url if current_user
   end
 
   def create
-    @user = User.find_or_initialize_by(create_params)
+    Rails.logger.info("create_params: #{create_params}!!!!!!!!!!!!!!!!")
     # logger.info @user
 
     # logger.info "Look Here!!!!!!!"
     # logger.info "params #{params}"
-
+    @user = User.find_or_initialize_by create_params
     if @user.new_record?
       # logger.info "New Record Here!!!!!!!"
       attach_users_avatar_from_provider @user, provider_avatar_url
+      @user.save
     end
 
     # logger.info "New Cookie Here!!!!!!!"
