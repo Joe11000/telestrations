@@ -8,7 +8,8 @@ class SessionsController < ApplicationController
   end
 
   def create
-    Rails.logger.info("create_params: #{create_params}!!!!!!!!!!!!!!!!")
+    puts ("create_params: #{create_params}!!!!!!!!!!!!!!!!")
+    # Rails.logger.info("create_params: #{create_params}!!!!!!!!!!!!!!!!")
     # logger.info @user
 
     # logger.info "Look Here!!!!!!!"
@@ -18,6 +19,7 @@ class SessionsController < ApplicationController
       # logger.info "New Record Here!!!!!!!"
       attach_users_avatar_from_provider @user, provider_avatar_url
       @user.save
+      puts "saved new person #{@user.name}"
     end
 
     # logger.info "New Cookie Here!!!!!!!"
