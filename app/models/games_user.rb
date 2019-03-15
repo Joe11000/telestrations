@@ -1,4 +1,4 @@
-class GamesUser < ActiveRecord::Base
+class GamesUser < ApplicationRecord
   acts_as_paranoid
 
   belongs_to :user

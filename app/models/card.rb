@@ -1,4 +1,4 @@
-class Card < ActiveRecord::Base
+class Card < ApplicationRecord
   acts_as_paranoid
 
   belongs_to :idea_catalyst, class_name: 'GamesUser', inverse_of: :starting_card, optional: true # signifies this card is a starting card in a game. Because trying to find all starting cards was harder before doing this

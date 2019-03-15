@@ -8,5 +8,5 @@ test:
 
 production:
   adapter: redis
-  url: <%= Rails.application.credentials.dig(:production, :heroku, :redis_url) %>
-  channel_prefix: telestrations_production
+  url: redis://h:p0edc7e2bfce1dd97fedfdc264364fd4f4c2f113922601069ef8a0b4731840bfd@ec2-100-24-145-65.compute-1.amazonaws.com:9309
+
