@@ -124,4 +124,5 @@ gem 'token_phrase'
 gem 'mini_magick'
 gem 'rubocop'
 gem 'webpacker'
+gem 'bcrypt'
 # gem 'teaspoon-mocha', group: [:development, :test]

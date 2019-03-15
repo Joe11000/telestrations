@@ -1,5 +1,6 @@
 class User < ActiveRecord::Base
   acts_as_paranoid
+  has_secure_password
 
   has_one_attached :provider_avatar
   has_many :games_users, ->{ order(id: :asc) }, inverse_of: :user
