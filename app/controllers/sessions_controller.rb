@@ -10,19 +10,13 @@ class SessionsController < ApplicationController
   def create
     @user = nil
     
-    byebug
     if form_session_create_params.to_h.all? 
-      byebug
       @user = User.find_or_initialize_by form_session_create_params
 
       if @user.new_record?
         attach_anonymous_avatar_to_user @user
-        byebug
-        @user.attributes << {
-          uid: User.count + 1,
-          provider: nil,
-          name: user.email
-        }
+        # byebug
+        @user.assign_attributes({ uid: (User.count || 0) + 1, provider: nil, name: @user.email })
         @user.save
       end
     elsif omniauth_session_create_params.all?
@@ -76,7 +70,6 @@ class SessionsController < ApplicationController
   private
 
     def attach_anonymous_avatar_to_user user
-      byebug
       user.provider_avatar.attach(io: open(get_anonymous_image_from_public_folder), filename: 'anonymous.png', content_type: "image/png")
     end
 

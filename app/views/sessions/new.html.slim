@@ -11,13 +11,15 @@
     /     = link_to '/auth/twitter', id: 'twitter_logo'
     /       = image_tag 'tw_img.png'
 
-    .row 
-      = form_tag login_path do |form|
-        = label_tag :email
-        = text_field_tag :email, '', name: 'user[email]', require: true
-        = label_tag :password
-        = password_field_tag :password_digest, '', name: 'user[password_digest]', require: true
-        = submit_tag 'Submit'
+
+    = form_tag login_path  do 
+      .row.text-align-center
+        .form-group.justify-content-center.col-12.offset-sm-2.col-sm-8
+          = text_field_tag :email, '', { name: 'user[email]', require: true, placeholder: 'Email Address', class: 'form-control-lg form-control'}
+        .form-group.justify-content-center.col-12.offset-sm-2.col-sm-8
+          = password_field_tag :password_digest, '', {name: 'user[password_digest]', require: true, placeholder: 'Password', class: 'form-control-lg form-control'}
+        .form-group.justify-content-center.col-12.offset-sm-2.col-sm-8
+          = submit_tag 'Submit', class: 'btn-lg form-control btn-secondary', style: 'height: 2.25em; cursor: pointer;'
     .instructions-container.text-center data-toggle="popover" data-placement="top" title="Instructions" data-trigger='focus' tabindex="0" data-content="Like the game telephone but with drawing at every other step. At the start of the game each player writes something for the next person to draw. Everyone passes their card to the next player to draw what the card says. Players alternate drawing or guessing a drawing until the game has gone the number of rounds equal to the number of players."
       i.fa.fa-question-circle.d-inline-block.td-underline
       h3.text-center.instructions.d-inline-block.mx-2 Instructions
