@@ -49,12 +49,7 @@ Rails.application.configure do
   # config.action_cable.url = 'wss://example.com/cable'
   # config.action_cable.allowed_request_origins = [ 'http://telestrations.herokuapp.com/*', /http:\/\/telestrations.herokuapp.com\/*/ ]
 
-  # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
-  config.force_ssl = true
 
-  # Use the lowest log level to ensure availability of diagnostic information
-  # when problems arise.
-  config.log_level = :debug
 
   # Prepend all log lines with the following tags.
   config.log_tags = [ :request_id ]
@@ -120,8 +115,6 @@ end
 
 
 
-Rails.application.routes.default_url_options[:host] = Rails.application.credentials.dig(Rails.env.to_sym, :domain)
-
 Rails.application.configure do
   # Verifies that versions and hashed value of the package contents in the project's package.json
   config.webpacker.check_yarn_integrity = false
@@ -168,7 +161,7 @@ Rails.application.configure do
   config.web_socket_server_url = "wss://telestrations.herokuapp.com/cable"
 
 #   # Action Cable endpoint configuration
-  config.action_cable.url = 'wss://telestrations.herokuapp.com/cable'
+  config.action_cable.url = '/cable'
   config.action_cable.allowed_request_origins = [ /https:\/\/telestrations.herokuapp.com*/, /http:\/\/telestrations.herokuapp.com*/ ]
 
 #   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
