@@ -57,6 +57,7 @@ class LobbyChannel < ApplicationCable::Channel
     end
 
     ActionCable.server.broadcast("lobby_#{params[:join_code]}", info)
+    sleep 0.25
     stop_all_streams
   end
 

@@ -40,6 +40,7 @@ class Postgame extends Component {
       case 'PostGameTab':
       card_body_html = <PostGameTab {...this.state.PostGameTab}
       retrieveCardsForPostgame={this.retrieveCardsForPostgame}
+      current_user_info={this.state.current_user_info}
       />
       break;
       

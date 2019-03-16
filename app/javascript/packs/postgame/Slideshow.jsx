@@ -90,7 +90,7 @@ class Slideshow extends Component {
       const conjoined_card_id = deck[slide_index][1].id;
       
       const card_body_styles = {display: 'flex',  justifyContent: 'center', alignItems: 'center'};
-
+      
       return (
           <CarouselItem key={ `carousel-item-${conjoined_card_id}` } className={ item.shouldGlow ? 'glow' : ''} >
             <Card className='bg-dark border-primary m-auto' style={{"height": '300px'}}>
