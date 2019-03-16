@@ -8,4 +8,7 @@ test:
 
 production:
   adapter: redis
-  url: <%= Rails.application.credentials.dig(:production, :heroku, :redis_url) %>
+  url: <%= Rails.application.credentials.dig(:production, :redis, :url) %>
+  host: 'ec2-18-204-150-188.compute-1.amazonaws.com'
+  port: '7509'
+  password: <%= Rails.application.credentials.dig(:production, :redis, :password) %>
