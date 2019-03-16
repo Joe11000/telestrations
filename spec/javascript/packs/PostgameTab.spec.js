@@ -26,7 +26,8 @@ describe('PostGameTab Component', () => {
                                   retrieveCardsForPostgame: mockRetrieveCardsForPostgame
                                 }
     const post_game_tab_component = shallow(<PostGameTab {...post_game_tab_props } />);
-    expect(post_game_tab_component.find('p').text()).toEqual('( * cards with red text were made by you * )');
+    expect(post_game_tab_component.find('p').text()).toEqual('( * cards made by you * )'); // haven't tested if color is read
+    expect(post_game_tab_component.find('p').text()).toEqual('( * current card not drawn by you * )'); // haven't tested if color is light purple
   })
 
   it('renders the GameSelector with correct props and a key', () => {

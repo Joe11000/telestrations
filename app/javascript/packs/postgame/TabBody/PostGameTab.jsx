@@ -29,7 +29,11 @@ export default class PostGameTab extends Component {
                           current_postgame_id={current_postgame_id}
                           />
             <div className='mt-4 mb-4'></div>
-            <p className='small glow' style={{textAlign: 'right'}}>( * cards with red text were made by you * )</p>
+            <div className='helpful-text'>
+              <p className='small glow mb-0' style={{textAlign: 'right'}}>( * cards made by you * )</p>
+              <p className='small' style={{textAlign: 'right', color: 'mediumpurple'}}>( * current card not made by you * )</p>
+            </div>
+
             <SlideshowList arr_of_decks_of_cards={ storage_of_viewed_postgames[current_postgame_id] } 
                            current_user_info={ current_user_info }
                            key={ `slideshow_list_${current_postgame_id}` }
