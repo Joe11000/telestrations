@@ -46,7 +46,7 @@ Rails.application.configure do
 
   # Mount Action Cable outside main process or domain
   # config.action_cable.mount_path = nil
-  # config.action_cable.url = 'ws://example.com/cable'
+  # config.action_cable.url = 'wss://example.com/cable'
   # config.action_cable.allowed_request_origins = [ 'http://telestrations.herokuapp.com/*', /http:\/\/telestrations.herokuapp.com\/*/ ]
 
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
@@ -165,10 +165,10 @@ Rails.application.configure do
 #   # config.action_dispatch.x_sendfile_header = 'X-Accel-Redirect' # for NGINX
 
 #   # We need to set the cable server's URI for production.
-  config.web_socket_server_url = "ws://telestrations.herokuapp.com/cable"
+  config.web_socket_server_url = "wss://telestrations.herokuapp.com/cable"
 
 #   # Action Cable endpoint configuration
-  config.action_cable.url = 'ws://telestrations.herokuapp.com/cable'
+  config.action_cable.url = 'wss://telestrations.herokuapp.com/cable'
   config.action_cable.allowed_request_origins = [ /https:\/\/telestrations.herokuapp.com*/, /http:\/\/telestrations.herokuapp.com*/ ]
 
 #   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
