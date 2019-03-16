@@ -96,7 +96,7 @@ Rails.application.configure do
   config.active_record.dump_schema_after_migration = false
 
   config.middleware.use MiddlewareForActionCableOnHeroku
-  config.web_socket_server_url = "ws://telestrations.herokuapp.com/" 
+  config.web_socket_server_url = Rails.application.credentials.dig(:production, :web_socket_server_url) 
 end
 
 
