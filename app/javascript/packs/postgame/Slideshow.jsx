@@ -25,6 +25,23 @@ class Slideshow extends Component {
     this.state = {
                    activeIndex: 0
                  };
+    this.currentSlideshow = React.createRef();
+    
+  }
+
+  componentDidMount() {
+
+    // turn the indicator red of the card the current_user drew. Current slideshow only
+    let deck_length = this.props.deck.length;
+    for(let card_index = 0; card_index < deck_length; card_index++) {
+      let carousel_indicators = this.currentSlideshow.current.querySelector('.carousel-indicators');
+
+      if(this.props.current_user_info.id == this.props.deck[card_index][1].uploader_id) {  
+        let card_the_current_user_made = carousel_indicators.childNodes[card_index];
+        card_the_current_user_made.style.backgroundColor = 'red';
+        break;
+      }
+    }
   }
 
   acquireCardInfoForCarousel(deck) {
@@ -116,21 +133,22 @@ class Slideshow extends Component {
           </CarouselItem>
       );
     }.bind(this))
-
+    
     return (
-      
-      <Carousel
-        autoplay={false}
-        activeIndex={activeIndex}
-        next={this.next}
-        previous={this.previous}
-        interval={false}
-      >
-        <CarouselIndicators items={carousel_card_info} activeIndex={activeIndex} onClickHandler={this.goToIndex} />
-        {slides}
-        <CarouselControl direction="prev" directionText="Previous" onClickHandler={this.previous} />
-        <CarouselControl direction="next" directionText="Next" onClickHandler={this.next} />
-      </Carousel>
+      <div ref={this.currentSlideshow}>
+        <Carousel
+          autoplay={false}
+          activeIndex={activeIndex}
+          next={this.next}
+          previous={this.previous}
+          interval={false}
+          >
+          <CarouselIndicators items={carousel_card_info} activeIndex={activeIndex} onClickHandler={this.goToIndex}/>
+          {slides}
+          <CarouselControl direction="prev" directionText="Previous" onClickHandler={this.previous} />
+          <CarouselControl direction="next" directionText="Next" onClickHandler={this.next} />
+        </Carousel>
+      </div>
     );
   }
 }
@@ -139,7 +157,7 @@ Slideshow.propTypes = {
   current_user_info: PropTypes.shape({
     id: PropTypes.number, 
     name: PropTypes.string,
-  }),
-  deck: PropTypes.array
+  }).isRequired,
+  deck: PropTypes.array.isRequired
 }
 export default Slideshow;

@@ -11,11 +11,11 @@ export default class SlideshowList extends React.Component {
     return (
       <ListGroup flush>
         {
-          arr_of_decks_of_cards && arr_of_decks_of_cards.map(function(deck){
-            const first_card_in_the_game = deck.map(deck => deck[1].id).join('.') 
+          arr_of_decks_of_cards && arr_of_decks_of_cards.map(function(deck, slideshow_index){
+            // const first_card_in_the_game = deck.map(deck => deck[1].id).join('.') 
 
             return (
-              <ListGroupItem  className="list-group-item" key={`list-group-item-${first_card_in_the_game}`}>
+              <ListGroupItem  className={`list-group-item-${slideshow_index}`} key={`list-group-item-${slideshow_index}`}>
                 <Slideshow deck={deck} current_user_info={current_user_info} />
               </ListGroupItem>
             )
