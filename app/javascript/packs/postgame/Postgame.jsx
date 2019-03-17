@@ -65,9 +65,10 @@ class Postgame extends Component {
                     </NavLink>
                   </NavItem>
                   <NavItem>
-                    <NavLink className={nav_link__outofgametab__classes} 
-                            onClick={this.selectTab.bind(this, "OutOfGameCardUploadTab")} 
-                            href='#'>
+                    <NavLink  className={nav_link__outofgametab__classes} 
+                              id='out_of_game_card_upload_tab'
+                              onClick={this.selectTab.bind(this, "OutOfGameCardUploadTab")} 
+                              href='#'>
                       Out of game card uploads
                     </NavLink>
                   </NavItem>

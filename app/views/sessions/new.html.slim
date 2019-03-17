@@ -12,7 +12,7 @@
     /       = image_tag 'tw_img.png'
 
 
-    = form_tag login_path  do 
+    = form_tag login_path, id: 'login_form'  do 
       .row.text-align-center
         .form-group.justify-content-center.col-12.offset-sm-2.col-sm-8
           = text_field_tag :email, '', { name: 'user[email]', require: true, placeholder: 'Email Address', class: 'form-control-lg form-control'}

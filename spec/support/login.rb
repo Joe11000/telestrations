@@ -19,6 +19,16 @@ module LoginHelper
         end
       end
     end
+
+    def form_login 
+      visit root_path
+      num_of_users = User.count + 1
+      within '#login_form' do 
+        fill_in :email, with: "Email_#{num_of_users}"
+        fill_in :password_digest, with: "Password_#{num_of_users}"
+        click_on 'Submit'
+      end
+    end 
   end
 
   module RequestTests

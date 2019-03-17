@@ -4,13 +4,14 @@
   .col-8.offset-2.text-center.mt-3
     p.h3 Upload Pictures From Your Games At Home
   .col-6.offset-3.col-md-4.offset-md-4.mt-3
-    = form_with scope: :drawing , url: out_of_game_card_uploads_path do |f|
+    = form_tag out_of_game_card_uploads_path, multipart: true, id: 'file_upload_form' do 
       .form-group
-        = f.file_field :drawings, multiple: true
+        = file_field_tag :drawings, multiple: true, accept: 'image/png,image/gif,image/jpeg', name: 'drawings[]' do 
           - if flash[:notice]
             p.small.success.help-text = flash[:notice]
           - elsif flash[:alert]
             p.small.danger.help-text = flash[:alert]
       .form-group
-        = f.submit 'Upload'
+        = submit_tag 'Upload', name: 'upload', class: 'btn-primary'
 
+  = link_to 'View Uploaded Drawings', games_path
