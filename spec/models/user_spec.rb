@@ -6,40 +6,43 @@ RSpec.describe User, type: :model do
       user1 = FactoryBot.build :user
 
       expect(user1).to be_valid
-      expect(user1.name).to be_a String
-      expect(user1.provider.in?(['twitter', 'facebook'])).to eq true
+      # expect(user1.name).to be_a String
+      # expect(user1.provider.in?(['twitter', 'facebook'])).to eq true
+      expect(user1.email).to be_a String
+      expect(user1.password_digest).to be_a String
+      
       expect(user1.deleted_at).to eq nil
     end
 
     it 'is valid' do
-      user2 = FactoryBot.build :user, :twitter
+      user2 = FactoryBot.build :user #, :twitter
       expect(user2).to be_valid
-      expect(user2).to be_valid
-      expect(user2.name).to be_a String
-      expect(user2.provider).to eq 'twitter'
+      # expect(user2.name).to be_a String
+      # expect(user2.provider).to eq 'twitter'
       expect(user2.deleted_at).to eq nil
     end
 
     it 'is valid' do
-      user3 = FactoryBot.build :user, :facebook
+      user3 = FactoryBot.build :user #, :facebook
       expect(user3).to be_valid
-      expect(user3).to be_valid
-      expect(user3).to be_valid
-      expect(user3.name).to be_a String
-      expect(user3.provider).to eq 'facebook'
+      # expect(user3.name).to be_a String
+      # expect(user3.provider).to eq 'facebook'
       expect(user3.deleted_at).to eq nil
     end
   end
 
   context 'in schema', r5: true do
-    it { is_expected.to have_db_column(:name).of_type(:string).with_options({null: false}) }
-    it { is_expected.to have_db_column(:provider).of_type(:string).with_options(null: false) }
-    it { is_expected.to have_db_column(:uid).of_type(:string).with_options(null: false) }
+    # it { is_expected.to have_db_column(:name).of_type(:string).with_options({null: false}) }
+    # it { is_expected.to have_db_column(:provider).of_type(:string).with_options(null: false) }
+    # it { is_expected.to have_db_column(:uid).of_type(:string).with_options(null: false) }
     it { is_expected.to have_db_index(:deleted_at) }
+    it { is_expected.to have_db_index(:email).of_type(:string) }
+    it { is_expected.to have_db_index(:password_digest).of_type(:string) }
   end
 
   context 'associations', r5: true do
     it { is_expected.to act_as_paranoid }
+    it { is_expected.to have_secure_password }
     it { is_expected.to have_many(:games_users).inverse_of(:user) }
     it { is_expected.to have_many(:games).through(:games_users)}
     it { is_expected.to have_many(:starting_cards).through(:games_users)}

@@ -1508,7 +1508,7 @@ RSpec.describe Game, type: :model do
             current_user = users.first
 
             # simulate user upload... round: 2, move: 1 without the next placeholder
-              gu_3.starting_card.child_card.drawing.attach(io: File.open(File.join(Rails.root, 'spec', 'support', 'images', 'thumbnail_selfy.jpg')), \
+              gu_3.starting_card.child_card.drawing.attach(io: File.open(File.join(Rails.root, 'spec', 'fixtures', 'files',  'images', 'thumbnail_selfy.jpg')), \
                                                        content_type: 'image/jpg', \
                                                        filename: 'provider_avatar.jpg') # replace the placeholder card because it was easier than updating it with a new attachment
               gu_3.starting_card.child_card.update(placeholder: false);
@@ -1535,7 +1535,7 @@ RSpec.describe Game, type: :model do
             user_2 = users[1]
 
             # simulate user upload ... round:2 move:2 without the new placeholder
-              gu_1.starting_card.child_card.drawing.attach(io: File.open(File.join(Rails.root, 'spec', 'support', 'images', 'thumbnail_selfy.jpg')), \
+              gu_1.starting_card.child_card.drawing.attach(io: File.open(File.join(Rails.root, 'spec', 'fixtures', 'files',  'images', 'thumbnail_selfy.jpg')), \
                                                        content_type: 'image/jpg', \
                                                        filename: 'provider_avatar.jpg') # replace the placeholder card because it was easier than updating it with a new attachment
               gu_1.starting_card.child_card.update(placeholder: false);

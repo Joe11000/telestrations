@@ -175,7 +175,7 @@ RSpec.describe Card, type: :model do
 
         # start user 2 has 2 placeholders, so test for both
           expect(Card.get_placeholder_card(user_2.id, game)).to eq gu1_placeholder
-          gu1_placeholder.drawing.attach(io: File.open(File.join(Rails.root, 'spec', 'support', 'images', 'thumbnail_selfy.jpg')), \
+          gu1_placeholder.drawing.attach(io: File.open(File.join(Rails.root, 'spec', 'fixtures', 'files',  'images', 'thumbnail_selfy.jpg')), \
                                          content_type: 'image/jpg', \
                                          filename: 'provider_avatar.jpg')
           gu1_placeholder.update(placeholder: false)

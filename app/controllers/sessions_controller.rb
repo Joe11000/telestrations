@@ -19,22 +19,22 @@ class SessionsController < ApplicationController
         @user.assign_attributes({ uid: (User.count || 0) + 1, provider: nil, name: @user.email })
         @user.save
       end
-    elsif omniauth_session_create_params.all?
-      puts ("params: #{params.inspect.to_s}!!!!!!!!!!!!!!!!")
-      puts ("create_params: #{create_params}!!!!!!!!!!!!!!!!")
-      # Rails.logger.info("create_params: #{create_params}!!!!!!!!!!!!!!!!")
-      # logger.info @user
+    # elsif omniauth_session_create_params.all?
+    #   puts ("params: #{params.inspect.to_s}!!!!!!!!!!!!!!!!")
+    #   puts ("create_params: #{create_params}!!!!!!!!!!!!!!!!")
+    #   # Rails.logger.info("create_params: #{create_params}!!!!!!!!!!!!!!!!")
+    #   # logger.info @user
 
-      # logger.info "Look Here!!!!!!!"
-      # logger.info "params #{params}"
-      @user = User.find_or_initialize_by create_params
+    #   # logger.info "Look Here!!!!!!!"
+    #   # logger.info "params #{params}"
+    #   @user = User.find_or_initialize_by create_params
 
-      if @user.new_record?
-        # logger.info "New Record Here!!!!!!!"
-        attach_users_avatar_from_provider @user, provider_avatar_url
-        @user.save
-        puts "saved new person #{@user.name}"
-      end
+    #   if @user.new_record?
+    #     # logger.info "New Record Here!!!!!!!"
+    #     attach_users_avatar_from_provider @user, provider_avatar_url
+    #     @user.save
+    #     puts "saved new person #{@user.name}"
+    #   end
     end
 
 

@@ -27,7 +27,7 @@ FactoryBot.define do
       after(:build) do |card|
         card.uploader ||= card.starting_games_user.user
 
-        card.drawing.attach(io: File.open(File.join(Rails.root, 'spec', 'support', 'images', 'thumbnail_selfy.jpg')), \
+        card.drawing.attach(io: File.open(File.join(Rails.root, 'spec', 'fixtures', 'files', 'images', 'thumbnail_selfy.jpg')), \
                             content_type: 'image/jpg', \
                             filename: 'provider_avatar.jpg')
       end

@@ -193,7 +193,7 @@ end
 
 #         elsif round != round_num_to_reach
 #           if (@medium_order[(round + move) % 2] == 'description')
-#             @gu_3.starting_card.child_card.drawing.attach(io: File.open(File.join(Rails.root, 'spec', 'support', 'images', 'thumbnail_selfy.jpg')), \
+#             @gu_3.starting_card.child_card.drawing.attach(io: File.open(File.join(Rails.root, 'spec', 'fixtures', 'files',  'images', 'thumbnail_selfy.jpg')), \
 #                                          content_type: 'image/jpg', \
 #                                          filename: 'provider_avatar.jpg') # replace the placeholder card because it was easier than updating it with a new attachment
 #             @gu_3.starting_card.child_card.update(placeholder: false);
@@ -248,7 +248,7 @@ class GameWithThreePeople
 
     # User 1 adding a drawing to Deck 3, then pass to User 2
     def move_1!
-      @gu_3.starting_card.child_card.drawing.attach(io: File.open(File.join(Rails.root, 'spec', 'support', 'images', 'thumbnail_selfy.jpg')), \
+      @gu_3.starting_card.child_card.drawing.attach(io: File.open(File.join(Rails.root, 'spec', 'fixtures', 'files',  'images', 'thumbnail_selfy.jpg')), \
                                                content_type: 'image/jpg', \
                                                filename: 'provider_avatar.jpg') # replace the placeholder card because it was easier than updating it with a new attachment
       @gu_3.starting_card.child_card.update(placeholder: false);
@@ -259,7 +259,7 @@ class GameWithThreePeople
 
     # User 2 adding a drawing to Deck 1, then pass to User 3
     def move_2!
-      @gu_1.starting_card.child_card.drawing.attach(io: File.open(File.join(Rails.root, 'spec', 'support', 'images', 'thumbnail_selfy.jpg')), \
+      @gu_1.starting_card.child_card.drawing.attach(io: File.open(File.join(Rails.root, 'spec', 'fixtures', 'files',  'images', 'thumbnail_selfy.jpg')), \
                                                content_type: 'image/jpg', \
                                                filename: 'provider_avatar.jpg') # replace the placeholder card because it was easier than updating it with a new attachment
       @gu_1.starting_card.child_card.update(placeholder: false);
@@ -270,7 +270,7 @@ class GameWithThreePeople
 
     # User 3 adding a drawing to Deck 2
     def move_3!
-      @gu_2.starting_card.child_card.drawing.attach(io: File.open(File.join(Rails.root, 'spec', 'support', 'images', 'thumbnail_selfy.jpg')), \
+      @gu_2.starting_card.child_card.drawing.attach(io: File.open(File.join(Rails.root, 'spec', 'fixtures', 'files',  'images', 'thumbnail_selfy.jpg')), \
                                                content_type: 'image/jpg', \
                                                filename: 'provider_avatar.jpg') # replace the placeholder card because it was easier than updating it with a new attachment
       @gu_2.starting_card.child_card.update(placeholder: false);
@@ -372,7 +372,7 @@ class GameWithThreePeople
     user_2 = gu_2.user
     user_3 = gu_3.user
 
-    gu_1.starting_card.child_card.drawing.attach(io: File.open(File.join(Rails.root, 'spec', 'support', 'images', 'thumbnail_selfy.jpg')), \
+    gu_1.starting_card.child_card.drawing.attach(io: File.open(File.join(Rails.root, 'spec', 'fixtures', 'files',  'images', 'thumbnail_selfy.jpg')), \
                                                content_type: 'image/jpg', \
                                                filename: 'provider_avatar.jpg') # replace the placeholder card because it was easier than updating it with a new attachment
     gu_1.starting_card.child_card.update(placeholder: false);
@@ -380,7 +380,7 @@ class GameWithThreePeople
     gu_1.starting_card.child_card.child_card = FactoryBot.create(:description, uploader: user_3, starting_games_user: gu_1)
     gu_1.update(set_complete: true)
     # user 2 is on their last card
-    gu_2.starting_card.child_card.drawing.attach(io: File.open(File.join(Rails.root, 'spec', 'support', 'images', 'thumbnail_selfy.jpg')), \
+    gu_2.starting_card.child_card.drawing.attach(io: File.open(File.join(Rails.root, 'spec', 'fixtures', 'files',  'images', 'thumbnail_selfy.jpg')), \
                                                content_type: 'image/jpg', \
                                                filename: 'provider_avatar.jpg') # replace the placeholder card because it was easier than updating it with a new attachment
     gu_2.starting_card.child_card.update(placeholder: false);
@@ -426,7 +426,7 @@ module GameWithTwoPeople
 
     # User 1 adding a drawing to Deck 2, then user is done
     def move_1!
-      @gu_2.starting_card.child_card.drawing.attach(io: File.open(File.join(Rails.root, 'spec', 'support', 'images', 'thumbnail_selfy.jpg')), \
+      @gu_2.starting_card.child_card.drawing.attach(io: File.open(File.join(Rails.root, 'spec', 'fixtures', 'files',  'images', 'thumbnail_selfy.jpg')), \
                                                content_type: 'image/jpg', \
                                                filename: 'provider_avatar.jpg') # replace the placeholder card because it was easier than updating it with a new attachment
       @gu_2.starting_card.child_card.update(placeholder: false);
@@ -436,7 +436,7 @@ module GameWithTwoPeople
 
     # User 2 adding a drawing to Deck 1, then game is done
     def move_2!
-      @gu_1.starting_card.child_card.drawing.attach(io: File.open(File.join(Rails.root, 'spec', 'support', 'images', 'thumbnail_selfy.jpg')), \
+      @gu_1.starting_card.child_card.drawing.attach(io: File.open(File.join(Rails.root, 'spec', 'fixtures', 'files',  'images', 'thumbnail_selfy.jpg')), \
                                                content_type: 'image/jpg', \
                                                filename: 'provider_avatar.jpg') # replace the placeholder card because it was easier than updating it with a new attachment
       @gu_1.starting_card.child_card.update(placeholder: false);
@@ -508,7 +508,7 @@ module GameWithTwoPeople
     user_2 = gu_2.user
     user_3 = gu_3.user
 
-    gu_1.starting_card.child_card.drawing.attach(io: File.open(File.join(Rails.root, 'spec', 'support', 'images', 'thumbnail_selfy.jpg')), \
+    gu_1.starting_card.child_card.drawing.attach(io: File.open(File.join(Rails.root, 'spec', 'fixtures', 'files',  'images', 'thumbnail_selfy.jpg')), \
                                                content_type: 'image/jpg', \
                                                filename: 'provider_avatar.jpg') # replace the placeholder card because it was easier than updating it with a new attachment
     gu_1.starting_card.child_card.update(placeholder: false);
@@ -516,7 +516,7 @@ module GameWithTwoPeople
     gu_1.starting_card.child_card.child_card = FactoryBot.create(:description, uploader: user_3, starting_games_user: gu_1)
     gu_1.update(set_complete: true)
     # user 2 is on their last card
-    gu_2.starting_card.child_card.drawing.attach(io: File.open(File.join(Rails.root, 'spec', 'support', 'images', 'thumbnail_selfy.jpg')), \
+    gu_2.starting_card.child_card.drawing.attach(io: File.open(File.join(Rails.root, 'spec', 'fixtures', 'files',  'images', 'thumbnail_selfy.jpg')), \
                                                content_type: 'image/jpg', \
                                                filename: 'provider_avatar.jpg') # replace the placeholder card because it was easier than updating it with a new attachment
     gu_2.starting_card.child_card.update(placeholder: false);
