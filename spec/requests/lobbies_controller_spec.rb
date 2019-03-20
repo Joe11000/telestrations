@@ -38,7 +38,7 @@ RSpec.describe LobbiesController, type: :request do
 
       it 'default layout is' do
         expect(response.body).to match(/logout/)
-        expect(response.body).to match(/#{@user.name}/)
+        expect(response.body).to match(/#{@user.email}/)
         expect(response.body).to match(/Play Game/)
         expect(response.body).to match(/Create a New Game/)
         expect(response.body).to match(/Join a Public or Private Game/)

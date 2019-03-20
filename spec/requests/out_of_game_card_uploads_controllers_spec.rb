@@ -5,6 +5,17 @@ RSpec.describe "OutOfGameCardUploadController", type: :request do
   include LoginHelper::RequestTests
 
   describe "GET /out_of_game_card_upload_controller_spec.rb" do
+    describe 'if user uploads a single file' do 
+      describe 'which is valid'
+      describe 'which is invalid'
+    end
+    describe 'if user uploads a multiple files' do 
+      describe 'which are valid'
+      describe 'which are invalid'
+    end
+  end
+
+  xdescribe "GET /out_of_game_card_upload_controller_spec.rb" do
     # it "works! (now write some real specs)" do
     #   current_user = FactoryBot.create(:user);
     #   FactoryBot.create_list :card, 3, out_of_game_card_upload: true, uploader: current_user
@@ -15,7 +26,8 @@ RSpec.describe "OutOfGameCardUploadController", type: :request do
     #   expect(response).to have_http_status(200)
     # end
 
-    it "should return expected return values for desired component (I know this should be in a controller test testing a controller/get_desired_out_of_game_card_attributes.rb mixin, but bad design planning to fix for later.)", :r5 do 
+    # GET /out_of_game_card_uploads is no longer going to be displaying index here. Moved to postgame tab
+    xit "should return expected return values for desired component (I know this should be in a controller test testing a controller/get_desired_out_of_game_card_attributes.rb mixin, but bad design planning to fix for later.)", :r5 do 
       FactoryBot.create(:pregame, callback_wanted: :pregame)
       game = FactoryBot.create(:postgame, callback_wanted: :postgame)
       current_user = game.users.first
