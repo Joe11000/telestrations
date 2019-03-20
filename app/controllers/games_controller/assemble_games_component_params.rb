@@ -80,7 +80,7 @@ class GamesController
       end
 
       def current_user_info 
-        current_user.slice(:id, :name)
+        current_user.slice(:id, :email)
       end
 
       def result

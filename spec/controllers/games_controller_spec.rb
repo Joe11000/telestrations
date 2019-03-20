@@ -843,7 +843,7 @@ RSpec.describe GamesController::AssemblePostgamesComponentParams, :r5, :clean_as
     end
 
     def current_user_info current_user
-      current_user.slice(:id, :name)
+      current_user.slice(:id, :email)
     end
 
     it 'returns json string of component params for the user\'s last postgame', :r5 do

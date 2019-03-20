@@ -9,25 +9,27 @@ module LoginHelper
       Capybara.session_name = old_session
     end
 
-    def login_with provider
-      visit root_path
+    # def login_with provider
+    #   visit root_path
 
-      case provider.downcase
-      when 'facebook', 'twitter'
-        VCR.use_cassette("support/vcr_cassettes/#{provider.downcase}_user_info", record: :new_episodes) do
-          find('#' + provider + '_logo').click
-        end
-      end
-    end
+    #   case provider.downcase
+    #   when 'facebook', 'twitter'
+    #     VCR.use_cassette("support/vcr_cassettes/#{provider.downcase}_user_info", record: :new_episodes) do
+    #       find('#' + provider + '_logo').click
+    #     end
+    #   end
+    # end
 
-    def form_login 
+    def form_login! 
       visit root_path
       num_of_users = User.count + 1
       within '#login_form' do 
-        fill_in :email, with: "Email_#{num_of_users}"
+        fill_in :email, with: "Email_#{num_of_users}@aol.com"
         fill_in :password_digest, with: "Password_#{num_of_users}"
         click_on 'Submit'
       end
+      
+      return User.last
     end 
   end
 

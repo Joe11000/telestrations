@@ -101,8 +101,7 @@ RSpec.describe InGameCardUploadsController, type: :controller do
             @gu_1, @gu_2 = @game.games_users.order(id: :asc)
             @user_1, @user_2 = @gu_1.user, @gu_2.user
 
-            @file_name = 'Ace_of_Diamonds.jpg'
-            @drawn_image = Rack::Test::UploadedFile.new(File.join(Rails.root, 'spec' ,'support', 'images', @file_name ), "image/jpg")
+            @drawn_image = fixture_file_upload('images/Ace_of_Diamonds.jpg', "image/jpg")
           end
 
           it 'user_1 and user_2' do
@@ -144,8 +143,7 @@ RSpec.describe InGameCardUploadsController, type: :controller do
             @gu_1, @gu_2 = @game.games_users.order(id: :asc)
             @user_1, @user_2 = @gu_1.user, @gu_2.user
 
-            @file_name = 'Ace_of_Diamonds.jpg'
-            @drawn_image = Rack::Test::UploadedFile.new(File.join(Rails.root, 'spec' ,'support', 'images', @file_name ), "image/jpg")
+            @drawn_image = fixture_file_upload('images/Ace_of_Diamonds.jpg', "image/jpg")
           end
 
           it 'user_2 and user_1' do
@@ -288,8 +286,7 @@ RSpec.describe InGameCardUploadsController, type: :controller do
             @gu_1, @gu_2, @gu_3 = @game.games_users.order(id: :asc)
             @user_1, @user_2, @user_3 = @gu_1.user, @gu_2.user, @gu_3.user
 
-            @file_name = 'Ace_of_Diamonds.jpg'
-            @drawn_image = Rack::Test::UploadedFile.new(File.join(Rails.root, 'spec' ,'support', 'images', @file_name ), "image/jpg")
+            @drawn_image = fixture_file_upload('images/Ace_of_Diamonds.jpg', "image/jpg")
           end
 
           it 'user_1 and user_2' do
@@ -329,8 +326,7 @@ RSpec.describe InGameCardUploadsController, type: :controller do
             @gu_1, @gu_2, @gu_3 = @game.games_users.order(id: :asc)
             @user_1, @user_2, @user_3 = @gu_1.user, @gu_2.user, @gu_3.user
 
-            @file_name = 'Ace_of_Diamonds.jpg'
-            @drawn_image = Rack::Test::UploadedFile.new(File.join(Rails.root, 'spec' ,'support', 'images', @file_name ), "image/jpg")
+            @drawn_image = fixture_file_upload('images/Ace_of_Diamonds.jpg', "image/jpg")
           end
 
           it 'user_2 and user_3' do
@@ -371,8 +367,7 @@ RSpec.describe InGameCardUploadsController, type: :controller do
             @gu_1, @gu_2, @gu_3 = @game.games_users.order(id: :asc)
             @user_1, @user_2, @user_3 = @gu_1.user, @gu_2.user, @gu_3.user
 
-            @file_name = 'Ace_of_Diamonds.jpg'
-            @drawn_image = Rack::Test::UploadedFile.new(File.join(Rails.root, 'spec' ,'support', 'images', @file_name ), "image/jpg")
+            @drawn_image = fixture_file_upload('images/Ace_of_Diamonds.jpg', "image/jpg")
           end
 
           it 'user_1 and user_3' do
@@ -539,9 +534,8 @@ RSpec.describe InGameCardUploadsController, type: :controller do
 
           expect(ActionCable.server).not_to receive(:broadcast).with(any_args)
 
+          @drawn_image = fixture_file_upload('images/Ace_of_Diamonds.jpg', "image/jpg")
 
-          @file_name = 'Ace_of_Diamonds.jpg'
-          @drawn_image = Rack::Test::UploadedFile.new(File.join(Rails.root, 'spec' ,'support', 'images', @file_name ), "image/jpg")
           post :create, params: { card: {drawing: @drawn_image }, format: :js}
 
           expect(response).to redirect_to(choose_game_type_page_path)
@@ -571,8 +565,8 @@ RSpec.describe InGameCardUploadsController, type: :controller do
 
           expect(ActionCable.server).not_to receive(:broadcast).with(any_args)
 
-          @file_name = 'Ace_of_Diamonds.jpg'
-          @drawn_image = Rack::Test::UploadedFile.new(File.join(Rails.root, 'spec' ,'support', 'images', @file_name ), "image/jpg")
+          @drawn_image = fixture_file_upload('images/Ace_of_Diamonds.jpg', "image/jpg")
+
           post :create, params: { card: {drawing: @drawn_image }, format: :js}
 
           expect(response).to redirect_to(choose_game_type_page_path)

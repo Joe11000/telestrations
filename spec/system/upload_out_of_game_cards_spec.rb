@@ -9,7 +9,7 @@ RSpec.describe 'upload_out_of_game_cards_spec', type: :system do
 
   describe 'no out of game cards uploaded by user' do 
     before :all do 
-      form_login 
+      form_login! 
       expect(page.current_path).to eq choose_game_type_page_path
       
       visit games_path
@@ -23,8 +23,8 @@ RSpec.describe 'upload_out_of_game_cards_spec', type: :system do
   end
 
   describe 'upload one drawing file' do 
-    before :all do 
-      form_login 
+    before :each do 
+      form_login! 
       expect(page.current_path).to eq choose_game_type_page_path
       
       visit new_out_of_game_card_upload_path
@@ -39,8 +39,11 @@ RSpec.describe 'upload_out_of_game_cards_spec', type: :system do
     
     it 'returns a valid text' do
       expect(page).to have_content(/Successfully Uploaded 1 Image/)  
-      
-      visit games_path 
+    end
+    
+    it 'appears in the out_of_game_card_upload tab of the post_games page', :r5_wip do
+      byebug
+      click_link 'View Uploaded Drawings'
       expect(page).to have_css '#out_of_game_card_upload_tab'
       click_link 'out_of_game_card_upload_tab'
       byebug
@@ -50,7 +53,8 @@ RSpec.describe 'upload_out_of_game_cards_spec', type: :system do
 
   describe 'upload multiple files' do 
     before :all do 
-      form_login 
+      form_login! 
+      byebug
       expect(page.current_path).to eq choose_game_type_page_path
       
       visit new_out_of_game_card_upload_path

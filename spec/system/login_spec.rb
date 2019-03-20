@@ -20,25 +20,11 @@ RSpec.describe "On the Sessions Page,", :type => :system do
   end
 
 
-  describe "user logs in via", :r5, :no_travis do
-    context "facebook" do
-      it 'sees his facebook username on the next page' do
-        login_with 'facebook'
+  describe "user logs in via", :r5 do
+    it 'sees his user email on the next page' do
+      user = form_login! 
 
-        expect(page).to have_css('#user-email', text: /Facebook User/)
-        # all('#user-avatar').each {|img| img['src'] == User.last.provider_avatar}
-        expect(User.last.provider_avatar.attached?).to eq true
-      end
-    end
-
-    context "twitter" do
-      it 'sees his twitter info on the next page' do
-        login_with 'twitter'
-
-        expect(page).to have_css('#user-email', text: /Twitter User/)
-        all('#user-avatar').each {|img| img['src'] }
-        expect(User.last.provider_avatar.attached?).to eq true
-      end
+      expect(page).to have_css('#user-email', text: user.email)
     end
   end
 end

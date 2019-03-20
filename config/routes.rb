@@ -16,13 +16,13 @@ Rails.application.routes.draw do
   scope 'cards' do
     resources :in_game_card_uploads, only: [:new, :create], as: :in_game_card_uploads
 
-    resources :out_of_game_card_uploads, only: [ :new, :create ], as: :out_of_game_card_uploads
+    resources :out_of_game_card_uploads, only: [ :new, :create, :index ], as: :out_of_game_card_uploads
   end
 
   get  'login'          => 'sessions#new'
   post 'login'          => 'sessions#create'
   get  'logout'         => 'sessions#destroy', as: :logout
 
-  get 'auth/:provider/callback', to: 'sessions#create'
-  get 'auth/failure', to: redirect('/'), alert: 'Failed Login Attempt'
+  # get 'auth/:provider/callback', to: 'sessions#create'
+  # get 'auth/failure', to: redirect('/'), alert: 'Failed Login Attempt'
 end
