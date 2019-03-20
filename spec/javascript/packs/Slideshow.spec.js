@@ -2,7 +2,7 @@ import React from 'react';
 import { mount } from 'enzyme';
 import Slideshow from 'packs/postgame/Slideshow';
 // import { finished } from 'stream';
-import { mock_games_show_request_for_last_postgame } from '../fixtures/mock_games_show_request_for_last_postgame';
+import { mock_games_show_request_for_last_postgame } from '../fixtures/mocks/responses/mock_games_show_request_for_last_postgame';
 
 describe('Slideshow component', () => {
   describe('smoke test', () => {

@@ -2,7 +2,7 @@
 export const mock_games_show_request_for_second_to_last_postgame = {
     "current_user_info": {
         "id": 1,
-        "name": "Joe Noonan"
+        "email": "joe@aol.com"
     },
     "PostGameTab": {
         "all_postgames_of__current_user": [

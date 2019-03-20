@@ -1,7 +1,7 @@
 import React from 'react';
 import {shallow} from 'enzyme';
 import PostGameTab from 'packs/postgame/TabBody/PostGameTab';
-import { mock_games_show_request_for_last_postgame } from '../fixtures/mock_games_show_request_for_last_postgame';
+import { mock_games_show_request_for_last_postgame } from '../fixtures/mocks/responses/mock_games_show_request_for_last_postgame';
 
 // import enzymeSerializer from 'enzyme-to-json/serializer';
 // expect.addSnapshotSerializer(enzymeSerializer)

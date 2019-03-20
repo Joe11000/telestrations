@@ -1,13 +1,14 @@
 import React from 'react';
 import { mount, shallow } from 'enzyme';
 import  GameSelector  from 'packs/postgame/GameSelector';
-import { mock_games_show_request_for_last_postgame } from '../mock_games_show_request_for_last_postgame';
+import { mock_games_show_request_for_last_postgame } from '../fixtures/mocks/responses/mock_games_show_request_for_last_postgame';
 // import enzymeSerializer from 'enzyme-to-json/serializer';
 // expect.addSnapshotSerializer(enzymeSerializer);
 
 describe('GameSelector Component', ()=>{
   describe('sets correct values', ()=>{
     it('onload, default selects last game played', ()=>{
+      debugger
       const mockRetrieveCardsForPostgame = jest.fn();
       const game_selector_props = {
         all_postgames_of__current_user: mock_games_show_request_for_last_postgame.OutOfGameCardUploadTab.out_of_game_cards,
