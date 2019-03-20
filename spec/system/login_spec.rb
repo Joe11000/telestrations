@@ -25,7 +25,7 @@ RSpec.describe "On the Sessions Page,", :type => :system do
       it 'sees his facebook username on the next page' do
         login_with 'facebook'
 
-        expect(page).to have_css('#user-name', text: /Facebook User/)
+        expect(page).to have_css('#user-email', text: /Facebook User/)
         # all('#user-avatar').each {|img| img['src'] == User.last.provider_avatar}
         expect(User.last.provider_avatar.attached?).to eq true
       end
@@ -35,7 +35,7 @@ RSpec.describe "On the Sessions Page,", :type => :system do
       it 'sees his twitter info on the next page' do
         login_with 'twitter'
 
-        expect(page).to have_css('#user-name', text: /Twitter User/)
+        expect(page).to have_css('#user-email', text: /Twitter User/)
         all('#user-avatar').each {|img| img['src'] }
         expect(User.last.provider_avatar.attached?).to eq true
       end

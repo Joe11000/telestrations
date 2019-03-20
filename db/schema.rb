@@ -84,8 +84,8 @@ ActiveRecord::Schema.define(version: 2019_03_17_210407) do
     t.datetime "deleted_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "password_digest"
-    t.string "email"
+    t.string "password_digest", null: false
+    t.string "email", null: false
     t.index ["deleted_at"], name: "index_users_on_deleted_at"
   end
 

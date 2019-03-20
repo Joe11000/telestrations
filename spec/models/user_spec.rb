@@ -3,41 +3,23 @@ require 'rails_helper'
 RSpec.describe User, type: :model do
   context 'factories', r5: true do
     it 'is valid' do
-      user1 = FactoryBot.build :user
+      user = FactoryBot.build :user
 
-      expect(user1).to be_valid
-      # expect(user1.name).to be_a String
-      # expect(user1.provider.in?(['twitter', 'facebook'])).to eq true
-      expect(user1.email).to be_a String
-      expect(user1.password_digest).to be_a String
-      
-      expect(user1.deleted_at).to eq nil
-    end
-
-    it 'is valid' do
-      user2 = FactoryBot.build :user #, :twitter
-      expect(user2).to be_valid
-      # expect(user2.name).to be_a String
-      # expect(user2.provider).to eq 'twitter'
-      expect(user2.deleted_at).to eq nil
-    end
-
-    it 'is valid' do
-      user3 = FactoryBot.build :user #, :facebook
-      expect(user3).to be_valid
-      # expect(user3.name).to be_a String
-      # expect(user3.provider).to eq 'facebook'
-      expect(user3.deleted_at).to eq nil
+      expect(user).to be_valid
+      expect(user.email).to be_a String
+      expect(user.password_digest).to be_a String
+      expect(user.deleted_at).to eq nil
     end
   end
-
+  context 'validations' do 
+    it {is_expected.to validate_presence_of(:email)}
+    it {is_expected.to validate_presence_of(:password_digest)}
+  end
+  
   context 'in schema', r5: true do
-    # it { is_expected.to have_db_column(:name).of_type(:string).with_options({null: false}) }
-    # it { is_expected.to have_db_column(:provider).of_type(:string).with_options(null: false) }
-    # it { is_expected.to have_db_column(:uid).of_type(:string).with_options(null: false) }
+    it { is_expected.to have_db_column(:email).of_type(:string).with_options(null: false) }
+    it { is_expected.to have_db_column(:password_digest).of_type(:string).with_options(null: false) }
     it { is_expected.to have_db_index(:deleted_at) }
-    it { is_expected.to have_db_index(:email).of_type(:string) }
-    it { is_expected.to have_db_index(:password_digest).of_type(:string) }
   end
 
   context 'associations', r5: true do
@@ -49,15 +31,6 @@ RSpec.describe User, type: :model do
     it { is_expected.to have_one(:current_game).through(:games_users).class_name('Game')}
   end
 
-
-
-    # string "name", null: false
-    # string "provider", null: false
-    # string "uid", null: false
-    # datetime "deleted_at"
-    # datetime "created_at", null: false
-    # datetime "updated_at", null: false
-    # index ["deleted_at"], name: "index_users_on_deleted_at"
   context 'methods' do
     context '#current_game', :r5 do
       before :all do
@@ -203,6 +176,5 @@ RSpec.describe User, type: :model do
         end
       end
     end
-
   end
 end

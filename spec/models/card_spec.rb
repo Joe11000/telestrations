@@ -29,8 +29,9 @@ RSpec.describe Card, type: :model do
 
         expect(drawing).to be_valid
         expect(drawing.drawing?).to eq true
-        expect(drawing.description?).to eq false
+        expect(drawing.drawing.attached?).to eq true
         expect(drawing.medium).to eq 'drawing'
+        expect(drawing.description?).to eq false
         expect(drawing.description_text).to eq nil
         expect(drawing.uploader).to be_a User
         expect(drawing.idea_catalyst).to be_nil
@@ -38,7 +39,6 @@ RSpec.describe Card, type: :model do
         expect(drawing.starting_games_user).to be_a GamesUser
         expect(drawing.deleted_at).to eq nil
         expect(drawing.out_of_game_card_upload).to eq false
-        expect(drawing.drawing.attached?).to eq true
         expect(drawing.child_card).to eq nil
         expect(drawing.placeholder).to eq false
       end
@@ -46,13 +46,13 @@ RSpec.describe Card, type: :model do
   end
 
   context 'associations', :r5 do
-    it {is_expected.to belong_to(:idea_catalyst).class_name("GamesUser").inverse_of(:starting_card)}
-    it {is_expected.to belong_to(:parent_card).class_name('Card').inverse_of(:child_card)}
-    it {is_expected.to belong_to(:starting_games_user).class_name('GamesUser')}
-    it {is_expected.to belong_to(:starting_games_user).class_name('GamesUser')}
-    it {is_expected.to have_one(:child_card).class_name('Card').inverse_of(:parent_card)} # .foreign_key(:parent_card_id)
-    it {is_expected.to belong_to(:uploader).class_name('User')} #.foreign_key(:uploader_id)
-    # it { is_expected.to have_one(:drawing) }
+    it { is_expected.to belong_to(:idea_catalyst).class_name("GamesUser").inverse_of(:starting_card).optional }
+    it { is_expected.to belong_to(:parent_card).class_name('Card').inverse_of(:child_card).optional }
+    it { is_expected.to belong_to(:starting_games_user).class_name('GamesUser').optional }
+    it { is_expected.to have_one(:child_card).class_name('Card').inverse_of(:parent_card).with_foreign_key(:parent_card_id) }
+    it { is_expected.to belong_to(:uploader).class_name('User').with_foreign_key(:uploader_id) }
+    # it { is_expected.to have_one(:drawing) } #shoulda-matchers doesn't allow this yet
+
   end
 
   context 'db_columns', :r5 do
@@ -145,7 +145,6 @@ RSpec.describe Card, type: :model do
                                         ]
                                       ]
         @cards.each do |gu|
-          byebug
           expect(gu.dig(0, 1, 'drawing_url')).to eq nil
           expect(gu.dig(1, 1, 'drawing_url')).to be_a String
           expect(gu.dig(2, 1, 'drawing_url')).to eq nil
