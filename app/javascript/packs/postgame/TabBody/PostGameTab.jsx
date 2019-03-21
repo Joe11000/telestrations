@@ -11,13 +11,14 @@ export default class PostGameTab extends Component {
 
   render() {
     const { 
-            all_postgames_of__current_user, 
-            current_user_info,
-            current_postgame_id, 
-            retrieveCardsForPostgame, 
-            storage_of_viewed_postgames
-          } = this.props;
-
+      all_postgames_of__current_user, 
+      current_user_info,
+      current_postgame_id, 
+      retrieveCardsForPostgame, 
+      storage_of_viewed_postgames
+    } = this.props;
+    debugger
+    
     return(
       <React.Fragment>
         { all_postgames_of__current_user &&

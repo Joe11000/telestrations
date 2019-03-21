@@ -14,17 +14,19 @@ class GamesController < ApplicationController
 
   # @game from redirect method
   def show
-    if Game.count == 0
+    current_users_games = current_user.games.postgame
+    
+    if current_users_games.length == 0
       render( json: {} ) and return
     end
 
     # if user inputs params[:id] == , then user doen't know their last postgame and wants to view it.
     if params[:id].to_i == -1
-      params[:id] = current_user.games.postgame.try(:last).try(:id)
+      params[:id] = current_users_games.try(:last).try(:id)
     end
     respond_to do |format|
       format.json do
-        game = current_user.games.postgame.find(params[:id])
+        game = current_users_games.find(params[:id])
         @postgame_component_params = AssemblePostgamesComponentParams.new(current_user: current_user, game: game).result_to_json
 
         if game.present?

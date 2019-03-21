@@ -38,10 +38,11 @@ class Postgame extends Component {
     let card_body_html;
     switch(this.state.tab_selected) {
       case 'PostGameTab':
+      debugger;
       card_body_html = <PostGameTab {...this.state.PostGameTab}
-      retrieveCardsForPostgame={this.retrieveCardsForPostgame}
-      current_user_info={this.state.current_user_info}
-      />
+                                    retrieveCardsForPostgame={this.retrieveCardsForPostgame}
+                                    current_user_info={this.state.current_user_info}
+                        />
       break;
       
       case 'OutOfGameCardUploadTab':
@@ -86,6 +87,7 @@ class Postgame extends Component {
   }
   
   componentDidMount() {
+    debugger
     // Controller knows game_id of -1 means like accessing user's last postgame(like in an array[-1])
     this.retrieveCardsForPostgame(-1);
   }
@@ -101,12 +103,17 @@ class Postgame extends Component {
   }
 
   retrieveCardsForPostgame(id) {
+    debugger
     if(this.state.PostGameTab.storage_of_viewed_postgames[id] == null) {
        return this.getNewPostgameInfoRequest(id).then(function(axios_response_wrapper){
           var response = axios_response_wrapper.data;
 
           // on first load, find what the id of the most recent game played is
           
+          if(response['PostGameTab'] == undefined){ // if user has not played any games yet.
+            return;
+          }
+
           if(id == -1) { 
             // on initial load 
             // change -1 index to what the last postgame index is
