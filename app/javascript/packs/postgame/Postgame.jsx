@@ -21,7 +21,7 @@ class Postgame extends Component {
                                     'storage_of_viewed_postgames': {}
                                   },
                     'OutOfGameCardUploadTab': {
-                                                'out_of_game_cards': []
+                                                'out_of_game_cards': null
                                               }
                  };
     
@@ -182,7 +182,7 @@ class Postgame extends Component {
   retrieveOutOfGameCards(){
     const { OutOfGameCardUploadTab: {out_of_game_cards: out_of_game_cards } } = this.state;
     
-    if( out_of_game_cards.length == 0 ) {
+    if( out_of_game_cards == null ) {
       this.getNewOutOfGameCardsInfoRequest().then(axios_wrapper => axios_wrapper.data).then(function(response) {
         this.setState({ 'OutOfGameCardUploadTab': { 'out_of_game_cards': response } });
       }.bind(this));

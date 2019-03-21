@@ -5,19 +5,19 @@ import { CardTitle } from 'reactstrap';
 
 export default class OutOfGameCardUploadTab extends React.Component {
   componentDidMount(){
-    debugger
-    if(this.props.out_of_game_cards.length == 0){
+    // debugger
+    if( this.props.out_of_game_cards == null ){
       this.props.retrieveOutOfGameCards();
     }
   }
 
   render(){
     const { current_user_info, out_of_game_cards } = this.props;
-    debugger
+    // debugger
     return(
       <React.Fragment>
       { 
-        out_of_game_cards.length == 0 ? 
+        out_of_game_cards == [] ? 
           <h2>You don't have any images uploaded out of game</h2> : 
 
           <React.Fragment>
@@ -43,8 +43,9 @@ OutOfGameCardUploadTab.propTypes = {
 
   out_of_game_cards: PropTypes.arrayOf(
                         PropTypes.shape({
-                          id: PropTypes.number, 
-                          created_at_strftime: PropTypes.string,
-                        }).isRequired).isRequired, 
+                          drawing_url: PropTypes.string
+                          // id: PropTypes.number, 
+                          // created_at_strftime: PropTypes.string,
+                        })), 
   retrieveOutOfGameCards: PropTypes.func
 }

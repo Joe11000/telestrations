@@ -47,14 +47,12 @@ class Card < ApplicationRecord
 
   # retrieve all postgame attributes for  
   def self.get_desired_out_of_game_card_attributes current_user
-    byebug
     ordered_drawings = drawing.where(uploader: current_user, out_of_game_card_upload: true).order(created_at: :desc)
     return [] if ordered_drawings.blank?
-    
+
     result = ordered_drawings.map do |card|
       [ "", { 'drawing_url' => card.get_drawing_url } ] # return "" first because there is no users_game_name from a game that didn't exist 
     end
-
     [result]
   end
 

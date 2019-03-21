@@ -19,11 +19,11 @@ describe('OutOfGameCardUploadTab Component', () => {
       params.out_of_game_cards  = [];
 
       const post_game_tab_component = shallow(<OutOfGameCardUploadTab {...params } />);
-
+      debugger
       expect(post_game_tab_component.find('h2').text()).toEqual("You don't have any images uploaded out of game")
     });
 
-    it('does not a SlideshowList', () => {
+    fit('does not have a SlideshowList on screen', () => {
       const mockRetrieveOutOfGameCards = jest.fn();
       const params = {
         current_user_info: mock_games_show_request_for_last_postgame.current_user_info,
@@ -33,7 +33,7 @@ describe('OutOfGameCardUploadTab Component', () => {
       params.out_of_game_cards = [];
 
       const post_game_tab_component = shallow(<OutOfGameCardUploadTab {...params } />);
-
+      debugger
       expect(post_game_tab_component.find('SlideshowList').exists()).toEqual(false);
     });
     it('calls retrieveOutOfGameCards in componentDidMount', () => {
@@ -43,7 +43,7 @@ describe('OutOfGameCardUploadTab Component', () => {
         ...mock_games_show_request_for_last_postgame.OutOfGameCardUploadTab,
         retrieveOutOfGameCards: mockRetrieveOutOfGameCards
       }
-      params.out_of_game_cards  = [];
+      params.out_of_game_cards = null;
 
       shallow(<OutOfGameCardUploadTab {...params } />);
       expect(mockRetrieveOutOfGameCards.mock.calls.length).toEqual(1);
@@ -92,7 +92,7 @@ describe('OutOfGameCardUploadTab Component', () => {
         retrieveOutOfGameCards: mockRetrieveOutOfGameCards
       }
       shallow(<OutOfGameCardUploadTab {...params } />);
-
+      debugger
       expect(mockRetrieveOutOfGameCards.mock.calls.length).toEqual(0);
     })
   })
