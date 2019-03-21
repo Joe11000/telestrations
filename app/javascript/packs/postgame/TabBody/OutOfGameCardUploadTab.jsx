@@ -44,7 +44,7 @@ OutOfGameCardUploadTab.propTypes = {
   out_of_game_cards: PropTypes.arrayOf(
                         PropTypes.shape({
                           id: PropTypes.number, 
-                          created_at_strftime: PropTypes.string
+                          created_at_strftime: PropTypes.string,
                         }).isRequired).isRequired, 
   retrieveOutOfGameCards: PropTypes.func
 }

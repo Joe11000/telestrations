@@ -3,7 +3,7 @@ import { shallow, mount } from 'enzyme';
 import Postgame from 'packs/postgame/Postgame';
 import { mock_games_show_request_for_last_postgame } from '../fixtures/mocks/responses/mock_games_show_request_for_last_postgame';
 import { mock_games_show_request_for_second_to_last_postgame } from '../fixtures/mocks/responses/mock_games_show_request_for_second_to_last_postgame';
-import { postgames_state_with_two_loaded_games } from '../fixtures/state/responses/postgames_state_with_two_loaded_games';
+import { postgames_state_with_two_loaded_games } from '../fixtures/mocks/state/postgames_state_with_two_loaded_games';
 // import sinon from 'sinon';
 // import sinon from './node_modules/sinon/pkg/sinon-esm.js';
 
@@ -11,7 +11,7 @@ describe('Postgame component', () => {
   // Unit test methods
   describe('#retrieveCardsForPostgame', () => {
     describe('A new postgame is requested', async () => { 
-      describe('with id index -1 (only should happen on componentDidMount and server will return last postgames info  )', async ()=>{
+      describe('with id index -1 (only should happen on componentDidMount and server will return last postgames info  )', async () => {
         let PostgameComponent;
         let mock_getNewPostgameinfoRequest;
         let postgame_component_instance;

@@ -96,7 +96,7 @@ class Slideshow extends Component {
   }
 
   render() {
-
+    debugger
     const { deck } = this.props;
     const { activeIndex } = this.state;
 

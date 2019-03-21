@@ -177,35 +177,6 @@ export const mock_games_show_request_for_second_to_last_postgame = {
         }
     },
     "OutOfGameCardUploadTab": {
-        "out_of_game_cards": [
-            {
-                "id": 1,
-                "created_at_strftime": "Fri Dec  7, 2018"
-            },
-            {
-                "id": 2,
-                "created_at_strftime": "Thu Dec  6, 2018"
-            },
-            {
-                "id": 3,
-                "created_at_strftime": "Wed Dec  5, 2018"
-            },
-            {
-                "id": 4,
-                "created_at_strftime": "Tue Dec  4, 2018"
-            },
-            {
-                "id": 5,
-                "created_at_strftime": "Mon Dec  3, 2018"
-            },
-            {
-                "id": 6,
-                "created_at_strftime": "Sun Dec  2, 2018"
-            },
-            {
-                "id": 7,
-                "created_at_strftime": "Sat Dec  1, 2018"
-            }
-        ]
+      "out_of_game_cards": null
     }
 }
