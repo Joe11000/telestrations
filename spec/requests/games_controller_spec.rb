@@ -70,7 +70,7 @@ RSpec.describe GamesController, :type => :request do
 
         get new_game_path
         
-        byebug
+        # byebug
         expect(response).to have_http_status :ok
       end
     end

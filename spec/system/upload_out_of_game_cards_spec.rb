@@ -42,11 +42,11 @@ RSpec.describe 'upload_out_of_game_cards_spec', type: :system do
     end
     
     it 'appears in the out_of_game_card_upload tab of the post_games page', :r5_wip do
-      byebug
+      # byebug
       click_link 'View Uploaded Drawings'
       expect(page).to have_css '#out_of_game_card_upload_tab'
       click_link 'out_of_game_card_upload_tab'
-      byebug
+      # byebug
       expect(page).to have_no_content "You don't have any images uploaded out of game"
     end
   end
@@ -54,7 +54,7 @@ RSpec.describe 'upload_out_of_game_cards_spec', type: :system do
   describe 'upload multiple files' do 
     before :all do 
       form_login! 
-      byebug
+      # byebug
       expect(page.current_path).to eq choose_game_type_page_path
       
       visit new_out_of_game_card_upload_path
