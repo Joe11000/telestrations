@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-ruby '2.6.0'
+ruby '2.6.3'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails'
 gem 'sprockets', '>= 3.7.2'
@@ -60,7 +60,7 @@ group :development do
   # gem 'guard-rspec'
 end
 
-gem 'guard-rails', require: false
+# gem 'guard-rails', require: false
 
 # # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 # gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
