@@ -29,7 +29,7 @@
 yarn-debug.log*
 .yarn-integrity
 
-examples\.txt
+examples.txt
 /tmp/storage/*
 /storage/*
-/coverage
+/coverage/*
